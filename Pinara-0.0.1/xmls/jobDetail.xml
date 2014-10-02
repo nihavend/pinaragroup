@@ -1,0 +1,100 @@
+<genericJob groupId="bir" dangerZoneGroupId="birinci grup"
+	handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="0" agentId="1">
+	<baseJobInfos xmlns:myra2="http://www.likyateknoloji.com/myra-jobprops">
+		<jsName>My name is</jsName>
+		<jobTypeDetails>
+			<jobCommandType>BATCH PROCESS</jobCommandType>
+			<jobCommand>job1-err.sh</jobCommand>
+				<!-- jobCommand>job1.sh</jobCommand -->
+			<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+		</jobTypeDetails>
+		<jobLogFile>demo.log</jobLogFile>
+		<jobLogPath>./</jobLogPath>
+		<oSystem>MACOS</oSystem>
+		<jobPriority>1</jobPriority>
+		<jsIsActive>true</jsIsActive>
+		<userId>1</userId>
+	</baseJobInfos>
+	<DependencyList>
+		<Item dependencyID="mydep">
+			<jsName>depJsName</jsName>
+			<jsId>0</jsId>
+			<jsType>JOB</jsType>
+			<comment>no comment</comment>
+			<jsDependencyRule>
+				<StateName>PENDING</StateName>
+				<SubstateName>READY</SubstateName>
+				<StatusName>BYTIME</StatusName>
+			</jsDependencyRule>
+		</Item>
+		<DependencyExpression>mydep</DependencyExpression>
+	</DependencyList>
+	<stateInfos>
+		<LiveStateInfos>
+			<LiveStateInfo LSIDateTime="2013-12-27T17:08:26.694+02:00">
+				<StateName>PENDING</StateName>
+				<SubstateName>IDLED</SubstateName>
+				<StatusName>BYTIME</StatusName>
+			</LiveStateInfo>
+			<LiveStateInfo LSIDateTime="2013-12-27T17:08:26.694+02:00">
+				<StateName>PENDING</StateName>
+				<SubstateName>IDLED</SubstateName>
+				<StatusName>BYUSER</StatusName>
+			</LiveStateInfo>
+			<LiveStateInfo LSIDateTime="2013-12-27T17:08:26.694+02:00">
+				<StateName>RUNNING</StateName>
+				<SubstateName>TIMEIN</SubstateName>
+				<StatusName>BYTIME</StatusName>
+			</LiveStateInfo>
+			<LiveStateInfo LSIDateTime="2013-12-27T17:08:26.694+02:00">
+				<StateName>FINISHED</StateName>
+				<SubstateName>COMPLETED</SubstateName>
+				<StatusName>SUCCESS</StatusName>
+			</LiveStateInfo>
+		</LiveStateInfos>
+	</stateInfos>
+	<management>
+		<trigger>TIME</trigger>
+		<periodInfo step="PT10S" />
+		<timeManagement>
+			<bornedPlannedTime>
+				<startTime>2014-01-24T17:00:00.000+02:00</startTime>
+				<stopTime>2014-01-24T23:22:00.000+02:00</stopTime>
+			</bornedPlannedTime>
+			<jsPlannedTime>
+				<startTime>2014-01-24T17:00:00.000+02:00</startTime>
+				<stopTime>2014-01-24T11:50:00.000+02:00</stopTime>
+			</jsPlannedTime>
+			<jsRealTime>
+				<startTime>2013-12-27T17:08:26.560+02:00</startTime>
+				<stopTime>2013-12-27T17:19:26.569+02:00</stopTime>
+			</jsRealTime>
+			<jsTimeOut>
+				<value_integer>5</value_integer>
+				<unit>SECONDS</unit>
+			</jsTimeOut>
+			<expectedDuration>00:01:46</expectedDuration>
+			<previousDuration>00:01:46</previousDuration>
+			<realizedDuration>00:14:30</realizedDuration>
+		</timeManagement>
+		<cascadingConditions>
+			<runEvenIfFailed>YES</runEvenIfFailed>
+			<jobSafeToRestart>YES</jobSafeToRestart>
+			<jobAutoRetryInfo step="PT30M">
+				<jobAutoRetry>YES</jobAutoRetry>
+			</jobAutoRetryInfo>
+		</cascadingConditions>
+	</management>
+	<scheduleInfo>
+		<daysOfMonth>
+			<days>1</days>
+		</daysOfMonth>
+		<daysOfWeekIntType>1</daysOfWeekIntType>
+		<daysOfWeekIntType>2</daysOfWeekIntType>
+		<daysOfWeekIntType>3</daysOfWeekIntType>
+		<daysOfWeekIntType>4</daysOfWeekIntType>
+		<daysOfWeekIntType>5</daysOfWeekIntType>
+		<daysOfWeekIntType>6</daysOfWeekIntType>
+		<daysOfWeekIntType>7</daysOfWeekIntType>
+	</scheduleInfo>
+</genericJob>

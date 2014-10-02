@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project Pinara-0.0.1 with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/Users/serkan/Desktop/pinara/pinara-0.0.1.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.likya.pinara.Pinara"/>
+                <attribute name="Class-Path" value=". pinara-0.0.1_lib/myra-0.0.1.jar pinara-0.0.1_lib/myra-schema-0.0.1.jar pinara-0.0.1_lib/winp-1.14.jar pinara-0.0.1_lib/junit-3.8.1.jar pinara-0.0.1_lib/commons-collections-3.2.1.jar pinara-0.0.1_lib/eval-0.5.jar pinara-0.0.1_lib/myra-commons-0.0.1.jar pinara-0.0.1_lib/likya-commons-0.0.1.jar pinara-0.0.1_lib/joda-time-2.2.jar pinara-0.0.1_lib/log4j-1.2.17.jar pinara-0.0.1_lib/commons-codec-1.8.jar pinara-0.0.1_lib/commons-lang-2.6.jar pinara-0.0.1_lib/xmlbeans-2.6.0.jar pinara-0.0.1_lib/stax-api-1.0.1.jar pinara-0.0.1_lib/gson-2.2.3.jar pinara-0.0.1_lib/jmxremote_optional-1.0.0.jar pinara-0.0.1_lib/activation-1.1.1.jar pinara-0.0.1_lib/dsn-1.5.0.jar pinara-0.0.1_lib/javax.mail-1.5.0.jar pinara-0.0.1_lib/imap-1.5.0.jar pinara-0.0.1_lib/mailapi-1.4.3.jar pinara-0.0.1_lib/pop3-1.5.0.jar pinara-0.0.1_lib/smtp-1.5.0.jar pinara-0.0.1_lib/jsch-0.1.50.jar"/>
+            </manifest>
+            <fileset dir="/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/target/classes"/>
+        </jar>
+        <delete dir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <mkdir dir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/likyateknoloji/myra/0.0.1/myra-0.0.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/likyateknoloji/myra-schema/0.0.1/myra-schema-0.0.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/org/jvnet/winp/winp/1.14/winp-1.14.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/net/java/dev/eval/eval/0.5/eval-0.5.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/likyateknoloji/myra-commons/0.0.1/myra-commons-0.0.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/likyateknoloji/likya-commons/0.0.1/likya-commons-0.0.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/joda-time/joda-time/2.2/joda-time-2.2.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/commons-codec/commons-codec/1.8/commons-codec-1.8.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/google/code/gson/gson/2.2.3/gson-2.2.3.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/jmxmp/jmxremote_optional/1.0.0/jmxremote_optional-1.0.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/sun/mail/dsn/1.5.0/dsn-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/sun/mail/javax.mail/1.5.0/javax.mail-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/sun/mail/imap/1.5.0/imap-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/javax/mail/mailapi/1.4.3/mailapi-1.4.3.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/sun/mail/pop3/1.5.0/pop3-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/com/sun/mail/smtp/1.5.0/smtp-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+        <copy file="/Users/serkan/.m2/repository/jsch/jsch/0.1.50/jsch-0.1.50.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+    </target>
+</project>

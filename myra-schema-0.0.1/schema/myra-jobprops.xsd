@@ -1,0 +1,252 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/myra-jobprops" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen" xmlns:wla-gen="http://www.likyateknoloji.com/wla-gen"
+	xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"
+	xmlns:rs="http://www.likyateknoloji.com/rs" targetNamespace="http://www.likyateknoloji.com/myra-jobprops"
+	elementFormDefault="qualified">
+
+	<!-- xs:import namespace="http://schemas.ggf.org/jsdl/2005/11/jsdl" schemaLocation="/Users/serkan/git/localgit/LikyaUtilsLib/schemas/jsdl.2005_11.xsd" /-->
+	<xs:import namespace="http://www.likyateknoloji.com/myra-stateinfo" schemaLocation="myra-stateinfo.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/wla-gen" schemaLocation="wla-gen.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/likya-gen" schemaLocation="likya-gen.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/rs" schemaLocation="myra-remotesch.xsd" />
+
+
+	<!--========================================================= -->
+	<!-- Job Tanımları -->
+
+	<xs:complexType name="simplePropertiesType">
+		<xs:sequence>
+			<!-- xs:element ref="jsdl:JobDescription" minOccurs="0" / -->
+			<!-- xs:element ref="sweep:Sweep" minOccurs="0" /-->
+			<xs:element ref="baseJobInfos" />
+			<xs:element ref="graphInfo" />
+			<xs:element ref="DependencyList" minOccurs="0" />
+			<xs:element ref="myra-stateinfo:stateInfos" />
+			<!-- xs:element ref="advancedJobInfos" /-->
+			<!-- xs:element ref="alarmPreference" minOccurs="0" /-->
+			<xs:element ref="management" />
+			<!--  Sadece Myra için kullanılıyor -->
+			<!--  xs:element name="instanceCount" type="xs:short" minOccurs="0" /-->
+			<xs:element ref="wla-gen:logAnalysis" minOccurs="0" />
+			<!--  Sadece Myra için kullanılıyor -->
+			<xs:element ref="scheduleInfo" minOccurs="0" />
+			<!-- xs:element ref="lt:localParameters" minOccurs="0" /-->
+		</xs:sequence>
+		<xs:attribute name="runId" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="planId" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="scenarioId" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Id" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="agentId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="LSIDateTime" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="dangerZoneGroupId" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="groupId" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string" />
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="handlerURI" use="required" type="xs:anyURI" />
+	</xs:complexType>
+	<!--========================================================= -->
+	<xs:element name="management">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="wla-gen:trigger" minOccurs="0" />
+				<!--  xs:element ref="eventTypeDef" minOccurs="0" /-->
+				<xs:element ref="periodInfo" minOccurs="0" />
+				<xs:element ref="wla-gen:timeManagement" minOccurs="0" />
+				<xs:element ref="wla-gen:timeControl" minOccurs="0" />
+				<!-- xs:element ref="concurrencyManagement" /-->
+				<xs:element ref="wla-gen:cascadingConditions" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="graphInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:comment" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="lastNodeOfBranch" use="optional" type="xs:boolean" default="false" />
+			<xs:attribute name="deadBranch" use="optional" type="xs:boolean" default="false" />
+			<xs:attribute name="blockBranchOnFail" use="optional" type="xs:boolean" default="true" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="baseJobInfos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="wla-gen:jsName" />
+				<xs:element ref="likya-gen:comment" minOccurs="0" />
+				<xs:element ref="likya-gen:jobTypeDetails" minOccurs="0" />
+				<xs:element ref="wla-gen:jobLogFile" />
+				<xs:element ref="wla-gen:jobLogPath" />
+				<xs:element ref="wla-gen:oSystem" />
+				<xs:element ref="wla-gen:jobPriority" />
+				<xs:element name="jsIsActive" type="xs:boolean" default="true" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="likya-gen:userId" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--========================================================= -->
+	<xs:element name="DependencyList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sensInfo" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="wla-gen:Item" maxOccurs="unbounded" />
+				<xs:element ref="DependencyExpression" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DependencyExpression">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="sensInfo">
+		<xs:complexType>
+			<xs:sequence minOccurs="1">
+				<xs:choice>
+					<xs:element name="sensDep" type="xs:string" />
+					<xs:element ref="sensTime" />
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+
+	</xs:element>
+
+	<xs:element name="sensTime">
+		<xs:complexType>
+			<xs:attribute name="relativeStart" use="optional" type="xs:boolean" default="false" />
+			<xs:attribute name="delay" use="optional" default="PT0S" type="xs:duration" />
+		</xs:complexType>
+	</xs:element>
+
+	<!--========================================================= -->
+
+	<xs:element name="periodInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:comment" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="relativeStart" use="optional" type="xs:boolean" default="false" />
+			<xs:attribute name="step" use="optional" type="xs:duration" default="P1D"/>
+			<xs:attribute name="counter" default="0" use="optional" type="xs:integer" />
+			<xs:attribute name="maxCount" use="optional" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+	
+	<!--========================================================= -->
+
+	<xs:element name="scheduleInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="daysOfMonth" minOccurs="0" maxOccurs="1" />
+				<!-- xs:choice>
+					<xs:element ref="daysOfWeekStrType" minOccurs="0" maxOccurs="unbounded" /-->
+					<xs:element ref="daysOfWeekIntType" minOccurs="0" maxOccurs="unbounded" />
+				<!-- /xs:choice-->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="daysOfMonth">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="firstDayOfMonth" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="lastDayOfMonth" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="days" default="1" minOccurs="0" maxOccurs="unbounded">
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:minInclusive value="1" />
+							<xs:maxInclusive value="31" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- xs:element name="daysOfMonth" default="1">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1" />
+				<xs:maxInclusive value="31" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element-->
+
+	<xs:element name="daysOfWeek" default="1">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1" />
+				<xs:maxInclusive value="7" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!-- xs:element name="daysOfWeekStrType" default="SUN">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="SUN" />
+				<xs:enumeration value="MON" />
+				<xs:enumeration value="TUE" />
+				<xs:enumeration value="WED" />
+				<xs:enumeration value="THR" />
+				<xs:enumeration value="FRI" />
+				<xs:enumeration value="SAT" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element-->
+
+
+	<xs:element name="daysOfWeekIntType" default="1">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:minInclusive value="1" />
+				<xs:maxInclusive value="7" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+	<!--========================================================= -->
+
+	<xs:element name="eventTypeDef">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="FILE" />
+				<xs:enumeration value="SYSTEM" />
+				<xs:enumeration value="NETWORK" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+</xs:schema>

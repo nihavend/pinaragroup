@@ -1,0 +1,201 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/likya-gen" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.likyateknoloji.com/likya-gen" elementFormDefault="qualified">
+
+	<!--========================================================= -->
+	<!-- Basit Tanımlar -->
+
+	<xs:element name="comment" type="xs:string" />
+
+	<xs:element name="userId">
+		<xs:simpleType>
+			<xs:restriction base="xs:int" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="unit">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="HOURS" />
+				<xs:enumeration value="MINUTES" />
+				<xs:enumeration value="SECONDS" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="value_integer">
+		<xs:simpleType>
+			<xs:restriction base="xs:positiveInteger" />
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="value_string">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-9]+" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!--========================================================= -->
+	<!-- Zaman Tanımları -->
+
+
+	<xs:complexType name="datetimeType">
+		<xs:sequence>
+			<xs:element ref="date" minOccurs="0" />
+			<xs:element ref="time" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="date">
+		<xs:simpleType>
+			<xs:restriction base="xs:date" />
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="time">
+		<xs:simpleType>
+			<xs:restriction base="xs:time" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:simpleType name="timeZoneType">
+		<xs:restriction base="xs:string" />
+	</xs:simpleType>
+	<xs:element name="timeZone" type="timeZoneType" />
+
+	<xs:simpleType name="typeOfTimeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Actual" />
+			<xs:enumeration value="Broadcast" />
+			<xs:enumeration value="Relative" />
+			<xs:enumeration value="Recurring" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="typeOfTime" type="typeOfTimeType" />
+
+	<!--========================================================= -->
+
+	<xs:element name="jobTypeDetails">
+		<xs:complexType>
+			<xs:sequence minOccurs="0">
+				<!-- xs:element ref="eventTypeDef" minOccurs="0" /-->
+				<xs:element ref="jobCommandType" minOccurs="0" />
+				<xs:element ref="jobCommand" minOccurs="0" />
+				<xs:element ref="jobPath" minOccurs="0" />
+				<xs:element ref="argValues" minOccurs="0" />
+				<xs:element ref="envVariables" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jobCommandType">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="SHELL SCRIPT" />
+				<xs:enumeration value="REMOTE SHELL" />
+				<xs:enumeration value="ETL TOOL JOBS" />
+				<xs:enumeration value="SAP" />
+				<xs:enumeration value="SAS" />
+				<xs:enumeration value="SYSTEM COMMAND" />
+				<xs:enumeration value="FTP" />
+				<xs:enumeration value="FILE PROCESS" />
+				<xs:enumeration value="FILE LISTENER" />
+				<xs:enumeration value="BATCH PROCESS" />
+				<xs:enumeration value="PROCESS NODE" />
+				<xs:enumeration value="DB JOBS" />
+				<xs:enumeration value="WEB SERVICE" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jobCommand">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="argValues">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="jobPath">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<!-- xs:pattern value="^(.*?/|.*?\\)?([^\./|^\.\\]+)(?:\.([^\\]*)|)$"/ -->
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:simpleType name="ipAddressType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+
+	<xs:simpleType name="portType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="65535" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="userNameType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-zA-Z])+" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="userPassword">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="4" />
+				<xs:maxLength value="8" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="fileSeperator">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="EmailList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="email" type="ST_Email" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="ST_Email">
+		<xs:restriction base="xs:string">
+			<xs:pattern
+				value="[A-Za-z0-9_]+([-+.'][A-Za-z0-9_]+)*@[A-Za-z0-9_]+([-.][A-Za-z0-9_]+)*\.[A-Za-z0-9_]+([-.][A-Za-z0-9_]+)*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="envVariables">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="entry" />
+			</xs:sequence>
+		</xs:complexType>
+		<xs:unique name="UniqueEntryKey">
+			<xs:selector xpath="entry" />
+			<xs:field xpath="@key" />
+		</xs:unique>
+	</xs:element>
+	<xs:element name="entry">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:normalizedString">
+					<xs:attribute name="key" use="required" type="xs:NCName" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

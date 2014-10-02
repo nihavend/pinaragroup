@@ -1,0 +1,29 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/rs" xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	targetNamespace="http://www.likyateknoloji.com/rs" elementFormDefault="qualified">
+	<xs:import namespace="http://www.likyateknoloji.com/wla-gen" schemaLocation="wla-gen.xsd" />
+
+	<xs:element name="executeRShellParams">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:choice>
+					<xs:element name="hostName" type="xs:string" />
+					<xs:element name="ipAddress" type="likya-gen:ipAddressType" />
+				</xs:choice>
+				<xs:element name="port" type="likya-gen:portType" default="22" />
+				<xs:element name="userName" type="likya-gen:userNameType" />
+				<xs:element ref="rshellPassword" />
+				<xs:element ref="likya-gen:fileSeperator" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="rshellPassword">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="4" />
+				<xs:maxLength value="20" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

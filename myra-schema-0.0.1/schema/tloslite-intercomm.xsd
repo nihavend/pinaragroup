@@ -1,0 +1,156 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/intcomm" xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:myra-joblist="http://www.likyateknoloji.com/myra-joblist" targetNamespace="http://www.likyateknoloji.com/intcomm"
+	elementFormDefault="qualified">
+	<xs:import namespace="http://www.likyateknoloji.com/wla-gen" schemaLocation="wla-gen.xsd" />
+
+
+	<xs:complexType name="jobICProps">
+		<xs:complexContent>
+			<xs:extension base="myra-joblist:abstractJobType">
+				<xs:sequence>
+					<xs:element ref="iCParams" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="iCParams">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="commandType" />
+				<xs:choice>
+					<xs:element name="appStatusInfo" type="appStatusInfoType" />
+					<xs:element name="jobStatusInfo" type="jobStatusInfoType" />
+				</xs:choice>
+				<xs:choice>
+					<xs:element name="hostName" type="xs:string" />
+					<xs:element name="ipAddress" type="likya-gen:ipAddressType" />
+				</xs:choice>
+				<xs:element name="clientId" type="xs:string" />
+				<xs:element name="port" type="likya-gen:portType" default="22" />
+				<xs:element name="userName" type="likya-gen:userNameType" />
+				<xs:element ref="likya-gen:userPassword" />
+			</xs:sequence>
+			<xs:attribute name="pollperiod" use="required" type="xs:duration" />
+			<xs:attribute name="counter" default="3" use="optional" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="commandType">
+		<!-- xs:complexType>
+			<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="appStatus" type="appStatusType" />
+					<xs:element ref="jobStatus" />
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType-->
+
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="TLOS_STATUS" />
+				<xs:enumeration value="JOB_STATUSLIST" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+
+
+	<xs:complexType name="jobStatusInfoType">
+		<xs:sequence>
+			<xs:element name="jobId" type="xs:string" />
+			<xs:element name="jobStatus" type="jobStatusListType" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="jobStatusListType">
+		<xs:annotation>
+			<xs:documentation>Job Status List</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="READY" />
+			<xs:enumeration value="WORKING" />
+			<xs:enumeration value="WAITING" />
+			<xs:enumeration value="SUCCESS" />
+			<xs:enumeration value="FAIL" />
+			<xs:enumeration value="TIMEOUT" />
+			<xs:enumeration value="SKIP" />
+			<xs:enumeration value="STOP" />
+			<xs:enumeration value="PAUSE" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- xs:simpleType name="jobStatusListType">
+		<xs:annotation>
+			<xs:documentation>Job Status List</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:integer">
+			<xs:enumeration value="0">
+				<xs:annotation>
+					<xs:documentation>READY</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="1">
+				<xs:annotation>
+					<xs:documentation>WORKING</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="2">
+				<xs:annotation>
+					<xs:documentation>WAITING</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3">
+				<xs:annotation>
+					<xs:documentation>SUCCESS</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="4">
+				<xs:annotation>
+					<xs:documentation>FAIL</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="5">
+				<xs:annotation>
+					<xs:documentation>TIMEOUT</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="6">
+				<xs:annotation>
+					<xs:documentation>SKIP</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="7">
+				<xs:annotation>
+					<xs:documentation>STOP</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="8">
+				<xs:annotation>
+					<xs:documentation>PAUSE</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType-->
+
+	<xs:simpleType name="appStatusInfoType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="STATE_STOP">
+				<xs:annotation>
+					<xs:documentation>App is not running</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STATE_SUSPENDED">
+				<xs:annotation>
+					<xs:documentation>App is suspended</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STATE_JOBOVERFLOW">
+				<xs:annotation>
+					<xs:documentation>App is running but it reached to higher threshold value</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

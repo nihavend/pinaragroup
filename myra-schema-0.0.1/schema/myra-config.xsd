@@ -1,0 +1,80 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/myra-config" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen" xmlns:wla-gen="http://www.likyateknoloji.com/wla-gen"
+	xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" targetNamespace="http://www.likyateknoloji.com/myra-config"
+	elementFormDefault="qualified">
+
+	<!--========================================================= -->
+	<!-- Config Tanımları -->
+
+	<xs:element name="myraConfig">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="persistent" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1" />
+				<xs:element name="normalize" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="frequency" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="higherThreshold" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="lowerThreshold" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logPath" type="logPathType" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="usejobnamesforlog" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logFileExt" type="logFileType" minOccurs="0" maxOccurs="1" />
+				<xs:element name="globalLogPath" type="logPathType" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logbuffersize" type="xs:short" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logpagesize" type="xs:short" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="groupType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([a-zA-Z/\\\.0-9_ \-])*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="logPathType">
+		<xs:restriction base="xs:string">
+				<!-- <xs:pattern value="[abcdefgABCDEFG]:[\\/]([a-zA-Z/\\\.0-9_ \-])*"/> -->
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="logFileType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([a-zA-Z/\\\.0-9_ \-])*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="frequency">
+		<xs:simpleType>
+			<xs:restriction base="xs:short" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="higherThreshold">
+		<xs:simpleType>
+			<xs:restriction base="xs:short" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="lowerThreshold">
+		<xs:simpleType>
+			<xs:restriction base="xs:short" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="usejobnamesforlog" default="NO">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="YES" />
+				<xs:enumeration value="NO" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="usegloballogpath" default="NO">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="YES" />
+				<xs:enumeration value="NO" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

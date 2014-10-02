@@ -1,0 +1,101 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/pinara-config" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen" xmlns:wla-gen="http://www.likyateknoloji.com/wla-gen"
+	xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" targetNamespace="http://www.likyateknoloji.com/pinara-config"
+	elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.likyateknoloji.com/myra-joblist"
+		schemaLocation="../../myra-schema-0.0.1/schema/myra-joblist.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/myra-stateinfo" schemaLocation="../../myra-schema-0.0.1/schema/myra-stateinfo.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/likya-gen" schemaLocation="../../myra-schema-0.0.1/schema/likya-gen.xsd" />
+
+
+	<!--========================================================= -->
+	<!-- Config Tanımları -->
+
+	<xs:element name="pinaraConfig">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="senaryoDosyasi" type="fileNameType" minOccurs="1" maxOccurs="1" />
+				<xs:element name="myraConfigFile" type="fileNameType" minOccurs="1" maxOccurs="1" />
+				<xs:choice>
+					<xs:element name="serverHostName" type="xs:string" />
+					<xs:element name="serverIpAddress" type="likya-gen:ipAddressType" />
+				</xs:choice>
+				<xs:element name="httpPort" type="likya-gen:portType" default="3001" />
+				<xs:element name="httpsPort" type="likya-gen:portType" default="3002" />
+				<xs:element name="persistent" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="mailInfo" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="tcpInfo" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="mcInfo" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="smsInfo" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logFile" type="fileNameType" minOccurs="0" maxOccurs="1" />
+				<xs:element name="logPath" type="logPathType" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="version" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="instanceName" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="logPathType">
+		<xs:restriction base="xs:string">
+				<!-- <xs:pattern value="[abcdefgABCDEFG]:[\\/]([a-zA-Z/\\\.0-9_ \-])*"/> -->
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="fileNameType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([a-zA-Z/\\\.0-9_ \-])*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="tcpInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="tcpPort" type="likya-gen:portType" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mcInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="jmxPort" type="likya-gen:portType" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mailInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:EmailList" minOccurs="0" />
+				<xs:element ref="myra-stateinfo:stateInfos" />
+				<xs:element name="useEncryption" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+				<xs:element name="userName" type="xs:string" />
+				<xs:element ref="likya-gen:userPassword" />
+				<xs:choice>
+					<xs:element name="smtpServerHostName" type="xs:string" />
+					<xs:element name="smtpServerIpAddress" type="likya-gen:ipAddressType" />
+				</xs:choice>
+				<xs:element name="port" type="likya-gen:portType" default="22" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="smsInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="myra-stateinfo:stateInfos" />
+			</xs:sequence>
+			<xs:attribute name="smsHandlerURI" use="required" type="xs:anyURI" />
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

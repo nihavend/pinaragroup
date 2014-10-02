@@ -1,0 +1,120 @@
+<project name="myra-schema-0.0.1" default="myra-schema-0.0.1.jar" basedir=".">
+
+	<property name="appname" value="myra-schema" />
+	
+	<property file="build.properties" />
+	<property name="home.dir" value="${basedir}/.." />
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="build.dir" value="${basedir}/build/classes" />
+	<property name="webapp.dir" value="." />
+	<property name="build.classes.dir" value="${build.dir}" />
+	<property name="app.deploy.dir" value="${basedir}" />
+	<property name="version.num" value="0.0.1" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${home.dir}/${sharedlib.dir}/antlib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="init" depends="init2" unless="minor.number">
+		<property name="minor.number" value="" />
+		<property name="buildchar" value="" />
+	</target>
+
+	<target name="init2" if="minor.number">
+		<property name="buildchar" value="_b" />
+	</target>
+
+	<path id="build.path">
+		<pathelement location="${build.classes.dir}" />
+	</path>
+
+	<path id="combined">
+		<path refid="build.path" />
+		<path refid="castor.class.path" />
+	</path>
+
+	<path id="SchemaEnum.path">
+		<path refid="xmlbeans.path" />
+		<fileset dir="build/lib" includes="*.jar" />
+		<pathelement path="build/classes" />
+	</path>
+
+	<target name="cleanUp">
+		<echo>Clearing up temporary directory...</echo>
+		<delete dir="${src.dir}/com/likya/xsd" />
+		<delete dir="${src.dir}/org/ggf/schemas" />
+		<echo>...temporary directory cleared OK</echo>
+
+		<delete>
+			<fileset dir="." includes="**/*.jar" />
+		</delete>
+	</target>
+
+	<target name="initxmlbeans" depends="cleanUp">
+		<property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" />
+
+		<!-- check for xbean.jar from binary distribution -->
+		<available property="xmlbeans.lib" value="${xmlbeans.home}/lib" file="${xmlbeans.home}/lib/xbean.jar" />
+
+		<!-- check for xbean.jar compiled from source -->
+		<available property="xmlbeans.lib" value="${xmlbeans.home}/build/lib" file="${xmlbeans.home}/build/lib/xbean.jar" />
+
+		<fail message="Set XMLBEANS_HOME in your enviornment." unless="xmlbeans.lib" />
+
+		<echo message="xmlbeans.lib: ${xmlbeans.lib}" />
+		<path id="xmlbeans.path">
+			<fileset dir="${xmlbeans.lib}" includes="*.jar" />
+		</path>
+
+		<taskdef name="xmlbean" classname="org.apache.xmlbeans.impl.tool.XMLBean" classpathref="xmlbeans.path" />
+	</target>
+
+	<target name="myra-schema-0.0.1.jar" depends="init,initxmlbeans" unless="">
+		<mkdir dir="build/lib" />
+
+		<xmlbean schema="schema" destfile="./${appname}-${version.num}${buildchar}${minor.number}.jar" srcgendir="src/" classpathref="xmlbeans.path" debug="on" download="true" />
+
+		<property name="src.jar" value="${appname}-src-${version.num}${buildchar}${minor.number}.jar" />
+		<jar jarfile="${src.jar}">
+			<fileset dir="${src.dir}">
+			</fileset>
+			<fileset dir=".">
+				<include name="lib" />
+				<include name="lib/*.jar" />
+			</fileset>
+		</jar>
+
+		<mkdir dir="test" />
+		<copy file="${appname}-${version.num}${buildchar}${minor.number}.jar" todir="test" />
+		<move file="test/${appname}-${version.num}${buildchar}${minor.number}.jar" tofile="${appname}.jar" />
+
+		<if>
+			<equals arg1="${minor.number}" arg2="" />
+			<then>
+				<echo message="Trying to mavenize locally..." />
+				<move file="${appname}.jar" tofile="${appname}-${version.num}.jar" />
+				<copy file="${appname}-${version.num}.jar" todir="${user.home}/.m2/repository/likyateknoloji/${appname}/${version.num}/" />
+				<echo message="Tying to mavenize locally... completed !" />
+			</then>
+			<else>
+				<!--arg value="${env.MAVEN_HOME}\bin\mvn.bat"/-->
+				<!--arg value="/Users/serkan/apache-maven-3.0.5/bin/mvn"/-->
+				<!--exec dir="." executable="sh"-->
+				<echo message="**************************************************"/>
+				<echo message="Tying to mavenize for deployment..." />
+				<move file="${appname}.jar" tofile="${appname}-${version.num}.jar" />
+				<echo message="executing maven : install:install-file -Dfile=${appname}-${version.num}.jar -DgroupId=likyateknoloji -DartifactId=${appname} -Dversion=${version.num} -Dpackaging=jar" />
+				<exec dir="." executable="cmd" failonerror="true">
+					<arg value="/c"/>
+					<arg value="D:/apache-maven-3.0.5/bin/mvn.bat install:install-file -Dfile=${appname}-${version.num}.jar -DgroupId=likyateknoloji -DartifactId=${appname} -Dversion=${version.num} -Dpackaging=jar" />
+				</exec>
+				<echo message="Tying to mavenize for deployment... completed !" />			
+				<echo message="**************************************************"/>
+			</else>
+		</if>
+		
+	</target>
+</project>

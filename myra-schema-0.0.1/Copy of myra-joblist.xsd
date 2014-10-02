@@ -1,0 +1,75 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/myra-joblist" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:rs="http://www.likyateknoloji.com/rs"
+	targetNamespace="http://www.likyateknoloji.com/myra-joblist" elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.likyateknoloji.com/myra-jobprops" schemaLocation="myra-jobprops.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/rs" schemaLocation="myra-remotesch.xsd" />
+	<!-- xs:import namespace="http://www.likyateknoloji.com/intcomm" schemaLocation="/Users/serkan/git/localgit/InterCommExtension/schema/tloslite-intercomm.xsd" / -->
+
+	<!--========================================================= -->
+	<!-- Job Tanımları -->
+
+	<xs:element name="jobList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="abstractJob" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="abstractJob" abstract="true" type="genericJobType" />
+	<xs:element name="jobRemoteSchProperties" substitutionGroup="abstractJob" type="remoteSchProperties" />
+
+
+	<xs:complexType name="genericJobType">
+		<xs:complexContent>
+			<xs:extension base="myra-jobprops:simpleProperties">
+				<xs:attribute name="id" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="remoteSchProperties">
+		<xs:complexContent>
+			<xs:extension base="genericJobType">
+				<xs:sequence>
+					<xs:element ref="rs:executeRShellParams" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+<!--========================================================= -->
+
+<!-- 
+	<xs:element name="jobList1">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="genericJob" type="abstractJobType" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="abstractJobType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="myra-jobprops:simpleProperties">
+				<xs:attribute name="id" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="jobSimpleProperties" type="myra-jobprops:simpleProperties" />
+	<xs:element name="jobRemoteSchProperties" type="remoteSchProperties" />
+
+	<xs:complexType name="remoteSchProperties">
+		<xs:complexContent>
+			<xs:extension base="abstractJobType">
+				<xs:sequence>
+					<xs:element ref="rs:executeRShellParams" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+-->
+</xs:schema>

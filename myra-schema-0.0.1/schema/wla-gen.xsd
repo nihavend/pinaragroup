@@ -1,0 +1,390 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/wla-gen" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen"
+	xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" targetNamespace="http://www.likyateknoloji.com/wla-gen"
+	elementFormDefault="qualified">
+
+	<xs:import xmlns="myra-stateinfo" namespace="http://www.likyateknoloji.com/myra-stateinfo" schemaLocation="myra-stateinfo.xsd" />
+	<xs:import xmlns="likya-gen" namespace="http://www.likyateknoloji.com/likya-gen" schemaLocation="likya-gen.xsd" />
+	
+	<!--========================================================= -->
+	<xs:element name="jsName">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jobLogFile">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="([a-zA-Z/\\\.0-9_ \-])*" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jobLogPath">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<!-- <xs:pattern value="[abcdefgABCDEFG]:[\\/]([a-zA-Z/\\\.0-9_ \-])*"/> -->
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jobPriority" default="1">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="1" />
+				<xs:enumeration value="2" />
+				<xs:enumeration value="3" />
+				<xs:enumeration value="4" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jsId">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jsType">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="JOB" />
+				<xs:enumeration value="SCENARIO" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="jsPath">
+		<xs:simpleType>
+			<xs:restriction base="xs:string" />
+			<!-- xs:restriction base="xs:string"> <xs:pattern value="[\\/]([a-zA-Z/\\\.0-9_])*" 
+				/> </xs:restriction -->
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="Item">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="jsName" />
+				<xs:element ref="jsId" />
+				<xs:element ref="jsType" />
+				<xs:element ref="jsPath" minOccurs="0" />
+				<xs:element ref="likya-gen:comment" />
+				<xs:element ref="myra-stateinfo:jsDependencyRule" />
+			</xs:sequence>
+			<xs:attribute name="dependencyID" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="oSystem" type="OperatingSystemTypeEnumeration" />
+	
+	<!--========================================================= -->
+	<xs:element name="timeManagement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="bornedPlannedTime" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="jsPlannedTime" minOccurs="0" />
+				<xs:element ref="jsRealTime" minOccurs="0" />
+				<xs:element ref="likya-gen:timeZone" minOccurs="0" />
+				<xs:element ref="likya-gen:typeOfTime" minOccurs="0" />
+				<xs:element ref="jsRelativeTimeOption" minOccurs="0" />
+				<xs:element ref="jsTimeOut" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="expectedTime" minOccurs="0" />
+				<xs:element ref="tolerancePercentage" minOccurs="0" />
+				<xs:element ref="minPercentage" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jsRelativeTimeOption" default="NO">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="YES" />
+				<xs:enumeration value="NO" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="bornedPlannedTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jsPlannedTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jsRealTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jsTimeOut">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:value_integer" />
+				<xs:element ref="likya-gen:unit" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="expectedTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:value_integer" />
+				<xs:element ref="likya-gen:unit" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="tolerancePercentage" default="10">
+		<xs:simpleType>
+			<xs:restriction base="xs:int" />
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="minPercentage" default="10">
+		<xs:simpleType>
+			<xs:restriction base="xs:int" />
+		</xs:simpleType>
+	</xs:element>
+	
+	<!--========================================================= -->
+
+	<xs:element name="cascadingConditions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="runEvenIfFailed" type="xs:boolean" default="false" />
+				<xs:element name="jobSafeToRestart" type="xs:boolean" default="false" />
+				<xs:element ref="jobAutoRetryInfo" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jobAutoRetryInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="jobAutoRetry" type="xs:boolean" default="false" />
+				<xs:element ref="myra-stateinfo:LiveStateInfo" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="step" use="required" type="xs:duration" />
+			<xs:attribute name="maxCount" use="optional" default="1" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="logAnalysis">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="findWhat" />
+				<xs:element ref="action" />
+			</xs:sequence>
+			<xs:attribute name="active" use="required" type="xs:boolean" />
+			<xs:attribute name="id" use="required" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="findWhat">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:normalizedString">
+					<xs:attribute name="direction" use="required" type="directionType" />
+					<xs:attribute name="matchCase" use="required" type="xs:boolean" />
+					<xs:attribute name="matchWholeWordOnly" type="xs:boolean" />
+					<xs:attribute name="mode" use="required" type="modeType" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="action">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="then" />
+				<xs:element minOccurs="0" ref="else" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="then">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="event" />
+				<xs:element ref="forcedResult" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="else">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="event" />
+				<xs:element ref="forcedResult" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="event">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="likya-gen:EmailList" minOccurs="0" />
+				<xs:element ref="content" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="code" use="required" type="codeType" />
+			<xs:attribute name="id" use="required" type="xs:integer" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="content">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="logLineNumBack" use="optional" type="xs:positiveInteger" />
+					<xs:attribute name="logLineNumForward" use="optional" type="xs:positiveInteger" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="forcedResult">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="myra-stateinfo:LiveStateInfo" />
+			</xs:sequence>
+			<xs:attribute name="active" use="required" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="modeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="normal" />
+			<xs:enumeration value="regEx" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="directionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Up" />
+			<xs:enumeration value="Down" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="email" />
+			<xs:enumeration value="waitMe" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!--========================================================= -->
+
+	<xs:element name="trigger" default="TIME">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="TIME" />
+				<xs:enumeration value="EVENT" />
+				<xs:enumeration value="USER" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<xs:element name="timeControl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="jsTimeOut" minOccurs="0" />
+				<xs:element ref="expectedTime" minOccurs="0" />
+				<xs:element ref="tolerancePercentage" minOccurs="0" />
+				<xs:element ref="minPercentage" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	
+	<!--=========================================================-->
+	<!--  copied from jsdl -->
+	<xs:simpleType name="OperatingSystemTypeEnumeration">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Unknown" />
+			<xs:enumeration value="MACOS" />
+			<xs:enumeration value="ATTUNIX" />
+			<xs:enumeration value="DGUX" />
+			<xs:enumeration value="DECNT" />
+			<xs:enumeration value="Tru64_UNIX" />
+			<xs:enumeration value="OpenVMS" />
+			<xs:enumeration value="HPUX" />
+			<xs:enumeration value="AIX" />
+			<xs:enumeration value="MVS" />
+			<xs:enumeration value="OS400" />
+			<xs:enumeration value="OS_2" />
+			<xs:enumeration value="JavaVM" />
+			<xs:enumeration value="MSDOS" />
+			<xs:enumeration value="WIN3x" />
+			<xs:enumeration value="WIN95" />
+			<xs:enumeration value="WIN98" />
+			<xs:enumeration value="WINNT" />
+			<xs:enumeration value="WINCE" />
+			<xs:enumeration value="NCR3000" />
+			<xs:enumeration value="NetWare" />
+			<xs:enumeration value="OSF" />
+			<xs:enumeration value="DC_OS" />
+			<xs:enumeration value="Reliant_UNIX" />
+			<xs:enumeration value="SCO_UnixWare" />
+			<xs:enumeration value="SCO_OpenServer" />
+			<xs:enumeration value="Sequent" />
+			<xs:enumeration value="IRIX" />
+			<xs:enumeration value="Solaris" />
+			<xs:enumeration value="SunOS" />
+			<xs:enumeration value="U6000" />
+			<xs:enumeration value="ASERIES" />
+			<xs:enumeration value="TandemNSK" />
+			<xs:enumeration value="TandemNT" />
+			<xs:enumeration value="BS2000" />
+			<xs:enumeration value="LINUX" />
+			<xs:enumeration value="Lynx" />
+			<xs:enumeration value="XENIX" />
+			<xs:enumeration value="VM" />
+			<xs:enumeration value="Interactive_UNIX" />
+			<xs:enumeration value="BSDUNIX" />
+			<xs:enumeration value="FreeBSD" />
+			<xs:enumeration value="NetBSD" />
+			<xs:enumeration value="GNU_Hurd" />
+			<xs:enumeration value="OS9" />
+			<xs:enumeration value="MACH_Kernel" />
+			<xs:enumeration value="Inferno" />
+			<xs:enumeration value="QNX" />
+			<xs:enumeration value="EPOC" />
+			<xs:enumeration value="IxWorks" />
+			<xs:enumeration value="VxWorks" />
+			<xs:enumeration value="MiNT" />
+			<xs:enumeration value="BeOS" />
+			<xs:enumeration value="HP_MPE" />
+			<xs:enumeration value="NextStep" />
+			<xs:enumeration value="PalmPilot" />
+			<xs:enumeration value="Rhapsody" />
+			<xs:enumeration value="Windows_2000" />
+			<xs:enumeration value="Dedicated" />
+			<xs:enumeration value="OS_390" />
+			<xs:enumeration value="VSE" />
+			<xs:enumeration value="TPF" />
+			<xs:enumeration value="Windows_R_Me" />
+			<xs:enumeration value="Caldera_Open_UNIX" />
+			<xs:enumeration value="OpenBSD" />
+			<xs:enumeration value="Not_Applicable" />
+			<xs:enumeration value="Windows_XP" />
+			<xs:enumeration value="z_OS" />
+			<xs:enumeration value="Windows" /> <!--== Added for generic name control ==-->
+			<xs:enumeration value="Unix" />    <!--== Added for generic name control ==-->
+			<xs:enumeration value="other" />
+		</xs:restriction>
+	</xs:simpleType>
+	<!--=========================================================-->
+
+</xs:schema>

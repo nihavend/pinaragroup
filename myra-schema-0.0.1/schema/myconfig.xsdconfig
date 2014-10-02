@@ -1,0 +1,86 @@
+
+	<!--
+		Copyright 2004 The Apache Software Foundation Licensed under the
+		Apache License, Version 2.0 (the "License"); you may not use this file
+		except in compliance with the License. You may obtain a copy of the
+		License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+		by applicable law or agreed to in writing, software distributed under
+		the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+
+<xb:config xmlns:xb="http://xml.apache.org/xmlbeans/2004/02/xbean/config"
+	xmlns:ct="http://xmlbeans.apache.org/samples/catalog">
+
+
+	<!--
+		<namespace> element specifies configuration for namespace. Attribute
+		uri contains namespace list. <package> element specifies package name
+		to be used for types generated in this namespace.
+	-->
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/myra-stateinfo">
+		<xb:package>com.likya.xsd.myra.model.stateinfo</xb:package>
+	</xb:namespace>
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/myra-jobprops">
+		<xb:package>com.likya.xsd.myra.model.jobprops</xb:package>
+	</xb:namespace>
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/likya-gen">
+		<xb:package>com.likya.xsd.myra.model.generics</xb:package>
+	</xb:namespace>
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/wla-gen">
+		<xb:package>com.likya.xsd.myra.model.wlagen</xb:package>
+	</xb:namespace>
+	
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/rs">
+		<xb:package>com.likya.xsd.myra.model.rs</xb:package>
+	</xb:namespace>
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/myra-joblist">
+		<xb:package>com.likya.xsd.myra.model.joblist</xb:package>
+	</xb:namespace>		
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/intcomm">
+		<xb:package>com.likya.xsd.myra.model.intcomm</xb:package>
+	</xb:namespace>			
+
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/myra-config">
+		<xb:package>com.likya.xsd.myra.model.config</xb:package>
+	</xb:namespace>		
+	
+	<xb:namespace
+		uri="http://www.likyateknoloji.com/pinara-config">
+		<xb:package>com.likya.xsd.pinara.model.config</xb:package>
+	</xb:namespace>	
+	<!--
+		##any indicates all URIs. A <prefix> is used to prepend to top-level
+		Java type names generated in this namespace. A <suffix> is used to
+		append to top-level Java types names generated in this namespace. The
+		<prefix> and <suffix> are not used for inner Java type definitions.
+	-->
+
+	<!-- xb:namespace uri="##any">
+		<xb:prefix>Xml</xb:prefix>
+		<xb:suffix>Bean</xb:suffix>
+	</xb:namespace -->
+
+
+	<!--<qname> specifies a Java class name for a Qualified name -->
+	<xb:qname name="ct:forsample" javaname="GoodName" />
+	<xb:qname name="ct:a-very-long-description-element" javaname="XmlShortItemBean" />
+
+</xb:config>

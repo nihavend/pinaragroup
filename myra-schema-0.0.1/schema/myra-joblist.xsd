@@ -1,0 +1,46 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/myra-joblist" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:intcomm="http://www.likyateknoloji.com/intcomm" xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"
+	xmlns:rs="http://www.likyateknoloji.com/rs" targetNamespace="http://www.likyateknoloji.com/myra-joblist"
+	elementFormDefault="qualified">
+
+	<xs:import namespace="http://www.likyateknoloji.com/myra-jobprops" schemaLocation="myra-jobprops.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/rs" schemaLocation="myra-remotesch.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/intcomm" schemaLocation="tloslite-intercomm.xsd" />
+	<xs:import namespace="http://www.likyateknoloji.com/pinara-config" schemaLocation="pinara-config.xsd" />
+	<!--========================================================= -->
+	<!-- Job Tanımları -->
+
+	<xs:element name="jobList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="genericJob" type="abstractJobType" minOccurs="0" maxOccurs="unbounded" />
+				<!-- xs:element ref="jobRemoteSchProperties" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="jobTlosLiteInterCommProperties" minOccurs="0" maxOccurs="unbounded" /-->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="abstractJobType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="myra-jobprops:simplePropertiesType">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="simpleProperties">
+		<xs:complexContent>
+			<xs:extension base="abstractJobType" />
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="remoteSchProperties">
+		<xs:complexContent>
+			<xs:extension base="abstractJobType">
+				<xs:sequence>
+					<xs:element ref="rs:executeRShellParams" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+</xs:schema>

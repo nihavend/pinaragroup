@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="createSchModule()"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:remotesch="com.likya.pinara.modules.remotesch.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			import spark.modules.ModuleLoader;
+			
+			public function onError(event:Event):void {
+				Alert.show("Error loading module " + url);
+			}
+			
+			public function createSchModule():void {
+				if (!remoteSchPropsLoader.url) {
+					remoteSchPropsLoader.url = "RemoteSchProps.swf";
+				}
+				remoteSchPropsLoader.addEventListener("error", onError);
+				try {
+					remoteSchPropsLoader.loadModule();
+				} catch(err:Error) {
+					Alert.show("Hata Oluştu : " + err.message);
+					trace(err);
+				}
+			}
+			
+			public function createModule(m:ModuleLoader, s:String):void {
+				if (!m.url) {
+					m.url = s;
+				}
+				m.loadModule();
+			}
+			
+			public function removeModule(m:ModuleLoader):void {
+				m.unloadModule();
+			}
+			
+		]]>
+		
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<mx:TabNavigator id="tn"          
+					 paddingTop="10" 
+					 paddingLeft="10" 
+					 paddingRight="10" 
+					 paddingBottom="10"
+					 width="100%" height="100%"
+					 creationPolicy="auto">
+		<s:NavigatorContent label="ColumnChartModule">
+			<s:layout>
+				<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+			</s:layout>
+			<s:Button label="Load" 
+					  click="createModule(chartModuleLoader, l1.text)"/>
+			<s:Button label="Unload" 
+					  click="removeModule(chartModuleLoader)"/>
+			<s:Label id="l1" text="ColumnChartModule.swf"/>
+			<s:ModuleLoader id="chartModuleLoader"/>                                
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent label="FormModule">
+			<s:layout>
+				<s:VerticalLayout paddingTop="10" paddingLeft="5"/>
+			</s:layout>
+			<s:Button label="Load" 
+					  click="createModule(formModuleLoader, l2.text)"/>
+			<s:Button label="Unload" 
+					  click="removeModule(formModuleLoader)"/>
+			<s:Label id="l2" text="FormModule.swf"/>
+			<s:ModuleLoader id="formModuleLoader"/>
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+	
+		
+	<s:ModuleLoader id="remoteSchPropsLoader" height="200" width="600" visible="false" includeInLayout="false"/>
+		
+	
+</s:Application>

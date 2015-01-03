@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					clipAndEnableScrolling="true"
+					xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.containers.ImageContainer;
+			import com.likya.pinara.event.ResourceEvent;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var selectedGroupId:String;
+			
+			/*
+			<visualParams>
+			<statu>1</statu>
+			<commandabilityParams>
+			<isPausable>true</isPausable>
+			<isResumable>false</isResumable>
+			<isRetryable>false</isRetryable>
+			<isSkipable>false</isSkipable>
+			<isStartable>false</isStartable>
+			<isStopable>false</isStopable>
+			<isSuccessable>false</isSuccessable>
+			</commandabilityParams>
+			</visualParams>
+			*/
+			private static var STOP_JOB:String = "stopJob";
+			private static var START_JOB:String = "startJob";
+			private static var SETSUCCESS_JOB:String = "setSuccessJob";
+			private static var SKIP_JOB:String = "skipJob";
+			private static var PAUSE_JOB:String = "pauseJob";
+			private static var RESUME_JOB:String = "resumeJob";
+			private static var RETRY_JOB:String = "retryJob";
+			private static var ENABLE_JOB:String = "enableJob";
+			private static var DISABLE_JOB:String = "disableJob";
+			
+			public function executeJobCommand(event:MouseEvent, jobId:String, tlosName:String):void {
+				
+				//Alert.show("Esrar'ı naz : " + event.currentTarget.id);
+				
+				var compId:String = event.currentTarget.id;
+				
+				/*tlosConnection = getTlosConnection(tlosName);
+				
+				tlosOperation = new TlosOperation();
+				tlosOperation.jobId = jobId;*/
+				
+				var warningStr:String = resourceManager.getString("messages", "warning");
+				Alert.okLabel = resourceManager.getString("messages", "yesLabel");
+				Alert.cancelLabel = resourceManager.getString("messages", "cancelLabel");
+				
+				function confirmJobOperations(eventObj:CloseEvent):void {
+					
+					if(eventObj.detail == Alert.OK) {
+						
+						// Alert.show("Calling service for : " + jobId);
+						// startJobResult.token = jobManagerService.start(jobId);
+						
+						//disablePage();
+						
+						switch(compId)
+						{
+							case STOP_JOB:
+							{
+								stopJobResult.token = jobManagerService.stop(jobId);
+								break;
+							}
+							case START_JOB:
+							{
+								startJobResult.token = jobManagerService.start(jobId);
+								break;
+							}
+							case SETSUCCESS_JOB:
+							{
+								setSuccessJobResult.token = jobManagerService.setsuccess(jobId);
+								break;
+							}
+							case SKIP_JOB:
+							{
+								skipJobResult.token = jobManagerService.skip(jobId);
+								break;
+							}
+							case PAUSE_JOB:
+							{
+								pauseJobResult.token = jobManagerService.pause(jobId);
+								break;
+							}
+							case RESUME_JOB:
+							{
+								resumeJobResult.token = jobManagerService.resume(jobId);
+								break;
+							}
+							case RETRY_JOB:
+							{
+								retryJobResult.token = jobManagerService.retry(jobId);
+								break;
+							}
+							case ENABLE_JOB:
+							{
+								enableJobResult.token = jobManagerService.enable(jobId);
+								break;
+							}
+							case DISABLE_JOB:
+							{
+								disableJobResult.token = jobManagerService.disable(jobId);
+								break;
+							}
+								
+							default:
+							{
+								Alert.show(" Tanımsız işlem komutu : " + compId);
+								break;
+							}
+						}
+						
+					}
+					
+				}
+				
+				if (compId == STOP_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "stopConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == START_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "startConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == SETSUCCESS_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "setsuccessConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == SKIP_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "skipConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == PAUSE_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "pauseConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == RESUME_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "resumeConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == RETRY_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "restartConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == ENABLE_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "enableConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				} else if (compId == DISABLE_JOB) {
+					Alert.show(jobId + " " + resourceManager.getString("messages", "disableConfirmetion"), warningStr, Alert.OK|Alert.CANCEL, this, confirmJobOperations, null, Alert.CANCEL);
+				}
+			}
+			
+			protected function jobManagerService_resultHandler(event:ResultEvent):void {
+				// Alert.show("Result : " + event.message);
+				// Alert.show("outerDocument.selectedGroupId : " + outerDocument.selectedGroupId);
+				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedGroupId));
+			}
+			
+			protected function jobManagerService_faultHandler(event:FaultEvent):void {
+				Alert.show("Fault : " + event.message);	
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<jobmanager:JobManager id="jobManagerService" result="jobManagerService_resultHandler(event)" fault="jobManagerService_faultHandler(event)"/>
+		<s:CallResponder id="stopJobResult"/>
+		<s:CallResponder id="startJobResult"/>
+		<s:CallResponder id="setSuccessJobResult"/>
+		<s:CallResponder id="skipJobResult"/>
+		<s:CallResponder id="pauseJobResult"/>
+		<s:CallResponder id="resumeJobResult"/>
+		<s:CallResponder id="retryJobResult"/>
+		<s:CallResponder id="enableJobResult"/>
+		<s:CallResponder id="disableJobResult"/>
+	</fx:Declarations>
+	
+	<!--
+	http://stackoverflow.com/questions/375100/flex-when-hiding-components-in-flex
+	2. cevap
+	includeInLayout ve visible beraber kullanılmalı !
+	-->
+	<s:Group horizontalCenter="0">
+		<s:layout>
+			<!--s:TileLayout horizontalGap="1" verticalGap="8" horizontalAlign="center"/-->
+			<s:HorizontalLayout />
+		</s:layout>
+		<!--s:Label text="isStartable : {data.visualParams.commandabilityParams.isStartable}" paddingTop="5"/-->
+		
+		<s:Image id="disableJob" source="{ImageContainer.getManageImage(0)}" toolTip="{resourceManager.getString('messages', 'disableJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isStartable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isStartable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="startJob" source="{ImageContainer.getManageImage(1)}" toolTip="{resourceManager.getString('messages', 'startJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isStartable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isStartable == true}" 
+				 click="executeJobCommand(event, data.@Id, data.@Id)" />
+		
+		<s:Image id="pauseJob" source="{ImageContainer.getManageImage(2)}" toolTip="{resourceManager.getString('messages', 'pauseJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isPausable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isPausable == true}" 
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="enableJob" source="{ImageContainer.getManageImage(3)}" toolTip="{resourceManager.getString('messages', 'enableJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isStartable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isStartable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="retryJob" source="{ImageContainer.getManageImage(4)}" toolTip="{resourceManager.getString('messages', 'retryJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isRetryable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isRetryable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="setSuccessJob" source="{ImageContainer.getManageImage(5)}" toolTip="{resourceManager.getString('messages', 'setSuccessJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isSuccessable == true}" buttonMode="true" mouseChildren="false"
+				 visible="{data.visualParams.commandabilityParams.isSuccessable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="skipJob" source="{ImageContainer.getManageImage(6)}" toolTip="{resourceManager.getString('messages', 'skipJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isSkipable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isSkipable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="stopJob" source="{ImageContainer.getManageImage(7)}" toolTip="{resourceManager.getString('messages', 'stopJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isStopable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isStopable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+		<s:Image id="resumeJob" source="{ImageContainer.getManageImage(8)}" toolTip="{resourceManager.getString('messages', 'resumeJobTooltip')}" 
+				 includeInLayout="{data.visualParams.commandabilityParams.isResumable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isResumable == true}"
+				 click="executeJobCommand(event, data.@Id, data.Id)" />
+		
+	</s:Group>
+	
+</s:GridItemRenderer>

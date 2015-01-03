@@ -1,0 +1,318 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="JobManager">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">com.likya.pinara.services.jobmanager</item>
+      <item name="rootURL">http://127.0.0.1:3000</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">HTTPService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">com.likya.pinara.services.jobmanager.helpers</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="stop" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/stopjob/{jobId}</item>
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/stopjob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="start" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/startjob/{jobId}</item>
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/startjob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="setsuccess" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/setsuccessjob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/setsuccessjob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="skip" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/skipjob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/skipjob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="pause" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/pausejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/pausejob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="resume" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/resumejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/resumejob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="retry" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/retryjob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/retryjob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="enable" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/enablejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/enablejob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="disable" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/disablejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablejob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="stopapp" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/stopapp</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/stopapp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="fstopapp" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/fstopapp</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/fstopapp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="suspendapp" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/suspendapp</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/suspendapp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+    <function name="resumeapp" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/resumeapp</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/resumeapp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+  </service>
+  <service name="GraphLayer">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">com.likya.pinara.services.graphlayer</item>
+      <item name="rootURL">http://127.0.0.1:3000</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">HTTPService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="getdepgraph" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/graphview/nettreegml/{nettreeid}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/graphview/nettreegml/{nettreeid}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">nettreeid</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">nettreeid</item>
+      </annotation>
+      <parameter name="nettreeid" type="string"/>
+    </function>
+  </service>
+</model>

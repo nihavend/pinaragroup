@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:layout="org.osmf.layout.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import flashx.textLayout.conversion.TextConverter;
+			
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void {
+				var myStr:String = "I contain <b>html</b> tags!";
+				//myRichEditableText.textFlow = TextConverter.importToFlow(myStr, TextConverter.TEXT_FIELD_HTML_FORMAT);
+			}
+			
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<fx:String id="htmlTextAsHTML">
+			<![CDATA[
+			
+			<p><b><font size="12" face="Arial,sans-serif"> Yazılım Son Kullanıcı Lisans Sözleşmesi</font></b></p>
+			
+			<p align="justify">
+				<font size="9" face="Arial,sans-serif">Bu yazılımı (aşağıda açıklanmıştır) indirmeden, kurmadan veya kullanmadan önce aşağıdaki şart ve koşulları dikkatlice okuyun. Yazılımı bilgisayarınıza kurmanız bu şart ve koşulları kabul etmeniz anlamına gelir.
+				</font>
+			</p>
+			
+			LİSANS SÖZLEŞMESİ
+			<p>
+			Bu Son Kullanıcı Lisans Sözleşmesi (“Lisans" veya “Lisans Sözleşmesi” ) TLOS isimli yazılımı kapsamaktadır. “Yazılım” terimi, bu yazılım programlarını ve bu yazılım programlarıyla birlikte verilen ilgili tüm belgeleri ifade eder.
+			</p>
+			
+			<p>
+			1. Lisansın Verilmesi. İşbu Lisans Sözleşmesine uymaya devam ettiğiniz sürece, LİKYA BİLGİ TEKNOLOJİLERİ VE İLETİŞİM HİZMETLERİ LİMİTED ŞİRKETİ (“LİKYA TEKNOLOJİ”) size, aşağıda belirtilen Lisans sınırlamalarına tabi olarak, Yazılımın bir kopyası için, münhasır olmayan bir lisans verir. İşbu Lisans, Yazılımın ve LİKYA TEKNOLOJİ’nin adlarını, logolarını veya ticari markalarını kullanma hakkı vermez. İşbu Lisans Sözleşmesi, Yazılım veya diğer fikri mülkiyetlerin satışı amacına yönelik değildir. Yazılım ile ilgili tüm haklar ve ünvanlar ile fikri mülkiyet hakları LİKYA TEKNOLOJİ’ye aittir.
+			</p>
+			
+			<p>
+			2. Kullanım Sınırlamaları. Yazılımı bir bilgisayarda kullanabilirsiniz. Yazılımı yukarıda anlatılan şekilde kullanabilmek amacıyla Yazılımı gerektiği gibi kopyalayabilirsiniz; ancak  Yazılımı herhangi bir üçüncü tarafa veremezsiniz. Yazılımda, Yazılım belgelerinde açıklanan alt program kütüphaneleri ve örnek dosyalar bulunabilir. Örnek dosyaları hiçbir nedenle değiştiremezsiniz.
+			</p>
+			
+			<p>
+			3. Yazılımın Devri. Yazılım hiçbir şekilde üçüncü şahıslara ve tüzel kişilere devredilemez.
+			</p>
+			
+			<p>
+			4. Telif hakkı. Yazılımın sahibi LİKYA TEKNOLOJİ olup; Yazılım, telif hakkı kanunları ve uluslararası anlaşmalar tarafından korunmaktadır. Aksi bu Lisans içinde açıkça belirtilmedikçe, Yazılımı kopyalayamazsınız. Yazılım üzerinde tersine mühendislik uygulayamaz, kaynak koda dönüştüremez veya bileşenlerine ayıramazsınız. Yazılımın hiçbir bölümünü LİKYA TEKNOLOJİ tarafından sağlandığı amaç dışında bir amaçla kullanamazsınız. Yazılım üzerinde değişiklik, uyarlama, çeviri yapamazsınız, Yazılımdan çalışma türetemezsiniz ya da Yazılımı başka yazılımlarla birleştiremezsiniz.
+			</p>
+			
+			<p>
+			5. Süre. Bu Lisans, sona erdirilene kadar geçerlidir. Yazılımı ve her türlü kopyasını imha ederek bu lisans sözleşmesini istediğiniz zaman sona erdirebilirsiniz. Ayrıca, işbu Lisans'ın herhangi bir koşuluna uymamanız durumunda da lisans otomatik olarak fesih olacaktır. Herhangi bir nedenle sona ermesi üzerine, Yazılımı ve tüm kopyalarını imha etmeyi kabul edersiniz. Nitelikleri gereği işbu Lisans Sözleşmesinin sona ermesinden sonra da yürürlükte kalması gereken hükümler yürürlükte kalmaya devam edecektir.
+			</p>
+			
+			<p>
+			6. GARANTİ REDDİ. Bu Yazılım size “OLDUĞU GİBİ” sağlanmaktadır. LİKYA TEKNOLOJİ, Yazılım içinde yer alan fonksiyonların gereksinimlerinizi karşılayacağı veya Yazılımın çalışmasının kesintisiz veya hatasız olacağı konusunda bir garanti vermemektedir. Yazılımın kullanılması ve Yazılımın kurulumu, kullanımı ve elde edilecek sonuçlarla ilgili sorumluluk size aittir.
+			</p>
+			
+			<p>
+			Aşağıdaki muafiyetleri yasaklayan ilgili yasaların izin verdiği ölçüde LİKYA TEKNOLOJİ, DOLAYLI TİCARİ VE ÖZEL BİR AMACA UYGUNLUK, İHLAL ETMEME GARANTİLERİ DE DAHİL OLMAK ÜZERE, PERFORMANS, KULLANIM VE TİCARİ FAALİYETLER SIRASINDA ORTAYA ÇIKABİLEN AÇIK VEYA DOLAYLI GARANTİLER DAHİL OLMAK ÜZERE, YAZILIM İLE İLGİLİ HİÇBİR AÇIK YA DA DOLAYLI GARANTİ VERMEMEKTEDİR.
+			</p>
+			
+			<p>
+			7. YÜKÜMLÜLÜK KONUSUNDAKİ KISITLAMALAR. Yazılımın kullanımı tamamen sizin sorumluluğunuzdadır. LİKYA TEKNOLOJİ, hiçbir koşul altında Yazılımı kullanmanız veya hatalı kullanmanız konusunda size karşı yükümlü değildir. YASALARIN İZİN VERDİĞİ SINIRLAR DAHİLİNDE LİKYA TEKNOLOJİ HİÇBİR KOŞUL ALTINDA YAZILIMI KULLANMANIZDAN VEYA HATALI KULLANMANIZDAN KAYNAKLANAN, KAR KAYBI, TASARRUF KAYBI, İKAME ÜRÜN VEYA HİZMET TEDARİK MASRAFLARI VEYA DİĞER ZARARLAR DA DAHİL OLMAK ÜZERE HİÇBİR FİİLİ, DOĞRUDAN, DOLAYLI, TESADÜFİ, ÖZEL, SONUÇ OLARAK MEYDANA GELEN VEYA CEZAİ HASARLAR KONUSUNDA, BU TÜR HASARLARIN İHTİMALİ KONUSUNDA ÖNCEDEN UYARILMIŞ OLSA BİLE, HİÇBİR YÜKÜMLÜLÜK TAŞIMAMAKTADIR.
+			</p>
+			
+			<p>
+			8. Yazılım 5486 sayılı Fikir ve Sanat Eserleri Kanunu, 765 sayılı Türk Ceza Kanunu'nun ilgili maddeleri ile ve ilgili uluslararası geçerli kanunlarla korunmaktadır. Bu Lisans Anlaşması Yazılım’ın yalnız kullanım haklarını size verir. Yalnız yedekleme ve arşivleme amaçlarıyla, Yazılımın özgün kopyaları üzerindeki bütün telif hakkı ve mülkiyete ilişkin notları da çoğaltmak koşulu ile Yazılımın bir kopyasını çıkartabilirsiniz. Bunun dışında Yazılımın tümünün ya da bir bölümünün kopyalanması, çoğaltılması, haksız eylem ve suç oluşturur.
+			</p>
+			
+			<p align="justify"><font size="9" face="Arial,sans-serif">
+			9. Çeşitli Hükümler. İşbu Lisans Sözleşmesinin tüm hükümleri bölünebilirdir. Herhangi bir hükmün yürütülemez bulunması halinde, bu bulgu işbu Lisans Sözleşmesinin kalan hükümlerinin, şartlarının ya da koşullarının yürütülebilirliğini etkilemez. İşbu Lisans Sözleşmesi, varisler ve halefler için de bağlayıcıdır. LİKYA TEKNOLOJİ, tamamen ya da kısmen kendi makul kontrolü dışındaki nedenlere isnat edilebilecek kullanılamama ya da gecikme durumlarından dolayı sorumlu tutulamaz. İşbu sözleşmede yer alan hiçbir hüküm, taraflar arasında temsilcilik, ortaklık ya da başka bir ortak girişim oluşturulması anlamına gelmemektedir. Yazılımı kurmanız ya da kullanmanız işbu Lisans Sözleşmesini okuduğunuzu, anladığınızı, koşullarının sizin için bağlayıcı olduğunu ve yukarıda anılan hükümlerin Lisans Sözleşmesinin tam ve münhasır ifadesi olduğunu kabul ettiğiniz anlamına gelir.
+			</font>
+			</p>
+			
+			]]>
+		</fx:String>
+	</fx:Declarations>
+	
+	<!--s:Button click="aboutTlos_clickHandler()" /-->
+		
+	
+	<s:BorderContainer width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="10" paddingTop="100"/>
+		</s:layout>
+		
+<!--		<s:RichText id="myRichEditableText"  width="500" height="200" textAlign="justify" fontFamily="Arial" fontSize="12" paddingTop="50"/>
+
+		<s:RichText id="richTxt" width="500" height="200"
+					horizontalCenter="0" verticalCenter="0"
+					initialize="richTxt.textFlow = TextConverter.importToFlow(htmlTextAsHTML, TextConverter.TEXT_FIELD_HTML_FORMAT);"/>-->
+		
+		<s:TextArea id="myText"  width="500" height="200" textAlign="justify" fontFamily="Arial" fontSize="12" editable="false"
+					initialize="myText.textFlow = TextConverter.importToFlow(htmlTextAsHTML, TextConverter.TEXT_FIELD_HTML_FORMAT);"/>
+		
+	</s:BorderContainer>
+</s:Application>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				startJobResult.token = jobManagerService.start("1");
+			}
+			
+			protected function iki_clickHandler(event:MouseEvent):void {
+				disableJobResult.token = jobManagerService.disable("1");
+			}
+			
+			protected function uc_clickHandler(event:MouseEvent):void {
+				setSuccessJobResult.token = jobManagerService.setsuccess("1");
+			}
+			
+			protected function jobManagerService_resultHandler(event:ResultEvent):void {
+				// Alert.show("Result : " + XML(event.message.body));								
+			}
+			
+			protected function jobManagerService_faultHandler(event:FaultEvent):void {
+				Alert.show("Fault : " + event.message);	
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<jobmanager:JobManager id="jobManagerService" result="jobManagerService_resultHandler(event)" fault="jobManagerService_faultHandler(event)"/>
+		<s:CallResponder id="startJobResult"/>
+		<s:CallResponder id="disableJobResult"/>
+		<s:CallResponder id="setSuccessJobResult"/>
+	</fx:Declarations>
+
+	<s:Button id="bir" click="button1_clickHandler(event)" label="Start Job" left="100" top="100"/>
+	<s:Button id="iki" click="iki_clickHandler(event)" label="Disable Job" left="200" top="100"/>
+	<s:Button id="uc" click="uc_clickHandler(event)" label="Set Success Job" left="300" top="100"/>
+	
+</s:Application>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  implements="com.likya.pinara.modules.IModuleInterface"
+		  creationComplete="module1_creationCompleteHandler(event)"
+		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.formatters.DateFormatter;
+			import mx.rpc.events.FaultEvent;
+			
+			[Bindable] 
+			private var jobs:ArrayCollection;
+			
+			public var selectedJobId:String;
+			
+			private var executeRShellParamsXml:XML;
+			
+			[Bindable]
+			public var tlosMenuData:XMLListCollection = new XMLListCollection();
+			
+			[Bindable]
+			public var jobDetailXml:XML;
+			
+			public function getDate(dateTxt:String):String {
+				var dateFormatter:DateFormatter = new DateFormatter();
+				dateFormatter.formatString = 'HH:NN:SS DD/MM/YYYY';
+				return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+			}
+			
+			protected function serverdef_itemClickHandler(event:ItemClickEvent):void {
+				
+			}
+			
+			public function setDataXml(xml:XML):void {
+				// trace(xml);
+				// trace(xml.executeRShellParams.hostName);
+				// trace(xml.executeRShellParams.port);
+				// trace(xml.executeRShellParams.rshellPassword);
+				// trace(xml.executeRShellParams.fileSeperator);
+				
+				executeRShellParamsXml = xml;
+			}
+			
+			protected function module1_creationCompleteHandler(event:FlexEvent):void {
+				// trace("XML(executeRShellParamsXml) : " + XML(executeRShellParamsXml));
+				if(XML(executeRShellParamsXml).hasOwnProperty("hostName")) {
+					hostName.selected = true;
+					ipHostText.text = executeRShellParamsXml.hostName;
+				} else {
+					ipAddress.selected = true;
+					ipHostText.text = executeRShellParamsXml.ipAddress;
+				}
+				
+				userInput.text = executeRShellParamsXml.userName;
+				passInput.text = executeRShellParamsXml.rshellPassword;
+				portInput.text = executeRShellParamsXml.port;
+				fileDelInput.text = executeRShellParamsXml.fileSeperator
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="serverdef" itemClick="serverdef_itemClickHandler(event)"/>
+	</fx:Declarations>
+	
+	<s:BorderContainer width="100%" height="100%" borderVisible="false"> 
+		<s:layout> 
+			<s:VerticalLayout gap="5" clipAndEnableScrolling="true"/> 
+		</s:layout>
+		
+		<s:HGroup verticalAlign="top" paddingTop="10" paddingLeft="10">
+			<s:RadioButton group="{serverdef}" 
+						   selected="true"
+						   id="hostName" 
+						   value="hostName" 
+						   label="Hostname" 
+						   width="100"/>
+			<s:RadioButton group="{serverdef}" 
+						   id="ipAddress" 
+						   value="ipAddress" 
+						   label="IP Address" 
+						   width="100"/>
+			<s:TextInput id="ipHostText" editable="false"/>
+		</s:HGroup>
+		
+		<mx:HRule width="100%"/>
+		
+		<s:HGroup verticalAlign="top" paddingTop="10" paddingLeft="10">
+			<s:Label text="Kullanıcı Adı :" />
+			<s:TextInput id="userInput" editable="false"/>
+			<s:Label text="Şifre :" />
+			<s:TextInput id="passInput" editable="false"/>
+		</s:HGroup>
+		
+		<mx:HRule width="100%"/>
+		
+		<s:HGroup verticalAlign="baseline" paddingTop="10" paddingLeft="10">
+			<s:Label text="Port Number :" />
+			<s:TextInput id="portInput" editable="false"/>
+			<s:Label text="Dosya ayracı :" />
+			<s:TextInput id="fileDelInput" editable="false"/>
+		</s:HGroup>
+		
+	</s:BorderContainer> 
+</s:Module>

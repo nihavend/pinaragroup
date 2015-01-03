@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="27" creationComplete="getYear()">
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			private var curretYear:String = "";
+
+			protected function getYear():void {
+				var currentDate:Date = new Date();
+				curretYear = "" + currentDate.fullYear;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<mx:HBox backgroundColor="#E1E5EA" width="100%" height="30" dropShadowVisible="true" borderStyle="solid" chromeColor="#E1E5EA" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<s:Label width="100%" fontSize="10" text="Her Hakkı Saklıdır © 2008-{curretYear} Likya Bilgi Teknolojileri ve İletişim Hizmetleri Ltd. Şti., İstanbul" textAlign="center"/>
+	</mx:HBox> 
+	
+</s:Group>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.MenuEvent;
+			import mx.collections.ArrayCollection;
+			import com.likya.pinara.model.UserRole;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.events.MenuEvent;
+
+			[Bindable] 
+			private var jobs:ArrayCollection;
+			
+			[Bindable]
+			public var tlosMenuData:XMLListCollection = new XMLListCollection();
+			
+			[Bindable]
+			public var jobListType:String;
+			
+			[Bindable]
+			public var roleList:ArrayCollection = new ArrayCollection(
+				[ {name:"Admin", value:UserRole.ADMIN},
+					{name:"Operation", value:UserRole.OPERATION},
+					{name:"View", value:UserRole.VIEW} ]);
+			
+			public var role:String = UserRole.ADMIN;
+			// public var role:String = UserRole.OPERATION;
+			// public var role:String = UserRole.VIEW;
+			
+
+			[Bindable]
+			private var dpFlat:ArrayCollection = new ArrayCollection([
+				{Region:"Southwest", Territory:"Arizona", 
+					Territory_Rep:"Barbara Jennings", Actual:38865, Estimate:40000}, 
+				{Region:"Southwest", Territory:"Arizona", 
+					Territory_Rep:"Dana Binn", Actual:29885, Estimate:30000},  
+				{Region:"Southwest", Territory:"Central California", 
+					Territory_Rep:"Joe Smith", Actual:29134, Estimate:30000},  
+				{Region:"Southwest", Territory:"Nevada", 
+					Territory_Rep:"Bethany Pittman", Actual:52888, Estimate:45000},  
+				{Region:"Southwest", Territory:"Northern California", 
+					Territory_Rep:"Lauren Ipsum", Actual:38805, Estimate:40000}, 
+				{Region:"Southwest", Territory:"Northern California", 
+					Territory_Rep:"T.R. Smith", Actual:55498, Estimate:40000},  
+				{Region:"Southwest", Territory:"Southern California", 
+					Territory_Rep:"Alice Treu", Actual:44985, Estimate:45000}, 
+				{Region:"Southwest", Territory:"Southern California", 
+					Territory_Rep:"Jane Grove", Actual:44913, Estimate:45000}
+			]);
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:Panel id="tlosMainPanel" left="0" right="0" height="100%" minWidth="600" chromeColor="#E2E5E7" color="#0D173C" dropShadowVisible="true" enabled="true" fontFamily="Arial" title="{resourceManager.getString('messages', 'jobListHeader')}">
+		
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		
+		<mx:AdvancedDataGrid id="myADG" dataProvider="{jobs}" width="100%" height="100%">        
+			<mx:columns>
+				<mx:AdvancedDataGridColumn visible="{jobListType == 'allJobsView'}" headerText="{resourceManager.getString('messages', 'tlosNameGrid')}" dataField="Region"/>
+				<mx:AdvancedDataGridColumn headerText="{resourceManager.getString('messages', 'stateGrid')}" dataField="Territory"/>
+				<mx:AdvancedDataGridColumn dataField="Territory_Rep"
+										   headerText="Territory Rep"/>
+				<mx:AdvancedDataGridColumn dataField="Actual"/>
+				<mx:AdvancedDataGridColumn dataField="Estimate"/>
+			</mx:columns>
+		</mx:AdvancedDataGrid>
+		
+		<!--mx:DataGrid top="20" width="100%" height="100%" minWidth="600" borderVisible="true" color="#0D173C" dataProvider="{jobs}" dropShadowVisible="true" editable="false" enabled="true" fontSize="9" horizontalScrollPolicy="off" includeInLayout="true" resizableColumns="true" variableRowHeight="true"
+					 verticalAlign="middle" wordWrap="true">
+			
+			<mx:columns>
+				<mx:DataGridColumn visible="{jobListType == 'allJobsView'}" width="98" minWidth="70" dataField="tlosName" headerText="{resourceManager.getString('messages', 'tlosNameGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="38" minWidth="30" dataField="state" headerText="{resourceManager.getString('messages', 'stateGrid')}" resizable="true" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:HBox horizontalAlign="center" horizontalGap="2">
+								<s:Image id="ready" visible="{data.state == 0}" includeInLayout="{data.state == 0}" source="@Embed(source='/images/clock1.jpg')" toolTip="{resourceManager.getString('messages', 'readyTooltip')}"/>
+								<s:Image id="waiting" visible="{data.state == 1}" includeInLayout="{data.state == 1}" source="@Embed(source='/images/kilit.jpg')" toolTip="{resourceManager.getString('messages', 'waitingTooltip')}"/>
+								<s:Image id="working" visible="{data.state == 2}" includeInLayout="{data.state == 2}" source="@Embed(source='/images/kosu2.jpg')" toolTip="{resourceManager.getString('messages', 'workingTooltip')}"/>
+								<s:Image id="success" visible="{data.state == 3}" includeInLayout="{data.state == 3}" source="@Embed(source='/images/ok2.jpg')" toolTip="{resourceManager.getString('messages', 'successfulTooltip')}"/>
+								<s:Image id="fail" visible="{data.state == 4}" includeInLayout="{data.state == 4}" source="@Embed(source='/images/error.jpg')" toolTip="{resourceManager.getString('messages', 'failedTooltip')}"/>
+								<s:Image id="timeout" visible="{data.state == 5}" includeInLayout="{data.state == 5}" source="@Embed(source='/images/timeout.jpg')" toolTip="{resourceManager.getString('messages', 'timeoutTooltip')}"/>
+								<s:Image id="skip" visible="{data.state == 6}" includeInLayout="{data.state == 6}" source="@Embed(source='/images/skip.jpg')" toolTip="{resourceManager.getString('messages', 'skippedTooltip')}"/>
+								<s:Image id="stop" visible="{data.state == 7}" includeInLayout="{data.state == 7}" source="@Embed(source='/images/stop.jpg')" toolTip="{resourceManager.getString('messages', 'stoppedTooltip')}"/>
+								<s:Image id="pause" visible="{data.state == 8}" includeInLayout="{data.state == 8}" source="@Embed(source='/images/pause.jpg')" toolTip="{resourceManager.getString('messages', 'pausedTooltip')}"/>
+								<s:Image id="working2" visible="{data.state == 10}" includeInLayout="{data.state == 10}" source="@Embed(source='/images/kosu2.jpg')" toolTip="{resourceManager.getString('messages', 'workingTooltip')}"/>
+								<s:Image id="disable" visible="{data.state == 11}" includeInLayout="{data.state == 11}" source="@Embed(source='/images/disabled.jpg')" toolTip="{resourceManager.getString('messages', 'disabledTooltip')}"/>
+							</mx:HBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn visible="true" width="98" minWidth="70" headerText="{resourceManager.getString('messages', 'manageGrid')}" resizable="true" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:HBox horizontalAlign="center" horizontalGap="2">
+								<fx:Script>
+									<![CDATA[
+										import mx.controls.Alert;
+										import mx.controls.Alert;
+										public function executeJobCommand(event:MouseEvent, jobId:String, tlosName:String):void {	
+											Alert.show("Fire event !");
+										}
+									]]>
+								</fx:Script>
+								
+								<s:Image id="disableJob" visible="{data.disableButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.disableButton}" source="@Embed(source='/images/disableJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'disableJobTooltip')}"/>
+								<s:Image id="startJob" visible="{data.startButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.startButton}" source="@Embed(source='/images/startJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'startJobTooltip')}"/>
+								<s:Image id="pauseJob" visible="{data.pauseButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.pauseButton}" source="@Embed(source='/images/pauseJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'pauseJobTooltip')}"/>
+								<s:Image id="enableJob" visible="{data.enableButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.enableButton}" source="@Embed(source='/images/enableJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'enableJobTooltip')}"/>
+								<s:Image id="retryJob" visible="{data.retryButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.retryButton}" source="@Embed(source='/images/retryJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'retryJobTooltip')}"/>
+								<s:Image id="setSuccessJob" visible="{data.setSuccessButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.setSuccessButton}" source="@Embed(source='/images/setSuccessJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'setSuccessJobTooltip')}"/>
+								<s:Image id="skipJob" visible="{data.skipButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.skipButton}" source="@Embed(source='/images/skipJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'skipJobTooltip')}"/>
+								<s:Image id="stopJob" visible="{data.stopButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.stopButton}" source="@Embed(source='/images/stopJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'stopJobTooltip')}"/>
+								<s:Image id="resumeJob" visible="{data.resumeButton}" click="executeJobCommand(event, data.jobId, data.tlosName)" includeInLayout="{data.resumeButton}" source="@Embed(source='/images/resumeJob.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'resumeJobTooltip')}"/>
+							</mx:HBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn visible="true" width="98" minWidth="70" dataField="jobNo" headerText="{resourceManager.getString('messages', 'jobNameGrid')}" textAlign="center" wordWrap="true">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:VBox horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+								<fx:Script>
+									<![CDATA[
+										import mx.controls.Alert;
+										import mx.controls.Alert;
+										public function showParameterDefinitions(event:MouseEvent, jobId:String, tlosName:String):void {	
+											Alert.show("Fire event !");
+										}
+									]]>
+								</fx:Script>
+								
+								<mx:Label text="{data.jobNo}"/>
+								<s:Button id="parameter" visible="{data.paramList}" label="{resourceManager.getString('messages', 'parameterGrid')}" click="showParameterDefinitions(event, data.jobId, data.tlosName)" includeInLayout="{data.paramList}"/>
+							</mx:VBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn visible="true" width="98" minWidth="70" dataField="jobNo" headerText="{resourceManager.getString('messages', 'jobNameGrid')}" textAlign="center" wordWrap="true"/>
+				<mx:DataGridColumn width="53" minWidth="28" dataField="jobType" headerText="{resourceManager.getString('messages', 'jobTypeGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:VBox horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+								<mx:Label visible="{data.isStandart()}" includeInLayout="{data.isStandart()}" text="{resourceManager.getString('messages', 'standard')}"/>
+								<mx:Label visible="{data.isManuel()}" includeInLayout="{data.isManuel()}" text="{resourceManager.getString('messages', 'manuel')}"/>
+								<mx:Label visible="{data.isRepetitive()}" includeInLayout="{data.isRepetitive()}" text="{resourceManager.getString('messages', 'repetitive')}"/>
+							</mx:VBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn width="63" minWidth="33" dataField="group" headerText="{resourceManager.getString('messages', 'groupGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="63" minWidth="33" dataField="jobCommandName" headerText="{resourceManager.getString('messages', 'commandGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:HBox horizontalAlign="center" horizontalGap="2" verticalAlign="middle">
+								<fx:Script>
+									<![CDATA[
+										import mx.controls.Alert;
+										import mx.controls.Alert;
+										public function showScriptFile(event:MouseEvent, jobId:String, tlosName:String):void {	
+											Alert.show("Fire event !");
+										}
+									]]>
+								</fx:Script>
+								<mx:Label buttonMode="true" click="showScriptFile(event, data.jobId, data.tlosName)" mouseChildren="false" text="{data.jobCommandName}" toolTip="{resourceManager.getString('messages', 'commandFileTooltip')}" useHandCursor="true"/>
+							</mx:HBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn width="38" minWidth="30" dataField="log" headerText="{resourceManager.getString('messages', 'logGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:HBox horizontalAlign="center" horizontalGap="2">
+								<fx:Script>
+									<![CDATA[
+										import mx.controls.Alert;
+										import mx.controls.Alert;
+										public function showLogFile(event:MouseEvent, jobId:String, tlosName:String):void {	
+											Alert.show("Fire event !");
+										}
+									]]>
+								</fx:Script>
+								<mx:Image id="showJobLog" visible="{data.logExist}" buttonMode="true" click="showLogFile(event, data.jobId, data.tlosName)" includeInLayout="{data.logExist}" source="@Embed(source='/images/logfile.jpg')"
+										  toolTip="{resourceManager.getString('messages', 'logFileTooltip')}"/>
+								<mx:Image id="dontShowJobLog" visible="{!data.logExist}" buttonMode="true" includeInLayout="{!data.logExist}" source="@Embed(source='/images/noLogfile.jpg')" toolTip="{resourceManager.getString('messages', 'noLogFileTooltip')}"/>
+							</mx:HBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn width="108" minWidth="70" dataField="nextTime" headerText="{resourceManager.getString('messages', 'nextTimeGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="108" minWidth="70" dataField="execution" headerText="{resourceManager.getString('messages', 'executionTimeGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="82" minWidth="53" dataField="preDuration" headerText="{resourceManager.getString('messages', 'previousDurationGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="62" minWidth="33" dataField="duration" headerText="{resourceManager.getString('messages', 'durationGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="143" minWidth="80" dataField="previousStatusList" headerText="{resourceManager.getString('messages', 'previousStatesGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:VBox horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+								<fx:Script>
+									<![CDATA[
+										import mx.collections.ArrayCollection;
+										import mx.controls.Alert;
+										public function getPreviousStatusListString(previousStatusList:ArrayCollection):String {
+											var statusListStr:String = "("; 
+											if (previousStatusList != null) {
+												var i:int = 0;
+												while (i < previousStatusList.length) {
+													var jobStatus:int = int(previousStatusList.getItemAt(i));
+													//statusListStr += getStatusAsString(jobStatus) + ",";
+													i++;
+												}
+											}
+											var lastChar:String = statusListStr.charAt(statusListStr.length - 1);
+											if (lastChar == ",") {
+												statusListStr = statusListStr.substring(0, statusListStr.length - 1);
+											}
+											statusListStr += ")";
+											return statusListStr;
+										}
+									]]>
+								</fx:Script>
+								<mx:Label text="{getPreviousStatusListString(data.previousStatusList)}"/>
+							</mx:VBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn width="72" minWidth="38" dataField="state" headerText="{resourceManager.getString('messages', 'stateGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:VBox horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+								<mx:Label visible="{data.state == 0}" includeInLayout="{data.state == 0}" text="{resourceManager.getString('messages', 'readyState')}"/>
+								<mx:Label visible="{data.state == 1}" includeInLayout="{data.state == 1}" text="{resourceManager.getString('messages', 'waitingState')}"/>
+								<mx:Label visible="{data.state == 2}" includeInLayout="{data.state == 2}" text="{resourceManager.getString('messages', 'workingState')}"/>
+								<mx:Label visible="{data.state == 3}" includeInLayout="{data.state == 3}" text="{resourceManager.getString('messages', 'successState')}"/>
+								<mx:Label visible="{data.state == 4}" includeInLayout="{data.state == 4}" text="{resourceManager.getString('messages', 'failedState')}"/>
+								<mx:Label visible="{data.state == 5}" includeInLayout="{data.state == 5}" text="{resourceManager.getString('messages', 'timeoutState')}"/>
+								<mx:Label visible="{data.state == 6}" includeInLayout="{data.state == 6}" text="{resourceManager.getString('messages', 'skipState')}"/>
+								<mx:Label visible="{data.state == 7}" includeInLayout="{data.state == 7}" text="{resourceManager.getString('messages', 'stopState')}"/>
+								<mx:Label visible="{data.state == 8}" includeInLayout="{data.state == 8}" text="{resourceManager.getString('messages', 'pauseState')}"/>
+								<mx:Label visible="{data.state == 9}" includeInLayout="{data.state == 9}" text="{resourceManager.getString('messages', 'resumeState')}"/>
+								<mx:Label visible="{data.state == 10}" includeInLayout="{data.state == 10}" text="{resourceManager.getString('messages', 'manuelState')}"/>
+								<mx:Label visible="{data.state == 11}" includeInLayout="{data.state == 11}" text="{resourceManager.getString('messages', 'disabledState')}"/>
+							</mx:VBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn width="82" minWidth="45" dataField="nextJobs" headerText="{resourceManager.getString('messages', 'nextJobsGrid')}" textAlign="center" wordWrap="false"/>
+				<mx:DataGridColumn width="72" minWidth="40" dataField="reStartable" headerText="{resourceManager.getString('messages', 'restartableGrid')}" textAlign="center" wordWrap="false">
+					<mx:itemRenderer>
+						<fx:Component>
+							<mx:VBox horizontalAlign="center" verticalAlign="middle" verticalGap="2">
+								<mx:Label visible="{data.reStartable}" includeInLayout="{data.reStartable}" text="{resourceManager.getString('messages', 'restartableYes')}"/>
+								<mx:Label visible="{!data.reStartable}" includeInLayout="{!data.reStartable}" text="{resourceManager.getString('messages', 'restartableNo')}"/>
+							</mx:VBox>
+						</fx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
+			</mx:columns>
+			
+		</mx:DataGrid-->
+		
+	</s:Panel>
+	
+</s:Group>

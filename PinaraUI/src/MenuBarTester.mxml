@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			public var tlosMenuData:XMLListCollection = new XMLListCollection();
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void {
+				tlosMenuData.source = menuDataXMLList;
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				// Alert.show(menuDataXMLList..item.(@label=="Menu2"), "Title : ");
+				// trace(menuDataXMLList..menuitem.(attribute("label") == "Menu0"));
+				// menuDataXMLList[3][0] = "<menuitem label=\"{resourceManager.getString('messages', 'suspendApp')}\" id=\"suspend\"/>";
+				// menuDataXMLList.item.(@label=="{resourceManager.getString('messages', 'suspendApp')}").@label = "{resourceManager.getString('messages', 'suspendApp')}";
+				// menuDataXMLList.item.(@label=="label").@id = "resume";
+				// trace(menuDataXMLList.item.(@label=="Beklemeye Al"));
+				// trace(menuDataXMLList.item.(@id=="suspend"));
+				/*trace(XML(menuDataXMLList[3][0]).menuitem[0].@label);
+				trace(XML(menuDataXMLList[3][0]).menuitem[0].@id);
+				XML(menuDataXMLList[3][0]).@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
+				XML(menuDataXMLList[3][0]).menuitem.@id = "resume"
+				trace(XML(menuDataXMLList[3][0]).@label);
+				trace(XML(menuDataXMLList[3][0]).@id);*/
+				
+				/*for(var item in menuDataXMLList) {  
+				trace(item);
+				var xml:XML = menuDataXMLList[item] as XML;
+				trace(xml);        
+				}
+				trace(menuDataXMLList[0]);
+				trace(menuDataXMLList[1]);
+				trace(XMLList(menuDataXMLList[3])[0]);
+				trace(menuDataXMLList[3]);
+				trace(menuDataXMLList[4]);*/
+				/*for(var item in menuDataXMLList) {  
+					//trace(item);
+					//trace(menuDataXMLList[item].xmlNodeName);
+					// trace(menuDataXMLList[item].@label);
+					trace(XML(menuDataXMLList[item]));       
+				}*/
+				
+				// trace(XML(menuDataXMLList[2]).children()[0].@label);
+				XML(menuDataXMLList[2]).children()[0].@label = "serkan";
+				// trace(XML(menuDataXMLList[2]).children()[0].@label);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<fx:XMLList id="menuDataXMLList">
+			<menuitem label="Menu0" id="anasayfa"/>
+			<menuitem label="Menu1" id="refresh"/>
+			<menuitem label="Menu2" id="configfiles" role="">			
+				<menuitem label="Menu2-0" id="pinaraProperties"/>			
+				<menuitem label="Menu2-1" id="myraProperties"/>
+				<menuitem label="Menu2-2" id="scenarioFile"/>			
+				<menuitem label="Menu2-3" id="myraLog"/>
+				<menuitem label="Menu2-4" id="pinaraLog"/>
+				<menuitem label="Menu2-5" id="pinaraEkran"/>
+			</menuitem>
+			<menuitem label="Menu3" id="help" role="">			
+				<menuitem label="Menu3-0"/>			
+				<menuitem label="Menu3-1"/>			
+			</menuitem>
+			
+		</fx:XMLList>
+		
+		
+	</fx:Declarations>
+	
+	
+	<mx:MenuBar id="pinaraMenuBar" width="100%" chromeColor="#B4CBE1" color="#0D173C" 
+				dataProvider="{tlosMenuData}" fontFamily="Arial" fontWeight="bold" horizontalCenter="0"
+				labelField="@label" selectionColor="#A8C6EE"
+				symbolColor="#F7F4F4"/>
+	
+	<s:Button click="button1_clickHandler(event)" y="100"/>
+</s:Application>

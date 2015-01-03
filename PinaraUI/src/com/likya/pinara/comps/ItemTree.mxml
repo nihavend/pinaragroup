@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:query="services.query.*"
+		 width="150" height="300" xmlns:services="services.*"  creationComplete="group_creationCompleteHandler(event)" >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			
+			public namespace rs = "http://www.likyateknoloji.com/XML_resource_types";
+			
+			[Bindable]
+			private var selectedNode:XML;
+			
+			//private var selectedTreeItem:Object; 
+			
+			[Bindable]
+			[Embed(source="/images/connected.jpg")] 
+			private var tlosConnectedImage:Class; 
+			
+			[Bindable]
+			[Embed(source="/images/disconnected.jpg")] 
+			private var tlosDisconnectedImage:Class;
+			
+			[Bindable]
+			[Embed(source="/images/tlosTree.jpg")]
+			private var tlosFolderImg:Class;
+			
+			[Bindable]
+			[Embed(source="/images/addTlos.jpg")] 
+			private var addTlosImage:Class;
+			
+			public var CONNECT_RESOURCE:String = "Kaynak Tanımla";
+			public var RESOURCE_LIST:String = "Kaynak Listesi";
+			
+			[Bindable]
+			public static var jobListXml:XML;
+			
+			private static var treeXml:XML = 
+				<list> 
+					<tlos title="Kaynak Tanımla" ip="1" port="1"/> 
+				</list>
+				
+			private static var treeXml2:XML = <rs:resourceList title="Kaynak Listesi" xmlns:rs="http://www.likyateknoloji.com/XML_resource_types"/>; 
+			
+			[Bindable] 
+			public static var tlosTreeData:XMLListCollection = new XMLListCollection(treeXml.tlos); 
+			
+			[Bindable] 
+			public static var nrpeProperties:ArrayCollection = new ArrayCollection();
+			
+			public var treeOpenItems:Object;
+				
+			private function treeLabel(item:Object):String { 
+				var node:XML = XML(item); 
+				if( node.localName() == "tlos" || node.localName() == "resourceList") 
+					return node.@title;
+				else if(node.localName() == "resourceProperties")
+					return node.@name + " (" + node.@ipAddress + ")";
+				else if(node.localName() == "agentProperties")
+					return node.@name; 
+				else
+					return node.text();
+			} 
+			
+			private function treeIconFunc(item:Object):Class { 
+				var node:XML = XML(item); 
+				if( node.@title == RESOURCE_LIST) {
+					return tlosFolderImg;
+				} else if (node.@title == CONNECT_RESOURCE){
+					return addTlosImage;
+				} else if(node.localName() == "resourceProperties") {
+					return tlosFolderImg;
+				} else if(node.localName() == "agentProperties") {
+					if(node.@connected == "true") {
+						return tlosConnectedImage;
+					} else {
+						return tlosDisconnectedImage;
+					}
+				} else {
+					return null;
+				}
+			}
+			
+			private function tlosTree_itemClickHandler(e:ListEvent):void {
+				selectedNode=Tree(e.target).selectedItem as XML;
+				
+				//selectedTreeItem = Tree(e.target).selectedItem;
+				
+				if(selectedNode.@title == CONNECT_RESOURCE){
+//					dispatchEvent(new ResourceEvent(ResourceEvent.ADD));
+					
+				} else if(selectedNode.@title == RESOURCE_LIST) {
+//					dispatchEvent(new ResourceEvent(ResourceEvent.LIST));
+					
+				} else if(selectedNode.@type == "Tlos") {
+					var ipAddress:String = selectedNode.parent().@ipAddress.toString();
+					var port:Number = selectedNode.@port;
+//					getJobListResult.token = jmxAgentConnection.getJobList(ipAddress, port);
+					
+				} else if(selectedNode.@type == "Nagios") {
+					var osType:String = selectedNode.parent().@osType.toString();
+					var ip:String = selectedNode.parent().@ipAddress.toString();
+					var portNumber:Number = selectedNode.@port;
+					checkNrpeResource(osType, ip, portNumber);
+					
+				} else if(selectedNode.localName() == "resourceProperties") {
+//					TlosSWTestConsole.selectedResourceId = selectedNode.@ID;
+//					dispatchEvent(new ResourceEvent(ResourceEvent.EDIT_AGENTS));
+				}
+			}
+			
+			private function getJobListResultHandler(event:ResultEvent):void {
+				var node:XML = XML(event.result.toString());
+				
+				if (node == "false") {
+					selectedNode.@connected = "false";
+				} else {
+					jobListXml = node;
+					//Alert.show(jobListXml.toXMLString());
+					
+					selectedNode.@connected = "true";
+//					dispatchEvent(new ResourceEvent(ResourceEvent.TLOSJOBS));
+				}
+			}
+			
+			protected function checkNrpeResource(osType:String, ipAddress:String, port:Number):void
+			{
+				var commandList:ArrayCollection = new ArrayCollection();
+				
+				if(osType == "unix") {
+					commandList.addItem("check_moad");
+					commandList.addItem("check_disk");
+					commandList.addItem("check_mem");
+				} else if(osType == "win") {
+					commandList.addItem("alias_cpu");
+					commandList.addItem("alias_disk");
+					commandList.addItem("alias_mem");
+				}
+				
+//				checkNrpeResourceResult.token = nagiosConnection.checkResource(ipAddress, port, commandList);
+			}
+			
+			private function checkNrpeResourceResultHandler(event:ResultEvent):void
+			{
+				if (event.result != null) {
+//					var nrpeAgentData:NrpeAgentData;
+					
+					nrpeProperties.removeAll();
+					
+					for (var i:int = 0; i < 3 ; i++)
+					{
+//						nrpeAgentData = new NrpeAgentData();
+						switch(i) {
+							case 0: 
+//								nrpeAgentData.command = "Cpu";
+								break;
+							
+							case 1: 
+//								nrpeAgentData.command = "Disk";
+								break;
+							
+							case 2: 
+//								nrpeAgentData.command = "Memory";
+								break;
+						}
+//						nrpeAgentData.property = event.result[i].toString();
+//						nrpeProperties.addItem(nrpeAgentData);
+					}
+					selectedNode.@connected = "true";
+					
+//					dispatchEvent(new ResourceEvent(ResourceEvent.NRPE));
+					
+				} else {
+					//Alert.show("Nagios error!");
+					selectedNode.@connected = "false";
+				}
+			}
+			
+			private function nrpeFaultHandler(event:FaultEvent):void
+			{
+				Alert.show("Nrpe vekilinin çalıştığından ve bağlantı ayarlarının doğru yapıldığından emin olun !");
+			}
+			
+			
+			protected function group_creationCompleteHandler(event:FlexEvent):void
+			{
+				//addEventListener(ResourceEvent.TREE_CHANGE, treeChangeHandler);
+				//dispatchEvent(new ResourceEvent(ResourceEvent.TREE_CHANGE));
+				tlosTreeData.addItem(treeXml2);
+				
+				treePanel.addElement(tlosTree);
+				
+				refreshTreeData();
+			}
+			
+			/*public function treeChange(event:ResourceEvent):void{
+				
+			refreshTreeData();
+			}
+			
+			public function treeChange2():void{
+				
+				addEventListener(ResourceEvent.TREE_CHANGE, treeChange);
+				dispatchEvent(new ResourceEvent(ResourceEvent.TREE_CHANGE));
+			}*/
+			
+			public function refreshTreeData():void
+			{
+				var byteArrayQuery:ByteArray = new ByteArray();
+				var stringQuery:String = "xquery version \"1.0\";" +
+					"import module namespace res=\"http://res.tlos.com/\" at \"xmldb:exist://db/TLOSSW/test/moduleResourceOperations.xquery\";" +
+					"res:getResources()";
+				
+				byteArrayQuery.writeMultiByte(stringQuery, "utf-8");
+				
+//				xqueryGetResourcesResult.token = query.xquery(TlosSWTestConsole.wsSession, byteArrayQuery);
+			}
+			
+			private function xqueryGetResourcesResultHandler(event:ResultEvent):void
+			{
+				if (event.result != null) {
+//					retrieveGetResourcesDataResult.token = query.retrieveData(TlosSWTestConsole.wsSession, 1, 10, true, false, "elements");
+				}
+			}
+			
+			private function retrieveGetResourcesDataResultHandler(event:ResultEvent):void
+			{
+				var myColl:ArrayCollection = (ArrayCollection (event.result));
+				var node:XML = XML(myColl.toArray().valueOf()[0].toString());
+				
+				if (node.children().length() != 0) {
+					//treeXml.appendChild(node);
+					
+					if (tlosTreeData.length == 2) {
+						tlosTreeData.removeItemAt(1);
+					}
+					tlosTreeData.addItemAt(node, 1);
+					
+					restoreTreeState();
+					
+					//tlosTree.dataProvider = tlosTreeData;
+					
+					//var prevItemRenderer : IFactory = tlosTree.itemRenderer;
+					//tlosTree.itemRenderer = null;
+					
+					//tlosTree.itemRenderer = prevItemRenderer as IFactory;
+					
+				} 
+				//tlosTree.initialize();
+				//treePanel.removeAllElements();
+				//treePanel.addElement(tlosTree);
+				
+				//tlosTree.includeInLayout = true;
+				//tlosTree.visible = true;
+				
+				/*tlosTree.invalidateSize(); 
+				tlosTree.invalidateList(); 
+				tlosTree.invalidateDisplayList(); 
+				tlosTree.validateSize(true); 
+				tlosTree.validateNow(); */
+			}
+			
+			public function saveTreeState():void
+			{
+				treeOpenItems = tlosTree.openItems;
+			}
+			
+			public function restoreTreeState():void
+			{
+				tlosTree.openItems = treeOpenItems;
+			}
+			
+			public function updateAgentNode(agent:Object):void
+			{
+				var agentXml:XML = XML(agent);
+				var resourceNode:XMLList = XML(tlosTreeData.getItemAt(1)).children().(@ID == agentXml.@resourceId);
+				var agentNode:XMLList = XML(resourceNode).children().(@ID == agentXml.@ID);
+				
+				agentNode[0].@type = agentXml.@type;
+				agentNode[0].@port = agentXml.@port;
+			}
+			
+			public function removeAgentNode(parameterList:Object):void
+			{
+				var resourceNode:XMLList = XML(tlosTreeData.getItemAt(1)).children().(@ID == XML(parameterList).@resourceId); 
+					
+				var agentNode:XMLList = XML(resourceNode[0]).children().(@ID == XML(parameterList).@agentId); 
+				
+				delete agentNode[0];
+			}
+			
+			public function addAgentNode(newXml:Object):void
+			{
+				//var newXml:XML = <rs:agentProperties ID="4" name="Nagios" type="Nagios" port="2224" connected="true" xmlns:rs="http://www.likyateknoloji.com/XML_resource_types"/>;
+			
+				//var treeResourceList:XMLList = XMLList(tlosTreeData.getItemAt(1)).children();
+				
+				//var treeResourceList:XMLList = tlosTreeData.getItemAt(1).descendants(new QName(rs, "resourceProperties"));
+				
+				/*var treeResourceList1:XML = XML(tlosTreeData.getItemAt(1));
+				//var treeResourceList:XMLList = treeResourceList1.child(new QName(rs, "resourceProperties"));
+				
+				var treeResourceList:XMLList = treeResourceList1.elements(new QName(rs, "resourceProperties"));*/
+				
+				var resourceNode:XMLList = XML(tlosTreeData.getItemAt(1)).children().(@ID == selectedNode.@ID); 
+				resourceNode[0].appendChild(XML(newXml)); 
+					
+				/*for(var i:Number=0; i < treeResourceList.length(); i++) { 
+					if(treeResourceList[i].@ID == selectedNode.@ID) { 
+						
+						XML(treeResourceList[i]).appendChild(XML(newXml)); 
+						return;
+					} 
+				}*/
+			}
+			
+			public function addResourceNode(newXml:Object):void
+			{
+				if (tlosTreeData.length == 2) {
+					var treeResourceList:XMLList = XMLList(tlosTreeData.getItemAt(1));
+				} else {
+					var resList:XML = <rs:resourceList title="Kaynak Listesi" xmlns:rs="http://www.likyateknoloji.com/XML_resource_types"/>;
+					
+					var treeResourceList:XMLList = XMLList(resList);
+				}
+				
+				treeResourceList.appendChild(XML(newXml)); 
+			}
+			
+			public function removeResourceNode(resourceId:Object):void
+			{
+				var resourceNode:XMLList = XML(tlosTreeData.getItemAt(1)).children().(@ID == resourceId); 
+				
+				delete resourceNode[0];
+			}
+			
+			public function updateResourceNode(resource:Object):void
+			{
+				//var resource:String = "<resourceProperties ID=\"8\" name=\"test\" ipAddress=\"192.168.1.39\" osType=\"win\"/>";
+					
+				var resourceXml:XML = XML(resource);
+				var resourceNode:XMLList = XML(tlosTreeData.getItemAt(1)).children().(@ID == resourceXml.@ID);
+				
+				resourceNode[0].@name = resourceXml.@name;
+				resourceNode[0].@ipAddress = resourceXml.@ipAddress;
+				resourceNode[0].@osType = resourceXml.@osType;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Metadata>
+		[Event(name="addResourceNode", type="events.ResourceEvent")]
+		[Event(name="removeResourceNode", type="events.ResourceEvent")]
+		[Event(name="updateResourceNode", type="events.ResourceEvent")]
+		[Event(name="addAgentNode", type="events.ResourceEvent")]
+		[Event(name="removeAgentNode", type="events.ResourceEvent")]
+		[Event(name="updateAgentNode", type="events.ResourceEvent")]
+		[Event(name="saveTreeState", type="events.ResourceEvent")]
+		[Event(name="editAgents", type="events.ResourceEvent")]
+		[Event(name="editResource", type="events.ResourceEvent")]
+		[Event(name="listResources", type="events.ResourceEvent")]
+		[Event(name="addResource", type="events.ResourceEvent")]
+		[Event(name="showNrpeAgent", type="events.ResourceEvent")]
+	</fx:Metadata>
+	<fx:Declarations>
+		<s:CallResponder id="retrieveGetResourcesDataResult" result="retrieveGetResourcesDataResultHandler(event)" />
+		<s:CallResponder id="xqueryGetResourcesResult" result="xqueryGetResourcesResultHandler(event)" />
+		<!--query:Query id="query" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/-->
+		
+		<s:CallResponder id="checkNrpeResourceResult" result="checkNrpeResourceResultHandler(event)" fault="nrpeFaultHandler(event)"/>
+		<!--services:NagiosConnection id="nagiosConnection" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/-->
+		
+		<s:CallResponder id="getJobListResult" result="getJobListResultHandler(event)"/>
+		<!--services:JmxAgentConnection id="jmxAgentConnection" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/-->
+	</fx:Declarations>
+	
+	<!-- dataDescriptor="{new LibraryTreeFilteredDataDescriptor()}"-->
+	<mx:Tree id="tlosTree"		
+			 iconField="@icon"
+			 labelField="@label"
+			 fontSize="12"
+			 showRoot="true"				 
+			 dataProvider="{tlosTreeData}"
+			 labelFunction="treeLabel"
+			 iconFunction="treeIconFunc"
+			 height="100%"				 
+			 width="100%"				 
+			 focusColor="#E67A7A"				 
+			 textRollOverColor="#FFFFFF"				 
+			 textSelectedColor="#063741"	
+			 contentBackgroundColor="#DAE0E6"
+			 rollOverColor="#596E76"
+			 chromeColor="#E2E5E7"
+			 selectionColor="#8E9DA0"  
+			 fontWeight="bold" 
+			 color="#0D173C"
+			 openItems="true"
+			 itemClick="tlosTree_itemClickHandler(event)"/>
+	
+		<s:Panel id="treePanel" includeInLayout="true" visible="true" width="100%" height="100%"/>
+	
+</s:Group>

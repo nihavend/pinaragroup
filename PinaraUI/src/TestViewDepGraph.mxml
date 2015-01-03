@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:modules="com.likya.pinara.modules.*">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ModuleEvent;
+			import mx.modules.IModuleInfo;
+			import mx.modules.ModuleManager;
+			
+			import spark.components.NavigatorContent;
+			import spark.modules.Module;
+			
+			private var depGraphModule:Module;
+			private var depGraphModuleInfo:IModuleInfo;
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				Alert.show("Aloooo");
+				checkForDepGraph(1);
+			}
+			
+			private function checkForDepGraph(selectedNetTreeId:int):void {
+				
+				try {
+					
+					var isDepGraph:Boolean = true;
+					
+					if(selectedNetTreeId > 0) {
+						isDepGraph = true;
+					}
+					
+					if(!isDepGraph && myViewStack.getChildByName("depGraph") != null) {
+						
+						myViewStack.removeChild(myViewStack.getChildByName("depGraph"));
+						
+					} else if(isDepGraph && myViewStack.getChildByName("depGraph") == null) {
+						
+						depGraphModuleInfo = ModuleManager.getModule("ViewDepGraph.swf");
+						depGraphModuleInfo.addEventListener(ModuleEvent.READY, renderDepGraphTabModule);
+						depGraphModuleInfo.addEventListener(ModuleEvent.ERROR, handleError);
+						try {
+							depGraphModuleInfo.load();
+						} catch(err:Error) {
+							Alert.show("Hata Oluştu : " + err.message);
+							//trace(err);
+						}
+					}
+					
+				} catch(err:Error) {
+					Alert.show("Hata Oluştu : " + errorString);
+					trace(err);
+				}
+			}
+			
+			private function handleError(event:ModuleEvent):void {
+				Alert.show(event.errorText, "Error");
+			}
+			
+			private function renderDepGraphTabModule(event:ModuleEvent):void {
+				
+				var depGraphTab:NavigatorContent = new NavigatorContent();
+				
+				depGraphModule = depGraphModuleInfo.factory.create() as Module;
+				
+				depGraphTab.name = "depGraph";
+				depGraphTab.label = "Dependency Graph";
+				
+				// var labelItem:Label = new Label();
+				// labelItem.text = "Customer Info";
+				// remoteSchTab.addElement(labelItem);
+				// trace(XML(jobDetailLocalXml));
+				// trace(XML(jobDetailLocalXml.executeRShellParams));
+				
+				//(depGraphModule as IModuleInterface).setDataXml(XML(jobDetailLocalXml.executeRShellParams));
+				
+				depGraphTab.addElement(depGraphModule);
+				
+				myViewStack.addElement(depGraphTab);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Button label="show xml" click="button1_clickHandler(event)" />
+	
+	<s:VGroup paddingTop="0" width="100%" height="100%">
+		<!-- Create a Spark ButtonBar control to navigate 
+		the ViewStack container. -->
+		<s:TabBar id="tabNavigator" dataProvider="{myViewStack}"/>
+		
+		<!-- Define the ViewStack and the three child containers. -->
+		<mx:ViewStack id="myViewStack" borderStyle="none" width="100%" height="100%">		
+		</mx:ViewStack>
+		
+	</s:VGroup>	</s:Application>

@@ -1,0 +1,27 @@
+K 26
+svn:wc:ra_dav:activity-url
+V 22
+/svn/srcRepo/!svn/act/
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/srcRepo/!svn/ver/4901/trunk/PinaraGroup/PinaraUI
+END
+.actionScriptProperties
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/srcRepo/!svn/ver/4885/trunk/PinaraGroup/PinaraUI/.actionScriptProperties
+END
+.flexProperties
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/srcRepo/!svn/ver/4648/trunk/PinaraGroup/PinaraUI/.flexProperties
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/srcRepo/!svn/ver/4855/trunk/PinaraGroup/PinaraUI/.project
+END

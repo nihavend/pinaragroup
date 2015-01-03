@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.model.UserRole;
+			import com.likya.pinara.utils.Transformer;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.formatters.DateFormatter;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+
+			private var serviceUrl:String = "/flex/restsrvc/jobdetailxml/";
+			
+			[Bindable] 
+			private var jobs:ArrayCollection;
+			
+			public var selectedJobId:String;
+			
+			[Bindable]
+			public var tlosMenuData:XMLListCollection = new XMLListCollection();
+			
+			[Bindable]
+			public var jobDetailXml:XML;
+			
+			[Bindable]
+			public var roleList:ArrayCollection = new ArrayCollection(
+				[ {name:"Admin", value:UserRole.ADMIN},
+					{name:"Operation", value:UserRole.OPERATION},
+					{name:"View", value:UserRole.VIEW} ]);
+			
+			public var role:String = UserRole.ADMIN;
+			// public var role:String = UserRole.OPERATION;
+			// public var role:String = UserRole.VIEW;
+			
+			public function getStateChangedDate(item:Object, column:GridColumn):String {
+				return getDate(item.@LSIDateTime);
+			}
+			
+			public function getDate(dateTxt:String):String {
+				var dateFormatter:DateFormatter = new DateFormatter();
+				dateFormatter.formatString = 'HH:NN:SS DD/MM/YYYY';
+				return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
+			}
+			
+			public function getStateInfo(item:Object, column:GridColumn):String {
+				var stateInfo:String = "";
+				
+				if(item.LiveStateInfo.StateName != null) {
+					stateInfo += item.StateName + "-";
+				}
+				if(item.LiveStateInfo.SubstateName != null) {
+					stateInfo += item.SubstateName + "-";
+				}
+				if(item.LiveStateInfo.StatusName != null) {
+					stateInfo += item.StatusName;
+				}
+				
+				return stateInfo;
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+			}
+			
+			public function updateData():void {
+				var testFlag:Boolean = isNaN(Number(selectedJobId));
+				
+				if(testFlag) {
+					Alert.show("Selected Job id is not valid ! >> " + selectedJobId);
+					return;
+				}
+				
+				jobDetailDS.url = serviceUrl + selectedJobId;
+				jobDetailDS.send();
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				
+				jobDetailXml = XML(event.result);
+				
+				// var treeOpenItems:Object;
+				
+				// trace(jobDetailXml);
+				
+				// treeOpenItems = jobDetailDS.openItems;
+				
+				try {
+					
+					jobId.text = jobDetailXml.@Id;
+					jobName.text = jobDetailXml.baseJobInfos.jsName;
+					// Visual paramse detail xml'e eklenmedi.
+					// jobState.text = jobDetailXml.visualParams.statu;
+					// manage.text = jobDetailXml.visualParams.commandabilityParams;
+					jobCommandType.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
+					groupId.text = jobDetailXml.@groupId;
+					lastCs.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsRealTime.startTime);
+					planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
+					sonSure.text = jobDetailXml.runtimeParams.realizedDuration;
+					
+					jobBaseInfoId.refreshData(jobDetailXml);
+					
+					/*
+					jobCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
+					dzGroup.text = jobDetailXml.@dangerZoneGroupId;
+					jobLogFile.text = "" + jobDetailXml.baseJobInfos.jobLogPath + jobDetailXml.baseJobInfos.jobLogFile;
+					restartable.text = jobDetailXml.management.cascadingConditions.jobSafeToRestart;
+					paramValue.text = "paramValue";
+					diffDuration.text = "00:10"; // "" + (currentDataItem.management.timeManagement.previousDuration - currentDataItem.management.timeManagement.realizedDuration);
+					handlerURI.text = jobDetailXml.@handlerURI;
+					prevDuration.text = jobDetailXml.management.timeManagement.previousDuration;					
+					*/
+					
+					if(jobDetailXml.hasOwnProperty("runtimeParams")) {
+						depListComp.waitingMeJobs.dataProvider = new XMLListCollection(XMLList(jobDetailXml.runtimeParams.waitingMeJobs.jobId));
+					}
+					
+					if(jobDetailXml.hasOwnProperty("DependencyList")) {
+						depListComp.meToWaitJobs.dataProvider = new XMLListCollection(XMLList(jobDetailXml.DependencyList.Item)); 
+					}
+					
+					stateHistory.dataProvider = new XMLListCollection(XML(jobDetailXml.stateInfos.LiveStateInfos).children());
+					
+					// liveTreeDP = new XMLList(treeXml);
+					// liveTree.validateNow();
+					/*
+					for each(var item:XML in treeOpenItems) {
+					if(item.name() == "list") {
+					trace(treeOpenItems);
+					liveTree.expandItem(liveTreeDP[0], true);
+					} else {
+					liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+					}
+					}
+					liveTree.validateNow();
+					*/
+					
+				} catch(err:Error) {
+					Alert.show("Hata Oluştu : " + errorString + " \nSunucu cevabı : " + jobDetailXml);
+					trace(err);
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:HTTPService id="jobDetailDS" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+	</fx:Declarations>
+	
+	<s:Panel id="allDetailPanel" title="Job All Detail Form" height="100%" width="100%">
+		
+		<s:BorderContainer width="100%" height="100%"> 
+			<s:layout> 
+				<s:VerticalLayout gap="5" clipAndEnableScrolling="true"/> 
+			</s:layout>  
+			
+			<s:HGroup width="100%">
+				
+				<s:VGroup paddingLeft="5" gap="-10" width="100%">
+					<s:HGroup verticalAlign="baseline" paddingTop="15">
+						<s:Label text="Job Id :" width="105" paddingLeft="10" />
+						<s:TextInput id="jobId" top="5" editable="false"/>
+						<s:Label text="Job Name :" width="105" paddingLeft="20" />
+						<s:TextInput id="jobName" top="5" editable="false"/>
+						<s:Label text="Job State :" width="105" paddingLeft="20"/>
+						<s:TextInput id="jobState" top="5" editable="false" />
+					</s:HGroup>
+					<s:HGroup verticalAlign="baseline" paddingTop="15">
+						<s:Label text="Command Type :" width="105" paddingLeft="10" />
+						<s:TextInput id="jobCommandType" top="5" editable="false"/>
+						<s:Label text="Group Id :" width="105" paddingLeft="20" />
+						<s:TextInput id="groupId" top="5" editable="false"/>
+						<s:Label text="Manage :" width="105" paddingLeft="20" />
+						<s:TextInput id="manage" top="5" editable="false"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="baseline" paddingTop="15">
+						<s:Label text="Son ÇZ :" width="105" paddingLeft="10" />
+						<s:TextInput id="lastCs" top="5" editable="false"/>
+						<s:Label text="Planlanan ÇZ :" width="105" paddingLeft="20" />
+						<s:TextInput id="planlananCZ" top="5" editable="false"/>
+						<s:Label text="Son Süre :" width="105" paddingLeft="20" />
+						<s:TextInput id="sonSure" top="5" editable="false"/>
+					</s:HGroup>
+				</s:VGroup>
+			
+			</s:HGroup>
+			
+			<mx:HRule width="100%" />
+			
+			<jobdetail:JobBaseInfo id="jobBaseInfoId" height="200" />
+			
+			<mx:HRule width="100%" />
+			
+			<jobdetail:DepLists id="depListComp" width="50%" height="60">
+				<jobdetail:layout>
+					<s:HorizontalLayout gap="40" />
+				</jobdetail:layout>
+			</jobdetail:DepLists>
+			
+			<mx:HRule width="100%" />
+			
+			<s:HGroup width="100%" >
+				
+				<s:VGroup paddingLeft="10" paddingTop="10"  width="100%">
+					<s:Label text="İş Tarihçesi :" width="120" />
+					<s:DataGrid id="stateHistory" width="55%" height="150" >
+						<s:columns>
+							<s:ArrayList>
+								<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" width="{this.stateHistory.width * 0.35}"/>
+								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" />
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid> 
+				</s:VGroup>
+				
+			</s:HGroup>
+			
+		</s:BorderContainer> 
+	</s:Panel>
+	
+</s:Group>

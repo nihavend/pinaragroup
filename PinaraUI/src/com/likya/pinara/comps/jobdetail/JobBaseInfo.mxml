@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" >
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.FileViewPopup;
+			import com.likya.pinara.containers.ImageContainer;
+			import com.likya.pinara.modules.IModuleInterface;
+			
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import mx.events.ModuleEvent;
+			import mx.managers.PopUpManager;
+			import mx.modules.IModuleInfo;
+			import mx.modules.ModuleManager;
+			
+			import spark.components.TitleWindow;
+			import spark.modules.Module;
+			
+			private var remoteSchModule:Module;
+			private var remoteSchModuleInfo:IModuleInfo;
+			
+			private var jobDetailLocalXml:XML;
+			
+			public function refreshData(jobDetailXml:XML):void	{
+				
+				jobDetailLocalXml = jobDetailXml;
+				
+				jobCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
+				jobLogFile.text = "" + jobDetailXml.baseJobInfos.jobLogPath + jobDetailXml.baseJobInfos.jobLogFile;
+				prevDuration.text = jobDetailXml.runtimeParams.previousDuration;
+				
+				argValues.text = jobDetailXml.baseJobInfos.jobTypeDetails.argValues;
+				
+				var prevDur:Number = Number(prevDuration.text);
+				var realDur:Number = Number(jobDetailXml.runtimeParams.realizedDuration);
+				
+				if(!isNaN(prevDur) && !isNaN(realDur)) {
+					diffDuration.text = "" + (realDur - prevDur);
+				} else {
+					diffDuration.text = "-";
+				}
+				
+				restartable.text = jobDetailXml.management.cascadingConditions.jobSafeToRestart;
+				dzGroup.text = jobDetailXml.@dangerZoneGroupId;
+				handlerURI.text = jobDetailXml.@handlerURI;
+				
+				
+				if(jobDetailXml.runtimeParams.hasJobLog == "false") {
+					showJobLog.visible = false;
+					showJobLog.includeInLayout = false;
+					dontShowJobLog.visible = true;
+					dontShowJobLog.includeInLayout = true;
+				} else {
+					showJobLog.visible = true;
+					showJobLog.includeInLayout = true;
+					dontShowJobLog.visible = false;
+					dontShowJobLog.includeInLayout = false;
+				}
+				
+				
+				if(jobDetailXml.runtimeParams.hasJobContent == "false") {
+					showJobContent.visible = false;
+					showJobContent.includeInLayout = false;
+					dontShowJobContent.visible = true;
+					dontShowJobContent.includeInLayout = true;
+				} else {
+					showJobContent.visible = true;
+					showJobContent.includeInLayout = true;
+					dontShowJobContent.visible = false;
+					dontShowJobContent.includeInLayout = false;
+				}
+				
+				try {
+					
+					var isRemoteSch:Boolean = false;
+					
+					if(jobDetailXml.@handlerURI == "com.likya.myra.jef.jobs.ExecuteSchComponent") {
+						isRemoteSch = true;
+					}
+					
+					// trace(myViewStack.getChildByName("search").name);
+					
+					//myViewStack.getChildByName("search");
+					//myViewStack.getChildByName("remoteSch");
+					
+					if(!isRemoteSch && myViewStack.getChildByName("remoteSch") != null) {
+						
+						myViewStack.removeChild(myViewStack.getChildByName("remoteSch"));
+						
+					} else if(isRemoteSch && myViewStack.getChildByName("remoteSch") == null) {
+						
+						remoteSchModuleInfo = ModuleManager.getModule("RemoteSchProps.swf");
+						remoteSchModuleInfo.addEventListener(ModuleEvent.READY, renderRemoteSchPropsModule);
+						remoteSchModuleInfo.addEventListener(ModuleEvent.ERROR, handleError);
+						try {
+							remoteSchModuleInfo.load();
+						} catch(err:Error) {
+							Alert.show("Hata Oluştu : " + err.message);
+							//trace(err);
+						}
+					}
+					
+				} catch(err:Error) {
+					Alert.show("Hata Oluştu : " + errorString + " \nSunucu cevabı : " + jobDetailXml);
+					trace(err);
+				}
+			}
+			
+			private function handleError(event:ModuleEvent):void {
+				Alert.show(event.errorText, "Error");
+			}
+			
+			private function renderRemoteSchPropsModule(event:ModuleEvent):void {
+				
+				var remoteSchTab:NavigatorContent = new NavigatorContent();
+				
+				remoteSchModule = remoteSchModuleInfo.factory.create() as Module;
+				
+				remoteSchTab.name = "remoteSch";
+				remoteSchTab.label = "RemoteSch Parameters";
+				
+				// var labelItem:Label = new Label();
+				// labelItem.text = "Customer Info";
+				// remoteSchTab.addElement(labelItem);
+				// trace(XML(jobDetailLocalXml));
+				// trace(XML(jobDetailLocalXml.executeRShellParams));
+				(remoteSchModule as IModuleInterface).setDataXml(XML(jobDetailLocalXml.executeRShellParams));
+				
+				myViewStack.addElement(remoteSchTab);
+
+				remoteSchTab.addElement(remoteSchModule);
+			}
+			
+			// setTabEnabled(1, false);
+			// setTabEnabled(2, false);
+			//}
+			
+			private function setTabEnabled(index:int, enabled:Boolean):void {
+				var theTab:UIComponent = tabNavigator.dataGroup.getElementAt(index) as UIComponent;
+				if (theTab)
+					theTab.visible = enabled;
+				theTab.includeInLayout = enabled;
+			}
+			
+			private function showArgValuePopup():void {
+				var parameterPopupForm:ParameterPopupForm = ParameterPopupForm(PopUpManager.createPopUp(this, ParameterPopupForm, true));
+				parameterPopupForm.title = "Working for job with id : " + jobDetailLocalXml.@Id;
+				parameterPopupForm.parameters.text = argValues.text;
+				PopUpManager.centerPopUp(parameterPopupForm);
+			}
+			
+			private function showJobContentPopup():void {
+				showGenericPopup( "jobcontent=" + jobDetailLocalXml.@Id);
+			}
+			
+			private function showJobLogPopup():void {
+				showGenericPopup( "joblog=" + jobDetailLocalXml.@Id);
+			}
+
+			private function showJobBuffPopup():void {
+				showGenericPopup( "jobbuff=" + jobDetailLocalXml.@Id);
+			}
+			
+			private function showGenericPopup(fileTag:String):void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var fileViewWindow:FileViewPopup = PopUpManager.createPopUp(parentApplication as DisplayObject, FileViewPopup, true) as FileViewPopup;
+				fileViewWindow.fileTag = fileTag; //"joblog=" + jobDetailLocalXml.@Id;
+				// fileViewWindow.fileTag = "infotag=myraTrace";
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(fileViewWindow);
+				fileViewWindow.setFocus();
+			}
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup paddingTop="5">
+		<!-- Create a Spark ButtonBar control to navigate 
+		the ViewStack container. -->
+		<s:TabBar id="tabNavigator" dataProvider="{myViewStack}"/>
+		
+		<!-- Define the ViewStack and the three child containers. -->
+		<mx:ViewStack id="myViewStack" 
+					  borderStyle="solid" 
+					  width="100%" height="160">
+			
+			<s:NavigatorContent id="search" label="Base Info">
+				<s:HGroup width="100%" >
+					
+					<s:VGroup paddingLeft="5" paddingRight="5" gap="-10" width="100%">
+						
+						<s:HGroup verticalAlign="middle" paddingTop="15">
+							<s:Label text="Job Command :" width="105"/>
+							<s:TextInput id="jobCommand" top="5" editable="false" width="95"/>
+							<s:Image id="showJobContent" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'commandFileTooltip')}" 
+									 buttonMode="true" click="showJobContentPopup()" visible="false" includeInLayout="false" />
+							<s:Image id="dontShowJobContent" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noLogFileTooltip')}"/>
+							<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+							<s:TextInput id="dzGroup" top="5" editable="false"/>
+						</s:HGroup>
+						<s:HGroup verticalAlign="middle" paddingTop="15">
+							<s:Label text="Job Log File :" width="105"/>
+							<s:TextInput id="jobLogFile" top="5" editable="false" width="95"/>
+							<s:Image id="showJobLog" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'logFileTooltip')}"
+									 buttonMode="true" click="showJobLogPopup()" visible="false" includeInLayout="false"/>
+							<s:Image id="dontShowJobLog" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noLogFileTooltip')}" />
+							<s:Label text="Restartable :" width="105" paddingLeft="10" />
+							<s:TextInput id="restartable" top="5" editable="false"/>
+						</s:HGroup>
+						<s:HGroup verticalAlign="middle" paddingTop="15">
+							<s:Label text="Previous Duration :" width="105"/>
+							<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
+							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'logFileTooltip')}"
+									 buttonMode="true" click="showJobBuffPopup()" top="0"/>
+							<s:Label text="Parameter :" width="105" paddingLeft="10" />
+							<s:TextInput id="paramValue" top="5" editable="false"/>
+						</s:HGroup>
+						<s:HGroup verticalAlign="baseline" paddingTop="15">
+							<s:Label text="Diff Duration :" width="105"/>
+							<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
+							<s:Label text="Arguments :" width="65"/>
+							<s:TextInput id="argValues" top="5" editable="false" width="140"/>
+							<s:Button y="-27" right="290" label="Edit" click="showArgValuePopup()" width="50"/>
+						</s:HGroup>
+						
+						<s:HGroup verticalAlign="baseline" paddingTop="15">
+							<s:Label text="Handler URI :" width="105" />
+							<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
+						</s:HGroup>
+						
+					</s:VGroup>
+					
+				</s:HGroup>
+			</s:NavigatorContent>
+			
+		</mx:ViewStack>
+		
+	</s:VGroup>
+	
+</s:Group>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:containers="com.likya.pinara.containers.*"
+		 creationComplete="loadData()" updateComplete="onUpdateComplete()" >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.containers.ImageContainer;
+			import com.likya.pinara.event.ResourceEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.Tree;
+			import mx.events.ListEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			[Embed(source="/images/tlosTree.jpg")]
+			private var tlosFolderImg:Class;
+			
+			[Bindable]
+			private var serviceUrl:String = "/flex/restsrvc/nettreexml/";
+
+			[Bindable] 
+			public static var liveTreeDP:XMLList; 
+			
+			/**
+			 * Stores the open/close states of the tree nodes
+			 */
+			
+			public function onUpdateComplete():void {
+				changeStateOfNodes(true);
+			}
+			
+			private function changeStateOfNodes(action:Boolean):void {
+				for (var i:int = 0; i < liveTree.dataProvider.length;i++) {
+					callLater(liveTree.expandChildrenOf, [liveTree.dataProvider[i], action]);
+				}
+			}
+			
+			private function setWidth():void {
+				// Alert.show("width before : " + jobTree.width);
+				liveTree.percentWidth = 100;
+				// Alert.show("width after : " + jobTree.width);
+			}
+			
+			private function treeLabel(item:Object):String { 
+				
+				var node:XML = XML(item); 
+				//Alert.show(node.localName());
+				if (node.localName() == "list") {
+					return node.@title; 
+				} else if (node.localName() == "jobGroup") {
+					return node.@title + " [Id:" + node.@id + "]"; 
+				} else if(node.localName() == "jobProperty") {
+					//return node.@name; 
+					return node.@title + " [Id:" + node.@id + "]"; 
+				}
+				
+				return node;
+			} 
+			
+			private function treeIconFunc(item:Object):Class { 
+				
+				var node:XML = XML(item); 
+				if (node.@id == "0") {
+					return tlosFolderImg;
+				} else if (node.localName() == "jobProperty") {
+					return ImageContainer.getTreeStatuImage(node.@statu);
+				} else if (node.localName() == "node") {
+					var consData:ArrayCollection = null //tlosConnections;
+					/*
+					for each (var tlosConn:TlosConnection in consData) {
+						if (node.@ip.toString() == tlosConn.ipAddress && node.@port.toString() == tlosConn.port) {
+							if (tlosConn.enable == "N") {
+								return null //tlosDisabledImage;
+							} else if (tlosConn.isConnected) {
+								return null //tlosConnectedImage;
+							}
+						}
+					}*/
+					return tlosFolderImg //tlosDisconnectedImage;
+				} else {
+					return tlosFolderImg;
+				}
+			}
+			
+			private function tlosTree_itemClickHandler(e:ListEvent):void {
+				
+				var selectedNode:XML = Tree(e.target).selectedItem as XML;
+				var selectedTreeItem:Object = Tree(e.target).selectedItem;
+				
+				// Alert.show("Title : " + selectedNode.@title);
+				// Alert.show("localName : " + selectedNode.localName());
+				if (selectedNode.localName() == "list") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
+				} if (selectedNode.localName() == "jobGroup") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedNode.@id));
+				} else if (selectedNode.localName() == "jobProperty") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedNode.@id));
+				}
+				
+				/*
+				if (selectedNode.@ip.toString() == "1") {
+					disablePage();
+					
+					jobListType = ALL_JOBS_VIEW;
+					getAllTlosJobs();
+					selectedNode = null;
+					
+					currentState = 'tlosState';
+				} else if (selectedNode.@enable == "Y") {
+					enableTlosBasedMenu(true);
+					
+					tlosUser.userName = selectedNode.@userName;
+					tlosUser.userPassword = selectedNode.@password;
+					
+					tlosConnection = new TlosConnection();
+					tlosConnection.id = selectedNode.@id;
+					tlosConnection.tlosName = selectedNode.@name;
+					tlosConnection.ipAddress = selectedNode.@ip.toString();
+					tlosConnection.port = selectedNode.@port;
+					tlosConnection.tlosUserName = selectedNode.@userName;
+					tlosConnection.tlosPassword = selectedNode.@password;
+					
+					jmxService.init(tlosConnection, FILTER_ALL, jmxTimeout);
+					
+					disablePage();
+					
+					jobListType = ONE_TLOS_VIEW;
+					currentState = 'oneTlosState';
+				}
+				*/
+				
+			}
+			
+			private function toggleTreeComp():void {
+				if(toggleTree.toolTip == "Collapse") {
+					toggleTree.toolTip = "Expand";
+					toggleTree.label = "Expand";
+					changeStateOfNodes(false);
+				} else {
+					toggleTree.toolTip = "Collapse";
+					toggleTree.label = "Collapse";
+					changeStateOfNodes(true);
+				}
+			}
+			
+/*			protected function xmlService_resultHandler(event:ResultEvent):void {
+				// trace("xmlService_resultHandler");
+				// Alert.show(event.result as XML);
+				
+				//jobTree.dataProvider = new XMLListCollection((event.result as XML).jobGroup);
+				// Alert.show("jobTree.openItems" + jobTree.openItems);
+				// Alert.show("Biraz bekleyelim !")
+				// restoreTreeState();
+				// Alert.show("jobTree.openItems" + jobTree.openItems);
+				
+				// var myColl:ArrayCollection = (ArrayCollection (event.result));
+				// var myColl:XMLListCollection = new XMLListCollection();
+				
+				var node:XML = event.result as XML;
+				
+				if (node.children().length() != 0) {
+					// if (tlosTreeData.length == 2) {
+					// 	tlosTreeData.removeItemAt(1);
+					// }
+					// tlosTreeData.addItemAt(node[0], 1);
+					restoreTreeState();
+				} 
+			}*/
+			
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+				//outputText.text += "\nxmlService_faultHandler " + event;
+			}
+			
+			private function refreshTree():void {
+				liveTreeDataService.send();
+			}
+			
+			public function loadData():void {
+				refreshTree();
+			}
+
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				
+				var treeXml:XML = XML(event.result);
+				var treeOpenItems:Object;
+				
+				treeOpenItems = liveTree.openItems;
+				
+				try {
+					liveTreeDP = new XMLList(treeXml);
+					liveTree.validateNow();
+
+					for each(var item:XML in treeOpenItems) {
+						if(item.name() == "list") {
+							// trace(treeOpenItems);
+							liveTree.expandItem(liveTreeDP[0], true);
+						} else {
+							liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+						}
+					}
+					liveTree.validateNow();
+				} catch(err:Error) {
+					Alert.show("Hata Oluştu : " + errorString);
+					trace(err);
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:HTTPService id="liveTreeDataService" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="{serviceUrl}"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+		
+	</fx:Declarations>
+	
+	<!--title="{resourceManager.getString('messages', 'tlosTree')}" 
+	color="#0D173C" fontWeight="bold" chromeColor="#E2E5E7" dropShadowVisible="true"
+	width="240" height="100%"-->
+	<containers:CollapsiblePanel id="tlosTreePanel" height="100%" width="100%" title="{resourceManager.getString('messages', 'tlosTree')}" >
+		
+		<!--tlosTreeData-->
+		<containers:AutoSizeTree id="liveTree"
+				 iconField="@icon"
+				 labelField="@label"
+				 fontSize="12"
+				 showRoot="true"				 
+				 dataProvider="{liveTreeDP}"
+				 labelFunction="treeLabel"
+				 iconFunction="treeIconFunc"
+				 height="100%"				 
+				 width="220"
+				 focusColor="#E67A7A"				 
+				 textRollOverColor="#FFFFFF"				 
+				 textSelectedColor="#063741"	
+				 contentBackgroundColor="#DAE0E6"
+				 rollOverColor="#596E76"
+				 chromeColor="#E2E5E7"
+				 selectionColor="#8E9DA0"  
+				 fontWeight="bold" 
+				 color="#0D173C"
+				 left="0" top="0" right="0" bottom="0"
+				 openItems="true"
+				 itemClick="tlosTree_itemClickHandler(event)" />
+		
+		<s:Button id="toggleTree" y="-27" right="40" width="80" click="toggleTreeComp()" toolTip="Expand" label="Expand"/>
+		
+		<s:Button id="refreshTreeButton" y="-27" right="10" width="30" click="refreshTree()" toolTip="Refresh" label="R"/>
+		
+	</containers:CollapsiblePanel>	
+</s:Group>

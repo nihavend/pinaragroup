@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" creationComplete="onCreationComplete()">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.jobdetail.JobEditWindow;
+			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.model.UserInfo;
+			
+			import mx.formatters.DateFormatter;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+
+			[Bindable]
+			public var userInfo:UserInfo = new UserInfo();
+			
+			[Bindable] 
+			private var time:String; 
+			private var ticker:Timer;
+			
+			[Bindable]
+			[Embed(source="/images/logout.png")] 
+			private var logoutIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/images/tr_icon.png")] 
+			private var trIcon:Class;
+			
+			[Bindable]
+			[Embed(source="/images/en_icon.png")] 
+			private var enIcon:Class;
+			
+			public function showTime():void {
+				var currentTime:Date = new Date();
+				var timeFormat:DateFormatter = new DateFormatter();
+				timeFormat.formatString = "DD/MM/YYYY JJ:NN:SS"
+				time = timeFormat.format(currentTime);
+				ticker = new Timer(1,1);
+				ticker.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+				ticker.start();
+			}
+			
+			public function onCreationComplete():void {
+				showTime();
+			}
+			
+			public function onTimerComplete(event:TimerEvent):void {
+				showTime();
+			} 
+			
+			private function logout():void {
+				dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+			}
+			
+			private function changeLocale(locale:String):void {
+				dispatchEvent(new ResourceEvent(ResourceEvent.CHANGE_LOCALE, locale));
+			}
+			
+			private function showLogin():void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(helpWindow);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+	</fx:Declarations>
+	
+	<!--s:Panel id="headerPanel"
+			 width="100%" height="20"
+			 includeIn="oneTlosState,tlosState,groupedTlosState,tlosDefinitionState,tloses,changePasswordState,changeAdminPasswordState,tlosUpdateState,graphState,userDefinitionState,users,userUpdateState"
+			 chromeColor="#E1E5EA" height.graphState="30">
+		<mx:Image x="10" y="-28" source="@Embed(source='/images/logo2.jpg')" />
+		<s:Label x="95" y="-24" text="{'- ' + resourceManager.getString('messages', 'applicationName')}" fontWeight="normal" fontSize="18"/>
+		
+		<s:Label right="{appUser.userName.length*2 + 200}" y="-18" text="{resourceManager.getString('messages', 'welcome') + ', ' + appUser.userName}" fontWeight="bold"/>
+		<s:Label right="90" y="-18" text="{time}" fontWeight="bold" chromeColor.oneTlosState="#CCD5E1" backgroundColor.oneTlosState="#CCE3ED"/>
+		
+		<mx:Button right="56" y="-27" click="logout()" icon="{logoutIcon}" width="20" toolTip="{resourceManager.getString('messages', 'logout')}"/>
+		<mx:Button right="30" y="-27" click="changeLocale('tr_TR')" icon="{trIcon}" width="20" toolTip="Türkçe"/>
+		<mx:Button right="5" y="-27" click="changeLocale('en_US')" icon="{enIcon}" width="20" toolTip="English"/>
+	</s:Panel--> 
+	
+	<s:Panel id="headerPanel" width="100%" height="20" chromeColor="#E1E5EA">
+		<mx:Image x="10" y="-28" source="@Embed(source='/images/logo2.jpg')"/>
+		<s:Label x="95" y="-24" fontSize="18" fontWeight="normal" text="{'- ' + resourceManager.getString('messages', 'applicationName')}"/>
+		
+		<s:Label y="-18" right="{this.userInfo.username.length * 2 + 200}" fontWeight="bold" text="{resourceManager.getString('messages', 'welcome') + ', ' + this.userInfo.username}"/>
+		<s:Label y="-18" right="90" fontWeight="bold" text="{time}"/>
+		
+		<mx:Button y="-27" right="56" width="20" click="logout()" icon="{logoutIcon}" toolTip="{resourceManager.getString('messages', 'logout')}"/>
+		<mx:Button y="-27" right="30" width="20" click="changeLocale('tr_TR')" icon="{trIcon}" toolTip="Türkçe"/>
+		<mx:Button y="-27" right="5" width="20" click="changeLocale('en_US')" icon="{enIcon}" toolTip="English"/>
+		<s:Button y="-27" right="320" label="Login" click="showLogin();"/>
+		
+	</s:Panel> 
+	
+</s:Group>

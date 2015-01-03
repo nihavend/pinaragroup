@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="10%" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.containers.StatuConst;
+			
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.controls.Menu;
+			import mx.events.MenuEvent;
+			
+			[Bindable]
+			public var data:XMLListCollection;
+			
+			private var statuFilter:int;
+			
+			// Create and display the Menu control.
+			private function createAndShow():void {
+				var myMenu:Menu = Menu.createMenu(null, filterMenuData, false);
+				myMenu.id = "filterMenu"
+				myMenu.labelField="@label";
+				myMenu.addEventListener(MenuEvent.ITEM_CLICK, filterMenu_itemClickHandler);
+				// Alert.show("x:y" + myButton.localToGlobal(new Point(0,0)));
+				myMenu.show(statuFilterButton.localToGlobal(new Point(0,0)).x + 50, statuFilterButton.localToGlobal(new Point(0,0)).y + 25);
+			}
+			
+			protected function filterMenu_itemClickHandler(event:MenuEvent):void {		
+				if (event.label == resourceManager.getString("messages", "listAll")) {
+					statuFilter = StatuConst.FILTER_ALL;
+				} else if (event.label == resourceManager.getString("messages", "readyFilter")) {
+					statuFilter = StatuConst.FILTER_READY;
+				} else if (event.label == resourceManager.getString("messages", "workingFilter")) {
+					statuFilter = StatuConst.FILTER_WORKING;
+				} else if (event.label == resourceManager.getString("messages", "successfulFilter")) {
+					statuFilter = StatuConst.FILTER_SUCCESSFUL;
+				} else if (event.label == resourceManager.getString("messages", "timeoutFilter")) {
+					statuFilter = StatuConst.FILTER_TIMEOUT;
+				} else if (event.label == resourceManager.getString("messages", "pausedFilter")) {
+					statuFilter = StatuConst.FILTER_PAUSED;
+				} else if (event.label == resourceManager.getString("messages", "failedFilter")) {
+					statuFilter = StatuConst.FILTER_FAILED;
+				} else if (event.label == resourceManager.getString("messages", "waitingFilter")) {
+					statuFilter = StatuConst.FILTER_WAITING;
+				} else if (event.label == resourceManager.getString("messages", "skippedFilter")) {
+					statuFilter = StatuConst.FILTER_SKIPPED;
+				} else if (event.label == resourceManager.getString("messages", "stoppedFilter")) {
+					statuFilter = StatuConst.FILTER_STOPPED;
+				} else if (event.label == resourceManager.getString("messages", "disabledFilter")) {
+					statuFilter = StatuConst.FILTER_DISABLED;
+				}
+				
+				data.filterFunction = filterRows;
+				
+				data.refresh();
+			}
+			
+			public function filterRows(item:Object):Boolean {
+				
+				var statu:int = item.visualParams.statu;
+				
+				if(statuFilter == StatuConst.FILTER_ALL || statu == statuFilter) {
+					return true;
+				}
+				return false;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:XML format="e4x" id="filterMenuData">
+			<menuitem label="{resourceManager.getString('messages', 'statusFilter')}" id="statusFilter">
+				<menuitem label="{resourceManager.getString('messages', 'listAll')}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'readyFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'waitingFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'workingFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'successfulFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'failedFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'timeoutFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'skippedFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'stoppedFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'pausedFilter')}"/>
+				<menuitem label="{resourceManager.getString('messages', 'disabledFilter')}"/>
+			</menuitem>
+		</fx:XML>
+	</fx:Declarations>
+	
+	<mx:Button id="statuFilterButton" label="Select Filter" click="createAndShow();"/>
+</s:Group>

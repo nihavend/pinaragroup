@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!-- containers\spark\myComponents\ArrayEntryForm.mxml -->
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   width="560" height="560" borderAlpha="1"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)"
+			   close="removeMe();">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import flashx.textLayout.conversion.TextConverter;
+			
+			private function removeMe():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void {
+				// var myStr:String = "I contain <b>html</b> tags!";           
+				var myStr:String = "I contain <b>html</b> tags!";
+				//myRichEditableText.textFlow = TextConverter.importToFlow(myStr, TextConverter.TEXT_FIELD_HTML_FORMAT);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:String id="htmlTextAsHTML">
+			<![CDATA[
+			
+			<style>
+			<!--
+			/* Font Definitions */
+			@font-face
+			{font-family:"Cambria Math";
+			panose-1:2 4 5 3 5 4 6 3 2 4;
+			mso-font-charset:1;
+			mso-generic-font-family:roman;
+			mso-font-format:other;
+			mso-font-pitch:variable;
+			mso-font-signature:0 0 0 0 0 0;}
+			@font-face
+			{font-family:Calibri;
+			panose-1:2 15 5 2 2 2 4 3 2 4;
+			mso-font-charset:162;
+			mso-generic-font-family:swiss;
+			mso-font-pitch:variable;
+			mso-font-signature:-520092929 1073786111 9 0 415 0;}
+			/* Style Definitions */
+			p.MsoNormal, li.MsoNormal, div.MsoNormal
+			{mso-style-unhide:no;
+			mso-style-qformat:yes;
+			mso-style-parent:"";
+			margin-top:0cm;
+			margin-right:0cm;
+			margin-bottom:10.0pt;
+			margin-left:0cm;
+			line-height:115%;
+			mso-pagination:widow-orphan;
+			font-size:11.0pt;
+			font-family:"Calibri","sans-serif";
+			mso-ascii-font-family:Calibri;
+			mso-ascii-theme-font:minor-latin;
+			mso-fareast-font-family:Calibri;
+			mso-fareast-theme-font:minor-latin;
+			mso-hansi-font-family:Calibri;
+			mso-hansi-theme-font:minor-latin;
+			mso-bidi-font-family:"Times New Roman";
+			mso-bidi-theme-font:minor-bidi;
+			mso-ansi-language:EN-US;
+			mso-fareast-language:EN-US;}
+			p
+			{mso-style-noshow:yes;
+			mso-style-priority:99;
+			mso-margin-top-alt:auto;
+			margin-right:0cm;
+			mso-margin-bottom-alt:auto;
+			margin-left:0cm;
+			mso-pagination:widow-orphan;
+			font-size:12.0pt;
+			font-family:"Times New Roman","serif";
+			mso-fareast-font-family:"Times New Roman";
+			mso-ansi-language:EN-US;
+			mso-fareast-language:EN-US;}
+			.MsoChpDefault
+			{mso-style-type:export-only;
+			mso-default-props:yes;
+			mso-ascii-font-family:Calibri;
+			mso-ascii-theme-font:minor-latin;
+			mso-fareast-font-family:Calibri;
+			mso-fareast-theme-font:minor-latin;
+			mso-hansi-font-family:Calibri;
+			mso-hansi-theme-font:minor-latin;
+			mso-bidi-font-family:"Times New Roman";
+			mso-bidi-theme-font:minor-bidi;
+			mso-ansi-language:EN-US;
+			mso-fareast-language:EN-US;}
+			.MsoPapDefault
+			{mso-style-type:export-only;
+			margin-bottom:10.0pt;
+			line-height:115%;}
+			@page WordSection1
+			{size:612.0pt 792.0pt;
+			margin:72.0pt 72.0pt 72.0pt 72.0pt;
+			mso-header-margin:35.4pt;
+			mso-footer-margin:35.4pt;
+			mso-paper-source:0;}
+			div.WordSection1
+			{page:WordSection1;}
+			-->
+			</style>
+			
+			<p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;text-align:
+			justify;line-height:12.75pt'><b><span style='font-size:8.0pt;mso-bidi-font-size:
+			9.0pt;font-family:"Arial","sans-serif";mso-fareast-font-family:"Times New Roman";
+			mso-ansi-language:TR'>Yazılım Son Kullanıcı Lisans Sözleşmesi<o:p></o:p></span></b></p>
+			]]>
+		</fx:String>
+	</fx:Declarations>
+	
+	<s:RichText id="myRichEditableText"  width="100%" height="100%" textAlign="justify" fontFamily="Arial" fontSize="12" />
+	
+	<s:RichText id="richTxt"
+				horizontalCenter="0" verticalCenter="0"
+				initialize="richTxt.textFlow = TextConverter.importToFlow(htmlTextAsHTML, TextConverter.TEXT_FIELD_HTML_FORMAT);"/>
+	
+</s:TitleWindow> 
+
+<!--s:Scroller width="100%" height="100%" id="scroller" minViewportInset="1" focusEnabled="false">
+<s:Group clipAndEnableScrolling="true" id="descriptionBox">
+
+<mx:Text id="tlosHtmlPopup" width="100%" color="black" fontStyle="normal" fontSize="14">
+<mx:htmlText>
+
+</mx:htmlText>
+</mx:Text>
+
+<mx:Text id="tlosXmlPopup" width="100%" color="black" fontStyle="normal" fontSize="14" >
+
+</mx:Text>
+
+<mx:Text id="aboutTlosHeaderPopup" width="100%" color="black" fontStyle="normal" fontSize="18" fontWeight="bold" textAlign="left" >
+<mx:htmlText>
+
+</mx:htmlText>
+</mx:Text>
+
+<mx:Text id="aboutTlosCenterPopup" width="100%" color="black" fontStyle="normal" fontSize="14" textAlign="left" >
+<mx:htmlText>
+
+</mx:htmlText>
+</mx:Text>
+
+
+
+</s:Group>
+</s:Scroller-->
+<!--s:TextArea id="popupText" width="100%" height="100%" verticalScrollPolicy="on"/-->
+<!--s:RichText id="tlosPopup"  width="100%" height="100%" / textAlign="justify" fontFamily="Arial" fontSize="12"-->
+
+<!--s:RichText id="tlosPopup" width="100%" maxDisplayedLines="3000" /-->
+<!--s:TextArea id="tlosPopup" width="100%" height="100%"/-->
+
+<!--mx:Image id:"logoLikya" width="100%" source="images/likya.jpg">
+</mx:Image>
+
+<mx:Image id:"tlosScheduler" width="100%" >
+</mx:Image-->

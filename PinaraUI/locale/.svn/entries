@@ -1,0 +1,34 @@
+10
+
+dir
+4901
+https://192.168.1.32:8443/svn/srcRepo/trunk/PinaraGroup/PinaraUI/locale
+https://192.168.1.32:8443/svn/srcRepo
+
+
+
+2014-02-21T13:25:36.275268Z
+4848
+serkan
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+90e71f49-f3df-994b-bcfa-a46cf4a1330b
+
+en_US
+dir
+
+tr_TR
+dir
+

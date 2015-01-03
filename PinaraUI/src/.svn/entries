@@ -1,34 +1,0 @@
-10
-
-dir
-4902
-https://192.168.1.32:8443/svn/srcRepo/trunk/PinaraGroup/PinaraUI/src
-https://192.168.1.32:8443/svn/srcRepo
-
-
-
-2014-02-26T10:17:04.267580Z
-4902
-serkan
-has-props
-
-svn:special svn:externals svn:needs-lock
-
-
-
-
-
-
-
-
-
-
-
-90e71f49-f3df-994b-bcfa-a46cf4a1330b
-
-com
-dir
-
-images
-dir
-

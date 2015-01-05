@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="450" height="300">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+ 						 
+ 
+	
+	<fx:Script>
+		<![CDATA[
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+<!--	<s:FormHeading width="300" label="Pınara Job Editor Form" backgroundColor="Gray" color="#FFFFFF"/>
+-->	
+	<s:FormItem label="Name">
+		<s:TextInput id="jsName" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter a neme for your Job"/>
+		</s:helpContent>
+	</s:FormItem>
+
+	<s:FormItem label="Command">
+		<s:TextInput id="jsCommand" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter the command for your Job"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Type">
+		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>BATCH PROCESS</fx:String>
+					<fx:String>SHELL SCRIPT</fx:String>
+					<fx:String>REMOTE SHELL</fx:String>
+					<fx:String>ETL TOOL JOBS</fx:String>
+					<fx:String>SAP</fx:String>
+					<fx:String>SAS</fx:String>
+					<fx:String>SYSTEM COMMAND</fx:String>
+					<fx:String>FTP</fx:String>
+					<fx:String>FILE PROCESS</fx:String>
+					<fx:String>FILE LISTENER</fx:String>
+					<fx:String>PROCESS NODE</fx:String>
+					<fx:String>DB JOBS</fx:String>
+					<fx:String>WEB SERVICE</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Path">
+		<s:TextInput id="jsJobPath" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Physical Path"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Arguments"> 
+		<s:TextArea id="jsJobArgs" height="25"/>
+	</s:FormItem>
+	
+	<s:FormItem label="Environment Variables"> 
+		<s:List> 
+			<mx:ArrayCollection>
+				<fx:String>var1=Dreamweaver</fx:String> 
+				<fx:String>var2=ColdFusion</fx:String> 
+			</mx:ArrayCollection>
+		</s:List>
+	</s:FormItem>
+
+	<s:FormItem label="Job Log Filename">
+		<s:TextInput id="jsJobLogFile" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Log Filename"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Log Path">
+		<s:TextInput id="jsJobLogPath" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Log File Physical Path"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="OS Type">
+		<s:DropDownList id="jsOsType" width="160" prompt="Select Operating System"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>Unknown</fx:String>
+					<fx:String>MACOS</fx:String>
+					<fx:String>ATTUNIX</fx:String>
+					<fx:String>DGUX</fx:String>
+					<fx:String>DECNT</fx:String>
+					<fx:String>Tru64_UNIX</fx:String>
+					<fx:String>OpenVMS</fx:String>
+					<fx:String>HPUX</fx:String>
+					<fx:String>AIX</fx:String>
+					<fx:String>MVS</fx:String>
+					<fx:String>OS400</fx:String>
+					<fx:String>OS_2</fx:String>
+					<fx:String>JavaVM</fx:String>
+					<fx:String>MSDOS</fx:String>
+					<fx:String>WIN3x</fx:String>
+					<fx:String>WIN95</fx:String>
+					<fx:String>WIN98</fx:String>
+					<fx:String>WINNT</fx:String>
+					<fx:String>WINCE</fx:String>
+					<fx:String>NCR3000</fx:String>
+					<fx:String>NetWare</fx:String>
+					<fx:String>OSF</fx:String>
+					<fx:String>DC_OS</fx:String>
+					<fx:String>Reliant_UNIX</fx:String>
+					<fx:String>SCO_UnixWare</fx:String>
+					<fx:String>SCO_OpenServer</fx:String>
+					<fx:String>Sequent</fx:String>
+					<fx:String>IRIX</fx:String>
+					<fx:String>Solaris</fx:String>
+					<fx:String>SunOS</fx:String>
+					<fx:String>U6000</fx:String>
+					<fx:String>ASERIES</fx:String>
+					<fx:String>TandemNSK</fx:String>
+					<fx:String>TandemNT</fx:String>
+					<fx:String>BS2000</fx:String>
+					<fx:String>LINUX</fx:String>
+					<fx:String>Lynx</fx:String>
+					<fx:String>XENIX</fx:String>
+					<fx:String>VM</fx:String>
+					<fx:String>Interactive_UNIX</fx:String>
+					<fx:String>BSDUNIX</fx:String>
+					<fx:String>FreeBSD</fx:String>
+					<fx:String>NetBSD</fx:String>
+					<fx:String>GNU_Hurd</fx:String>
+					<fx:String>OS9</fx:String>
+					<fx:String>MACH_Kernel</fx:String>
+					<fx:String>Inferno</fx:String>
+					<fx:String>QNX</fx:String>
+					<fx:String>EPOC</fx:String>
+					<fx:String>IxWorks</fx:String>
+					<fx:String>VxWorks</fx:String>
+					<fx:String>MiNT</fx:String>
+					<fx:String>BeOS</fx:String>
+					<fx:String>HP_MPE</fx:String>
+					<fx:String>NextStep</fx:String>
+					<fx:String>PalmPilot</fx:String>
+					<fx:String>Rhapsody</fx:String>
+					<fx:String>Windows_2000</fx:String>
+					<fx:String>Dedicated</fx:String>
+					<fx:String>OS_390</fx:String>
+					<fx:String>VSE</fx:String>
+					<fx:String>TPF</fx:String>
+					<fx:String>Windows_R_Me</fx:String>
+					<fx:String>Caldera_Open_UNIX</fx:String>
+					<fx:String>OpenBSD</fx:String>
+					<fx:String>Not_Applicable</fx:String>
+					<fx:String>Windows_XP</fx:String>
+					<fx:String>z_OS</fx:String>
+					<fx:String>Windows</fx:String><!--== Added for generic name control ==-->
+					<fx:String>Unix</fx:String> <!--== Added for generic name control ==-->
+					<fx:String>other</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+	</s:FormItem>
+
+	<s:FormItem label="Priority">
+		<s:DropDownList id="jsJobPriority" width="120" prompt="Select Priority"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>1</fx:String>
+					<fx:String>2</fx:String>
+					<fx:String>3</fx:String>
+					<fx:String>4</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+		<s:helpContent>
+			<s:Label text="Enter your Job Priority"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Enabled">
+		<s:DropDownList id="jsJobActivity" width="120" prompt="Select Job Activity"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>TRUE</fx:String>
+					<fx:String>FALSE</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+		<s:helpContent>
+			<s:Label text="Enter your Job activity"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+</s:Form>

@@ -3,13 +3,15 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:s="library://ns.adobe.com/flex/spark"
-			   close="handleCloseEvent();" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:jobcrud="com.likya.pinara.comps.jobcrud.*">
+			   close="handleCloseEvent();" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:jobcrud="com.likya.pinara.comps.jobcrud.*"
+			   title="Job Definition Window">
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.managers.PopUpManager;
 			import mx.managers.PopUpManager;
 			
 			// Handle the close button and Cancel button.
@@ -25,10 +27,104 @@
 		]]>
 	</fx:Script>
 	
-	<jobcrud:JobPropertiesForm>
+	<s:VGroup>
 		
-	</jobcrud:JobPropertiesForm>
-	<s:Form>
+		<!-- Create a Spark ButtonBar control to navigate 
+		the ViewStack container. -->
+		<s:TabBar dataProvider="{vs}"/>
+		<!-- Define the ViewStack and the three child containers. -->
+		
+		<mx:ViewStack id="vs" width="600" height="600" left="8" y="23">
+			
+			<s:NavigatorContent id="baseInfo" label="Base Information of Job">
+				<jobcrud:JobBaseTypeInfoForm />
+			</s:NavigatorContent>
+			
+<!--			<s:NavigatorContent id="search" label="Base Information of Job">
+				<s:HGroup width="100%" >
+					
+					<s:VGroup paddingLeft="5" paddingRight="5" gap="10" width="100%">
+						
+						<s:Panel title="Job Type Details" borderVisible="true" height="200">
+							<s:VGroup paddingLeft="5" paddingRight="5" gap="10" width="100%">
+								<s:HGroup verticalAlign="middle" paddingTop="15">
+									<s:Label text="Job Command :" width="105"/>
+									<s:TextInput id="jobCommand" top="5" editable="false" width="95"/>
+									<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+									<s:TextInput id="dzGroup" top="5" editable="false"/>
+								</s:HGroup>
+								<s:HGroup verticalAlign="middle" paddingTop="15">
+									<s:Label text="Job Log File :" width="105"/>
+									<s:TextInput id="jobLogFile" top="5" editable="false" width="95"/>
+									<s:Label text="Restartable :" width="105" paddingLeft="10" />
+									<s:TextInput id="restartable" top="5" editable="false"/>
+								</s:HGroup>
+							</s:VGroup>
+						</s:Panel>
+						
+						<s:Panel borderVisible="true">
+							<s:HGroup verticalAlign="middle" paddingTop="15">
+								<s:Label text="Previous Duration :" width="105"/>
+								<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
+								<s:Label text="Parameter :" width="105" paddingLeft="10" />
+								<s:TextInput id="paramValue" top="5" editable="false"/>
+							</s:HGroup>
+							<s:HGroup verticalAlign="baseline" paddingTop="15">
+								<s:Label text="Diff Duration :" width="105"/>
+								<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
+								<s:Label text="Arguments :" width="65"/>
+								<s:TextInput id="argValues" top="5" editable="false" width="140"/>
+							</s:HGroup>
+						</s:Panel>
+						
+						<s:Panel borderVisible="true">
+							<s:HGroup verticalAlign="baseline" paddingTop="15">
+								<s:Label text="Handler URI :" width="105" />
+								<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
+							</s:HGroup>
+							
+						</s:Panel>
+						
+					</s:VGroup>
+					
+				</s:HGroup>
+			</s:NavigatorContent>-->
+			<s:NavigatorContent id="search1" label="Base Info1">
+				<jobcrud:JobPropertiesForm />
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 1"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<s:Label left="3" top="5" text="This is my first tab..."/>
+				</s:BorderContainer>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 2"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<s:Label left="3" top="5" text="This is my second tab..."/>
+				</s:BorderContainer>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 3"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<jobcrud:ManagementInfoForm />
+				</s:BorderContainer>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Job Execution Schedule Info"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<jobcrud:ScheduleInfoForm />
+				</s:BorderContainer>
+			</s:NavigatorContent>			
+		</mx:ViewStack>
+
+		<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="8">
+			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="220">
+				<s:Button label="Save"
+						  click="processSave();" /> 
+				<s:Button label="Cancel"
+						  click="handleCloseEvent();"/> 
+			</s:HGroup>
+		</s:BorderContainer>
+	</s:VGroup>
+		
+	<!--s:Form>
 		<s:FormItem label="User Name">
 			<s:TextInput id="username" width="100%"/>
 		</s:FormItem> 
@@ -43,5 +139,73 @@
 				  click="processSave();" /> 
 		<s:Button label="Cancel"
 				  click="handleCloseEvent();"/> 
-	</s:HGroup> 
+	</s:HGroup-->
+<!--	<s:VGroup>
+		<mx:ViewStack id="vs" width="400" height="300" left="8" y="23">
+			<s:NavigatorContent label="Tab 1"  width="100%" height="100%">
+				<s:Label left="3" top="5" text="This is my first tab..."/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 2"  width="100%" height="100%">
+				<s:Label left="3" top="5" text="This is my second tab..."/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 3"  width="100%" height="100%">
+				<s:Label left="3" top="5" text="This is my third tab..."/>
+			</s:NavigatorContent>
+		</mx:ViewStack>
+	</s:VGroup>-->
+	<!-- Define the ViewStack and the three child containers. -->
+<!--	<mx:ViewStack id="myViewStack" 
+				  borderStyle="solid" 
+				  width="100%" height="160">
+		
+		<s:NavigatorContent id="search1" label="Base Info1">
+			<jobcrud:JobPropertiesForm />
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent id="search1" label="Base Info1">
+			<s:Label text="Job Command :" width="105"/>
+		</s:NavigatorContent>
+		
+		<s:NavigatorContent id="search" label="Base Info2">
+			<s:HGroup width="100%" >
+				
+				<s:VGroup paddingLeft="5" paddingRight="5" gap="-10" width="100%">
+					
+					<s:HGroup verticalAlign="middle" paddingTop="15">
+						<s:Label text="Job Command :" width="105"/>
+						<s:TextInput id="jobCommand" top="5" editable="false" width="95"/>
+						<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+						<s:TextInput id="dzGroup" top="5" editable="false"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle" paddingTop="15">
+						<s:Label text="Job Log File :" width="105"/>
+						<s:TextInput id="jobLogFile" top="5" editable="false" width="95"/>
+						<s:Label text="Restartable :" width="105" paddingLeft="10" />
+						<s:TextInput id="restartable" top="5" editable="false"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle" paddingTop="15">
+						<s:Label text="Previous Duration :" width="105"/>
+						<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
+						<s:Label text="Parameter :" width="105" paddingLeft="10" />
+						<s:TextInput id="paramValue" top="5" editable="false"/>
+					</s:HGroup>
+					<s:HGroup verticalAlign="baseline" paddingTop="15">
+						<s:Label text="Diff Duration :" width="105"/>
+						<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
+						<s:Label text="Arguments :" width="65"/>
+						<s:TextInput id="argValues" top="5" editable="false" width="140"/>
+					</s:HGroup>
+					
+					<s:HGroup verticalAlign="baseline" paddingTop="15">
+						<s:Label text="Handler URI :" width="105" />
+						<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
+					</s:HGroup>
+					
+				</s:VGroup>
+				
+			</s:HGroup>
+		</s:NavigatorContent>
+		
+	</mx:ViewStack>-->
+	
 </s:TitleWindow>

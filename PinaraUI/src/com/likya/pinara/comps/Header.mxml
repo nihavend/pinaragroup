@@ -6,7 +6,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.likya.pinara.comps.jobdetail.JobEditWindow;
+			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserInfo;
 			

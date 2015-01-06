@@ -37,12 +37,12 @@
   <applications>
     <application path="AboutWindowsTester.mxml"/>
     <application path="HtmlTester.mxml"/>
-    <application path="MenuBarTester.mxml"/>
-    <application path="ServiceTester.mxml"/>
     <application path="com/likya/pinara/main/PinaraUI.mxml"/>
-    <application path="com/likya/pinara/modules/RemoteSchProps.mxml"/>
-    <application path="TestViewDepGraph.mxml"/>
+    <application path="ServiceTester.mxml"/>
+    <application path="MenuBarTester.mxml"/>
     <application path="ModuleTester.mxml"/>
+    <application path="TestViewDepGraph.mxml"/>
+    <application path="com/likya/pinara/modules/RemoteSchProps.mxml"/>
     <application path="NumericTester.mxml"/>
     <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
   </applications>

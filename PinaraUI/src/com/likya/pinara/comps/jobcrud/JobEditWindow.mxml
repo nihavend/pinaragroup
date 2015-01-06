@@ -34,7 +34,7 @@
 		<s:TabBar dataProvider="{vs}"/>
 		<!-- Define the ViewStack and the three child containers. -->
 		
-		<mx:ViewStack id="vs" width="600" height="600" left="8" y="23">
+		<mx:ViewStack id="vs" width="100%" height="600" left="8" y="23">
 			
 			<s:NavigatorContent id="baseInfo" label="Base Information of Job">
 				<jobcrud:JobBaseTypeInfoForm />
@@ -89,22 +89,12 @@
 					
 				</s:HGroup>
 			</s:NavigatorContent>-->
-			<s:NavigatorContent id="search1" label="Base Info1">
+			<s:NavigatorContent id="depList" label="Dependency Definitions">
 				<jobcrud:JobPropertiesForm />
 			</s:NavigatorContent>
-			<s:NavigatorContent label="Tab 1"  width="100%" height="100%">
+			<s:NavigatorContent label="Job Management Info"  width="100%" height="100%">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
-					<s:Label left="3" top="5" text="This is my first tab..."/>
-				</s:BorderContainer>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Tab 2"  width="100%" height="100%">
-				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
-					<s:Label left="3" top="5" text="This is my second tab..."/>
-				</s:BorderContainer>
-			</s:NavigatorContent>
-			<s:NavigatorContent label="Tab 3"  width="100%" height="100%">
-				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
-					<jobcrud:ManagementInfoForm />
+					<jobcrud:JobManagementInfoForm />
 				</s:BorderContainer>
 			</s:NavigatorContent>
 			<s:NavigatorContent label="Job Execution Schedule Info"  width="100%" height="100%">

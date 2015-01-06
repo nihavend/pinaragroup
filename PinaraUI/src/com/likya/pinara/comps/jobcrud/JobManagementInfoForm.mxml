@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var data:ArrayCollection = new ArrayCollection(
+				[   
+					{value:"TIME", code:"0"},
+					{value:"EVENT", code:"1"},
+					{value:"USER", code:"2"}		
+				]                
+			);
+			
+			protected function dropDownList_changeHandler (event:IndexChangeEvent):void	{
+				// jsJobTriggerType.selectedIndex.toString();
+				// jsJobTriggerType.selectedItem.value;
+				if(jsJobTriggerType.selectedItem.code == 0) {
+					periodBox.enabled = true;
+					timeBox.enabled = true;
+					cascCondBox.enabled = true;
+				} else {
+					periodBox.enabled = false;
+					timeBox.enabled = false;
+					cascCondBox.enabled = false;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>
+	
+	<s:FormItem label="Job Trigger Type">
+		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
+	</s:FormItem>
+	
+	<s:BorderContainer id="periodBox" width="100%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Period Info" fontSize="14" fontWeight="bold"/>
+		
+		<s:FormItem label="Calculate Relatively" top="30">
+			<s:DropDownList id="relativeStart" width="120" selectedIndex="0"> 
+				<s:dataProvider>
+					<mx:ArrayList>
+						<fx:String>TRUE</fx:String>
+						<fx:String>FALSE</fx:String>
+					</mx:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+			<s:helpContent>
+				<s:Label text="Relative Time Calculation"/>
+			</s:helpContent>
+		</s:FormItem>
+		
+		<s:FormItem label="Delay between periods" top="60">
+			<s:TextInput id="stepValue" width="100%"/>
+			<s:helpContent>
+				<s:Label text="Define delay, e.g. P1D"/>
+			</s:helpContent>
+		</s:FormItem>
+
+		<s:FormItem label="Maximum Count" top="90">
+			<s:TextInput id="maxCountValue" width="100%"/>
+			<s:helpContent>
+				<s:Label text="Maximum Count of Execution"/>
+			</s:helpContent>
+		</s:FormItem>
+		
+	</s:BorderContainer>
+	
+	
+	<s:BorderContainer id="timeBox" width="100%" height="160" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
+		
+		<s:FormItem label="Başlangıç Tarih ve Saati : " top="30">
+			<s:HGroup>
+				<mx:DateField top="50" left="10" />
+				<s:TextInput  id="bhour"
+							  restrict="0-23"
+							  widthInChars="3"
+							  maxChars="2" />
+				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+				<s:TextInput  id="bminute"
+							  restrict="0-23"
+							  widthInChars="3"
+							  maxChars="2" />	
+				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+				<s:TextInput  id="bsecond"
+							  restrict="0-59"
+							  widthInChars="3"
+							  maxChars="2" />
+			</s:HGroup>
+		</s:FormItem>
+		
+		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
+			<s:HGroup>
+				<mx:DateField top="50" left="10" />
+				<s:TextInput  id="ehour"
+							  restrict="0-23"
+							  widthInChars="3"
+							  maxChars="2" />
+				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+				<s:TextInput  id="eminute"
+							  restrict="0-23"
+							  widthInChars="3"
+							  maxChars="2" />	
+				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+				<s:TextInput  id="esecond"
+							  restrict="0-59"
+							  widthInChars="3"
+							  maxChars="2" />
+			</s:HGroup>
+		</s:FormItem>
+		
+		<s:FormItem label="Time-out değeri               :" top="90">
+			<s:HGroup>
+				<s:TextInput  id="timoutValue"
+							  restrict="0-999999"
+							  widthInChars="10"
+							  maxChars="9" />
+				<s:DropDownList id="timeoutUnit" width="120" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>HOURS</fx:String>
+							<fx:String>MINUTES</fx:String>
+							<fx:String>SECONDS</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+			</s:HGroup>
+		</s:FormItem>
+
+		<s:FormItem label="Beklenen çalışma süresi:" top="120">
+			<s:HGroup>
+				<s:TextInput  id="expectedValue"
+							  restrict="0-999999"
+							  widthInChars="10"
+							  maxChars="9" />
+				<s:DropDownList id="expectedTimeUnit" width="120" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>HOURS</fx:String>
+							<fx:String>MINUTES</fx:String>
+							<fx:String>SECONDS</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+			</s:HGroup>
+		</s:FormItem>
+		
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="cascCondBox" width="100%" height="240" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Cascading Conditions" fontSize="14" fontWeight="bold"/>
+		
+		<s:FormItem label="Run Even Failed" top="30">
+			<s:DropDownList id="runEvenFailed" width="120" selectedIndex="0"> 
+				<s:dataProvider>
+					<mx:ArrayList>
+						<fx:String>TRUE</fx:String>
+						<fx:String>FALSE</fx:String>
+					</mx:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+			<s:helpContent>
+				<s:Label text="Continue Execution On Error"/>
+			</s:helpContent>
+		</s:FormItem>
+		
+		<s:FormItem label="Is Safe To Restart" top="60">
+			<s:DropDownList id="safeToRestart" width="120" selectedIndex="0"> 
+				<s:dataProvider>
+					<mx:ArrayList>
+						<fx:String>TRUE</fx:String>
+						<fx:String>FALSE</fx:String>
+					</mx:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+			<s:helpContent>
+				<s:Label text="Safe To Restart Info"/>
+			</s:helpContent>
+		</s:FormItem>
+		
+		<s:BorderContainer id="auotRetryBox" left="10" top="100" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			
+			<s:Label left="15" top="10" text="Auto Retry Info" fontSize="14" fontWeight="bold"/>
+			
+			<s:FormItem label="Auto Retry" top="30">
+				<s:DropDownList id="autoRetry" width="120" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>TRUE</fx:String>
+							<fx:String>FALSE</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Autor Retry On Error"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Delay between auto retry" top="60">
+				<s:TextInput id="arStepValue" width="100%"/>
+				<s:helpContent>
+					<s:Label text="Define delay, e.g. P1D"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Maximum Count" top="90">
+				<s:TextInput id="maxCountValueAr" width="100%"/>
+				<s:helpContent>
+					<s:Label text="Maximum Count of Execution"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+		</s:BorderContainer>
+	</s:BorderContainer>
+
+</s:Form>

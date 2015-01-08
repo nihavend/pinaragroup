@@ -4,7 +4,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlException;
+
 import com.likya.myra.commons.utils.JobListFilter;
+import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.commons.utils.StateFilter;
 import com.likya.myra.jef.core.CoreFactory;
@@ -20,6 +24,7 @@ import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
+import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 
 public final class PinaraAppManagerImpl implements PinaraAppManager {
@@ -303,5 +308,39 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 
 		return CoreFactory.getInstance().getNetTreeManagerInterface().getFreeJobs();
 	}
-	
+
+	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException {
+
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+
+		String header = "<myra:jobList xmlns:myra=\"http://www.likyateknoloji.com/myra-joblist\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+				"xmlns:myra-jobprops=\"http://www.likyateknoloji.com/myra-jobprops\" xmlns:wla=\"http://www.likyateknoloji.com/wla-gen\" " +
+				"xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" xmlns:myra-stateinfo=\"http://www.likyateknoloji.com/myra-stateinfo\">";
+		String footer = "</myra:jobList>";
+		
+		JobListDocument jobListDocument;
+
+		try {
+			
+			jobXml = header + jobXml + footer;
+			
+			jobListDocument = JobListDocument.Factory.parse(jobXml.toString());
+			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+				System.err.println("JobList.xml is null or damaged !");
+			}
+			
+			AbstractJobType abstractJobType = jobListDocument.getJobList().getGenericJobArray()[0];
+			
+			jobOperations.addJob(abstractJobType, persist);
+		} catch (XmlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

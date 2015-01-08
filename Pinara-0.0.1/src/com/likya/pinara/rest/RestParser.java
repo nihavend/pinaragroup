@@ -1,5 +1,7 @@
 package com.likya.pinara.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import com.google.gson.Gson;
@@ -36,6 +38,8 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_FSTOPAPP = "fstopapp";
 	public static final String CMD_SUSPENDAPP = "suspendapp";
 	public static final String CMD_RESUMEAPP = "resumeapp";
+	
+	public static final String CMD_ADDJOB = "addjob";
 	
 	public static byte[] parse(String uriTxt) {
 
@@ -292,5 +296,49 @@ public class RestParser extends GenericRestParser {
 		return responseBytes;
 
 	}
+	
+	
+	public static byte[] parsePost(String uriTxt, InputStream inputStream) throws IOException {
+		
+		String bufferString = "";
+		int i;
+		while ((i = inputStream.read()) != -1) {
+			bufferString = bufferString + (char) i;
+		}
 
+		String retStr = "";
+
+		String restCommArr[] = uriTxt.split("/");
+
+		byte responseBytes[] = new byte[0];
+
+		if (restCommArr.length == 0) {
+			return responseBytes;
+		}
+
+		switch (restCommArr[0]) {
+		
+		case RestParser.CMD_ADDJOB:
+			try {
+				PinaraAppManagerImpl.getInstance().addJob(bufferString, false);
+				retStr = "<result>OK</result>";
+			} catch (PinaraAuthenticationException e) {
+				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
+				e.printStackTrace();
+			}
+//			responseBytes = retStr.getBytes();
+			break;
+			
+		default:
+			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
+			
+			break;
+		}
+		
+		responseBytes = retStr.getBytes();
+		
+		return responseBytes;
+		
+	}
 }
+

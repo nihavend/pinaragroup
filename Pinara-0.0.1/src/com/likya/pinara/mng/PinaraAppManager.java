@@ -59,4 +59,6 @@ public interface PinaraAppManager {
 
 	public HashMap<String, AbstractJobType> getFreeJobs() throws PinaraAuthenticationException;
 	
+	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException;
+	
 }

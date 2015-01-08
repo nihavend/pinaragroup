@@ -10,6 +10,7 @@ import com.likya.myra.jef.InputStrategy;
 import com.likya.myra.jef.InputStrategyImpl;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.ManagementOperations;
+import com.likya.myra.jef.utils.Starter;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
 import com.likya.pinara.utils.license.LicenseManager;
@@ -123,8 +124,20 @@ public class Pinara extends PinaraBase {
 		}
 
 	}
-
+	
 	private boolean initMyra() throws Throwable {
+
+		String senaryoFile = pinara.getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
+
+		PinaraOutput testOutput = PinaraOutput.getInstance();
+		
+		Starter.startForce(senaryoFile, testOutput);
+
+		return true;
+
+	}
+
+	public boolean initMyraOld() throws Throwable {
 
 		StringBuffer xmlString = getMyraData();
 

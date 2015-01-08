@@ -23,19 +23,26 @@ public class RestfulHandler implements HttpHandler {
 	public void handle(HttpExchange httpExchange) throws IOException {
 
 		OutputStream os;
-
+		
 		URI myUri = httpExchange.getRequestURI();
 		
 		String uriTxt = myUri.toString();
 		
 		uriTxt = uriTxt.replace("/" + WebManager.RESTFUL_CTX + "/", "");
-		
-		byte responseBytes[] = RestParser.parse(uriTxt);
+
+		byte responseBytes[];
+				
+		if (httpExchange.getRequestMethod().equals("POST")) {
+			responseBytes = RestParser.parsePost(uriTxt, httpExchange.getRequestBody());
+		} else {
+			responseBytes = RestParser.parse(uriTxt);
+		}
 		
 		httpExchange.sendResponseHeaders(200, responseBytes.length);
 		os = httpExchange.getResponseBody();
 		os.write(responseBytes);
 		os.close();
+		
 	}
 	
 	public void handleJson(HttpExchange httpExchange) throws IOException {

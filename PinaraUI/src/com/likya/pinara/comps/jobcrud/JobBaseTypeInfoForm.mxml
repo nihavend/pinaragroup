@@ -16,6 +16,45 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			protected function ekle_clickHandler(event:MouseEvent):void
+			{
+				envVarList.dataProvider.addItem(envVars.text);
+				
+			}
+			
+			protected function cikar_clickHandler(event:MouseEvent):void
+			{
+				if(envVarList.dataProvider.length != 0 && envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+					envVarList.dataProvider.removeItemAt(envVarList.selectedIndex);
+				} else {
+					cikar.enabled = false;
+				}
+				
+			}
+			
+			protected function envVars_changeHandler(event:TextOperationEvent):void
+			{
+				if(event.currentTarget.text.length > 0) {
+					ekle.enabled = true;
+				} else {
+					ekle.enabled = false;
+				}
+				
+			}
+			
+			protected function envVarList_changeHandler(event:IndexChangeEvent):void
+			{
+				if(envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+				} else {
+					cikar.enabled = false;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -32,6 +71,13 @@
 		</s:helpContent>
 	</s:FormItem>
 
+	<s:FormItem label="Job Path">
+		<s:TextInput id="jsJobPath" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Physical Path"/>
+		</s:helpContent>
+	</s:FormItem>
+	
 	<s:FormItem label="Command">
 		<s:TextInput id="jsCommand" width="100%"/>
 		<s:helpContent>
@@ -44,7 +90,7 @@
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>BATCH PROCESS</fx:String>
-					<fx:String>SHELL SCRIPT</fx:String>
+					<!--<fx:String>SHELL SCRIPT</fx:String>
 					<fx:String>REMOTE SHELL</fx:String>
 					<fx:String>ETL TOOL JOBS</fx:String>
 					<fx:String>SAP</fx:String>
@@ -55,30 +101,33 @@
 					<fx:String>FILE LISTENER</fx:String>
 					<fx:String>PROCESS NODE</fx:String>
 					<fx:String>DB JOBS</fx:String>
-					<fx:String>WEB SERVICE</fx:String>
+					<fx:String>WEB SERVICE</fx:String>-->
 				</mx:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>
 	</s:FormItem>
 	
-	<s:FormItem label="Job Path">
-		<s:TextInput id="jsJobPath" width="100%"/>
-		<s:helpContent>
-			<s:Label text="Enter your Job Physical Path"/>
-		</s:helpContent>
-	</s:FormItem>
-	
 	<s:FormItem label="Job Arguments"> 
 		<s:TextArea id="jsJobArgs" height="25"/>
 	</s:FormItem>
-	
+		
 	<s:FormItem label="Environment Variables"> 
-		<s:List> 
-			<mx:ArrayCollection>
-				<fx:String>var1=Dreamweaver</fx:String> 
-				<fx:String>var2=ColdFusion</fx:String> 
-			</mx:ArrayCollection>
-		</s:List>
+		<s:HGroup>
+			<s:List id="envVarList" change="envVarList_changeHandler(event)" maxHeight="100" maxWidth="300"> 
+				<mx:ArrayCollection>
+					<!--<fx:String>var1=Dreamweaver</fx:String> 
+					<fx:String>var2=ColdFusion</fx:String> -->
+				</mx:ArrayCollection>
+			</s:List>
+			<s:VGroup>
+				<s:Label text="Key Value Pair" />
+				<s:TextInput id="envVars" width="100%" change="envVars_changeHandler(event)"/>
+				<s:HGroup>
+					<s:Button label="Ekle" id="ekle" click="ekle_clickHandler(event)" enabled="false"/>
+					<s:Button label="Çıkar" id="cikar" click="cikar_clickHandler(event)" enabled="false"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:HGroup>
 	</s:FormItem>
 
 	<s:FormItem label="Job Log Filename">

@@ -54,8 +54,9 @@
 	</target>
 
 	<target name="initxmlbeans" depends="cleanUp">
-		<property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" />
-
+		<!--property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" /-->
+		<property name="xmlbeans.lib" value="/Users/serkan/programlar/dev/workspace/SharedLibs/xmlbeans-2.5.0" />
+		
 		<!-- check for xbean.jar from binary distribution -->
 		<available property="xmlbeans.lib" value="${xmlbeans.home}/lib" file="${xmlbeans.home}/lib/xbean.jar" />
 

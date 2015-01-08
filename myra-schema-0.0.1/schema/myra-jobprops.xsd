@@ -82,7 +82,7 @@
 				<!--  xs:element ref="eventTypeDef" minOccurs="0" /-->
 				<xs:element ref="periodInfo" minOccurs="0" />
 				<xs:element ref="wla-gen:timeManagement" minOccurs="0" />
-				<xs:element ref="wla-gen:timeControl" minOccurs="0" />
+				<!-- xs:element ref="wla-gen:timeControl" minOccurs="0" / -->
 				<!-- xs:element ref="concurrencyManagement" /-->
 				<xs:element ref="wla-gen:cascadingConditions" minOccurs="0" />
 			</xs:sequence>

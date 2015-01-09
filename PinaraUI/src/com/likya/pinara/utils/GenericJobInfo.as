@@ -1,24 +1,214 @@
 package com.likya.pinara.utils {
 	import com.likya.pinara.comps.jobcrud.JobEditWindow;
 	
+	import mx.controls.Alert;
+	import mx.formatters.DateFormatter;
+	
 	public class GenericJobInfo {
+		
+		/*namespace xsi="http://www.w3.org/2001/XMLSchema-instance"
+		use namespace xsi;*/
+		
+		namespace myra = "http://www.likyateknoloji.com/myra-joblist";
+		use namespace myra;
+		
+		namespace myra_jobprops="http://www.likyateknoloji.com/myra-jobprops";
+		use namespace myra_jobprops;
+		
+		namespace wla = "http://www.likyateknoloji.com/wla-gen";
+		use namespace wla;
+		
+		public static function getXML_1(j:JobEditWindow):XML {
+			
+			var managementInfoXML:XML = <myra-jobprops:management xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>;
+			
+			if(j.managementInfoForm.jsJobTriggerType.selectedItem.value == "USER") {
+				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla-trigger>);
+			} else {
+				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">TIME</wla-trigger>);
+			}
+
+			
+			return managementInfoXML;
+		}
+
 		
 		public static function getXML(j:JobEditWindow):XML {
 			
-			var myraGenericJob:XML = <genericJob/>;
+			var myraJobList:XML = 
+				<myra:jobList xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen"
+						xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+					<myra:genericJob xsi:type="myra:simpleProperties" />
+				</myra:jobList>;
+
+
+			myraJobList.myra::genericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteInShell";
+			myraJobList.myra::genericJob.@Id = "22";
+			myraJobList.myra::genericJob.@groupId = "my_group";
+			myraJobList.myra::genericJob.@agentId = "1";
 			
-			myraGenericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteInShell";
-			myraGenericJob.@Id = "22";
-			myraGenericJob.@groupId = "my_group";
-			myraGenericJob.@agentId = "1";
+			// Alert.show("myraJobList.myra::genericJob.@handlerURI : " + myraJobList.myra::genericJob.@handlerURI);
 			
-			myraGenericJob = getBaseJobInfos(j, myraGenericJob);
+			// myraGenericJob = getBaseJobInfos(j, myraGenericJob);
+			// myraGenericJob = getScheduleInfo(j, myraGenericJob);
 			
-			myraGenericJob = getScheduleInfo(j, myraGenericJob);
+			// myraJobList.myra::genericJob = getManagementInfo(j, myraJobList.myra::genericJob);
 			
-			return myraGenericJob;
+			// var genericJob:XML = myraJobList.genericJob.@id;
+			
+			getManagementInfo(j, myraJobList);
+			
+			// myraJobList.appendChild(<myra:genericJob xsi:type="myra:simpleProperties" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra="http://www.likyateknoloji.com/myra-joblist"/>);
+			
+			return myraJobList;
 			
 		}
+		
+		private static function getManagementInfo(j:JobEditWindow, myraJobList:XML):XML {
+			
+			myraJobList.myra::genericJob.appendChild(<myra-jobprops:management xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
+			
+			var managementInfoXML:Object = myraJobList.myra::genericJob.myra_jobprops::management;
+			
+			if(j.managementInfoForm.jsJobTriggerType.selectedItem.value == "USER") {
+				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla-trigger>);
+			} else {
+				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">TIME</wla-trigger>);
+				
+				managementInfoXML.appendChild(<myra-jobprops:periodInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
+				
+				managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm.relativeStart.selectedItem;
+				managementInfoXML.periodInfo.@step = j.managementInfoForm.stepValue.text;
+				managementInfoXML.periodInfo.@maxCount = j.managementInfoForm.maxCountValue.text;
+				
+				managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+				
+				var sDate:Date = j.managementInfoForm.bdate.selectedDate;
+				var currentDF:DateFormatter = new DateFormatter();
+				currentDF.formatString = "YYYY-MM-DD"
+				var dateString:String = currentDF.format(sDate);
+				
+				dateString = dateString + "T" + j.managementInfoForm.bhour.text + ":" + j.managementInfoForm.bminute.text + ":" + j.managementInfoForm.bsecond.text + ".000+02:00";
+				
+				managementInfoXML.wla::timeManagement.appendChild(<wla:bornedPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				
+				managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				
+				managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
+				managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
+				
+			}
+			
+			// Alert.show("managementInfoXML : " + managementInfoXML);
+			
+/*			if(j.managementInfoForm.jsJobTriggerType.selectedItem.value == "USER") {
+				myraGenericJob.management.appendChild(<trigger>USER</trigger>);
+			} else {
+				myraGenericJob.management.appendChild(<trigger>TIME</trigger>);
+				myraGenericJob.management.periodInfo.@relativeStart = j.managementInfoForm.relativeStart.selectedItem;
+				myraGenericJob.management.periodInfo.@step = j.managementInfoForm.stepValue.text;
+				myraGenericJob.management.periodInfo.@maxCount = j.managementInfoForm.maxCountValue.text;
+				
+				myraGenericJob.management.timeManagement = <timeManagement/>;
+				
+				var sDate:Date = j.managementInfoForm.bdate.selectedDate;
+				var currentDF:DateFormatter = new DateFormatter();
+				currentDF.formatString = "YYYY-MM-DD"
+				var dateString:String = currentDF.format(sDate);
+				
+				dateString = dateString + "T" + j.managementInfoForm.bhour.text + ":" + j.managementInfoForm.bminute.text + ":" + j.managementInfoForm.bsecond.text + ".000+02:00";
+				
+				myraGenericJob.timeManagement.bornedPlannedTime.startTime = dateString;
+				myraGenericJob.timeManagement.jsPlannedTime.startTime = dateString;
+				
+				sDate = j.managementInfoForm.edate.selectedDate;
+				dateString = currentDF.format(sDate);
+				
+				dateString = dateString + "T" + j.managementInfoForm.ehour.text + ":" + j.managementInfoForm.eminute.text + ":" + j.managementInfoForm.esecond.text + ".000+02:00";
+				
+				myraGenericJob.timeManagement.bornedPlannedTime.stopTime = dateString;
+				myraGenericJob.timeManagement.jsPlannedTime.stopTime = dateString;
+				
+				myraGenericJob.timeManagement.jsTimeOut.value_integer = j.managementInfoForm.timoutValue.text;
+				myraGenericJob.timeManagement.jsTimeOut.unit = j.managementInfoForm.timeoutUnit.selectedItem;
+				
+				myraGenericJob.timeManagement.expectedTime.value_integer = j.managementInfoForm.expectedValue.text;
+				myraGenericJob.timeManagement.expectedTime.unit = j.managementInfoForm.expectedTimeUnit.selectedItem;
+			}*/
+			
+			return myraJobList;
+		}
+		
+		/*
+		
+		<s:BorderContainer id="cascCondBox" width="100%" height="240" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			
+			<s:Label left="15" top="10" text="Cascading Conditions" fontSize="14" fontWeight="bold"/>
+			
+			<s:FormItem label="Run Even Failed" top="30">
+				<s:DropDownList id="runEvenFailed" width="120" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>TRUE</fx:String>
+							<fx:String>FALSE</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Continue Execution On Error"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Is Safe To Restart" top="60">
+				<s:DropDownList id="safeToRestart" width="120" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>TRUE</fx:String>
+							<fx:String>FALSE</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Safe To Restart Info"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:BorderContainer id="auotRetryBox" left="10" top="100" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				
+				<s:Label left="15" top="10" text="Auto Retry Info" fontSize="14" fontWeight="bold"/>
+				
+				<s:FormItem label="Auto Retry" top="30">
+					<s:DropDownList id="autoRetry" width="120" selectedIndex="0"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>TRUE</fx:String>
+								<fx:String>FALSE</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+					<s:helpContent>
+						<s:Label text="Autor Retry On Error"/>
+					</s:helpContent>
+				</s:FormItem>
+				
+				<s:FormItem label="Delay between auto retry" top="60">
+					<s:TextInput id="arStepValue" width="100%"/>
+					<s:helpContent>
+						<s:Label text="Define delay, e.g. P1D"/>
+					</s:helpContent>
+				</s:FormItem>
+				
+				<s:FormItem label="Maximum Count" top="90">
+					<s:TextInput id="maxCountValueAr" width="100%"/>
+					<s:helpContent>
+						<s:Label text="Maximum Count of Execution"/>
+					</s:helpContent>
+				</s:FormItem>
+				
+			</s:BorderContainer>
+		</s:BorderContainer>*/
 		
 		private static function getScheduleInfo(j:JobEditWindow, myraGenericJob:XML):XML {
 
@@ -93,7 +283,7 @@ package com.likya.pinara.utils {
 			}
 			
 			
-			return myraGenericJob;;
+			return myraGenericJob;
 			
 			// return XML(j.scheduleInfoForm.scheduleType.selection.id);
 			
@@ -145,6 +335,8 @@ package com.likya.pinara.utils {
 		}
 		
 		private static function getBaseJobInfos(j:JobEditWindow, myraGenericJob:XML):XML {
+			
+			// myraGenericJob.baseJobInfos = <myra-jobprops:baseJobInfos />;
 			
 			myraGenericJob.baseJobInfos.jsName = j.baseInfoForm.jsName.text;
 			myraGenericJob.baseJobInfos.jobLogFile = j.baseInfoForm.jsJobLogFile.text;

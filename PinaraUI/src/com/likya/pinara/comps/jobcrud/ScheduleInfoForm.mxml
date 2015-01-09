@@ -35,7 +35,8 @@
 		<s:RadioButton group="{scheduleType}" 
 					   id="everyDaySchedule"
 					   value="everyDaySchedule"
-					   label="Execute Everyday" 
+					   label="Execute Everyday"
+					   selected="true"
 					   width="150"/>
 		<s:RadioButton group="{scheduleType}" 
 					   id="specificSchedule"
@@ -45,12 +46,12 @@
 	</s:VGroup>
 	
 	
-	<s:VGroup enabled="true" id="dom">
+	<s:VGroup enabled="false" id="dom">
 		<s:FormItem label="">
-			<s:CheckBox width="150" label="First Day Of Month"/>
+			<s:CheckBox width="150" label="First Day Of Month" id="fdom"/>
 		</s:FormItem>
 		<s:FormItem label="">
-			<s:CheckBox width="150" label="Last Day Of Month"/>
+			<s:CheckBox width="150" label="Last Day Of Month" id="ldom"/>
 		</s:FormItem>
 		<s:FormItem label="Day list">
 			<s:TextInput id="specDays" width="100%"/>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.jobcrud.JobEditWindow;
+			
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(helpWindow);
+				
+			}
+			
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				Alert.show(tobeParsed.text.split(',')[0]);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VGroup>
+		<s:Button id="button1" click="button1_clickHandler(event)" label="Test Me" />
+		
+		<s:TextInput id="tobeParsed">
+			
+		</s:TextInput>
+		
+		<s:Button id="button2" click="button2_clickHandler(event)" label="Split" />
+	</s:VGroup>
+	
+</s:Application>

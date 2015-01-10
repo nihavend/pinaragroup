@@ -14,7 +14,7 @@
 			public var data:ArrayCollection = new ArrayCollection(
 				[   
 					{value:"TIME", code:"0"},
-					{value:"EVENT", code:"1"},
+					/*{value:"EVENT", code:"1"},*/
 					{value:"USER", code:"2"}		
 				]                
 			);
@@ -88,7 +88,7 @@
 		
 		<s:FormItem label="Başlangıç Tarih ve Saati : " top="30">
 			<s:HGroup>
-				<mx:DateField top="50" left="10" />
+				<mx:DateField id="bdate" top="50" left="10" />
 				<s:TextInput  id="bhour"
 							  restrict="0-23"
 							  widthInChars="3"
@@ -108,7 +108,7 @@
 		
 		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
 			<s:HGroup>
-				<mx:DateField top="50" left="10" />
+				<mx:DateField id="edate" top="50" left="10" />
 				<s:TextInput  id="ehour"
 							  restrict="0-23"
 							  widthInChars="3"

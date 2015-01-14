@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="100%" height="100%">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+ 						 
+ 
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			protected function ekle_clickHandler(event:MouseEvent):void
+			{
+/*				envVarList.dataProvider.addItem(envVars.text);
+*/				
+			}
+			
+			protected function cikar_clickHandler(event:MouseEvent):void
+			{
+/*				if(envVarList.dataProvider.length != 0 && envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+					envVarList.dataProvider.removeItemAt(envVarList.selectedIndex);
+				} else {
+					cikar.enabled = false;
+				}
+*/				
+			}
+			
+			protected function envVars_changeHandler(event:TextOperationEvent):void
+			{
+/*				if(event.currentTarget.text.length > 0) {
+					ekle.enabled = true;
+				} else {
+					ekle.enabled = false;
+				}
+*/				
+			}
+			
+			protected function retCodeList_changeHandler(event:IndexChangeEvent):void
+			{
+/*				if(envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+				} else {
+					cikar.enabled = false;
+				}
+*/			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+	<s:BorderContainer id="jobStatusInfoBox" top="50" width="100%" height="280" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+
+		<s:Label left="15" top="10" text="Job Status Info" fontSize="14" fontWeight="bold"/>
+
+		<s:VGroup left="15" top="40">
+			
+			<s:HGroup>
+				<s:FormItem label="Job Status Name">
+					<s:DropDownList id="jobStatusName" width="140" prompt="Select Status"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>SUCCESS</fx:String>
+								<fx:String>WARNING</fx:String>
+								<fx:String>FAILED</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:FormItem>
+				
+				<s:FormItem label="Status Description">
+					<s:TextInput id="statusDescription" width="100%"/>
+					<s:helpContent>
+						<s:Label text="Enter the description"/>
+					</s:helpContent>
+				</s:FormItem>
+			</s:HGroup>
+			
+			<s:BorderContainer id="resCodeListBox" width="90%" height="150" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				
+				<s:HGroup>
+					<s:FormItem> 
+						<s:VGroup>
+							<s:Label text="Return Code List" top="20" fontSize="14" fontWeight="bold"/>
+							<s:List id="retCodeList" change="retCodeList_changeHandler(event)" maxHeight="100" maxWidth="300" width="200"> 
+								<mx:ArrayCollection />
+							</s:List>
+						</s:VGroup>
+						
+					</s:FormItem>
+					
+					<s:VGroup paddingTop="10">
+						<!--<s:Label visible="false"/>-->
+						<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+						<s:TextInput id="retCode" width="100%" change="envVars_changeHandler(event)"/>
+						<s:Label text="Return Code Description" fontSize="14" fontWeight="bold"/>
+						<s:TextInput id="retCodeDesc" width="100%" change="envVars_changeHandler(event)"/>
+						<s:HGroup>
+							<s:Button label="Ekle" id="ekle" click="ekle_clickHandler(event)" enabled="false"/>
+							<s:Button label="Çıkar" id="cikar" click="cikar_clickHandler(event)" enabled="false"/>
+						</s:HGroup>
+					</s:VGroup>
+				</s:HGroup>
+			</s:BorderContainer>
+		</s:VGroup>
+
+		
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="jobStatusInfoListBoxAddRemove" top="50" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="300">
+			<s:Button label="Ekle" id="ekleToList" click="ekle_clickHandler(event)" enabled="false"/>
+			<s:Button label="Çıkar" id="cikarFromList" click="cikar_clickHandler(event)" enabled="false"/>
+		</s:HGroup>
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="jobStatusInfoListBox" top="50" width="100%" height="250" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+
+		<s:Label left="15" top="10" text="Job Status Info List" fontSize="14" fontWeight="bold"/>
+		
+		<s:VGroup left="15" top="40">
+			<s:List id="statusInfoList" change="retCodeList_changeHandler(event)" width="695" height="200"> 
+				<mx:ArrayCollection />
+			</s:List>
+		</s:VGroup>
+	</s:BorderContainer>
+
+</s:Form>

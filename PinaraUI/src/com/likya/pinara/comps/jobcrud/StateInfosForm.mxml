@@ -16,47 +16,77 @@
 	
 	<fx:Script>
 		<![CDATA[
+
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
-			protected function ekle_clickHandler(event:MouseEvent):void
+			protected function retCodeEkle_clickHandler(event:MouseEvent):void
 			{
-/*				envVarList.dataProvider.addItem(envVars.text);
-*/				
+				retCodeList.dataProvider.addItem(retCode.text + " : " + retCodeDesc.text);
+				
 			}
 			
-			protected function cikar_clickHandler(event:MouseEvent):void
+			protected function retCodeCikar_clickHandler(event:MouseEvent):void
 			{
-/*				if(envVarList.dataProvider.length != 0 && envVarList.selectedIndex != -1) {
-					cikar.enabled = true;
-					envVarList.dataProvider.removeItemAt(envVarList.selectedIndex);
+				if(retCodeList.dataProvider.length != 0 && retCodeList.selectedIndex != -1) {
+					retCodeList.dataProvider.removeItemAt(retCodeList.selectedIndex);
+					if(retCodeList.dataProvider.length == 0) {
+						retCodeCikar.enabled = false;
+					}
 				} else {
-					cikar.enabled = false;
+					retCodeCikar.enabled = false;
 				}
-*/				
 			}
 			
-			protected function envVars_changeHandler(event:TextOperationEvent):void
+			protected function retCodeDesc_changeHandler(event:TextOperationEvent):void
 			{
-/*				if(event.currentTarget.text.length > 0) {
-					ekle.enabled = true;
+				if(retCode.text.length > 0 && retCodeDesc.text.length > 0) {
+					retCodeEkle.enabled = true;
 				} else {
-					ekle.enabled = false;
+					retCodeEkle.enabled = false;
 				}
-*/				
+				
 			}
 			
 			protected function retCodeList_changeHandler(event:IndexChangeEvent):void
 			{
-/*				if(envVarList.selectedIndex != -1) {
-					cikar.enabled = true;
+				if(retCodeList.selectedIndex != -1) {
+					retCodeCikar.enabled = true;
 				} else {
-					cikar.enabled = false;
+					retCodeCikar.enabled = false;
 				}
-*/			}
+			}
+			
+			protected function jobStatusEkle_clickHandler(event:MouseEvent):void
+			{
+				
+				var statColl:ArrayCollection = new ArrayCollection([
+					{statusname:jobStatusName.selectedItem, desc:"serkan", 
+					returnCodeList:[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
+				]);
+				// {[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
+				statusInfoGrid.dataProvider.addItem({statusname:jobStatusName.selectedItem, desc: statusDescription.text, retCodeList:[{code:"rcl1", desc:"rcl2"}]});
+				// statusInfoGrid.dataProvider.addItem(statColl);
+			}
+			
+			protected function jobStatusCikar_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function statusInfoList_changeHandler(event:IndexChangeEvent):void
+			{
+				// var dI:DataItem = 
+				
+			}
 			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:String id="sampleText">Lorem Ipsum is the standard dummy text of the typesetting industry.</fx:String>
+	</fx:Declarations>
 	
 	<s:layout>
 		<s:FormLayout gap="1"/>
@@ -66,36 +96,31 @@
 
 		<s:Label left="15" top="10" text="Job Status Info" fontSize="14" fontWeight="bold"/>
 
-		<s:VGroup left="15" top="40">
+		<s:VGroup left="15" top="25">
 			
-			<s:HGroup>
-				<s:FormItem label="Job Status Name">
-					<s:DropDownList id="jobStatusName" width="140" prompt="Select Status"> 
-						<s:dataProvider>
-							<mx:ArrayList>
-								<fx:String>SUCCESS</fx:String>
-								<fx:String>WARNING</fx:String>
-								<fx:String>FAILED</fx:String>
-							</mx:ArrayList>
-						</s:dataProvider>
-					</s:DropDownList>
-				</s:FormItem>
-				
-				<s:FormItem label="Status Description">
-					<s:TextInput id="statusDescription" width="100%"/>
-					<s:helpContent>
-						<s:Label text="Enter the description"/>
-					</s:helpContent>
-				</s:FormItem>
-			</s:HGroup>
+			<s:FormItem label="Job Status Name">
+				<s:DropDownList id="jobStatusName" width="140" prompt="Select Status"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>SUCCESS</fx:String>
+							<fx:String>WARNING</fx:String>
+							<fx:String>FAILED</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+			</s:FormItem>
 			
-			<s:BorderContainer id="resCodeListBox" width="90%" height="150" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			<s:FormItem label="Status Description">
+				<s:TextInput id="statusDescription" width="300"/>
+			</s:FormItem>
+			
+			<s:BorderContainer id="retCodeListBox" width="700" height="140" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 				
 				<s:HGroup>
 					<s:FormItem> 
 						<s:VGroup>
 							<s:Label text="Return Code List" top="20" fontSize="14" fontWeight="bold"/>
-							<s:List id="retCodeList" change="retCodeList_changeHandler(event)" maxHeight="100" maxWidth="300" width="200"> 
+							<s:List id="retCodeList" change="retCodeList_changeHandler(event)" maxHeight="100" maxWidth="300" width="400"> 
 								<mx:ArrayCollection />
 							</s:List>
 						</s:VGroup>
@@ -103,14 +128,13 @@
 					</s:FormItem>
 					
 					<s:VGroup paddingTop="10">
-						<!--<s:Label visible="false"/>-->
 						<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
-						<s:TextInput id="retCode" width="100%" change="envVars_changeHandler(event)"/>
+						<s:TextInput id="retCode" width="100%" change="retCodeDesc_changeHandler(event)" restrict="0-9" widthInChars="8" maxChars="6" />
 						<s:Label text="Return Code Description" fontSize="14" fontWeight="bold"/>
-						<s:TextInput id="retCodeDesc" width="100%" change="envVars_changeHandler(event)"/>
+						<s:TextInput id="retCodeDesc" width="100%" change="retCodeDesc_changeHandler(event)"/>
 						<s:HGroup>
-							<s:Button label="Ekle" id="ekle" click="ekle_clickHandler(event)" enabled="false"/>
-							<s:Button label="Çıkar" id="cikar" click="cikar_clickHandler(event)" enabled="false"/>
+							<s:Button label="Ekle" id="retCodeEkle" click="retCodeEkle_clickHandler(event)" enabled="false"/>
+							<s:Button label="Çıkar" id="retCodeCikar" click="retCodeCikar_clickHandler(event)" enabled="false"/>
 						</s:HGroup>
 					</s:VGroup>
 				</s:HGroup>
@@ -122,8 +146,8 @@
 	
 	<s:BorderContainer id="jobStatusInfoListBoxAddRemove" top="50" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="300">
-			<s:Button label="Ekle" id="ekleToList" click="ekle_clickHandler(event)" enabled="false"/>
-			<s:Button label="Çıkar" id="cikarFromList" click="cikar_clickHandler(event)" enabled="false"/>
+			<s:Button label="Ekle" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
+			<s:Button label="Çıkar" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="false"/>
 		</s:HGroup>
 	</s:BorderContainer>
 	
@@ -131,11 +155,74 @@
 
 		<s:Label left="15" top="10" text="Job Status Info List" fontSize="14" fontWeight="bold"/>
 		
-		<s:VGroup left="15" top="40">
-			<s:List id="statusInfoList" change="retCodeList_changeHandler(event)" width="695" height="200"> 
+<!--		<s:VGroup left="15" top="40">
+			<s:List id="statusInfoList" change="statusInfoList_changeHandler(event)" width="695" height="200"> 
 				<mx:ArrayCollection />
 			</s:List>
-		</s:VGroup>
+		</s:VGroup>-->
+			
+		<s:DataGrid id="statusInfoGrid" left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="200" rowHeight="100" >
+			<s:columns>
+				<s:ArrayList>                    
+					<!--
+					Simple custom item renderer based on GridItemRenderer and Label.
+					Prevent line breaking by setting maxDisplayedLines="1".
+					-->
+					<s:GridColumn dataField="statusname" headerText="Job Status Name">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:Label id="labelDisplay"
+											 left="5" top="9" right="5" bottom="5"/>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="desc" headerText="Status Description">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:Label id="labelDisplay"
+											 left="5" top="9" right="5" bottom="5"/>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="retCodeList" headerText="Return Code List" id="listGridCol">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:List id="inList" height="60">
+										<s:ArrayCollection>
+											{retCodeList as IList}
+										</s:ArrayCollection>
+									</s:List>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+				</s:ArrayList>
+			</s:columns>
+			
+			<!--
+			The typicalItem defines column widths and the default row height.  The text
+			occpies two lines because we've used '\n' to introduce two newlines.
+			
+			Alternatively we could have used the odd XML '&#10;' escape to introduce 
+			two newlines (the value of the newline character is decimal 10).
+			
+			<s:DataItem value="Lorem Ipsum sample text.&#10;Lorem Ipsum sample text.&#10;"/>
+			-->
+			<!--<s:typicalItem>
+				<s:DataItem value="{'Lorem Ipsum sample text.\nLorem Ipsum sample text\n'}"/>
+			</s:typicalItem>-->
+			
+			<s:ArrayCollection>
+<!--				<s:DataItem value="{sampleText}"/>
+				<s:DataItem value="{sampleText}"/>
+				<s:DataItem value="{sampleText}"/>-->
+			</s:ArrayCollection>
+		</s:DataGrid>
 	</s:BorderContainer>
 
 </s:Form>

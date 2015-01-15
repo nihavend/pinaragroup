@@ -6,6 +6,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
+			import com.likya.pinara.utils.GenericJobInfo;
 			
 			import mx.controls.Alert;
 			import mx.managers.PopUpManager;
@@ -23,11 +24,16 @@
 			{
 				Alert.show(tobeParsed.text.split(',')[0]);
 			}
+			
+			protected function button3_clickHandler(event:MouseEvent):void
+			{
+				Alert.show(GenericJobInfo.zeroize(tobeParsed.text));
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
 	<s:VGroup>
@@ -38,6 +44,10 @@
 		</s:TextInput>
 		
 		<s:Button id="button2" click="button2_clickHandler(event)" label="Split" />
-	</s:VGroup>
+		
+		<s:Button id="button3" click="button3_clickHandler(event)" label="Zero" />
 	
+		
+	</s:VGroup>
+
 </s:Application>

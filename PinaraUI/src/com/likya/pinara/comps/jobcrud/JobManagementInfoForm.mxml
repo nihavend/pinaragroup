@@ -55,8 +55,8 @@
 			<s:DropDownList id="relativeStart" width="120" selectedIndex="0"> 
 				<s:dataProvider>
 					<mx:ArrayList>
-						<fx:String>TRUE</fx:String>
-						<fx:String>FALSE</fx:String>
+						<fx:String>true</fx:String>
+						<fx:String>false</fx:String>
 					</mx:ArrayList>
 				</s:dataProvider>
 			</s:DropDownList>
@@ -172,8 +172,8 @@
 			<s:DropDownList id="runEvenFailed" width="120" selectedIndex="0"> 
 				<s:dataProvider>
 					<mx:ArrayList>
-						<fx:String>TRUE</fx:String>
-						<fx:String>FALSE</fx:String>
+						<fx:String>true</fx:String>
+						<fx:String>false</fx:String>
 					</mx:ArrayList>
 				</s:dataProvider>
 			</s:DropDownList>
@@ -186,8 +186,8 @@
 			<s:DropDownList id="safeToRestart" width="120" selectedIndex="0"> 
 				<s:dataProvider>
 					<mx:ArrayList>
-						<fx:String>TRUE</fx:String>
-						<fx:String>FALSE</fx:String>
+						<fx:String>true</fx:String>
+						<fx:String>false</fx:String>
 					</mx:ArrayList>
 				</s:dataProvider>
 			</s:DropDownList>
@@ -204,8 +204,8 @@
 				<s:DropDownList id="autoRetry" width="120" selectedIndex="0"> 
 					<s:dataProvider>
 						<mx:ArrayList>
-							<fx:String>TRUE</fx:String>
-							<fx:String>FALSE</fx:String>
+							<fx:String>true</fx:String>
+							<fx:String>false</fx:String>
 						</mx:ArrayList>
 					</s:dataProvider>
 				</s:DropDownList>

@@ -21,6 +21,9 @@ package com.likya.pinara.utils {
 		namespace lik = "http://www.likyateknoloji.com/likya-gen";
 		use namespace lik;
 		
+		namespace myra_stateinfo ="http://www.likyateknoloji.com/myra-stateinfo";
+		use namespace myra_stateinfo;
+		
 		public static function getXML(j:JobEditWindow):XML {
 			
 			var myraJobList:XML = 
@@ -29,7 +32,6 @@ package com.likya.pinara.utils {
 						xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
 					<myra:genericJob xsi:type="myra:simpleProperties" />
 				</myra:jobList>;
-
 
 			myraJobList.myra::genericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteInShell";
 			myraJobList.myra::genericJob.@Id = "22";
@@ -41,10 +43,15 @@ package com.likya.pinara.utils {
 			// TO-DO Aşağıdaki 2 fonksiyon yeni ns yapısına uygun hale getirilecek ardından dependency yapılacak
 			
 			myraJobList = getBaseJobInfos(j, myraJobList);
-			// myraGenericJob = getScheduleInfo(j, myraGenericJob);
+
+			myraJobList.myra::genericJob.appendChild(<myra-jobprops:graphInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
+			
+			myraJobList = getStateInfos(j, myraJobList);
 			
 			myraJobList = getManagementInfo(j, myraJobList);
-			
+
+			myraJobList = getScheduleInfo(j, myraJobList);
+
 			return myraJobList;
 			
 		}
@@ -71,6 +78,48 @@ package com.likya.pinara.utils {
 			return myraJobList;
 		}
 		
+		private static function getStateInfos(j:JobEditWindow, myraJobList:XML):XML {
+			
+/*			<myra-stateinfo:JobStatusList>
+				<myra-stateinfo:JobStatus>
+					<myra-stateinfo:StatusName>SUCCESS</myra-stateinfo:StatusName>
+					<myra-stateinfo:Desc />
+					<myra-stateinfo:ReturnCodeList osType="Windows">
+						<myra-stateinfo:ReturnCode>
+							<myra-stateinfo:Code>5</myra-stateinfo:Code>
+							<myra-stateinfo:Desc>Dönüş kodu 5 ise başarılı kabul et</myra-stateinfo:Desc>
+						</myra-stateinfo:ReturnCode>
+					</myra-stateinfo:ReturnCodeList>
+				</myra-stateinfo:JobStatus>
+			</myra-stateinfo:JobStatusList>*/
+			
+			myraJobList.myra::genericJob.appendChild(
+				<myra-stateinfo:stateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+						<myra-stateinfo:JobStatusList>
+							<myra-stateinfo:JobStatus>
+								<myra-stateinfo:StatusName>SUCCESS</myra-stateinfo:StatusName>
+								<myra-stateinfo:Desc />
+								<myra-stateinfo:ReturnCodeList osType="MACOS">
+									<myra-stateinfo:ReturnCode>
+										<myra-stateinfo:Code>0</myra-stateinfo:Code>
+										<myra-stateinfo:Desc>Açıklama</myra-stateinfo:Desc>
+									</myra-stateinfo:ReturnCode>
+								</myra-stateinfo:ReturnCodeList>
+							</myra-stateinfo:JobStatus>
+						</myra-stateinfo:JobStatusList>
+						<myra-stateinfo:LiveStateInfos>
+							<myra-stateinfo:LiveStateInfo LSIDateTime="2014-01-30T23:41:58.595+02:00">
+								<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
+								<myra-stateinfo:SubstateName>IDLED</myra-stateinfo:SubstateName>
+								<myra-stateinfo:StatusName>BYUSER</myra-stateinfo:StatusName>
+							</myra-stateinfo:LiveStateInfo>
+						</myra-stateinfo:LiveStateInfos>
+				</myra-stateinfo:stateInfos>
+			);
+			
+			return myraJobList;
+		}
+		
 		private static function getManagementInfo(j:JobEditWindow, myraJobList:XML):XML {
 			
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:management xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
@@ -78,12 +127,12 @@ package com.likya.pinara.utils {
 			var managementInfoXML:Object = myraJobList.myra::genericJob.myra_jobprops::management;
 			
 			if(j.managementInfoForm.jsJobTriggerType.selectedItem.value == "USER") {
-				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla-trigger>);
+				managementInfoXML.appendChild(<wla:trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla:trigger>);
 			} else {
 				
 				/** Trigger Info ****/
 				
-				managementInfoXML.appendChild(<wla-trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">TIME</wla-trigger>);
+				managementInfoXML.appendChild(<wla:trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">TIME</wla:trigger>);
 				
 				/** Period Info ****/
 				
@@ -119,7 +168,7 @@ package com.likya.pinara.utils {
 				currentDF.formatString = "YYYY-MM-DD"
 				var dateString:String = currentDF.format(sDate);
 				
-				dateString = dateString + "T" + j.managementInfoForm.bhour.text + ":" + j.managementInfoForm.bminute.text + ":" + j.managementInfoForm.bsecond.text + ".000+02:00";
+				dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
 				
 				managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
 				managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
@@ -127,7 +176,7 @@ package com.likya.pinara.utils {
 				sDate = j.managementInfoForm.edate.selectedDate;
 				dateString = currentDF.format(sDate);
 				
-				dateString = dateString + "T" + j.managementInfoForm.ehour.text + ":" + j.managementInfoForm.eminute.text + ":" + j.managementInfoForm.esecond.text + ".000+02:00";
+				dateString = dateString + "T" + zeroize(j.managementInfoForm.ehour.text) + ":" + zeroize(j.managementInfoForm.eminute.text) + ":" + zeroize(j.managementInfoForm.esecond.text) + ".000+02:00";
 				
 				managementInfoXML.timeManagement.bornedPlannedTime.stopTime = dateString;
 				managementInfoXML.timeManagement.jsPlannedTime.stopTime = dateString;
@@ -170,13 +219,13 @@ package com.likya.pinara.utils {
 			
 			if(j.scheduleInfoForm.scheduleType.selection.id == "everyDaySchedule") {
 
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">1</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">2</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">3</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">4</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">5</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">6</daysOfWeekIntType>);
-				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">7</daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">1</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">2</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">3</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">4</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">5</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">6</myra-jobprops:daysOfWeekIntType>);
+				scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">7</myra-jobprops:daysOfWeekIntType>);
 
 			} else {
 				
@@ -187,51 +236,55 @@ package com.likya.pinara.utils {
 				if(j.scheduleInfoForm.ldom.selected) {
 					scheduleInfoXML.appendChild(<myra-jobprops:lastDayOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
 				}
-
+				
 				if(j.scheduleInfoForm.specDays.text.length > 0) {
+					
 					var specDays:String = j.scheduleInfoForm.specDays.text;
 					
-					var results:Array = specDays.split(',');
-					
-					for each (var item:String in results) {
-						
-						if(item.indexOf('-') > 0) {
-							var dashList:Array = item.split('-');
-							if(dashList.length == 1) {
-								scheduleInfoXML.scheduleInfo.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[0]}</myra-jobprops:days>);
-							} else if(dashList.length > 1) {
-								var counter:int = 0;								
-								for each (var dashitem:String in dashList) {
-									scheduleInfoXML.scheduleInfo.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[counter ++]}</myra-jobprops:days>);
+					if(specDays.indexOf(',') > 0) {
+						var results:Array = specDays.split(',');
+						for each (var item:String in results) {
+							
+							if(item.indexOf('-') > 0) {
+								var dashList:Array = item.split('-');
+								if(dashList.length == 1) {
+									scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[0]}</myra-jobprops:days>);
+								} else if(dashList.length > 1) {
+									var counter:int = 0;								
+									for each (var dashitem:String in dashList) {
+										scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[counter ++]}</myra-jobprops:days>);
+									}
 								}
+							} else {
+								scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{item}</myra-jobprops:days>);
 							}
-						} else {
-							scheduleInfoXML.scheduleInfo.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{item}</myra-jobprops:days>);
 						}
-
+					} else {
+						scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{specDays}</myra-jobprops:days>);
 					}
+					
 				}
 				
 				if(j.scheduleInfoForm.d1.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">1</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">1</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d2.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">2</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">2</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d3.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">3</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">3</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d4.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">4</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">4</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d5.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">5</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">5</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d6.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">6</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">6</myra-jobprops:daysOfWeekIntType>);
 				}
 				if(j.scheduleInfoForm.d7.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">7</daysOfWeekIntType>);
+					scheduleInfoXML.appendChild(<myra-jobprops:daysOfWeekIntType xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">7</myra-jobprops:daysOfWeekIntType>);
 				}
 
 			}
@@ -247,14 +300,13 @@ package com.likya.pinara.utils {
 			var baseJobInfosXML:Object = myraJobList.myra::genericJob.myra_jobprops::baseJobInfos;
 			
 			baseJobInfosXML.appendChild(<wla:jsName xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			baseJobInfosXML.appendChild(<lik:jobTypeDetails xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.appendChild(<wla:jobLogFile xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			baseJobInfosXML.appendChild(<wla:jobLogPath xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			baseJobInfosXML.appendChild(<wla:oSystem xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			baseJobInfosXML.appendChild(<wla:jobPriority xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			baseJobInfosXML.appendChild(<myra-jobprops:jsIsActive xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 			baseJobInfosXML.appendChild(<lik:userId xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
-			
-			baseJobInfosXML.appendChild(<lik:jobTypeDetails xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobCommandType xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobCommand xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
@@ -279,13 +331,26 @@ package com.likya.pinara.utils {
 			
 			for each (var item:String in j.baseInfoForm.envVarList.dataProvider.toArray()) {
 				// var xmlText:String = "<entry key=\"" + item + "\">" + item + "</entry>";
-				var xmlText:String = "<lik:entry xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" key=\"" + item + "\">" + item + "</lik:entry>";
-				baseJobInfosXML.lik::jobTypeDetails.lik::envVariables.appendChild(XML(xmlText));
+				
+				if(item.indexOf('-') > 0) {
+					var pairs:Array = item.split('=');
+					if(pairs.length == 2) {
+						var xmlText:String = "<lik:entry xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" key=\"" + pairs[0] + "\">" + pairs[1] + "</lik:entry>";
+						baseJobInfosXML.lik::jobTypeDetails.lik::envVariables.appendChild(XML(xmlText));
+					}
+				}
+				
 			}
 			
 			return myraJobList;
 		}
 		
+		public static function zeroize(text:String):String {
+			if(text.length < 2) { 
+				text = '0' + text;
+			}
+			return text;
+		}		
 	}
 }
 

@@ -244,8 +244,8 @@
 		<s:DropDownList id="jsJobActivity" width="120" prompt="Select Job Activity"> 
 			<s:dataProvider>
 				<mx:ArrayList>
-					<fx:String>TRUE</fx:String>
-					<fx:String>FALSE</fx:String>
+					<fx:String>true</fx:String>
+					<fx:String>false</fx:String>
 				</mx:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>

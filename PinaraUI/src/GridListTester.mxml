@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+
+			protected function jobStatusEkle_clickHandler(event:MouseEvent):void
+			{
+				// statusInfoGrid.dataProvider.addItem({statusname:"jobStatusName.selectedItem", desc: "statusDescription.text", retCodeList:[{code:"rcl1", desc:"rcl2"}]});
+			
+				// statusInfoGrid.dataProvider.addItem({statusname:"jobStatusName.selectedItem", desc: "statusDescription.text", retCodeList:[{code:"rcl1", desc:"rcl1"}, {code:"rcl2", desc:"rcl2"}]});
+
+				// var stateArray:Object = {statusname:"AL", desc:"Montgomery", retCodeList: new ArrayCollection(["a:a", "b:B"])};
+				
+				var stateArray:Object = {statusname:"AL", desc:"Montgomery", retCodeList: new ArrayCollection(["a:a", "b:B"])};
+				
+				statusInfoGrid.dataProvider.addItem(stateArray);
+				// Alert.show("" + ObjectUtil.toString(statusInfoGrid.dataProvider.getItemAt(0).retCodeList));
+				
+				dummyList.dataProvider.addItem(stateArray.retCodeList);
+			}
+			
+			protected function jobStatusCikar_clickHandler(event:MouseEvent):void
+			{
+				// Alert.show("size of list " + statusInfoGrid.dataProvider.length);
+				if(statusInfoGrid.dataProvider.length > 0) {
+					statusInfoGrid.dataProvider.removeItemAt(statusInfoGrid.dataProvider.length - 1);
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:BorderContainer id="jobStatusInfoListBoxAddRemove" top="0" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="300">
+			<s:Button label="Ekle" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
+			<s:Button label="Çıkar" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="true"/>
+		</s:HGroup>
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="jobStatusInfoListBox" top="50" width="100%" height="250" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Job Status Info List" fontSize="14" fontWeight="bold"/>
+		
+		<!--		<s:VGroup left="15" top="40">
+		<s:List id="statusInfoList" change="statusInfoList_changeHandler(event)" width="695" height="200"> 
+		<mx:ArrayCollection />
+		</s:List>
+		</s:VGroup>-->
+		
+		<s:DataGrid id="statusInfoGrid" left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="200" rowHeight="100" >
+			<s:columns>
+				<s:ArrayList>                    
+					<!--
+					Simple custom item renderer based on GridItemRenderer and Label.
+					Prevent line breaking by setting maxDisplayedLines="1".
+					-->
+					<s:GridColumn dataField="statusname" headerText="Job Status Name">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:Label id="labelDisplay"
+											 left="5" top="9" right="5" bottom="5"/>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn dataField="desc" headerText="Status Description">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<s:Label id="labelDisplay"
+											 left="5" top="9" right="5" bottom="5"/>
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+					<s:GridColumn headerText="Return Code List" id="listGridCol">
+						<s:itemRenderer>
+							<fx:Component>
+								<s:GridItemRenderer>
+									<fx:Script>
+										<![CDATA[
+											import mx.collections.IList;
+											import mx.controls.Alert;
+											import mx.utils.ObjectUtil;
+											
+											public function mylabelFunc(data:Object):IList {
+												
+												Alert.show("inner : " + ObjectUtil.toString(data));
+												
+												return data.retCodeList as IList; 
+											}
+											
+										]]>
+									</fx:Script>
+									<!--<s:List dataProvider="{parentDocument.childrenData}" labelField="retCodeList" />-->
+<!--									<s:List dataProvider="{parentDocument.retCodeList}" />-->
+									<s:ComboBox id="myCB" width="140" prompt="Select a Color" dataProvider="{mylabelFunc(data)}"/> 
+								</s:GridItemRenderer>
+							</fx:Component>
+						</s:itemRenderer>
+					</s:GridColumn>
+				</s:ArrayList>
+			</s:columns>
+			
+			<!--
+			The typicalItem defines column widths and the default row height.  The text
+			occpies two lines because we've used '\n' to introduce two newlines.
+			
+			Alternatively we could have used the odd XML '&#10;' escape to introduce 
+			two newlines (the value of the newline character is decimal 10).
+			
+			<s:DataItem value="Lorem Ipsum sample text.&#10;Lorem Ipsum sample text.&#10;"/>
+			-->
+			<!--<s:typicalItem>
+			<s:DataItem value="{'Lorem Ipsum sample text.\nLorem Ipsum sample text\n'}"/>
+			</s:typicalItem>-->
+			
+			<s:ArrayCollection>
+				<!--				<s:DataItem value="{sampleText}"/>
+				<s:DataItem value="{sampleText}"/>
+				<s:DataItem value="{sampleText}"/>-->
+			</s:ArrayCollection>
+		</s:DataGrid>
+	</s:BorderContainer>
+	<s:List id="dummyList" maxHeight="100" maxWidth="300" width="400" top="400"> 
+		<mx:ArrayCollection />
+	</s:List>
+</s:Application>

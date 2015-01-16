@@ -1,5 +1,7 @@
 package com.likya.pinara.mng;
 
+import java.net.UnknownServiceException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +25,7 @@ import com.likya.pinara.infobus.PinaraMailServer;
 import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
+import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
@@ -309,7 +312,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		return CoreFactory.getInstance().getNetTreeManagerInterface().getFreeJobs();
 	}
 
-	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException {
+	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 
 		if(!authorize()) {
 			throw new PinaraAuthenticationException();
@@ -324,11 +327,18 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 
 		try {
 			
-			jobXml = header + jobXml + footer;
+			// jobXml = header + jobXml + footer;
+			
+			ArrayList<String> errMsgLst = new ArrayList<String>();
 			
 			jobListDocument = JobListDocument.Factory.parse(jobXml.toString());
-			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument, errMsgLst)) {
 				System.err.println("JobList.xml is null or damaged !");
+				
+				String[] strArr = errMsgLst.toArray(new String[errMsgLst.size()]);
+				
+				throw new PinaraXMLValidationException(strArr);
+				// throw new PinaraAuthenticationException();
 			}
 			
 			AbstractJobType abstractJobType = jobListDocument.getJobList().getGenericJobArray()[0];
@@ -337,7 +347,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		} catch (XmlException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Exception e) {
+		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

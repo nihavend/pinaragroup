@@ -8,6 +8,7 @@ import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.pinara.model.PinaraAuthenticationException;
+import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 
@@ -59,6 +60,6 @@ public interface PinaraAppManager {
 
 	public HashMap<String, AbstractJobType> getFreeJobs() throws PinaraAuthenticationException;
 	
-	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException;
+	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
 	
 }

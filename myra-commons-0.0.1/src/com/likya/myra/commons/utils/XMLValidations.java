@@ -49,7 +49,8 @@ public class XMLValidations {
 		return;
 	}
 	
-	public static boolean validateWithXSDAndLog(Logger logger, XmlObject xmlObject) {
+	public static boolean validateWithXSDAndLog(Logger logger, XmlObject xmlObject, ArrayList<String> errMsgList) {
+		
 		/**
 		 * @reference http://xmlbeans.apache.org/docs/1.0.4/reference/org/apache/xmlbeans/XmlObject.html#validate%28%29
 		 */
@@ -77,17 +78,33 @@ public class XMLValidations {
 			for (int i = 0; i < errorList.size(); i++) {
 				XmlError error = (XmlError) errorList.get(i);
 				
-				logger.error("Validation error : " + (i + 1));
-				logger.error("	> Message: " + error.getMessage());
-				logger.error("	> Location of invalid XML : ");
-				logger.error("		" + error.getCursorLocation().xmlText());
-				logger.error("	");
 				
-				XMLValidations.errprintln("Validation error : " + (i + 1));
-				XMLValidations.errprintln("	> Message: " + error.getMessage());
-				XMLValidations.errprintln("	> Location of invalid XML : ");
-				XMLValidations.errprintln("		" + error.getCursorLocation().xmlText());
-				XMLValidations.errprintln("	");
+				String str1 = "Validation error : " + (i + 1);
+				String str2 = "	> Message: " + error.getMessage();
+				String str3 = "	> Location of invalid XML : ";
+				String str4 = "		" + error.getCursorLocation().xmlText();
+				String str5 = "	";
+						
+				logger.error(str1);
+				logger.error(str2);
+				logger.error(str3);
+				logger.error(str4);
+				logger.error(str5);
+				
+				XMLValidations.errprintln(str1);
+				XMLValidations.errprintln(str2);
+				XMLValidations.errprintln(str3);
+				XMLValidations.errprintln(str4);
+				XMLValidations.errprintln(str5);
+				
+				if(errMsgList != null) {
+					errMsgList.add(str1);
+					errMsgList.add(str2);
+					errMsgList.add(str3);
+					errMsgList.add(str4);
+					errMsgList.add(str5);
+				}
+
 			}
 			
 			XMLValidations.errprintln("*************************************************************");
@@ -95,6 +112,10 @@ public class XMLValidations {
 		}
 
 		return isValid;
+	}
+	
+	public static boolean validateWithXSDAndLog(Logger logger, XmlObject xmlObject) {
+		return validateWithXSDAndLog(logger, xmlObject, null);
 	}
 	
 	public static void errprintln(String message) {

@@ -16,7 +16,10 @@
 	
 	<fx:Script>
 		<![CDATA[
-
+			import mx.controls.Alert;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
@@ -60,25 +63,59 @@
 			protected function jobStatusEkle_clickHandler(event:MouseEvent):void
 			{
 				
-				var statColl:ArrayCollection = new ArrayCollection([
-					{statusname:jobStatusName.selectedItem, desc:"serkan", 
-					returnCodeList:[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
-				]);
+				// var statColl:ArrayCollection = new ArrayCollection([
+				//	{statusname:jobStatusName.selectedItem, desc:"serkan", 
+				//	returnCodeList:[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
+				// ]);
 				// {[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
-				statusInfoGrid.dataProvider.addItem({statusname:jobStatusName.selectedItem, desc: statusDescription.text, retCodeList:[{code:"rcl1", desc:"rcl2"}]});
+				// statusInfoGrid.dataProvider.addItem({statusname:jobStatusName.selectedItem, desc: statusDescription.text, retCodeList:[{code:"rcl1", desc:"rcl2"}]});
 				// statusInfoGrid.dataProvider.addItem(statColl);
+				
+				// Alert.show("retCodeList : " + ObjectUtil.toString(retCodeList.dataProvider));
+				
+				// var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider/*new ArrayCollection(["code:a", "desc:b"])*/};
+				
+				if(jobStatusName.selectedIndex == -1) {
+					Alert.show("Status name not selected !");
+					return;
+				}
+				
+				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
+					if(jobStatusName.selectedItem == item.statusname) {
+						Alert.show("Status Name already defined : " + item.statusname);
+						return;
+					}
+				}
+				
+				// Alert.show("Column : " + ObjectUtil.toString(statusInfoGrid.dataProvider.toArray()[0]));
+				
+				// Alert.show("Column : " + statusInfoGrid.columns.getItemIndex(jobStatusName.selectedItem));
+					
+				var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider};
+				
+				statusInfoGrid.dataProvider.addItem(stateArray);
 			}
 			
 			protected function jobStatusCikar_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
+				if(statusInfoGrid.dataProvider.length != 0 && statusInfoGrid.selectedIndex != -1) {
+					statusInfoGrid.dataProvider.removeItemAt(statusInfoGrid.selectedIndex);
+					if(statusInfoGrid.dataProvider.length == 0) {
+						jobStatusCikar.enabled = false;
+					}
+				} else {
+					jobStatusCikar.enabled = false;
+				}
 				
 			}
 			
-			protected function statusInfoList_changeHandler(event:IndexChangeEvent):void
+			protected function statusInfoGrid_selectionChangeHandler(event:GridSelectionEvent):void
 			{
-				// var dI:DataItem = 
-				
+				if(statusInfoGrid.selectedIndex != -1) {
+					jobStatusCikar.enabled = true;
+				} else {
+					jobStatusCikar.enabled = false;
+				}
 			}
 			
 		]]>
@@ -161,7 +198,7 @@
 			</s:List>
 		</s:VGroup>-->
 			
-		<s:DataGrid id="statusInfoGrid" left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="200" rowHeight="100" >
+		<s:DataGrid id="statusInfoGrid" selectionChange="statusInfoGrid_selectionChangeHandler(event)"  left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="200" rowHeight="100" >
 			<s:columns>
 				<s:ArrayList>                    
 					<!--
@@ -192,11 +229,20 @@
 						<s:itemRenderer>
 							<fx:Component>
 								<s:GridItemRenderer>
-									<s:List id="inList" height="60">
-										<s:ArrayCollection>
-											{retCodeList as IList}
-										</s:ArrayCollection>
-									</s:List>
+									<fx:Script>
+										<![CDATA[
+											import mx.collections.IList;
+											// import mx.controls.Alert;
+											// import mx.utils.ObjectUtil;
+											
+											public function myDataFunc(data:Object):IList {
+												// Alert.show("inner : " + ObjectUtil.toString(data));
+												return data.retCodeList as IList; 
+											}
+											
+										]]>
+									</fx:Script>
+									<s:List id="inList" height="40" dataProvider="{myDataFunc(data)}" />
 								</s:GridItemRenderer>
 							</fx:Component>
 						</s:itemRenderer>

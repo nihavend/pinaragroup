@@ -10,6 +10,7 @@ import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
+import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.pinara.utils.xml.mappers.JobDetailMapper;
 import com.likya.pinara.utils.xml.mappers.JobGridListMapper;
 import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
@@ -322,7 +323,7 @@ public class RestParser extends GenericRestParser {
 			try {
 				PinaraAppManagerImpl.getInstance().addJob(bufferString, false);
 				retStr = "<result>OK</result>";
-			} catch (PinaraAuthenticationException e) {
+			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}

@@ -16,8 +16,9 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.collections.IList;
 			import mx.controls.Alert;
-			import mx.utils.ObjectUtil;
+			import mx.utils.StringUtil;
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
@@ -25,8 +26,34 @@
 			
 			protected function retCodeEkle_clickHandler(event:MouseEvent):void
 			{
-				retCodeList.dataProvider.addItem(retCode.text + " : " + retCodeDesc.text);
+				var myDp:IList = retCodeList.dataProvider;
 				
+				var newRecordFlag:Boolean = true;
+				
+				if(myDp.length > 0) {
+					for each (var item:Object in myDp.toArray()) {
+						// Alert.show("item : " + item);
+						if(item.indexOf(':') > 0) {
+							var pairs:Array = item.split(':');
+							// Alert.show("pairs[0] : " + pairs[0]);
+							// Alert.show("pairs[1] : " + pairs[1]);
+							if(pairs.length == 2) {
+								var retCodeTmp:int = Number(StringUtil.trim(pairs[0]));
+								// Alert.show("retCodeTmp : " + retCodeTmp);
+								// Alert.show("Number(retCode.text) : " + Number(retCode.text));
+								if(retCodeTmp == Number(retCode.text)) {
+									Alert.show("Return code already defined : " + retCode.text);
+									newRecordFlag = false;
+									break;
+								} 
+							}
+						}
+					}
+				} 
+				
+				if(newRecordFlag) {
+					retCodeList.dataProvider.addItem(retCode.text + " : " + retCodeDesc.text);
+				}
 			}
 			
 			protected function retCodeCikar_clickHandler(event:MouseEvent):void

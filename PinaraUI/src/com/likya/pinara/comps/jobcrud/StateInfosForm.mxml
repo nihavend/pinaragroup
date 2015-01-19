@@ -16,13 +16,30 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.utils.CodeDesc;
+			
 			import mx.collections.IList;
 			import mx.controls.Alert;
-			import mx.utils.StringUtil;
+			import mx.utils.ObjectUtil;
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
+			
+			private function checkListForItem(checkItem:Object, checkArr:Array):Boolean
+			{
+				if(checkArr.length > 0) {
+					for each (var item:Object in checkArr) {
+						var codeDescCuple:CodeDesc = new CodeDesc(String(item));
+						if(codeDescCuple.code == Number(checkItem)) {
+							//Alert.show("Return code already defined : " + checkItem);
+							return true;
+						}
+					}
+				} 
+				
+				return false;
+			}
 			
 			protected function retCodeEkle_clickHandler(event:MouseEvent):void
 			{
@@ -30,30 +47,30 @@
 				
 				var newRecordFlag:Boolean = true;
 				
-				if(myDp.length > 0) {
+				if(!checkListForItem(retCode.text, myDp.toArray())) {
+					myDp.addItem(retCode.text + " : " + retCodeDesc.text);
+					retCodeCikar.enabled = true;
+					retCodeDegistir.enabled = true;
+					retCodeList.selectedIndex = myDp.length - 1;
+				} else {
+					Alert.show("Return code already defined : " + retCode.text);
+				}
+				
+				/*if(myDp.length > 0) {
 					for each (var item:Object in myDp.toArray()) {
-						// Alert.show("item : " + item);
-						if(item.indexOf(':') > 0) {
-							var pairs:Array = item.split(':');
-							// Alert.show("pairs[0] : " + pairs[0]);
-							// Alert.show("pairs[1] : " + pairs[1]);
-							if(pairs.length == 2) {
-								var retCodeTmp:int = Number(StringUtil.trim(pairs[0]));
-								// Alert.show("retCodeTmp : " + retCodeTmp);
-								// Alert.show("Number(retCode.text) : " + Number(retCode.text));
-								if(retCodeTmp == Number(retCode.text)) {
-									Alert.show("Return code already defined : " + retCode.text);
-									newRecordFlag = false;
-									break;
-								} 
-							}
+						var codeDescCuple:CodeDesc = new CodeDesc(String(item));
+						if(codeDescCuple.code == Number(retCode.text)) {
+							Alert.show("Return code already defined : " + retCode.text);
+							newRecordFlag = false;
+							break;
 						}
 					}
-				} 
+				} */
 				
-				if(newRecordFlag) {
-					retCodeList.dataProvider.addItem(retCode.text + " : " + retCodeDesc.text);
-				}
+				// if(newRecordFlag) {
+				// 	myDp.addItem(retCode.text + " : " + retCodeDesc.text);
+				// }
+				
 			}
 			
 			protected function retCodeCikar_clickHandler(event:MouseEvent):void
@@ -62,9 +79,22 @@
 					retCodeList.dataProvider.removeItemAt(retCodeList.selectedIndex);
 					if(retCodeList.dataProvider.length == 0) {
 						retCodeCikar.enabled = false;
+						retCodeDegistir.enabled = false;
 					}
 				} else {
 					retCodeCikar.enabled = false;
+					retCodeDegistir.enabled = false;
+				}
+			}
+
+			protected function retCodeDegistir_clickHandler(event:MouseEvent):void
+			{
+				if(retCodeList.dataProvider.length != 0 && retCodeList.selectedIndex != -1) {
+					/*if(!checkListForItem(retCode.text, retCodeList.dataProvider.toArray())) {*/
+						retCodeList.dataProvider.setItemAt(retCode.text + " : " + retCodeDesc.text, retCodeList.selectedIndex);
+					/*} else {
+						Alert.show("Return code already defined : " + retCode.text);
+					}*/
 				}
 			}
 			
@@ -82,8 +112,13 @@
 			{
 				if(retCodeList.selectedIndex != -1) {
 					retCodeCikar.enabled = true;
+					retCodeDegistir.enabled = true;
+					var codeDescCuple:CodeDesc = new CodeDesc(String(retCodeList.selectedItem));
+					retCode.text = "" + codeDescCuple.code;
+					retCodeDesc.text = codeDescCuple.desc;
 				} else {
 					retCodeCikar.enabled = false;
+					retCodeDegistir.enabled = false;
 				}
 			}
 			
@@ -102,23 +137,24 @@
 				
 				// var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider/*new ArrayCollection(["code:a", "desc:b"])*/};
 				
-				if(jobStatusName.selectedIndex == -1) {
+				if(jobStatusName.selectedIndex == -1 || retCodeList.dataProvider.length == 0) {
 					Alert.show("Status name not selected !");
 					return;
 				}
 				
-				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
+				/*for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
 					if(jobStatusName.selectedItem == item.statusname) {
 						Alert.show("Status Name already defined : " + item.statusname);
 						return;
 					}
-				}
+				}*/
 				
 				// Alert.show("Column : " + ObjectUtil.toString(statusInfoGrid.dataProvider.toArray()[0]));
 				
 				// Alert.show("Column : " + statusInfoGrid.columns.getItemIndex(jobStatusName.selectedItem));
 					
-				var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider};
+				var newDP:Object = ObjectUtil.copy(retCodeList.dataProvider);
+				var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList:newDP };
 				
 				statusInfoGrid.dataProvider.addItem(stateArray);
 			}
@@ -136,14 +172,51 @@
 				
 			}
 			
+			protected function jobStatusDegistir_clickHandler(event:MouseEvent):void
+			{
+				if(jobStatusName.selectedIndex == -1 || retCodeList.dataProvider.length == 0) {
+					Alert.show("Status name not selected !");
+					return;
+				}
+				
+				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
+					if(jobStatusName.selectedItem == item.statusname) {
+						Alert.show("Status Name already defined : " + item.statusname);
+						return;
+					}
+				}
+				
+				var newDP:Object = ObjectUtil.copy(retCodeList.dataProvider);
+				var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList:newDP };
+				
+				statusInfoGrid.dataProvider.setItemAt(stateArray, statusInfoGrid.selectedIndex);
+			}
+			
 			protected function statusInfoGrid_selectionChangeHandler(event:GridSelectionEvent):void
 			{
 				if(statusInfoGrid.selectedIndex != -1) {
 					jobStatusCikar.enabled = true;
+					jobStatusDegistir.enabled = true;
+					jobStatusName.selectedItem = statusInfoGrid.selectedItem.statusname;
+					statusDescription.text = statusInfoGrid.selectedItem.desc;
+					//trace(statusInfoGrid.selectedItem.retCodeList);
+					retCodeList.dataProvider = ObjectUtil.copy(statusInfoGrid.selectedItem.retCodeList) as IList;
+					// trace(ObjectUtil.toString(ObjectUtil.copy(statusInfoGrid.selectedItem.retCodeList) as IList));
+					retCodeList.selectedIndex = retCodeList.dataProvider.length - 1;
+					
+					if(retCodeList.selectedIndex != -1) {
+						retCodeCikar.enabled = true;
+						retCodeDegistir.enabled = true;
+						var codeDescCuple:CodeDesc = new CodeDesc(String(retCodeList.selectedItem));
+						retCode.text = "" + codeDescCuple.code;
+						retCodeDesc.text = codeDescCuple.desc;
+					} 
 				} else {
 					jobStatusCikar.enabled = false;
+					jobStatusDegistir.enabled = false;
 				}
 			}
+			
 			
 		]]>
 	</fx:Script>
@@ -199,6 +272,7 @@
 						<s:HGroup>
 							<s:Button label="Ekle" id="retCodeEkle" click="retCodeEkle_clickHandler(event)" enabled="false"/>
 							<s:Button label="Çıkar" id="retCodeCikar" click="retCodeCikar_clickHandler(event)" enabled="false"/>
+							<s:Button label="Degistir" id="retCodeDegistir" click="retCodeDegistir_clickHandler(event)" enabled="false"/>
 						</s:HGroup>
 					</s:VGroup>
 				</s:HGroup>
@@ -212,6 +286,7 @@
 		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="300">
 			<s:Button label="Ekle" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
 			<s:Button label="Çıkar" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="false"/>
+			<s:Button label="Değiştir" id="jobStatusDegistir" click="jobStatusDegistir_clickHandler(event)" enabled="false"/>
 		</s:HGroup>
 	</s:BorderContainer>
 	

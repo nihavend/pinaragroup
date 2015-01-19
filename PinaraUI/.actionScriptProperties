@@ -46,6 +46,7 @@
     <application path="NumericTester.mxml"/>
     <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
     <application path="GerenicJobXMLTester.mxml"/>
+    <application path="GridListTester.mxml"/>
   </applications>
   <modules/>
   <workers/>

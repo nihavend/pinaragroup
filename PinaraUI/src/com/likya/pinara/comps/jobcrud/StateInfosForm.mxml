@@ -142,12 +142,12 @@
 					return;
 				}
 				
-				/*for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
+				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
 					if(jobStatusName.selectedItem == item.statusname) {
 						Alert.show("Status Name already defined : " + item.statusname);
 						return;
 					}
-				}*/
+				}
 				
 				// Alert.show("Column : " + ObjectUtil.toString(statusInfoGrid.dataProvider.toArray()[0]));
 				
@@ -179,12 +179,12 @@
 					return;
 				}
 				
-				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
+				/*for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
 					if(jobStatusName.selectedItem == item.statusname) {
 						Alert.show("Status Name already defined : " + item.statusname);
 						return;
 					}
-				}
+				}*/
 				
 				var newDP:Object = ObjectUtil.copy(retCodeList.dataProvider);
 				var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList:newDP };

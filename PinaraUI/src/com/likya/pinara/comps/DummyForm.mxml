@@ -23,7 +23,7 @@
 
 			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void {
 				// Alert.show("htmlTextAsHTML : " + htmlTextAsHTML);
-				myText.textFlow = TextConverter.importToFlow(htmlTextAsHTML, TextConverter.PLAIN_TEXT_FORMAT);
+				myText.textFlow = TextConverter.importToFlow(htmlTextAsHTML, TextConverter.TEXT_FIELD_HTML_FORMAT);
 			}
 			
 			private function titleWindow_keyDown(evt:KeyboardEvent):void {

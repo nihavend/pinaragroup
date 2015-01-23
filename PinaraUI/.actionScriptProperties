@@ -47,6 +47,8 @@
     <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
     <application path="GerenicJobXMLTester.mxml"/>
     <application path="GridListTester.mxml"/>
+    <application path="DummyWindowsTester.mxml"/>
+    <application path="ChainedCombos.mxml"/>
   </applications>
   <modules/>
   <workers/>

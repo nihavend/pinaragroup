@@ -1,7 +1,6 @@
 package com.likya.pinara.utils {
 	import com.likya.pinara.comps.jobcrud.JobEditWindow;
 	
-	import mx.controls.Alert;
 	import mx.formatters.DateFormatter;
 	
 	public class GenericJobInfo {
@@ -43,6 +42,8 @@ package com.likya.pinara.utils {
 			// TO-DO Aşağıdaki 2 fonksiyon yeni ns yapısına uygun hale getirilecek ardından dependency yapılacak
 			
 			myraJobList = getBaseJobInfos(j, myraJobList);
+			
+			myraJobList = getDependencyInfo(j, myraJobList);
 
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:graphInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 			
@@ -74,7 +75,12 @@ package com.likya.pinara.utils {
 				</wla:Item>
 				<myra-jobprops:DependencyExpression>I can not express my deps !</myra-jobprops:DependencyExpression>
 			</myra-jobprops:DependencyList-->*/
+			
+			myraJobList.myra::genericJob.appendChild(<myra-jobprops:DependencyList xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
+			
+			var dependencyListXML:Object = myraJobList.myra::genericJob.myra_jobprops::DependencyList;
 
+			
 			return myraJobList;
 		}
 		
@@ -93,7 +99,7 @@ package com.likya.pinara.utils {
 				</myra-stateinfo:JobStatus>
 			</myra-stateinfo:JobStatusList>*/
 			
-			myraJobList.myra::genericJob.appendChild(
+/*			myraJobList.myra::genericJob.appendChild(
 				<myra-stateinfo:stateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
 						<myra-stateinfo:JobStatusList>
 							<myra-stateinfo:JobStatus>
@@ -115,7 +121,47 @@ package com.likya.pinara.utils {
 							</myra-stateinfo:LiveStateInfo>
 						</myra-stateinfo:LiveStateInfos>
 				</myra-stateinfo:stateInfos>
-			);
+			);*/
+			
+			myraJobList.myra::genericJob.appendChild(<myra-stateinfo:stateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"/>);
+			myraJobList.myra::genericJob.myra_stateinfo::stateInfos.appendChild(<myra-stateinfo:JobStatusList xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"/>);
+			
+			var jobStatusListXML:Object = myraJobList.myra::genericJob.myra_stateinfo::stateInfos.myra_stateinfo::JobStatusList;
+			
+			var counter:int = 0;
+			for each (var item:Object in j.stateInfosForm.statusInfoGrid.dataProvider.toArray()) {
+					jobStatusListXML.appendChild(<myra-stateinfo:JobStatus xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" />);
+					jobStatusListXML.myra_stateinfo::JobStatus[counter].appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{item.statusname}</myra-stateinfo:StatusName>);
+					jobStatusListXML.myra_stateinfo::JobStatus[counter].appendChild(<myra-stateinfo:Desc xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{item.desc}</myra-stateinfo:Desc>);
+					
+					jobStatusListXML.myra_stateinfo::JobStatus[counter].appendChild(<myra-stateinfo:ReturnCodeList osType="MACOS" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" />);
+					
+					var innercounter:int = 0;
+					for each (var innerItem:Object in item.retCodeList..toArray()) {
+						jobStatusListXML.myra_stateinfo::JobStatus[counter].myra_stateinfo::ReturnCodeList.appendChild(<myra-stateinfo:ReturnCode xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo" />);
+						
+						var codeDescCuple:CodeDesc = new CodeDesc(String(innerItem));
+						jobStatusListXML.myra_stateinfo::JobStatus[counter].myra_stateinfo::ReturnCodeList.myra_stateinfo::ReturnCode[innercounter].appendChild(<myra-stateinfo:Code xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{codeDescCuple.code}</myra-stateinfo:Code>);
+						jobStatusListXML.myra_stateinfo::JobStatus[counter].myra_stateinfo::ReturnCodeList.myra_stateinfo::ReturnCode[innercounter].appendChild(<myra-stateinfo:Desc xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{codeDescCuple.desc}</myra-stateinfo:Desc>);
+						innercounter ++;
+					}
+					
+					counter ++;
+			}
+			
+			myraJobList.myra::genericJob.myra_stateinfo::stateInfos.appendChild(<myra-stateinfo:LiveStateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+							<myra-stateinfo:LiveStateInfo LSIDateTime="">
+								<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
+								<myra-stateinfo:SubstateName>IDLED</myra-stateinfo:SubstateName>
+								<myra-stateinfo:StatusName>BYUSER</myra-stateinfo:StatusName>
+							</myra-stateinfo:LiveStateInfo>
+						</myra-stateinfo:LiveStateInfos>);
+
+			var dateTimeString:String = getformatteddatetime();		
+
+			myraJobList.myra::genericJob.myra_stateinfo::stateInfos.myra_stateinfo::LiveStateInfos.myra_stateinfo::LiveStateInfo.@LSIDateTime = dateTimeString;
+			
+			trace(myraJobList.myra::genericJob);
 			
 			return myraJobList;
 		}
@@ -351,6 +397,20 @@ package com.likya.pinara.utils {
 			}
 			return text;
 		}		
+		
+		private static function getformatteddatetime():String {
+			
+			var currentDateTime:Date = new Date();
+			var currentDF:DateFormatter = new DateFormatter(); 
+			currentDF.formatString = "YYYY-MM-DD";
+			var dateString:String = currentDF.format(currentDateTime);
+			currentDF.formatString = "LL:NN:SS";
+			var timeString:String = currentDF.format(currentDateTime);
+			
+			var dateTimeString:String = dateString + "T" + timeString + ".000+02:00";	
+			
+			return dateTimeString;
+		}
 	}
 }
 

@@ -13,7 +13,7 @@
 			protected function button1_clickHandler(event:MouseEvent):void {
 				var dummyWindow:DummyForm = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
 				dummyWindow.title="Hata Mesaj İçeriği";
-				dummyWindow.htmlTextAsHTML = XML(xmlText).result;
+				dummyWindow.htmlTextAsHTML = XML(xmlText).desc;
 				PopUpManager.centerPopUp(dummyWindow);
 				dummyWindow.setFocus();
 			}
@@ -35,14 +35,19 @@
 		</fx:String>
 
 		<fx:XML id="xmlText">
-			<result>
-				NOK : Validation error : 1	&gt; Message: Expected element 'baseJobInfos@http://www.likyateknoloji.com/myra-jobprops' instead of 'stateInfos@http://www.likyateknoloji.com/myra-stateinfo' here in element genericJob@http://www.likyateknoloji.com/myra-joblist	&gt; Location of invalid XML :
-				<myra-stateinfo:stateInfos xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
-					<myra-stateinfo:JobStatusList/>
-				</myra-stateinfo:stateInfos>
-				Validation error : 2	&gt; Message: Expected element 'baseJobInfos@http://www.likyateknoloji.com/myra-jobprops' before the end of the content in element genericJob@http://www.likyateknoloji.com/myra-joblist	&gt; Location of invalid XML :
-				<xml-fragment xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"/>
-			</result>
+			<message>
+				<result>
+					NOK
+				</result>
+				<desc>
+					Validation error : 1	&gt; Message: Expected element 'baseJobInfos@http://www.likyateknoloji.com/myra-jobprops' instead of 'stateInfos@http://www.likyateknoloji.com/myra-stateinfo' here in element genericJob@http://www.likyateknoloji.com/myra-joblist	&gt; Location of invalid XML :
+					<myra-stateinfo:stateInfos xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+						<myra-stateinfo:JobStatusList/>
+					</myra-stateinfo:stateInfos>
+					Validation error : 2	&gt; Message: Expected element 'baseJobInfos@http://www.likyateknoloji.com/myra-jobprops' before the end of the content in element genericJob@http://www.likyateknoloji.com/myra-joblist	&gt; Location of invalid XML :
+					<xml-fragment xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"/>
+				</desc>
+			</message>
 		</fx:XML>
 	</fx:Declarations>
 	

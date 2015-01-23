@@ -21,6 +21,7 @@ public class RestParser extends GenericRestParser {
 
 	private static final String NETTREE_XML_CMD = "nettreexml";
 	private static final String JOBLIST_XML_CMD = "joblistxml";
+	private static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
 
 	public static final String CMD_JOBLIST = "jobList";
@@ -120,6 +121,26 @@ public class RestParser extends GenericRestParser {
 //			responseBytes = retStr.getBytes();
 			break;
 
+		case RestParser.JOBSUMMARYLIST_XML_CMD:
+			
+			Collection<AbstractJobType> jobSummaryList = null;
+			try {
+				jobSummaryList = PinaraAppManagerImpl.getInstance().getJobList(filterStates);
+			} catch (PinaraAuthenticationException e) {
+				e.printStackTrace();
+			}
+			
+			retStr = "<joblist>";
+			for(Object abstractJobType : jobSummaryList.toArray()) {
+				retStr += "<job>";
+				retStr += "<jobid>" + ((AbstractJobType)abstractJobType).getId() + "</jobid>";
+				retStr += "<jobname>" + ((AbstractJobType)abstractJobType).getBaseJobInfos().getJsName() + "</jobname>";
+				retStr += "</job>";
+			}
+			retStr += "</joblist>";
+			
+		break;
+		
 		case RestParser.CMD_JOBLIST:
 
 			Collection<AbstractJobType> jobList = null;
@@ -322,9 +343,9 @@ public class RestParser extends GenericRestParser {
 		case RestParser.CMD_ADDJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().addJob(bufferString, false);
-				retStr = "<result>OK</result>";
+				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
-				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
 //			responseBytes = retStr.getBytes();

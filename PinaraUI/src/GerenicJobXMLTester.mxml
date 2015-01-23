@@ -30,6 +30,25 @@
 				Alert.show(GenericJobInfo.zeroize(tobeParsed.text));
 			}
 			
+			protected function button4_clickHandler(event:MouseEvent):void
+			{
+				var jobListXml:XML = 
+					<joblist>
+						<job><jobid>22</jobid><jobname>My name is 22</jobname></job>
+						<job><jobid>23</jobid><jobname>My name is 23</jobname></job>
+						<job><jobid>24</jobid><jobname>My name is 24</jobname></job>
+						<job><jobid>25</jobid><jobname>My name is 25</jobname></job>
+						<job><jobid>26</jobid><jobname>My name is 26</jobname></job>
+					</joblist>;
+				
+				
+				for each (var job:Object in jobListXml.children()) {
+					trace(job);
+					jobList.dataProvider.addItem(job.jobid + ":" + job.jobname);
+				}
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -46,7 +65,12 @@
 		<s:Button id="button2" click="button2_clickHandler(event)" label="Split" />
 		
 		<s:Button id="button3" click="button3_clickHandler(event)" label="Zero" />
+		
+		<s:Button id="button4" click="button4_clickHandler(event)" label="XMLList" />
 	
+		<s:List id="jobList" maxHeight="120"> 
+			<mx:ArrayCollection />
+		</s:List>
 		
 	</s:VGroup>
 

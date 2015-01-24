@@ -5,6 +5,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.jobcrud.DependencyListForm;
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.utils.GenericJobInfo;
 			
@@ -14,8 +15,17 @@
 			import spark.components.TitleWindow;
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
-				PopUpManager.centerPopUp(helpWindow);
+				var jobEditWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				
+				/*var depForm:DependencyListForm = jobEditWindow["dependencyListForm"] as DependencyListForm;
+				
+				depForm.jobList.dataProvider.addItem("1:job1");
+				depForm.jobList.dataProvider.addItem("2:job2");
+				depForm.jobList.dataProvider.addItem("3:job3");
+				depForm.jobList.dataProvider.addItem("4:job4");
+				depForm.jobList.dataProvider.addItem("5:job5");*/
+				
+				PopUpManager.centerPopUp(jobEditWindow);
 				
 			}
 			

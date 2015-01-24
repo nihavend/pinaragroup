@@ -11,15 +11,14 @@
 	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
 	</fx:Declarations>
 	-->
- 						 
- 
+	
+	
 	
 	<fx:Script>
 		<![CDATA[
-			import com.likya.pinara.utils.CodeDesc;
+			import com.likya.pinara.utils.SSS;
 			
-			import mx.collections.IList;
-			import mx.collections.XMLListCollection;
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.ItemClickEvent;
 			import mx.rpc.events.FaultEvent;
@@ -28,179 +27,158 @@
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
-			import spark.events.TextOperationEvent;
 			
-			private function checkListForItem(checkItem:Object, checkArr:Array):Boolean
-			{
-				if(checkArr.length > 0) {
-					for each (var item:Object in checkArr) {
-						var codeDescCuple:CodeDesc = new CodeDesc(String(item));
-						if(codeDescCuple.code == Number(checkItem)) {
-							//Alert.show("Return code already defined : " + checkItem);
-							return true;
-						}
+			protected function indexOf(label:String, arr:Array):int {
+				var count:int = 0;
+				for each (var item:Object in arr) {
+					if(item.value == label) {
+						break;
 					}
-				} 
+					count++;
+				}
+				
+				return count;
+			}
+			
+			private function checkGridForItem(checkItem:Object, checkArr:Array):Boolean
+			{
+				for each (var item:Object in checkArr) {
+					if(checkItem == item.depid) {
+						return true;
+					}
+				}
 				
 				return false;
 			}
 			
-			protected function retCodeEkle_clickHandler(event:MouseEvent):void
-			{
-				//var myDp:IList = jobList.dataProvider;
-				
-				var newRecordFlag:Boolean = true;
-				
-				/*if(!checkListForItem(retCode.text, myDp.toArray())) {
-					myDp.addItem(retCode.text + " : " + retCodeDesc.text);
-					retCodeCikar.enabled = true;
-					retCodeDegistir.enabled = true;
-					retCodeList.selectedIndex = myDp.length - 1;
-				} else {
-					Alert.show("Return code already defined : " + retCode.text);
-				}*/
-				
-			}
-			
-			protected function retCodeCikar_clickHandler(event:MouseEvent):void
-			{
-				/*if(jobList.dataProvider.length != 0 && jobList.selectedIndex != -1) {
-					jobList.dataProvider.removeItemAt(jobList.selectedIndex);
-					if(jobList.dataProvider.length == 0) {
-						retCodeCikar.enabled = false;
-						retCodeDegistir.enabled = false;
-					}
-				} else {
-					retCodeCikar.enabled = false;
-					retCodeDegistir.enabled = false;
-				}*/
-			}
-
-			protected function retCodeDegistir_clickHandler(event:MouseEvent):void
-			{
-				//if(jobList.dataProvider.length != 0 && jobList.selectedIndex != -1) {
-						//retCodeList.dataProvider.setItemAt(retCode.text + " : " + retCodeDesc.text, retCodeList.selectedIndex);
-						//Alert.show("Return code already defined : " + retCode.text);
-				//}
-			}
-			
-			protected function retCodeDesc_changeHandler(event:TextOperationEvent):void
-			{
-				/*if(retCode.text.length > 0 && retCodeDesc.text.length > 0) {
-					retCodeEkle.enabled = true;
-				} else {
-					retCodeEkle.enabled = false;
-				}*/
-				
-			}
-			
-			protected function retCodeList_changeHandler(event:IndexChangeEvent):void
-			{
-				/*if(retCodeList.selectedIndex != -1) {
-					retCodeCikar.enabled = true;
-					retCodeDegistir.enabled = true;
-					var codeDescCuple:CodeDesc = new CodeDesc(String(retCodeList.selectedItem));
-					retCode.text = "" + codeDescCuple.code;
-					retCodeDesc.text = codeDescCuple.desc;
-				} else {
-					retCodeCikar.enabled = false;
-					retCodeDegistir.enabled = false;
-				}*/
-			}
-			
-			protected function jobStatusEkle_clickHandler(event:MouseEvent):void
+			protected function depEkle_clickHandler(event:MouseEvent):void
 			{
 				
-				// var statColl:ArrayCollection = new ArrayCollection([
-				//	{statusname:jobStatusName.selectedItem, desc:"serkan", 
-				//	returnCodeList:[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
-				// ]);
-				// {[{code: "1", desc: "serkan"}, {code: "2", desc: "serkan2"}]}
-				// statusInfoGrid.dataProvider.addItem({statusname:jobStatusName.selectedItem, desc: statusDescription.text, retCodeList:[{code:"rcl1", desc:"rcl2"}]});
-				// statusInfoGrid.dataProvider.addItem(statColl);
-				
-				// Alert.show("retCodeList : " + ObjectUtil.toString(retCodeList.dataProvider));
-				
-				// var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider/*new ArrayCollection(["code:a", "desc:b"])*/};
-				
-/*				if(stateName.selectedIndex == -1 || jobList.dataProvider.length == 0) {
-					Alert.show("Status name not selected !");
+				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+					Alert.show("State or job not selected !");
 					return;
 				}
 				
+				var jobInfoTmp:String = stateName.selectedItem;
+				
+				if(substateName.selectedItem != null) {
+					jobInfoTmp += ":" + substateName.selectedItem.value;
+				}
+				
+				if(statusName.selectedItem != null) {
+					jobInfoTmp += ":" + statusName.selectedItem.value;
+				}
+				
 				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {
-					if(stateName.selectedItem == item.statusname) {
-						Alert.show("Status Name already defined : " + item.statusname);
+					//trace(ObjectUtil.toString(item));
+					
+					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
 						return;
 					}
-				}*/
+				}
+
 				
-				// Alert.show("Column : " + ObjectUtil.toString(statusInfoGrid.dataProvider.toArray()[0]));
+				var depIdTmp:String
+				var loop:Boolean = true;
+				var counter:int = 1;
 				
-				// Alert.show("Column : " + statusInfoGrid.columns.getItemIndex(jobStatusName.selectedItem));
-					
-				//var newDP:Object = ObjectUtil.copy(jobList.dataProvider);
-/*				var stateArray:Object = {statusname:stateName.selectedItem, desc:depExp.text, retCodeList:newDP };
-*/				
-				// dependencyListGrid.dataProvider.addItem(stateArray);
+				while(loop) {
+					depIdTmp = "dep_" + (dependencyListGrid.dataProvider.length + (counter ++));
+					if(!checkGridForItem(depIdTmp, dependencyListGrid.dataProvider.toArray())) {
+						loop = false;
+					}
+				}
+				
+				var depArray:Object = {depid:depIdTmp, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };
+								
+				dependencyListGrid.dataProvider.addItem(depArray);
 			}
 			
-			protected function jobStatusCikar_clickHandler(event:MouseEvent):void
+			protected function depDegistir_clickHandler(event:MouseEvent):void
+			{
+				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+					Alert.show("State or job not selected !");
+					return;
+				}
+				
+				var jobInfoTmp:String = stateName.selectedItem;
+				
+				if(substateName.selectedItem != null) {
+					jobInfoTmp += ":" + substateName.selectedItem.value;
+				}
+				
+				if(statusName.selectedItem != null) {
+					jobInfoTmp += ":" + statusName.selectedItem.value;
+				}
+				
+				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {
+					//trace(ObjectUtil.toString(item));
+					
+					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
+						return;
+					}
+				}
+				
+				var depArray:Object = {depid:dependencyListGrid.selectedItem.depid, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };
+				
+				dependencyListGrid.dataProvider.setItemAt(depArray, dependencyListGrid.selectedIndex);
+			}
+			
+			protected function depCikar_clickHandler(event:MouseEvent):void
 			{
 				if(dependencyListGrid.dataProvider.length != 0 && dependencyListGrid.selectedIndex != -1) {
 					dependencyListGrid.dataProvider.removeItemAt(dependencyListGrid.selectedIndex);
 					if(dependencyListGrid.dataProvider.length == 0) {
-						jobStatusCikar.enabled = false;
+						depCikar.enabled = false;
 					}
 				} else {
-					jobStatusCikar.enabled = false;
+					depCikar.enabled = false;
 				}
 				
 			}
 			
-			protected function jobStatusDegistir_clickHandler(event:MouseEvent):void
+			protected function depListGrid_selectionChangeHandler(event:GridSelectionEvent):void
 			{
-		/*	if(stateName.selectedIndex == -1 || jobList.dataProvider.length == 0) {
-					Alert.show("Status name not selected !");
-					return;
-				}
-				
-				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
-					if(jobStatusName.selectedItem == item.statusname) {
-						Alert.show("Status Name already defined : " + item.statusname);
-						return;
-					}
-				}
-				
-				var newDP:Object = ObjectUtil.copy(jobList.dataProvider);
-				var stateArray:Object = {statusname:stateName.selectedItem, desc:depExp.text, retCodeList:newDP };
-				
-				dependencyListGrid.dataProvider.setItemAt(stateArray, dependencyListGrid.selectedIndex);*/
-			}
-			
-			protected function statusInfoGrid_selectionChangeHandler(event:GridSelectionEvent):void
-			{
-/*				if(dependencyListGrid.selectedIndex != -1) {
-					jobStatusCikar.enabled = true;
-					jobStatusDegistir.enabled = true;
-					// stateName.selectedItem = dependencyListGrid.selectedItem.statusname;
-					depExp.text = dependencyListGrid.selectedItem.desc;
-					//trace(statusInfoGrid.selectedItem.retCodeList);
-					jobList.dataProvider = ObjectUtil.copy(dependencyListGrid.selectedItem.retCodeList) as IList;
-					// trace(ObjectUtil.toString(ObjectUtil.copy(statusInfoGrid.selectedItem.retCodeList) as IList));
-					jobList.selectedIndex = jobList.dataProvider.length - 1;
+				if(dependencyListGrid.selectedIndex != -1) {
+					depCikar.enabled = true;
+					depDegistir.enabled = true;
 					
-					if(jobList.selectedIndex != -1) {
-						//retCodeCikar.enabled = true;
-						//retCodeDegistir.enabled = true;
-						var codeDescCuple:CodeDesc = new CodeDesc(String(jobList.selectedItem));
-						//retCode.text = "" + codeDescCuple.code;
-						//jobList.text = codeDescCuple.desc;
-					} 
+					var sssTmp:SSS = new SSS(dependencyListGrid.selectedItem.stateinfo);
+					
+					stateName.selectedItem = sssTmp.state;
+					
+					stateName_changeHandler(null);
+					if(substateName.dataProvider != null) {
+						// trace("Before : " + ObjectUtil.toString(substateName.dataProvider));
+						(substateName.dataProvider as ArrayCollection).refresh();
+						// trace("After : " + ObjectUtil.toString(substateName.dataProvider));
+					}
+					
+					if(sssTmp.substate != null) {
+						substateName.selectedIndex = indexOf(sssTmp.substate, substateName.dataProvider.toArray());
+						substateName_changeHandler(null);
+						if(statusName.dataProvider != null) {
+							(statusName.dataProvider as ArrayCollection).refresh();
+						}
+					}
+					
+					if(sssTmp.status != null) {
+						statusName.selectedIndex = indexOf(sssTmp.status, statusName.dataProvider.toArray());
+					}
+					
+					
+					comment.text = dependencyListGrid.selectedItem.comment;
+					
+					var itemIdx:int = jobList.dataProvider.getItemIndex(dependencyListGrid.selectedItem.jobinfo);
+					
+					jobList.selectedIndex = itemIdx;
+					
 				} else {
-					jobStatusCikar.enabled = false;
-					jobStatusDegistir.enabled = false;
-				}*/
+					depCikar.enabled = false;
+					depDegistir.enabled = false;
+				}
 			}
 			
 			private function handleSensInfo(event:ItemClickEvent):void {
@@ -220,9 +198,8 @@
 			}
 			
 			public function updateData():void {
-				// jobListDS.url = "/flex/restsrvc/joblistxml/-1";
 				jobListDS.url = "/flex/restsrvc/jobsummarylistxml";
-				jobListDS.send();
+				// jobListDS.send();
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
@@ -250,6 +227,11 @@
 				
 			}
 			
+			public function resetList(item:DropDownList):void {
+				item.dataProvider = null;
+				item.enabled = false;
+			}
+			
 			protected function stateName_changeHandler(event:IndexChangeEvent):void
 			{
 				var data:ArrayCollection = new ArrayCollection();
@@ -268,7 +250,7 @@
 						]                
 					);
 					substateName.enabled = true;
-					statusName.enabled = true;
+					resetList(statusName);
 				} else if(stateName.selectedItem == "RUNNING") {
 					data = new ArrayCollection(
 						[   
@@ -280,15 +262,15 @@
 						]                
 					);
 					substateName.enabled = true;
-					statusName.enabled = true;
+					resetList(statusName);
 				} else if(stateName.selectedItem == "CANCELLED") {
 					data = null;
 					substateName.enabled = false;
-					statusName.enabled = false;
+					resetList(statusName);
 				} else if(stateName.selectedItem == "FAILED") {
 					data = null;
 					substateName.enabled = false;
-					statusName.enabled = false;
+					resetList(statusName);
 				} else if(stateName.selectedItem == "FINISHED") {
 					data = new ArrayCollection(
 						[   
@@ -298,7 +280,7 @@
 						]                
 					);
 					substateName.enabled = true;
-					statusName.enabled = true;
+					resetList(statusName);
 				}
 				
 				substateName.dataProvider = data;
@@ -412,12 +394,12 @@
 		<s:FormLayout gap="1"/>
 	</s:layout>  
 	
-	<s:BorderContainer id="dependencyInfoBox" top="50" width="100%" height="330" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
-
+	<s:BorderContainer id="dependencyInfoBox" top="50" width="100%" height="570" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
 		<s:Label left="15" top="10" text="Dependency Info" fontSize="14" fontWeight="bold"/>
-
+		
 		<s:VGroup left="15" top="30">
-
+			
 			<s:Label text="Select Ignition Priority" fontSize="12" fontWeight="bold"/>
 			<s:FormItem top="5">
 				<s:HGroup verticalAlign="baseline">
@@ -446,12 +428,12 @@
 				</s:HGroup>
 			</s:FormItem>
 			
-			<s:BorderContainer id="depItemListBox" width="700" height="180" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			<s:BorderContainer id="depItemListBox" width="700" height="120" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 				<s:HGroup top="10" gap="-20">
 					<s:FormItem> 
 						<s:VGroup>
-							<s:Label top="10" text="Job List" fontSize="12" fontWeight="bold"/>
-							<s:List id="jobList" change="retCodeList_changeHandler(event)" maxHeight="120"> 
+							<s:Label top="10" text="Job List (id:name)" fontSize="12" fontWeight="bold"/>
+							<s:List id="jobList" maxHeight="70"> 
 								<mx:ArrayCollection />
 							</s:List>
 						</s:VGroup>
@@ -460,7 +442,7 @@
 					<s:VGroup>
 						<s:HGroup>				
 							<s:FormItem label="State" width="140">
-								<s:DropDownList id="stateName" width="100" prompt="Select Status" change="stateName_changeHandler(event)"> 
+								<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)"> 
 									<s:dataProvider>
 										<mx:ArrayList>
 											<fx:String>PENDING</fx:String>
@@ -474,7 +456,7 @@
 							</s:FormItem>
 							
 							<s:FormItem label="Subtate" width="170">
-								<s:DropDownList id="substateName" width="110" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)"> 
+								<s:DropDownList id="substateName" width="110" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="false"> 
 									<s:dataProvider>
 										<mx:ArrayList>
 											<!--<fx:String>CREATED</fx:String>
@@ -496,10 +478,10 @@
 								</s:DropDownList>
 							</s:FormItem>
 							<s:FormItem label="Status">
-								<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value"> 
+								<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="false"> 
 									<s:dataProvider>
 										<mx:ArrayList>
-											<fx:String>SUCCESS</fx:String>
+											<!--<fx:String>SUCCESS</fx:String>
 											<fx:String>WARNING</fx:String>
 											<fx:String>FAILED</fx:String>
 											<fx:String>LOOKFOR-RESOURCE</fx:String>
@@ -515,7 +497,7 @@
 											<fx:String>DEVELOPMENT</fx:String>
 											<fx:String>TEST</fx:String>
 											<fx:String>REQUEST</fx:String>
-											<fx:String>DEPLOYED</fx:String>
+											<fx:String>DEPLOYED</fx:String>-->
 										</mx:ArrayList>
 									</s:dataProvider>
 								</s:DropDownList>
@@ -523,86 +505,71 @@
 						</s:HGroup>
 						<s:VGroup>
 							<s:Label text="Comment" fontSize="14" fontWeight="bold"/>
-							<s:TextInput id="comment" width="400" change="retCodeDesc_changeHandler(event)"/>
+							<s:TextInput id="comment" width="400" />
 						</s:VGroup>	
 					</s:VGroup>
 				</s:HGroup>
-	</s:BorderContainer>
+			</s:BorderContainer>
 			
+			
+			<s:BorderContainer id="dependencyListBoxAddRemove" top="50" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="250">
+					<s:Button label="Ekle" id="depEkle" click="depEkle_clickHandler(event)" enabled="true"/>
+					<s:Button label="Çıkar" id="depCikar" click="depCikar_clickHandler(event)" enabled="false"/>
+					<s:Button label="Değiştir" id="depDegistir" click="depDegistir_clickHandler(event)" enabled="false"/>
+				</s:HGroup>
+			</s:BorderContainer>
+			
+			<s:BorderContainer id="dependencyListBox" top="50" width="100%" height="200" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				
+				<s:Label left="15" top="10" text="Dependency List" fontSize="14" fontWeight="bold"/>
+				
+				<s:DataGrid id="dependencyListGrid" selectionChange="depListGrid_selectionChangeHandler(event)"  left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="150" rowHeight="100" >
+					<s:columns>
+						<s:ArrayList>                    
+							<!--
+							Simple custom item renderer based on GridItemRenderer and Label.
+							Prevent line breaking by setting maxDisplayedLines="1".
+							-->
+							<s:GridColumn dataField="depid" headerText="Dependency id">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:GridItemRenderer>
+											<s:Label id="labelDisplay"
+													 left="5" top="9" right="5" bottom="5"/>
+										</s:GridItemRenderer>
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+							<s:GridColumn dataField="jobinfo" headerText="Job id and name">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:GridItemRenderer>
+											<s:Label id="labelDisplay"
+													 left="5" top="9" right="5" bottom="5"/>
+										</s:GridItemRenderer>
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+							<s:GridColumn dataField="stateinfo" headerText="State Substate Status" id="listGridCol">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:GridItemRenderer>
+											<s:Label id="labelDisplay"
+													 left="5" top="9" right="5" bottom="5"/>
+										</s:GridItemRenderer>
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+						</s:ArrayList>
+					</s:columns>
+					<s:ArrayCollection />
+				</s:DataGrid>
+			</s:BorderContainer>
 			<s:FormItem label="Dependency Expression">
-				<s:TextInput id="depExp" width="300"/>
+				<s:TextArea id="depExp" width="500" height="80"/>
 			</s:FormItem>
-			
 		</s:VGroup>
-
-		
-	</s:BorderContainer>
-	
-	<s:BorderContainer id="jobStatusInfoListBoxAddRemove" top="50" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
-		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="200">
-			<s:Button label="Ekle" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
-			<s:Button label="Çıkar" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="false"/>
-			<s:Button label="Değiştir" id="jobStatusDegistir" click="jobStatusDegistir_clickHandler(event)" enabled="false"/>
-		</s:HGroup>
-	</s:BorderContainer>
-	
-	<s:BorderContainer id="dependencyListBox" top="50" width="100%" height="200" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
-
-		<s:Label left="15" top="10" text="Dependency List" fontSize="14" fontWeight="bold"/>
-		
-		<s:DataGrid id="dependencyListGrid" selectionChange="statusInfoGrid_selectionChangeHandler(event)"  left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0" width="695" height="150" rowHeight="100" >
-			<s:columns>
-				<s:ArrayList>                    
-					<!--
-					Simple custom item renderer based on GridItemRenderer and Label.
-					Prevent line breaking by setting maxDisplayedLines="1".
-					-->
-					<s:GridColumn dataField="statusname" headerText="Job Status Name">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:GridItemRenderer>
-									<s:Label id="labelDisplay"
-											 left="5" top="9" right="5" bottom="5"/>
-								</s:GridItemRenderer>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<s:GridColumn dataField="desc" headerText="Status Description">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:GridItemRenderer>
-									<s:Label id="labelDisplay"
-											 left="5" top="9" right="5" bottom="5"/>
-								</s:GridItemRenderer>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-					<s:GridColumn dataField="retCodeList" headerText="Return Code List" id="listGridCol">
-						<s:itemRenderer>
-							<fx:Component>
-								<s:GridItemRenderer>
-									<fx:Script>
-										<![CDATA[
-											import mx.collections.IList;
-											// import mx.controls.Alert;
-											// import mx.utils.ObjectUtil;
-											
-											public function myDataFunc(data:Object):IList {
-												// Alert.show("inner : " + ObjectUtil.toString(data));
-												return data.retCodeList as IList; 
-											}
-											
-										]]>
-									</fx:Script>
-									<s:List id="inList" height="40" dataProvider="{myDataFunc(data)}" />
-								</s:GridItemRenderer>
-							</fx:Component>
-						</s:itemRenderer>
-					</s:GridColumn>
-				</s:ArrayList>
-			</s:columns>
-			<s:ArrayCollection />
-		</s:DataGrid>
 	</s:BorderContainer>
 
 </s:Form>

@@ -42,10 +42,10 @@ package com.likya.pinara.utils {
 			// TO-DO Aşağıdaki 2 fonksiyon yeni ns yapısına uygun hale getirilecek ardından dependency yapılacak
 			
 			myraJobList = getBaseJobInfos(j, myraJobList);
-			
-			myraJobList = getDependencyInfo(j, myraJobList);
 
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:graphInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
+
+			myraJobList = getDependencyInfo(j, myraJobList);
 			
 			myraJobList = getStateInfos(j, myraJobList);
 			
@@ -78,6 +78,10 @@ package com.likya.pinara.utils {
 			</wla:Item>
 			<myra2:DependencyExpression>mydep</myra2:DependencyExpression>
 		</myra2:DependencyList>*/
+			
+			if(j.dependencyListForm.dependencyListGrid.dataProvider.length == 0) {
+				return myraJobList;
+			}
 			
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:DependencyList xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 			
@@ -190,8 +194,8 @@ package com.likya.pinara.utils {
 			myraJobList.myra::genericJob.myra_stateinfo::stateInfos.appendChild(<myra-stateinfo:LiveStateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
 							<myra-stateinfo:LiveStateInfo LSIDateTime="">
 								<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
-								<myra-stateinfo:SubstateName>IDLED</myra-stateinfo:SubstateName>
-								<myra-stateinfo:StatusName>BYUSER</myra-stateinfo:StatusName>
+								<myra-stateinfo:SubstateName>CREATED</myra-stateinfo:SubstateName>
+								<myra-stateinfo:StatusName>DEPLOYED</myra-stateinfo:StatusName>
 							</myra-stateinfo:LiveStateInfo>
 						</myra-stateinfo:LiveStateInfos>);
 
@@ -281,14 +285,17 @@ package com.likya.pinara.utils {
 				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm.runEvenFailed.selectedItem;
 				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm.safeToRestart.selectedItem;
 				
+				if(j.managementInfoForm.autoRetry.selectedItem == "true") {
+					managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm.arStepValue.text;
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm.maxCountValueAr.text;
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm.autoRetry.selectedItem;
+				}
+			
 				
-				managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm.arStepValue.text;
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm.maxCountValueAr.text;
-
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm.autoRetry.selectedItem;
 				
 			}
 			
@@ -396,7 +403,6 @@ package com.likya.pinara.utils {
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobCommand xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobPath xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:argValues xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
-			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:envVariables xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 
 			baseJobInfosXML.wla::jsName = j.baseInfoForm.jsName.text;
 			baseJobInfosXML.wla::jobLogFile = j.baseInfoForm.jsJobLogFile.text;
@@ -404,7 +410,7 @@ package com.likya.pinara.utils {
 			baseJobInfosXML.wla::oSystem = j.baseInfoForm.jsOsType.selectedItem;
 			baseJobInfosXML.wla::jobPriority = j.baseInfoForm.jsJobPriority.selectedItem;
 			baseJobInfosXML.myra_jobprops::jsIsActive = j.baseInfoForm.jsJobActivity.selectedItem;
-			baseJobInfosXML.lik::userId = "serkan";
+			baseJobInfosXML.lik::userId = "007";
 			
 			
 			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommandType = j.baseInfoForm.jsJobType.selectedItem;
@@ -413,18 +419,22 @@ package com.likya.pinara.utils {
 			baseJobInfosXML.lik::jobTypeDetails.lik::argValues = j.baseInfoForm.jsJobArgs.text; 
 			
 			
-			for each (var item:String in j.baseInfoForm.envVarList.dataProvider.toArray()) {
-				// var xmlText:String = "<entry key=\"" + item + "\">" + item + "</entry>";
-				
-				if(item.indexOf('-') > 0) {
-					var pairs:Array = item.split('=');
-					if(pairs.length == 2) {
-						var xmlText:String = "<lik:entry xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" key=\"" + pairs[0] + "\">" + pairs[1] + "</lik:entry>";
-						baseJobInfosXML.lik::jobTypeDetails.lik::envVariables.appendChild(XML(xmlText));
+			if(j.baseInfoForm.envVarList.dataProvider.length > 0) {
+				baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:envVariables xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
+				for each (var item:String in j.baseInfoForm.envVarList.dataProvider.toArray()) {
+					// var xmlText:String = "<entry key=\"" + item + "\">" + item + "</entry>";
+					
+					if(item.indexOf('-') > 0) {
+						var pairs:Array = item.split('=');
+						if(pairs.length == 2) {
+							var xmlText:String = "<lik:entry xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" key=\"" + pairs[0] + "\">" + pairs[1] + "</lik:entry>";
+							baseJobInfosXML.lik::jobTypeDetails.lik::envVariables.appendChild(XML(xmlText));
+						}
 					}
+					
 				}
-				
 			}
+			
 			
 			return myraJobList;
 		}

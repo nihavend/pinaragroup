@@ -26,6 +26,16 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
+			public function validateForm():Boolean
+			{
+				if(statusInfoGrid.dataProvider.length == 0) {
+					Alert.show("Job Status Info List is emtyy !");
+					return false;
+				}
+				
+				return true;
+			}
+			
 			private function checkListForItem(checkItem:Object, checkArr:Array):Boolean
 			{
 				if(checkArr.length > 0) {

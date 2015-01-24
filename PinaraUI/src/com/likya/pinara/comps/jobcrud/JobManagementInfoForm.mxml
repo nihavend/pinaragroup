@@ -8,6 +8,8 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			
 			import spark.events.IndexChangeEvent;
 			
 			[Bindable]
@@ -18,6 +20,64 @@
 					{value:"USER", code:"2"}		
 				]                
 			);
+			
+			public function validateForm():Boolean
+			{
+				if(stepValue.text == "") {
+					Alert.show("Delay is not defined !");
+					return false;
+				}
+				
+				if(maxCountValue.text == "") {
+					Alert.show("Max Count is not defined !");
+					return false;
+				}
+				
+				if(bdate.text == "") {
+					Alert.show("Begin date is not defined !");
+					return false;
+				}	
+				
+				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
+					Alert.show("Begin time is not defined !");
+					return false;
+				}	
+				
+				if(edate.text == "") {
+					Alert.show("End date is not defined !");
+					return false;
+				}	
+				
+				if(ehour.text == "" || eminute.text == "" || esecond.text == "") {
+					Alert.show("End time is not defined !");
+					return false;
+				}	
+				
+				if(timoutValue.text == "") {
+					Alert.show("Timeout is not defined !");
+					return false;
+				}	
+
+				if(expectedValue.text == "") {
+					Alert.show("Expected time is not defined !");
+					return false;
+				}	
+				
+				if(autoRetry.selectedItem == "true") {
+					
+					if(arStepValue.text == "") {
+						Alert.show("Autoretry step is not defined !");
+						return false;
+					}
+
+					if(maxCountValueAr.text == "") {
+						Alert.show("Autoretry maxcount is not defined !");
+						return false;
+					}
+				}
+				
+				return true;
+			}
 			
 			protected function dropDownList_changeHandler (event:IndexChangeEvent):void	{
 				// jsJobTriggerType.selectedIndex.toString();
@@ -31,6 +91,18 @@
 					timeBox.enabled = false;
 					cascCondBox.enabled = false;
 				}
+			}
+			
+			protected function autoRetry_changeHandler(event:IndexChangeEvent):void
+			{
+				if(autoRetry.selectedItem == "true") {
+					arStepValue.enabled = true;
+					maxCountValueAr.enabled = true;
+				} else {
+					arStepValue.enabled = false;
+					maxCountValueAr.enabled = false;
+				}
+				
 			}
 			
 		]]>
@@ -88,14 +160,14 @@
 		
 		<s:FormItem label="Başlangıç Tarih ve Saati : " top="30">
 			<s:HGroup>
-				<mx:DateField id="bdate" top="50" left="10" />
+				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY"/>
 				<s:TextInput  id="bhour"
 							  restrict="0-23"
 							  widthInChars="3"
 							  maxChars="2" />
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="bminute"
-							  restrict="0-23"
+							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />	
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
@@ -104,18 +176,21 @@
 							  widthInChars="3"
 							  maxChars="2" />
 			</s:HGroup>
+			<s:helpContent>
+				<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+			</s:helpContent>
 		</s:FormItem>
 		
 		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
 			<s:HGroup>
-				<mx:DateField id="edate" top="50" left="10" />
+				<mx:DateField id="edate" top="50" left="10"  formatString="DD/MM/YYYY"/>
 				<s:TextInput  id="ehour"
 							  restrict="0-23"
 							  widthInChars="3"
 							  maxChars="2" />
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="eminute"
-							  restrict="0-23"
+							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />	
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
@@ -124,6 +199,9 @@
 							  widthInChars="3"
 							  maxChars="2" />
 			</s:HGroup>
+			<s:helpContent>
+				<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+			</s:helpContent>
 		</s:FormItem>
 		
 		<s:FormItem label="Time-out değeri               :" top="90">
@@ -201,7 +279,7 @@
 			<s:Label left="15" top="10" text="Auto Retry Info" fontSize="14" fontWeight="bold"/>
 			
 			<s:FormItem label="Auto Retry" top="30">
-				<s:DropDownList id="autoRetry" width="120" selectedIndex="0"> 
+				<s:DropDownList id="autoRetry" width="120" selectedIndex="0" change="autoRetry_changeHandler(event)"> 
 					<s:dataProvider>
 						<mx:ArrayList>
 							<fx:String>true</fx:String>

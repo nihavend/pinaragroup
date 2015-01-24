@@ -16,8 +16,40 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import mx.controls.Alert;
+			
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
+			
+			public function validateForm():Boolean
+			{
+				if(jsOsType.selectedIndex == -1) {
+					Alert.show("Os Type is not selected !");
+					return false;
+				}
+				if(jsJobActivity.selectedIndex == -1) {
+					Alert.show("Job Activity is not selected !");
+					return false;
+				}
+				if(jsJobPriority.selectedIndex == -1) {
+					Alert.show("Job Priority is not selected !");
+					return false;
+				}
+				if(jsName.text == "") {
+					Alert.show("Job Name is not defined !");
+					return false;
+				}
+				if(jsJobPath.text == "") {
+					Alert.show("Job Path is not defined !");
+					return false;
+				}
+				if(jsCommand.text == "") {
+					Alert.show("Job Command is not defined !");
+					return false;
+				}
+				
+				return true;
+			}
 			
 			protected function ekle_clickHandler(event:MouseEvent):void
 			{
@@ -86,7 +118,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="Job Type">
-		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type"> 
+		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="false"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>BATCH PROCESS</fx:String>
@@ -145,7 +177,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="OS Type">
-		<s:DropDownList id="jsOsType" width="160" prompt="Select Operating System"> 
+		<s:DropDownList id="jsOsType" width="160" prompt="Select Operating System" selectedIndex="1"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>Unknown</fx:String>
@@ -225,7 +257,7 @@
 	</s:FormItem>
 
 	<s:FormItem label="Priority">
-		<s:DropDownList id="jsJobPriority" width="120" prompt="Select Priority"> 
+		<s:DropDownList id="jsJobPriority" width="120" prompt="Select Priority" selectedIndex="0"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>1</fx:String>
@@ -241,7 +273,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="Enabled">
-		<s:DropDownList id="jsJobActivity" width="120" prompt="Select Job Activity"> 
+		<s:DropDownList id="jsJobActivity" width="120" prompt="Select Job Activity" selectedIndex="0"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>true</fx:String>

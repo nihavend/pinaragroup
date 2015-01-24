@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.IndexChangeEvent;
+			
+			public function resetList(item:DropDownList):void {
+				item.dataProvider = null;
+				item.enabled = false;
+			}
+			
+			protected function stateName_changeHandler(event:IndexChangeEvent):void
+			{
+				var data:ArrayCollection = new ArrayCollection();
+				
+				if(stateName.selectedItem == "PENDING") {
+					//substateName.dataProvider = [{"CREATED", "VALIDATED", "IDLED", "DEACTIVATED", "READY", "PAUSED"}];
+					
+					data = new ArrayCollection(
+						[   
+							{value:"CREATED"},
+							{value:"VALIDATED"},
+							{value:"IDLED"},
+							{value:"DEACTIVATED"},
+							{value:"READY"},
+							{value:"PAUSED"}
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				} else if(stateName.selectedItem == "RUNNING") {
+					data = new ArrayCollection(
+						[   
+							{value:"STAGE-IN"},
+							{value:"MIGRATING"},
+							{value:"ON-RESOURCE"},
+							{value:"HELD"},
+							{value:"STAGE-OUT"}
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				} else if(stateName.selectedItem == "CANCELLED") {
+					data = null;
+					substateName.enabled = false;
+					resetList(statusName);
+				} else if(stateName.selectedItem == "FAILED") {
+					data = null;
+					substateName.enabled = false;
+					resetList(statusName);
+				} else if(stateName.selectedItem == "FINISHED") {
+					data = new ArrayCollection(
+						[   
+							{value:"STOPPED"},
+							{value:"SKIPPED"},
+							{value:"COMPLETED"},
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				}
+				
+				substateName.dataProvider = data;
+			}
+			
+			protected function substateName_changeHandler(event:IndexChangeEvent):void
+			{
+				
+				trace("mouse : " + ObjectUtil.toString(substateName.selectedItem));
+
+				var data:ArrayCollection = new ArrayCollection();
+				
+				if(substateName.selectedItem.value == "CREATED") {
+					data = new ArrayCollection(
+						[   
+							{value:"DEVELOPMENT"},
+							{value:"TEST"},
+							{value:"REQUEST"},
+							{value:"DEPLOYED"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "VALIDATED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "IDLED") {
+					data = new ArrayCollection(
+						[   
+							{value:"BYTIME"},
+							{value:"BYUSER"},
+							{value:"BYEVENT"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "DEACTIVATED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "READY") {
+					data = new ArrayCollection(
+						[   
+							{value:"LOOKFOR-RESOURCE"},
+							{value:"USER-CHOOSE-RESOURCE"},
+							{value:"USER-WAITING"},
+							{value:"WAITING"},
+							{value:"TRANSFERING"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "PAUSED") {
+					data = new ArrayCollection(
+						[   
+							{value:"BYUSER"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "STAGE-IN") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "MIGRATING") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "ON-RESOURCE") {
+					data = new ArrayCollection(
+						[   
+							{value:"TIME-IN"},
+							{value:"TIME-OUT"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "HELD") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "STAGE-OUT") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "STOPPED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "SKIPPED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "COMPLETED") {
+					data = new ArrayCollection(
+						[   
+							{value:"SUCCESS"},
+							{value:"WARNING"},
+							{value:"FAILED"}
+						]                
+					);
+					statusName.enabled = true;
+				}
+				
+				statusName.dataProvider = data;
+			}
+			
+			protected function button4_clickHandler(event:MouseEvent):void {
+				trace("stateIdx : " + stateName.dataProvider.getItemIndex(stateTxt.text));
+				//stateName.selectedItem = stateTxt.text;
+				//trace(ObjectUtil.toString(stateName.dataProvider));
+			}
+
+			protected function button5_clickHandler(event:MouseEvent):void {
+				
+				//trace("değer : " + substateName.dataProvider.getItemAt(indexOf(substateTxt.text, substateName.dataProvider.toArray())).value);
+				
+				substateName.selectedIndex = indexOf(substateTxt.text, substateName.dataProvider.toArray());
+
+			}
+			
+			protected function indexOf(label:String, arr:Array):int {
+				var count:int = 0;
+				for each (var item:Object in arr) {
+					if(item.value == label) {
+						break;
+					}
+					count++;
+				}
+				
+				return count;
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:BorderContainer id="depItemListBox" width="700" height="180" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		<s:HGroup top="10" gap="-20">
+
+			<s:VGroup>
+				<s:HGroup>				
+					<s:FormItem label="State" width="140">
+						<s:DropDownList id="stateName" width="100" prompt="Select Status" change="stateName_changeHandler(event)"> 
+							<s:dataProvider>
+								<mx:ArrayList>
+									<fx:String>PENDING</fx:String>
+									<fx:String>RUNNING</fx:String>
+									<fx:String>CANCELLED</fx:String>
+									<fx:String>FAILED</fx:String>
+									<fx:String>FINISHED</fx:String>
+								</mx:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					
+					<s:FormItem label="Subtate" width="170">
+						<s:DropDownList id="substateName" width="110" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)"> 
+							<s:dataProvider>
+								<mx:ArrayList>
+									<!--<fx:String>CREATED</fx:String>
+									<fx:String>DEACTIVATED</fx:String>
+									<fx:String>VALIDATED</fx:String>
+									<fx:String>IDLED</fx:String>
+									<fx:String>READY</fx:String>
+									<fx:String>PAUSED</fx:String>
+									<fx:String>STAGE-IN</fx:String>
+									<fx:String>STAGE-OUT</fx:String>
+									<fx:String>MIGRATING</fx:String>
+									<fx:String>HELD</fx:String>
+									<fx:String>ON-RESOURCE</fx:String>
+									<fx:String>COMPLETED</fx:String>
+									<fx:String>STOPPED</fx:String>
+									<fx:String>SKIPPED</fx:String>-->
+								</mx:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="Status">
+						<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value"> 
+							<s:dataProvider>
+								<mx:ArrayList>
+									<!--<fx:String>SUCCESS</fx:String>
+									<fx:String>WARNING</fx:String>
+									<fx:String>FAILED</fx:String>
+									<fx:String>LOOKFOR-RESOURCE</fx:String>
+									<fx:String>WAITING</fx:String>
+									<fx:String>TRANSFERING</fx:String>
+									<fx:String>TIME-IN</fx:String>
+									<fx:String>TIME-OUT</fx:String>
+									<fx:String>USER-CHOOSE-RESOURCE</fx:String>
+									<fx:String>USER-WAITING</fx:String>
+									<fx:String>BYTIME</fx:String>
+									<fx:String>BYUSER</fx:String>
+									<fx:String>BYEVENT</fx:String>
+									<fx:String>DEVELOPMENT</fx:String>
+									<fx:String>TEST</fx:String>
+									<fx:String>REQUEST</fx:String>
+									<fx:String>DEPLOYED</fx:String>-->
+								</mx:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+				</s:HGroup>
+				
+				<s:Button id="button4" click="button4_clickHandler(event)" label="Change State" />
+				<s:TextInput id="stateTxt" />
+				
+				<s:Button id="button5" click="button5_clickHandler(event)" label="Change Substate" />
+				<s:TextInput id="substateTxt" />
+			</s:VGroup>
+		</s:HGroup>
+		
+	</s:BorderContainer>
+</s:Application>

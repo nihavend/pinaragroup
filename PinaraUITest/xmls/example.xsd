@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema id="data" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.misprintt.net"
+	targetNamespace="http://www.misprintt.net"
+	elementFormDefault="qualified"
+	>
+	
+	<xs:include schemaLocation="/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/schema.xsd" />
+	
+	<xs:element name="result" >
+		<xs:complexType >
+		    <xs:sequence >
+				<xs:element name="example" type="example" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>
+

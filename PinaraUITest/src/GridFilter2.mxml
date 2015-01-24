@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   creationComplete="initApp()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.ComboBox;
+			import mx.controls.HSlider;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			
+			//the dataProvider for the DG
+			[Bindable]
+			private var _xlcCatalog:XMLListCollection;    
+			// the dataProvider for combobox
+			[Bindable]
+			private var _comboData:ArrayCollection;
+			
+			
+			//run by creationComplete
+			public function initApp():void
+			{
+				_xlcCatalog = new XMLListCollection(xmlCatalog.product);  
+				
+				var aColumnDef:Array = getComboDatas(xmlCatalog.product[0]); 
+				_comboData = new ArrayCollection(aColumnDef);
+				setFirstColumnBG(_comboData[0]);  
+			}
+			//get grid title name by xml head data
+			private function getGridTitles(headRow:XMLList):Array{
+				var titles:Array = new Array();                            
+				var headRoot:XML = headRow[0];
+				var eachHead:XMLList = headRoot.children();
+				for (var i:int=0;i<eachHead.length();i++)  {     
+					var headNode:XML = eachHead[i];                                         
+					titles.push(headNode.toString());         
+				}    
+				return titles;
+			}
+			private function setFirstColumnBG(item:Object):void{
+				
+				for(var i:int=0;i<dg.columns.length;i++ ){
+					var bgStyle:String = dg.columns[i].getStyle("backgroundColor"); 
+					if(bgStyle!=null){
+						dg.columns[i].clearStyle("backgroundColor");       
+					}              
+				}    
+				dg.columns[item.data].setStyle("backgroundColor","#FFFF00");  
+				var maxValue:int = getSpecificColumnMax(item.label);
+				setSliderComp(maxValue);
+			}
+			
+			private function getComboDatas(headRow:XML):Array{
+				var titles:Array = new Array();                              
+				var eachHead:XMLList = headRow.children();
+				for (var i:int=0;i<eachHead.length();i++)  {     
+					var headNode:XML = eachHead[i]; 
+					var nodeText:Number = Number(headNode.toString());
+					if(!isNaN(nodeText)){
+						var title:Object = new Object();
+						//the label used for diplay
+						title.label = eachHead[i].name();   
+						//the data used for set column bgcolor
+						title.data = i;    
+						titles.push(title);   
+					}    
+				}
+				
+				return titles;
+			}
+			private function getSpecificColumnMax(columnName:String):int{
+				var maxValue:Number = 0;
+				
+				for(var i:int=0;i<_xlcCatalog.length;i++ ){
+					var eachProduct:XML = _xlcCatalog[i];
+					var productAttr:XMLList = eachProduct.children();
+					
+					for(var j:int=0;j<productAttr.length();j++){
+						var eachCell:XML = productAttr[j];
+						var origColumnName:String = eachCell.name(); 
+						
+						if(origColumnName==columnName){            
+							var columnValue:Number = Number(eachCell.toString());     
+							if(columnValue>maxValue){
+								maxValue = columnValue;        
+							}
+						}
+					}
+				}
+				return int(maxValue)+1; 
+			}
+			private function setSliderComp(max:int):void{
+				slider.maximum = max;
+				slider.values = [0, max];
+				slider.labels = ["0",String(max)];
+				
+			}
+			
+			//save the selected column datafield for sort use, assigned by headerRelease event;
+			private var selectedColumn:String; 
+			//sort column data
+			private function comparGridItem(itema:XML,itemb:XML):int{
+				var filteredField:String = selectedColumn;  
+				var itemValueA:int = int(itema[filteredField]);
+				var itemValueB:int = int(itemb[filteredField]);
+				if(itemValueA > itemValueB){
+					return -1;
+				}else if(itemValueA < itemValueB){
+					return 1;
+				}else{
+					return 0;
+				}  
+				
+			}
+			//change combo data while drag the gridheader to change its sequence saved in combobox
+			private function changeColumnIndex():void{
+				var comboItems:Array = new Array();
+				for(var i:int=0; i<_comboData.length;i++){  
+					var eachItem:Object = _comboData[i];   
+					
+					var comboField:String = eachItem.label;
+					for(var j:int=0;j<dg.columns.length;j++){
+						var eachColumn:DataGridColumn = dg.columns[j];
+						var eachColumnField:String = eachColumn.dataField;    
+						if(eachColumnField == comboField){        
+							eachItem.data = j;     
+							break;
+						}
+					}     
+				}  
+			}
+			//manul filter grid items by slider values
+			private function refreshGridBySlider(sliderValues:Array):void{
+				
+				var startValue:int = int(sliderValues[0]);
+				var endValue:int = int(sliderValues[1]);
+				var filterField:String = columnSelecter.selectedItem.label;
+				var lastData:XMLList = _xlcCatalog.source;
+				var filterProducts:XMLList = getMultiConditionFilterData(filterField,startValue,endValue,lastData);  
+				_xlcCatalog = new XMLListCollection(filterProducts); 
+				debugger.text = _xlcCatalog.length.toString()+" records";
+				
+			}
+			//deal with multiple condition filter
+			private function getMultiConditionFilterData(filterField:String, startValue:int,endValue:int, lastData:XMLList):XMLList{
+				var newRootXml:XML = <root/>;
+				for(var i:int=0;i<lastData.length();i++){
+					var eachProduct:XML = lastData[i];
+					var filteredData:String = eachProduct[filterField];
+					var filteredValue:int = int(filteredData);
+					if(filteredValue>startValue && filteredValue<endValue){
+						newRootXml.appendChild(eachProduct);
+					}
+				}
+				return newRootXml.children();
+			}
+			
+			//retrieve data by slider values from initial dataset
+			private function resetGridData():void{
+				var sliderValues:Array = slider.values;
+				var startValue:int = int(sliderValues[0]);
+				var endValue:int = int(sliderValues[1]);
+				var filterField:String = columnSelecter.selectedItem.label;
+				var allProductsData:XMLList = xmlCatalog.product;
+				var filterProducts:XMLList = getMultiConditionFilterData(filterField,startValue,endValue,allProductsData);  
+				_xlcCatalog = new XMLListCollection(filterProducts); 
+				debugger.text = _xlcCatalog.length.toString()+" records";
+			}
+			//restore grid data to initial status
+			private function restoreGridData():void{
+				var allProductsData:XMLList = xmlCatalog.product;
+				_xlcCatalog = new XMLListCollection(allProductsData); 
+				debugger.text = _xlcCatalog.length.toString()+" records";
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<fx:XML id="xmlCatalog">
+			<catalog>  
+				<product productId="1">
+					<time >2007-04-01</time>
+					<ne>Bejing</ne>
+					<price>99.99</price>
+					<deposit>6000</deposit>   
+				</product>
+				<product productId="2">
+					<time>2007-04-02</time>
+					<ne>Shanghai</ne>
+					<price>139</price>
+					<deposit>5500</deposit>   
+				</product>
+				<product productId="3">
+					<time>2007-04-03</time>
+					<ne>Neimeng</ne>
+					<price>39</price>
+					<deposit>5000</deposit>   
+				</product>
+				<product productId="4">
+					<time>2007-04-04</time>
+					<ne>Guangzhou</ne>
+					<price>159.99</price>
+					<deposit>4500</deposit>   
+				</product>
+				<product productId="5">
+					<time>2007-04-05</time>
+					<ne>Tibet</ne>
+					<price>59.99</price>
+					<deposit>4000</deposit>   
+				</product>
+				<product productId="6">
+					<time>2007-04-06</time>
+					<ne>Shandong</ne>
+					<price>59.99</price>
+					<deposit>3000</deposit>   
+				</product>
+				<product productId="7">
+					<time>2007-04-07</time>
+					<ne>Wuhan</ne>
+					<price>49.99</price>
+					<deposit>2000</deposit>   
+				</product>
+				<product productId="8">
+					<time>2007-04-08</time>
+					<ne>Jinan</ne>
+					<price>88.99</price>
+					<deposit>1700</deposit>   
+				</product>
+				<product productId="9">
+					<time>2007-04-09</time>
+					<ne>Nanjing</ne>
+					<price>59.99</price>
+					<deposit>5700</deposit>   
+				</product>
+				<product productId="10">
+					<time>2007-04-10</time>
+					<ne>Huhehaote</ne>
+					<price>25</price>
+					<deposit>7800</deposit>   
+				</product>
+			</catalog>
+		</fx:XML>  
+	</fx:Declarations>
+	<s:layout>
+		<s:HorizontalLayout>
+			
+		</s:HorizontalLayout>
+	</s:layout>
+	
+	<mx:HBox borderStyle="solid" height="30" width="100%">     
+		<mx:ComboBox id="columnSelecter" dataProvider="{_comboData}" 
+					 change="setFirstColumnBG(ComboBox(event.target).selectedItem)" /> 
+		<mx:HSlider id="slider" width="180" thumbCount="2" snapInterval="1" minimum="0" allowTrackClick="true" liveDragging="false" labelOffset="0"   
+					change="refreshGridBySlider(HSlider(event.currentTarget).values)"/>
+		<mx:Button id="reset" label="reset" click="resetGridData()"/>
+		<mx:Button id="restore" label="restore" click="restoreGridData()"/> 
+		<mx:Label id="debugger" text=""/> 
+	</mx:HBox>  
+	<mx:Canvas id="gridParent" borderStyle="solid" height="450" width="100%" >
+		<mx:DataGrid id="dg" width="100%" height="100%" rowCount="5" dataProvider="{_xlcCatalog}" 
+					 headerRelease="selectedColumn=event.dataField"
+					 headerShift="changeColumnIndex()">
+			<mx:columns>
+				<mx:DataGridColumn dataField="time" headerText="Time"/>
+				<mx:DataGridColumn dataField="ne" headerText="Region" />
+				<mx:DataGridColumn dataField="price" headerText="Price" sortCompareFunction="comparGridItem"/>
+				<mx:DataGridColumn dataField="deposit" headerText="Deposit" sortCompareFunction="comparGridItem"/>    
+			</mx:columns>
+		</mx:DataGrid>   
+	</mx:Canvas>
+	
+</s:Application>

@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.formatters.DateFormatter;
+			
+			import spark.components.Grid;
+			import spark.events.GridSelectionEvent;
+			
+			//private var myra:Namespace = new Namespace("http://www.likyateknoloji.com/myra-jobprops");
+			private var myra1:Namespace = new Namespace("http://www.likyateknoloji.com/myra-stateinfo");
+			private var wla:Namespace = new Namespace("http://www.likyateknoloji.com/wla-gen");
+			private var lik:Namespace = new Namespace("http://www.likyateknoloji.com/likya-gen");
+			
+			protected namespace myra = "http://www.likyateknoloji.com/myra-jobprops";
+			protected namespace joblist = "http://www.likyateknoloji.com/myra-joblist";
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				Alert.show("length : " + jobListXmlCollection.children().toXMLString());
+			}
+
+			private function labelMyra2(item:Object, column:GridColumn):String {
+				// use namespace myra;
+				// use namespace wla;
+				// var qN:QName = new QName(myra1, column.dataField);
+				// return item[qN].text();
+				// Alert.show("length : " + item);
+				// Alert.show("length : " + qN);
+				// Alert.show("length : " + column.dataField);
+				// Alert.show("data : " + item["baseJobInfos"].toString());
+				//Alert.show("data : " + item["management"].toString());
+				
+				// Alert.show("data : " + item["baseJobInfos"]["jobTypeDetails"].toString());
+				
+				//item.descendants().("userId");   
+				
+				var my:XML = <s><a><b><c><d><name>serkan</name></d></c></b></a></s>;
+				
+				var my0:XML = <jobList xmlns="http://www.likyateknoloji.com/myra-joblist"
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:myra="http://www.likyateknoloji.com/myra-jobprops"
+									xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen"
+									xmlns:myra1="http://www.likyateknoloji.com/myra-stateinfo">
+									<genericJob xsi:type="myra:simpleProperties" groupId="bir"
+										dangerZoneGroupId="birinci grup" handlerURI="com.likya.myra.jef.jobs.ExecuteInShell"
+										Id="0" agentId="1" xmlns:myra="http://www.likyateknoloji.com/myra-joblist">
+										<name>serkan Taş</name>
+										<name>serkan Taş</name>	
+										<myra2:baseJobInfos xmlns:myra2="http://www.likyateknoloji.com/myra-jobprops">
+											<wla:jsName>My name is</wla:jsName>
+											<lik:jobTypeDetails>
+												<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
+												<lik:jobCommand>job1-err.sh</lik:jobCommand>
+												<!-- lik:jobCommand>job1.sh</lik:jobCommand -->
+												<lik:jobPath>/Users/serkan/Desktop/tlos2.0.0</lik:jobPath>
+											</lik:jobTypeDetails>
+											<wla:jobLogFile>demo.log</wla:jobLogFile>
+											<wla:jobLogPath>./</wla:jobLogPath>
+											<wla:oSystem>MACOS</wla:oSystem>
+											<wla:jobPriority>1</wla:jobPriority>
+											<myra2:jsIsActive>true</myra2:jsIsActive>
+											<lik:userId>1</lik:userId>
+										</myra2:baseJobInfos>
+										<myra2:management xmlns:myra2="http://www.likyateknoloji.com/myra-jobprops">
+											<wla:trigger>TIME</wla:trigger>
+											<!-- myra2:periodInfo step="PT10S" / -->
+											<wla:timeManagement>
+												<wla:bornedPlannedTime>
+													<wla:startTime>2014-01-24T17:00:00.000+02:00</wla:startTime>
+													<wla:stopTime>2014-01-24T23:22:00.000+02:00</wla:stopTime>
+												</wla:bornedPlannedTime>
+												<wla:jsPlannedTime>
+													<wla:startTime>2014-01-24T17:00:00.000+02:00</wla:startTime>
+													<wla:stopTime>2014-01-24T11:50:00.000+02:00</wla:stopTime>
+												</wla:jsPlannedTime>
+												<wla:jsRealTime>
+													<wla:startTime>2013-12-27T17:08:26.560+02:00</wla:startTime>
+													<wla:stopTime>2013-12-27T17:19:26.569+02:00</wla:stopTime>
+												</wla:jsRealTime>
+												<wla:jsTimeOut>
+													<lik:value_integer>5</lik:value_integer>
+													<lik:unit>SECONDS</lik:unit>
+												</wla:jsTimeOut>
+												<wla:expectedTime>
+													<lik:value_integer>100</lik:value_integer>
+													<lik:unit>SECONDS</lik:unit>
+												</wla:expectedTime>
+											</wla:timeManagement>
+											<!-- wla:cascadingConditions> <wla:runEvenIfFailed>YES</wla:runEvenIfFailed> 
+												<wla:jobSafeToRestart>YES</wla:jobSafeToRestart> <wla:jobAutoRetryInfo step="PT30M"> 
+												<wla:jobAutoRetry>YES</wla:jobAutoRetry> </wla:jobAutoRetryInfo> </wla:cascadingConditions -->
+										</myra2:management>
+									</genericJob>
+	        				 </jobList>
+				var my1:XML = item as XML;
+				
+				var jsNameQname:QName = new QName(wla, "startTime");
+				
+				//selected.descendants().("c"); 
+				//var first:XML = selected[0];
+				//var parent:XML = first.parent();
+				// Alert.show("jsNameQname.toString() : "+ jsNameQname.toString());
+				// Alert.show("data : " + getNodeByName(my0, jsNameQname));
+				return "serkan"		;//item[column.dataField].toString();
+			}
+			
+			public static function getNodeByName(xml:XML, nodeName:Object):XMLList {
+				return xml.descendants(nodeName);
+			}
+			
+			public static function getJobNameId(item:Object, column:GridColumn):String {
+				// Alert.show("" + item);
+				//var node:XML = XML(item); 
+				//item["baseJobInfos.jsName"].toString() + item["@Id"].toString();
+				return item.baseJobInfos.jsName.toString() + " [id:" + item.@Id + "]";
+			}
+			
+			private function getPlannedDate(item:Object, column:GridColumn):String {
+
+				return getDate(item.management.timeManagement.jsPlannedTime.startTime);
+			}
+			
+			public function getDate(dateTxt:String):String {
+				// Alert.show("" + formatedDate(item.management.timeManagement.jsPlannedTime.startTime));
+				
+				var dateFormatter:DateFormatter = new DateFormatter();
+				dateFormatter.formatString = 'HH:NN:SS DD/MM/YYYY';
+				//Alert.show(" : " + DateFormatter.parseDateString(item.management.timeManagement.jsPlannedTime.startTime));
+				
+				// Alert.show(dateFormatter.format(DateFormatter.parseDateString(item.management.timeManagement.jsPlannedTime.startTime)));
+					
+				// return item.management.timeManagement.jsPlannedTime.startTime;
+				return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
+			}
+			
+			public function getRealizedDate(item:Object, column:GridColumn):String {
+				return getDate(item.management.timeManagement.jsRealTime.startTime);
+			}
+
+			public function getJobCommandType(item:Object, column:GridColumn):String {
+				return item.baseJobInfos.jobTypeDetails.jobCommandType;
+			}
+			
+			public function getExpectedDuration(item:Object, column:GridColumn):String {
+				return item.management.timeManagement.expectedDuration;
+			}
+
+			public function getRealizedDuration(item:Object, column:GridColumn):String {
+				return item.management.timeManagement.realizedDuration;
+			}
+
+			
+			private function formatedDate(date:String):String{
+				var arr:Array = date.split(/\:/);
+				return arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3];
+			}
+			
+			private function toggleTreeComp():void {
+				if(toggleTree.toolTip == "Collapse") {
+					toggleTree.toolTip = "Expand";
+					toggleTree.label = "Expand";
+					detailPanel.height = 25;
+					// detailPanelGroup.visible = false;
+				} else {
+					toggleTree.toolTip = "Collapse";
+					toggleTree.label = "Collapse";
+					detailPanel.height = 200;
+					// detailPanelGroup.visible = true;
+				}
+			}
+			
+			public function getStateChangedDate(item:Object, column:GridColumn):String {
+				return getDate(item.@LSIDateTime);
+			}
+
+			public function getStateInfo(item:Object, column:GridColumn):String {
+				var stateInfo:String = "";
+
+				if(item.LiveStateInfo.StateName != null) {
+					stateInfo += item.StateName + "-";
+				}
+				if(item.LiveStateInfo.SubstateName != null) {
+					stateInfo += item.SubstateName + "-";
+				}
+				if(item.LiveStateInfo.StatusName != null) {
+					stateInfo += item.StatusName;
+				}
+				
+				return stateInfo;
+			}
+			
+			protected function selectionChangeHandlerPinara(event:GridSelectionEvent):void { 
+				const eventGrid:Grid = event.currentTarget.grid;
+				// var currentIndx:int = eventGrid.selectedIndex; 
+				var currentDataItem:Object = eventGrid.selectedItem; 
+				// pinaraSelIndex.text = String(currentIndx); 
+				// pinaraSelLName.text = String(currentDataItem.baseJobInfos.jsName); 
+				//Alert.show((ImageContainer.getImage(1) as Image).name);
+				jobCommand.text = currentDataItem.baseJobInfos.jobTypeDetails.jobCommand;
+				jobLogFile.text = "" + currentDataItem.baseJobInfos.jobLogPath + currentDataItem.baseJobInfos.jobLogFile;
+				prevDuration.text = currentDataItem.management.timeManagement.previousDuration;
+				diffDuration.text = "00:10"; // "" + (currentDataItem.management.timeManagement.previousDuration - currentDataItem.management.timeManagement.realizedDuration);
+				restartable.text = currentDataItem.management.cascadingConditions.jobSafeToRestart;
+				dzGroup.text = currentDataItem.@dangerZoneGroupId;
+				handlerURI.text = currentDataItem.@handlerURI;
+				
+				stateHistory.dataProvider = new XMLListCollection(XML(currentDataItem.stateInfos.LiveStateInfos).children()); 
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<!--fx:XML id="jobListXml" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUI/xmls/jobList.xml"/-->
+		<fx:XML id="jobListXml" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUI/xmls/cleanList.xml"/>
+			
+		<s:XMLListCollection id="jobListXmlCollection" source="{jobListXml.children()}" />
+		
+	</fx:Declarations>
+	
+	<s:layout> 
+		<s:VerticalLayout/> 
+	</s:layout> 
+	
+	<s:Button label="show xml" click="button1_clickHandler(event)" />
+
+	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}"> 
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn headerText="{resourceManager.getString('messages', 'stateGrid')}" width="{this.pinaraJobList.width * 0.10}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<s:layout>
+									<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+								</s:layout>
+								<fx:Script>
+									<![CDATA[
+										import com.likya.pinara.containers.ImageContainer;
+										
+									]]>
+								</fx:Script>
+								<s:Image source="{ImageContainer.getStatuImage(data.id)}" toolTip="{resourceManager.getString('messages', 'readyTooltip')}"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="{this.pinaraJobList.width * 0.10}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<s:layout>
+									<s:VerticalLayout  horizontalAlign="center" verticalAlign="middle"/>
+								</s:layout>
+								<fx:Script>
+									<![CDATA[
+										import com.likya.pinara.containers.ImageContainer;
+										
+									]]>
+								</fx:Script>
+								<s:Image source="{ImageContainer.getManageImage(data.id)}" toolTip="{resourceManager.getString('messages', 'readyTooltip')}"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn dataField="@Id" headerText="Job Id" width="{this.pinaraJobList.width * 0.06}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<!--s:GridColumn dataField="baseJobInfos.jsName" labelFunction="getJobNameId" headerText="Job Name" width="150">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn-->
+				<s:GridColumn dataField="baseJobInfos.jsName" headerText="Job Name" width="{this.pinaraJobList.width * 0.10}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn labelFunction="getJobCommandType" headerText="Job Command Type" width="{this.pinaraJobList.width * 0.12}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+
+				<!--s:GridColumn labelFunction="getJobCommand" headerText="Job Command" width="{this.pinaraJobList.width * 0.10}">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn-->
+				<!--s:GridColumn dataField="@dangerZoneGroupId" headerText="DZ Group Id">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn-->
+				<s:GridColumn dataField="@groupId" headerText="Group Id" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn labelFunction="getRealizedDate" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn labelFunction="getPlannedDate" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn labelFunction="getRealizedDuration" headerText="Son Çalışma Süresi" width="{this.pinaraJobList.width * 0.10}"/>
+				<!--s:GridColumn dataField="@handlerURI" headerText="handlerURI"/-->
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid> 
+	
+	<s:Panel id="detailPanel" title="Pınara Job Detail Form" height="200" width="100%">
+
+		<s:Button id="toggleTree" y="-27" right="10" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
+		<s:HGroup>
+			
+			<s:VGroup paddingLeft="5" gap="-10">
+				
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Job Command :" width="105"/>
+					<s:TextInput id="jobCommand" top="5" editable="false" />
+					<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+					<s:TextInput id="dzGroup" top="5" editable="false"/>
+					<!--s:Label text="Beni bekleyen işler :" width="120" paddingLeft="10" />
+					<s:List id="waitingMeJobs" height="60">
+						<s:dataProvider>
+							<mx:ArrayCollection>
+								<fx:String>Flex</fx:String> 
+								<fx:String>Flash Builder</fx:String> 
+								<fx:String>Flash</fx:String> 
+								<fx:String>Director</fx:String> 
+								<fx:String>Dreamweaver</fx:String> 
+								<fx:String>ColdFusion</fx:String> 
+								<fx:String>Illustrator</fx:String> 
+								<fx:String>PhotoShop</fx:String> 
+							</mx:ArrayCollection>
+						</s:dataProvider>
+					</s:List-->
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Job Log File :" width="105"/>
+					<s:TextInput id="jobLogFile" top="5" editable="false"/>
+					<s:Label text="Restartable :" width="105" paddingLeft="10" />
+					<s:TextInput id="restartable" top="5" editable="false"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Previous Duration :" width="105"/>
+					<s:TextInput id="prevDuration" top="5" editable="false"/>
+					<s:Label text="Parameter :" width="105" paddingLeft="10" />
+					<s:TextInput id="paramValue" top="5" editable="false"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Diff Duration :" width="105"/>
+					<s:TextInput id="diffDuration" top="5" editable="false"/>
+				</s:HGroup>
+	
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Handler URI :" width="105" />
+					<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
+				</s:HGroup>
+	
+			</s:VGroup>
+			
+			<s:VGroup gap="-10" paddingLeft="5">
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Bekleyen işler :" width="120" paddingLeft="10" />
+					<s:List id="waitingMeJobs" height="60">
+						<s:dataProvider>
+							<mx:ArrayCollection>
+								<fx:String>Flex</fx:String> 
+								<fx:String>Flash Builder</fx:String> 
+								<fx:String>Flash</fx:String> 
+								<fx:String>Director</fx:String> 
+								<fx:String>Dreamweaver</fx:String> 
+								<fx:String>ColdFusion</fx:String> 
+								<fx:String>Illustrator</fx:String> 
+								<fx:String>PhotoShop</fx:String> 
+							</mx:ArrayCollection>
+						</s:dataProvider>
+					</s:List>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Beklediğim işler :" width="120" paddingLeft="10" />
+					<s:List id="meToWaitJobs" height="70"> 
+						<s:dataProvider>
+							<mx:ArrayCollection>
+								<fx:String>Flex</fx:String> 
+								<fx:String>Flash Builder</fx:String> 
+								<fx:String>Flash</fx:String> 
+								<fx:String>Director</fx:String> 
+								<fx:String>Dreamweaver</fx:String> 
+								<fx:String>ColdFusion</fx:String> 
+								<fx:String>Illustrator</fx:String> 
+								<fx:String>PhotoShop</fx:String> 
+							</mx:ArrayCollection>
+						</s:dataProvider>
+					</s:List>
+				</s:HGroup>
+			</s:VGroup>
+
+			<s:VGroup paddingLeft="10" paddingTop="10" >
+				<s:Label text="İş Tarihçesi :" width="120" />
+				<s:DataGrid id="stateHistory" width="100%" height="75%" >
+					<s:columns>
+						<s:ArrayList>
+							<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" width="{this.pinaraJobList.width * 0.12}"/>
+							<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.pinaraJobList.width * 0.15}"/>
+						</s:ArrayList>
+					</s:columns>
+				</s:DataGrid> 
+			</s:VGroup>
+			
+		</s:HGroup>
+
+	</s:Panel>
+	
+	<!--s:Panel id="detailPanel" title="Pınara Job Detail Form" height="200" width="100%">
+		
+		
+
+		<s:VGroup>
+			<s:layout>
+				<s:TileLayout horizontalGap="4" verticalGap="8" />
+			</s:layout>
+				<s:Group>
+					<s:Label text="Job Command :" width="105"/>
+					<s:TextInput id="jobCommand" top="5" editable="false"/>
+				</s:Group>
+				
+			
+			<s:Label text="DZ Group Id :" width="90" paddingLeft="10"/>
+			<s:TextInput id="dzGroup" top="5" editable="false"/>
+			<s:Label text="Job Log File :" width="105"/>
+			<s:TextInput id="jobLogFile" top="5" editable="false"/>
+			<s:Label text="Previous Duration :" width="105"/>
+			<s:TextInput id="prevDuration" top="5" editable="false"/>
+			<s:Label text="Restartable :" width="105"/>
+			<s:TextInput id="restartable" top="5" editable="false"/>
+			
+		</s:VGroup>	
+
+		
+		
+	</s:Panel-->
+	
+	<!--jobdetail:JobSummary/-->
+	
+</s:Group>
+
+<!--s:Form id="detailPanelGroup" height="200" width="100%">
+<s:layout>
+<s:HorizontalLayout/>
+</s:layout>  
+
+<s:VGroup gap="-10">
+<s:FormItem label="Job Command :" >
+</s:FormItem>
+<s:FormItem label="Job Log File :" >
+</s:FormItem>
+<s:FormItem label="Previous Duration :" >
+</s:FormItem>
+<s:FormItem label="Diff Duration :" >
+</s:FormItem>
+<s:FormItem label="Restartable :" >
+</s:FormItem>
+<s:FormItem label="DZ Group Id :">
+</s:FormItem>
+</s:VGroup>
+
+<s:VGroup gap="-10">
+<s:FormItem id="jobCommand" />
+<s:FormItem id="jobLogFile" />
+<s:FormItem id="prevDuration" />
+<s:FormItem id="diffDuration" />
+<s:FormItem id="restartable" />
+<s:FormItem id="dzGroup" />
+</s:VGroup>
+
+<s:VGroup>
+<s:FormItem label="Handler URI :" width="240">
+<s:Label id="handlerURI" />
+</s:FormItem>
+<s:FormItem label="Beni bekleyen işler :" width="240">
+</s:FormItem>
+<s:List id="waitingMeJobs" height="60">
+<s:dataProvider>
+<mx:ArrayCollection>
+<fx:String>Flex</fx:String> 
+<fx:String>Flash Builder</fx:String> 
+<fx:String>Flash</fx:String> 
+<fx:String>Director</fx:String> 
+<fx:String>Dreamweaver</fx:String> 
+<fx:String>ColdFusion</fx:String> 
+<fx:String>Illustrator</fx:String> 
+<fx:String>PhotoShop</fx:String> 
+</mx:ArrayCollection>
+</s:dataProvider>
+</s:List>
+</s:VGroup>
+
+<s:VGroup>
+
+<s:FormItem label="Parameter :" width="240">
+<s:Label id="paramValue" />
+</s:FormItem>
+<s:FormItem label="Beni bekleyen işler :" width="240">
+
+</s:FormItem>
+<s:List id="meToWaitJobs" height="70"> 
+<s:dataProvider>
+<mx:ArrayCollection>
+<fx:String>Flex</fx:String> 
+<fx:String>Flash Builder</fx:String> 
+<fx:String>Flash</fx:String> 
+<fx:String>Director</fx:String> 
+<fx:String>Dreamweaver</fx:String> 
+<fx:String>ColdFusion</fx:String> 
+<fx:String>Illustrator</fx:String> 
+<fx:String>PhotoShop</fx:String> 
+</mx:ArrayCollection>
+</s:dataProvider>
+</s:List>
+</s:VGroup>
+
+
+
+</s:Form-->
+
+<!--s:Group id="detailPanelGroup" visible="true">
+
+<s:layout>
+<s:VerticalLayout paddingLeft="5"/>
+</s:layout>
+<s:HGroup verticalAlign="baseline" paddingTop="10">
+<s:Label text="Job Command :" width="105"/>
+<s:TextInput id="jobCommand" top="5" editable="false"/>
+<s:Label text="DZ Group Id :" width="90" paddingLeft="10"/>
+<s:TextInput id="dzGroup" top="5" editable="false"/>
+</s:HGroup>
+<s:HGroup verticalAlign="baseline" paddingTop="5">
+<s:Label text="Job Log File :" width="105"/>
+<s:TextInput id="jobLogFile" top="5" editable="false"/>
+</s:HGroup>
+<s:HGroup verticalAlign="baseline" paddingTop="5">
+<s:Label text="Previous Duration :" width="105"/>
+<s:TextInput id="prevDuration" top="5" editable="false"/>
+</s:HGroup>
+<s:HGroup verticalAlign="baseline" paddingTop="5">
+<s:Label text="Restartable :" width="105"/>
+<s:TextInput id="restartable" top="5" editable="false"/>
+</s:HGroup>
+
+</s:Group-->
+
+<!--s:HGroup verticalAlign="baseline">
+<s:FormItem label="Job Command :" width="250">
+<s:Label id="jobCommand" />
+</s:FormItem>
+<s:FormItem label="DZ Group Id :">
+<s:Label id="dzGroup" />
+</s:FormItem>
+</s:HGroup>
+
+<s:HGroup verticalAlign="baseline">
+<s:FormItem label="Job Log File :" width="250">
+<s:Label id="jobLogFile" />
+</s:FormItem>
+<s:FormItem label="Parameter :" width="250">
+<s:Label id="paramValue" />
+</s:FormItem>
+</s:HGroup>
+
+<s:HGroup verticalAlign="baseline">
+<s:FormItem label="Previous Duration :" width="250">
+<s:Label id="prevDuration" />
+</s:FormItem>
+<s:FormItem label="Handler URI :" width="250">
+<s:Label id="handlerURI" />
+</s:FormItem>
+</s:HGroup>
+
+<s:HGroup verticalAlign="baseline">
+<s:FormItem label="Diff Duration :" width="250">
+<s:Label id="diffDuration" />
+</s:FormItem>
+<s:FormItem label="Restartable :" width="250">
+<s:Label id="restartable" />
+</s:FormItem>
+</s:HGroup-->
+
+<!--s:Group>
+<s:layout>
+<s:HorizontalLayout paddingTop="10">
+</s:HorizontalLayout>
+</s:layout>
+<s:Label text="Selected index:"/> 
+<s:TextArea id="pinaraSelIndex" height="50"/> 
+
+<s:Label text="Selected Job Name:"/> 
+<s:TextArea id="pinaraSelLName" height="50"/> 
+</s:Group-->

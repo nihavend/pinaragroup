@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!-- containers\spark\myComponents\MyLoginForm.mxml -->
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   close="handleCloseEvent()"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)"
+			   width="800" height="500">
+	
+	<s:layout> 
+		<s:BasicLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.layouts.HorizontalLayout;
+			
+			import flashx.textLayout.compose.StandardFlowComposer;
+			import flashx.textLayout.conversion.TextConverter;
+			
+			protected var oldSearchResult:int = 0;
+			protected var vScrollPos:int = 0;
+			
+			public var fileTag:String;
+			private var titlePrefix:String = "Log Görüntüleme Penceresi";
+			private var defEndOff:int = 5000;
+			
+			private function initService(url:String = null):void {
+				// liveTreeDataService.url = "http://127.0.0.1:3000/logdetail?fname=myraTrace";
+				// liveTreeDataService.url = "http://127.0.0.1:3000/logdetail" + "?" + "fname=myraTrace" + "&" + "beginoff=0" + "&" + "endoff=5000";
+				if(url == null) {
+					url = "http://127.0.0.1:3000/logdetail" + "?" + "fname=" + fileTag + "&" + "beginoff=0" + "&" + "endoff=" + defEndOff;
+				}
+				liveTreeDataService.url = url;
+				liveTreeDataService.method = "GET";
+				liveTreeDataService.send(); // parametresiz.
+ 			}
+			
+			private function refreshService(event:Event):void {
+				var url:String = "http://127.0.0.1:3000/logdetail" + "?" + "fname=" + fileTag + "&" + "beginoff=" + beginOff.value + "&" + "endoff=" + endOff.value;
+				//Alert.show("service url : " + url);
+				initService(url);
+				defEndOff = endOff.value;
+			}
+
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void {
+				// addEventListener(MouseEvent.CLICK, handleClickEvent);
+				title = titlePrefix;
+				initService();
+			}
+			
+			private function handleClickEvent(event:Event):void {
+				// Alert.show("event.type : " + event.type + " Target : " + event.target);
+			}
+			
+			private function handleCloseEvent():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString(), "Hata oluştu !");
+				handleCloseEvent();
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				var result:Object = event.result;
+				/** XML strucuture :
+				 * <data>
+				 * 		<meta>
+				 * 			meta file info
+				 * 			<size></size>
+				 * 			<name></name>
+				 * 			<path></path>
+				 * 		</meta>
+				 * 		<content>
+				 * 			limited file content
+				 * 		</content>
+				 * </data> 
+				 **/
+				this.title = titlePrefix + " : " + XML(result).meta.name;
+				var fSize:int =  XML(result).meta.size;
+				
+				fileSize.text = fSize + "K";
+				beginOff.maximum = fSize -1;
+				endOff.maximum = fSize;
+				mainTextField.textFlow = TextConverter.importToFlow(String(XML(result).content), TextConverter.PLAIN_TEXT_FORMAT);
+				callLater(setLineNumbers);
+				callLater(updateEndOff);
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				
+				var searchStr : String = searchTxt.text;
+				var truncatedText : String;
+				
+				truncatedText = mainTextField.text.substring(oldSearchResult);
+				
+				
+				var searchResult:int = truncatedText.search(searchStr);
+				
+				mainTextField.setFocus();
+				
+				if(searchResult != -1) {
+					
+					var bIdx:int = oldSearchResult + searchResult;
+					var eIdx:int = oldSearchResult + searchResult + searchStr.length;
+					var pos:int =  mainTextField.selectionActivePosition;
+					
+					mainTextField.selectRange(bIdx, eIdx);
+					oldSearchResult = eIdx;
+					mainTextField.scrollToRange(bIdx, oldSearchResult);
+
+					//scrollBarPosLabel.text = "[" + mainTextField.scroller.verticalScrollBar.value + "]-[" + vScrollPos + "]";
+					
+					// var dgArray:Array = [{bIdx:bIdx, eIdx:eIdx, pos:pos + "/" + mainTextField.text.length}]; 
+					// initDG.addItem(dgArray[0]);
+					
+					setCaretPos();
+					setLineNumbers();
+				} else {
+					Alert.show('no more results');
+				}
+				
+			}
+
+			protected function mainTextField_clickHandler(event:MouseEvent):void {
+				
+				var caretPos:int = mainTextField.selectionActivePosition;
+				
+				if(event.target is Button) {
+					
+					if(event.type == MouseEvent.CLICK) {
+						vScrollPos = mainTextField.scroller.verticalScrollBar.value;
+						//scrollBarPosLabel.text = "[" + mainTextField.scroller.verticalScrollBar.value + "]-[" + vScrollPos + "]";
+					}
+				} else {
+					oldSearchResult = caretPos;
+					setCaretPos();
+					setLineNumbers();
+				}
+			}
+			
+			protected function setCaretPos():void {
+				activePosition.text = "[" + mainTextField.selectionActivePosition + "]";
+			}
+			
+			protected function setLineNumbers():void {
+				var flowComposer : StandardFlowComposer = StandardFlowComposer(mainTextField.textFlow.flowComposer);
+				var absoluteIndex : int = mainTextField.selectionActivePosition;
+				var lineIdx : int = flowComposer.findLineIndexAtPosition(absoluteIndex);
+				lineNumbers.text = (lineIdx + 1) + "/" + mainTextField.textFlow.numChildren;
+				//endOff.value = 5000;
+			}
+			
+			protected function updateEndOff():void {
+				endOff.value = defEndOff;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:HTTPService id="liveTreeDataService" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="xml"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+		
+	</fx:Declarations>
+	
+	<s:VGroup left="5" right="10" top="10" bottom="10" height="100%" width="100%">
+
+		<mx:HBox horizontalAlign="center">
+			<s:FormItem label="Başlangıç Offset" layout="{new HorizontalLayout()}" width="100%" >
+				<s:NumericStepper id="beginOff" stepSize="1" width="100" />
+			</s:FormItem>
+			<s:FormItem label="Bitiş Offset" layout="{new HorizontalLayout()}" width="100%" >
+				<s:NumericStepper id="endOff" stepSize="1" width="100" />
+			</s:FormItem>
+			<s:FormItem width="100%" >
+				<s:Button label="Refresh" click="refreshService(event)" />
+			</s:FormItem>
+		</mx:HBox>
+		
+		<mx:HRule width="100%" />
+		
+		<s:FormItem label="Search Text" layout="{new HorizontalLayout()}" width="100%" >
+			<s:TextInput id="searchTxt" text="fname" />
+			<s:Button label="Search Next" click="button1_clickHandler(event)" />
+		</s:FormItem>
+		
+		<s:Line width="100%">
+			<s:stroke>
+				<s:SolidColorStroke color="0x000000" weight="1" caps="square"/>
+			</s:stroke>
+		</s:Line>
+		
+		<s:TextArea  id="mainTextField" verticalScrollPolicy="on" width="100%" height="100%" click="mainTextField_clickHandler(event)" editable="false" skinClass="com.likya.pinara.test.skins.TextAreaLineNumbersSkin" />
+		
+		<s:BorderContainer height="25" width="100%" backgroundColor="0xDCDCDC" borderStyle="solid">
+			<s:layout>
+				<s:HorizontalLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" verticalAlign="middle"/>
+			</s:layout>
+			<s:Label text="Line Numbers :" />
+			<s:Label id="lineNumbers" />
+			<s:Spacer width="5%" />
+			<s:Label text="Caret Pos :" />
+			<s:Label id="activePosition" text="[0]" />
+			<s:Spacer width="100%" />
+			<s:HGroup horizontalAlign="right">
+				<s:Label text="File Size :" />
+				<s:Label id="fileSize" right="0" />
+			</s:HGroup>
+		</s:BorderContainer>
+	</s:VGroup>
+		
+</s:TitleWindow>

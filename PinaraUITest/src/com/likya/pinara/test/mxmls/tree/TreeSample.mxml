@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="onCreationComplete()"
+			   width="100%" height="100%" minWidth="500" minHeight="500"
+			   >
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serializers.json.JSONDecoder;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.ListEvent;
+			[Bindable]
+			public var selectedNode:XML;
+			
+			// Event handler for the Tree control change event.
+			public function treeChanged(event:Event):void {
+				selectedNode=Tree(event.target).selectedItem as XML;
+				Alert.show("Label : " + event.currentTarget.selectedItem.@label);
+			}
+			
+			protected function tree_itemClickHandler(event:ListEvent):void {
+			/*	try {
+					
+					Alert.show("Event : " + event.currentTarget.selectedItem);
+					
+					var selectedNode:XML = Tree(event.target).selectedItem as XML;
+					var selectedTreeItem:Object = Tree(event.target).selectedItem;
+					Alert.show("Node : " + selectedNode);
+				} catch (e:Error){
+					Alert.show(e.message);
+				} */
+			}
+			
+			public function onCreationComplete():void {
+				
+				try {
+					// var jsonData:String = '[ {"id":"11111", "progress":"", "date":"Jan 14, 2013 12:00:00", "count":1,"status":0}, {"id":"22222","progress":"","date":"Jan 15, 2013 12:00:00", "count":4,"status":1} ]';
+					
+					var jsonData:String = '[ { "jobGroup": [ {"title": "group_1", "jobProperty" : [ { "title":"Dosyayı Yükle",  "id" : 1, "ip":1, "port":1 } ] } ] } ]';
+					
+					// var arr:Array = (JSON.parse(jsonData) as Array);
+					// var dp:ArrayCollection = new ArrayCollection(arr);
+					
+					// var feeds:Object = JSON.parse(jsonData);
+					
+					// myTree.dataProvider = feeds;
+					
+					var arr:Array = JSON.parse(jsonData) as Array;
+					var arrColl:ArrayCollection = new ArrayCollection(arr);
+					
+					// var xmlList:XMLList = XMLList(arr);
+					
+					myTree.dataProvider = arrColl;
+					
+					// Alert.show("arr.length : " + arrColl[0]);
+					
+					// listTreeData = IList(JSON.parse(jsonData));
+					
+					// listTreeData = IList(feeds);
+					
+					Alert.show("jobTreeData.toJSON(): " + jobTreeData.toJSON("").toString());
+					
+					
+					
+				} catch (e:Error){
+					Alert.show(e.message);
+				} 
+				
+				//arrayTreeData = dp;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<fx:XMLList id="treeData">
+			<node label="E-Mail Box">
+				<node label="Inbox">
+					<node label="Client"/>
+					<node label="Product"/>
+					<node label="Personal"/>
+				</node>
+				<node label="Sent Items">
+					<node label="Professional"/>
+					<node label="Personal"/>
+				</node>
+				<node label="Deleted Items"/>
+				<node label="Spam"/>
+			</node>    
+		</fx:XMLList>
+		
+		<fx:XMLList id="jobTreeData">
+					  <jobGroup title="group_1" id="1">
+						  <jobProperty title="Dosyayı Yükle" id="1" ip="1" port="1"/>
+						  <jobProperty title="Diske yaz" id="1" ip="1" port="1" />
+						  <jobGroup title="group_2" id="2">
+							  <jobGroup title="group_2" id="2">
+								  <jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+								  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+								  <jobGroup title="group_2" id="2">
+									  <jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+									  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+								  </jobGroup>
+							  </jobGroup>
+							  <jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+							  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+						  </jobGroup>
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="3" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="4" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="5" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="6" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="7" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="8" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="9" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+					  <jobGroup title="group_2" id="2">
+						  <jobProperty title="ETL_LOAD_SUBSCDATA" id="10" ip="1" port="1" />
+						  <jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+					  </jobGroup>
+		</fx:XMLList>
+		
+	</fx:Declarations>
+	<s:BorderContainer width="630" height="480" id="mainContainer" 
+					   styleName="container">
+		<s:VGroup width="100%" height="100%" gap="50" 
+				  horizontalAlign="center" verticalAlign="middle">
+			<s:Label id="lblHeader" text="Complex Controls Demonstration" 
+					 fontSize="40" color="0x777777" styleName="heading"/>
+			<s:Panel id="treePanel" title="Using Tree" 
+					 width="400" height="300">
+				<s:layout>
+					<s:VerticalLayout  gap="10" verticalAlign="middle" 
+									   horizontalAlign="center"/>	
+				</s:layout>
+				<mx:Tree id="tree" width="95%" height="75%" 
+						 labelField="@label" showRoot="false"
+						 dataProvider="{treeData}" itemClick="treeChanged(event)"/>
+				
+				<mx:Tree id="jobTree" width="95%" height="75%" 
+						 labelField="@title" showRoot="false"
+						 dataProvider="{jobTreeData}" itemClick="treeChanged(event)"/>
+				
+				<mx:Tree id="myTree" width="95%" height="75%" 
+						 labelField="@title" showRoot="false"
+						 itemClick="treeChanged(event)"/>
+				
+				<s:TextArea height="20%" width="95%"
+							text="Selected Item: {selectedNode.@label}"/>
+				
+				
+			</s:Panel>		
+		</s:VGroup>	 
+	</s:BorderContainer>	
+</s:Application>

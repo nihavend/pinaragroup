@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:comps="com.likya.pinara.comps.*"
+			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()" xmlns:mxmls="com.likya.pinara.test.mxmls.*" xmlns:tree="com.likya.pinara.test.mxmls.tree.*">
+	
+	<fx:Metadata>
+		[ResourceBundle("messages")]
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="loggedOutState"/>
+		<s:State name="loggedInState"/>
+		
+		<s:State name="graphState"/>
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.actscrpts.UserInfo;
+			import com.likya.pinara.test.events.ResourceEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.resources.ResourceBundle;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Encoder;
+			
+			
+			
+			
+			
+			
+			[Bindable]
+			private var httpServiceUrl:String = "/flex/restsrvc/joblist"; //"http://127.0.0.1:3000/flex/restsrvc/joblist";
+			
+			[Bindable]
+			private var currentUser:UserInfo;
+			
+			protected function application_creationCompleteHandler():void {
+				
+				var myResources:ResourceBundle = new ResourceBundle("en_US","locale\messages");
+				myResources.content['TITLE'] = "Pinara Workload Management Application - English Version";
+				resourceManager.addResourceBundle(myResources);
+				
+				
+				myResources = new ResourceBundle("tr_TR","locale\messages");
+				myResources.content['TITLE'] = "Pınara İş Yükü Yönetim Uygulaması - Türkçe Sürümü";
+				resourceManager.addResourceBundle(myResources);
+				
+				resourceManager.update();
+				
+				addEventListener(ResourceEvent.LOGIN, checkLogin);
+				addEventListener(ResourceEvent.LOGOUT, logout);
+				addEventListener(ResourceEvent.CHANGE_LOCALE, changeLocale);
+				
+				currentUser = new UserInfo();
+			}
+			
+			private function checkLogin(event:ResourceEvent):void {
+				// Alert.show("Burada authentacion yapılacak !", "Hata", Alert.OK, this, null, null);
+				// authAndSend(UserInfo(event.object));
+				doWork(UserInfo(event.object));
+			}
+			
+			private function getLoginDataResultHandler(event:ResultEvent):void {
+				Alert.show("event.result : " + event.result);
+				currentState = "tlosState";
+				if (event.result != null) {
+					var myColl:ArrayCollection = (ArrayCollection (event.result));
+					
+					var result:String = myColl.toArray().valueOf()[0].toString();
+					
+					if (result == "1") {
+						dispatchEvent(new ResourceEvent(ResourceEvent.LOGIN));
+					} else {
+						Alert.show("Kullacını adı ya da şifre hatalı !");
+					}
+				}
+				
+			}
+			
+			private function resultFailed(event:FaultEvent):void {
+				Alert.show(event.message.toString());
+			}
+			
+			private function httpResult(event:HTTPStatusEvent):void {
+				
+				// Alert.show(event.toString());
+				
+				if(event.status == 200) {
+					currentState = "loggedInState";
+					// Alert.show("Giriş başarılı :)");
+				} else if (event.status == 400) {
+					Alert.show("Kullacını adı ya da şifre hatalı !");
+					currentUser.username = "";
+				} else {
+					Alert.show("Unexpected Event : " + event.toString());
+				}
+				
+			}
+			
+			private function securityError(event:SecurityErrorEvent):void {
+				Alert.show(event.toString());
+			}
+			
+			private function doWork(userInfo:UserInfo):void {
+				
+				try {
+
+					//possible error producing code;
+					// Alert.show(userInfo.username);
+						
+					currentUser.username = userInfo.username;
+					
+					var req:URLRequest = new URLRequest(httpServiceUrl);
+					req.method = URLRequestMethod.POST;
+					req.data = new URLVariables("name=John+Doe");
+					
+					
+					var encoder:Base64Encoder = new Base64Encoder();        
+					// encoder.encode("tlos:tlos");
+					encoder.encode(userInfo.username + ":" + userInfo.password);
+					
+					var credsHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + encoder.toString());
+					req.requestHeaders.push(credsHeader);
+					
+					var loader:URLLoader = new URLLoader();
+					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler); 
+					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityError);
+	
+					loader.load(req);
+					// Alert.show("Exited doWork");
+				
+				} catch (e:Error){
+					Alert.show(e.message);
+				} 
+			}
+			
+			private function changeLocale(event:ResourceEvent):void {
+				
+				var locale:String = String(event.object);
+				
+				// Alert.show("locale : " + locale);
+				if(resourceManager.localeChain[0] != locale.toString()) {
+					// Alert.show("aboo");
+					resourceManager.localeChain = [locale];
+				}
+				
+				// var dept:XMLList = treeXml.tlos.(@id == "0"); 
+				// if (dept.length() > 0) { 
+				// 	dept[0].@title = resourceManager.getString('messages', 'tlosTree');
+				// } 
+			}
+			
+			private function logout(event:ResourceEvent):void {
+				
+				// Alert.show("logout");
+				
+				// var tlosTreeNode:XMLList = XML(treeXml[0]).children();
+				// var tlosTreeNode2:XMLList = XML(tlosTreeNode[0]).children();
+				// delChildren(tlosTreeNode2);
+				// jobs.removeAll();
+				// username.text = "";
+				// password.text = "";
+				
+				currentUser = null;
+				
+				currentState = 'loggedOutState';
+				
+				// tlosMenuData = new XMLListCollection();
+				
+				application_creationCompleteHandler();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+
+	<!--<comps:LoginForm includeIn="loggedInState" left="381" right="380" top="259" bottom="264" horizontalCenter="0" verticalCenter="-3"/>-->
+
+	<!--<s:SkinnableContainer includeIn="loggedOutState" left="10" right="10" top="10" width="100%">
+		<comps:Header userInfo="{currentUser}"/>	
+	</s:SkinnableContainer>
+	-->
+	<s:SkinnableContainer includeIn="loggedOutState" left="10" top="50" bottom="50" width="240">
+		<!--comps:ItemTree id="tlosTreeView" left="0" right="10" top="0" bottom="0" addResource="addResource()" editAgents="editAgents()" listResources="listResources()" showNrpeAgent="showNrpeAgent()"/-->	  
+		<!--comps:ItemTree id="tlosTreeView" left="0" right="10" top="0" bottom="0" /-->
+		<tree:TreePanel id="jobTree" left="0" right="10" top="0" bottom="0" />
+	</s:SkinnableContainer>
+	
+	<s:SkinnableContainer id="mainContainer" includeIn="loggedOutState" left="250" right="10" top="50" bottom="50" height="100%" backgroundColor="#DCDCDC">
+		<!--s:Panel id="mainPanel" width="100%" height="100%"/-->
+		<!--<comps:MainPanel/>-->	
+	</s:SkinnableContainer>
+	
+	<s:SkinnableContainer includeIn="loggedOutState" left="10" right="10" bottom="20" width="100%">
+	<!--	<comps:Footer/>-->	
+	</s:SkinnableContainer>
+	
+
+	<s:SkinnableContainer includeIn="loggedOutState" left="10" right="10" bottom="20" width="100%">
+		<!--<comps:Footer/>	-->
+	</s:SkinnableContainer>
+	
+</s:Application>

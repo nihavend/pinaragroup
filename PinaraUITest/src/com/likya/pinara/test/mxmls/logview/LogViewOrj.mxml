@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<!-- containers\spark\myComponents\MyLoginForm.mxml -->
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   title="Log Görüntüleme Penceresi"
+			   close="handleCloseEvent()"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)"
+			   width="800" height="500">
+	
+	<s:layout> 
+		<s:BasicLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.layouts.HorizontalLayout;
+			
+			import flashx.textLayout.compose.StandardFlowComposer;
+			import flashx.textLayout.conversion.TextConverter;
+			
+			protected var oldSearchResult:int = 0;
+			protected var vScrollPos:int = 0;
+			
+			[Bindable] 
+			public var initDG:ArrayCollection = new ArrayCollection();
+			
+			private function initService():void {
+				// liveTreeDataService.url = "http://127.0.0.1:3000/logdetail?fname=myraTrace";
+				liveTreeDataService.url = "http://127.0.0.1:3000/logdetail" + "?" + "fname=myraTrace" + "&" + "beginoff=0" + "&" + "endoff=5000";
+				liveTreeDataService.method = "GET";
+				liveTreeDataService.send(); // parametresiz.
+			}
+
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void {
+				// addEventListener(MouseEvent.CLICK, handleClickEvent);
+				initService();
+			}
+			
+			private function handleClickEvent(event:Event):void {
+				// Alert.show("event.type : " + event.type + " Target : " + event.target);
+			}
+			
+			private function handleCloseEvent():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString(), "Hata oluştu !");
+				handleCloseEvent();
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				var result:Object = event.result;
+				/** XML strucuture :
+				 * <data>
+				 * 		<meta>
+				 * 			meta file info
+				 * 			<size></size>
+				 * 			<name></name>
+				 * 			<path></path>
+				 * 		</meta>
+				 * 		<content>
+				 * 			limited file content
+				 * 		</content>
+				 * </data> 
+				 **/
+				fileSize.text = XML(result).meta.size + "K";
+				mainTextField.textFlow = TextConverter.importToFlow(String(XML(result).content), TextConverter.PLAIN_TEXT_FORMAT);
+				callLater(setLineNumbers);
+			}
+			
+			/*
+			protected function button1_clickHandler1(event:MouseEvent):void {
+				var search_Str : String = searchTxt.text;
+				// truncate the text using substring; this gives you everything in mainTextField after your previous search results
+				var truncatedText : String;
+				truncatedText = mainTextField.text.substring(oldSearchResult);
+				
+				var search_result:int = truncatedText.search(search_Str);
+				mainTextField.setFocus();
+				// when you select the range, you want to offset your result index w/ the characters your chopped off  
+				if(search_result != -1) {
+					mainTextField.selectRange(oldSearchResult+search_result,oldSearchResult+search_result+search_Str.length);
+					mainTextField.scrollToRange(oldSearchResult+search_result - 20);
+					oldSearchResult = oldSearchResult+search_result+search_Str.length;
+				} else {
+					Alert.show('no more results');
+					// oldSearchResult = 0;
+					// mainTextField.scrollToRange(0);
+				}
+			}
+			*/
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				
+				var searchStr : String = searchTxt.text;
+				var truncatedText : String;
+				
+				truncatedText = mainTextField.text.substring(oldSearchResult);
+				
+				
+				var searchResult:int = truncatedText.search(searchStr);
+				// Alert.show("searchResult : " + searchResult);
+				
+				mainTextField.setFocus();
+				
+				if(searchResult != -1) {
+					
+					var bIdx:int = oldSearchResult + searchResult;
+					var eIdx:int = oldSearchResult + searchResult + searchStr.length;
+					var pos:int =  mainTextField.selectionActivePosition;
+					
+					mainTextField.selectRange(bIdx, eIdx);
+					oldSearchResult = eIdx;
+					mainTextField.scrollToRange(bIdx, oldSearchResult);
+
+					scrollBarPosLabel.text = "[" + mainTextField.scroller.verticalScrollBar.value + "]-[" + vScrollPos + "]";
+					
+					var dgArray:Array = [{bIdx:bIdx, eIdx:eIdx, pos:pos + "/" + mainTextField.text.length}]; 
+					initDG.addItem(dgArray[0]);
+					
+					// infoLabel.text = "bIdx:" + bIdx + " eIdx:" + eIdx + " selectionActivePosition:" + mainTextField.selectionActivePosition;
+					
+				} else {
+					Alert.show('no more results');
+					//oldSearchResult = 0;
+					// mainTextField.scrollToRange(0);
+				}
+				
+			}
+
+			protected function mainTextField_clickHandler(event:MouseEvent):void {
+				
+				var caretPos:int = mainTextField.selectionActivePosition;
+				
+				if(event.target is Button) {
+					
+					if(event.type == MouseEvent.CLICK) {
+						//caretPos = mainTextField.;
+						//mainTextField.scrollToRange(0, 0);
+						// Alert.show('Scroll Pos : ' + mainTextField.scroller.verticalScrollBar.value);
+						vScrollPos = mainTextField.scroller.verticalScrollBar.value;
+						scrollBarPosLabel.text = "[" + mainTextField.scroller.verticalScrollBar.value + "]-[" + vScrollPos + "]";
+					}
+				} else {
+					// Alert.show('Text Area !');
+					// oldSearchResult = caretPos;
+					// carPosLabel.text = caretPos + "-" + oldSearchResult;
+					
+					setLineNumbers();
+					
+					//var curLine:int = mainTextField.gettextField.getLineIndexOfChar(caretPos);
+					// navInfo.text = (lineIdx + 1) + "/" + mainTextField.textFlow.numChildren; 
+					
+					//var curLine:int = mainTextField.textFlow.getChildIndex(mainTextField.textFlow.findLeaf(caretPos));
+					
+					// 
+					// mainTextField.scroller.verticalScrollBar.value = vScrollPos; 
+					//
+					// mainTextField.scrollToRange(mainTextField.selectionActivePosition);
+					// Alert.show(" pos : "+ caretPos);
+					// Alert.show("Element : " + mainTextField.textFlow.findLeaf(caretPos).text);
+					//mainTextField.scrollToRange(caretPos, caretPos);
+				}
+				// Alert.show(" pos : "+ mainTextField.selectionActivePosition);
+				// mainTextField.textFlow.findLeaf(0);
+			}
+			
+			protected function setLineNumbers():void {
+				var flowComposer : StandardFlowComposer = StandardFlowComposer(mainTextField.textFlow.flowComposer);
+				var absoluteIndex : int = mainTextField.selectionActivePosition;
+				var lineIdx : int = flowComposer.findLineIndexAtPosition(absoluteIndex);
+				lineNumbers.text = (lineIdx + 1) + "/" + mainTextField.textFlow.numChildren; 
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:HTTPService id="liveTreeDataService" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="xml"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+		
+	</fx:Declarations>
+	
+	<s:VGroup left="10" right="10" top="10" bottom="10" height="100%" width="100%">
+		<s:FormItem label="Search Text" layout="{new HorizontalLayout()}" width="100%" >
+			<s:TextInput id="searchTxt" text="fname" />
+			<s:Button label="Search Next" click="button1_clickHandler(event)" />
+		</s:FormItem>
+		
+		<mx:HBox>
+			<s:Label text="Caret Position - Old Search Result : " />
+			<s:Label id="carPosLabel" /> 
+		</mx:HBox>
+		
+		<mx:HBox>
+			<s:Label text="Scroll Bar Position - Stored : " />
+			<s:Label id="scrollBarPosLabel" /> 
+		</mx:HBox>
+		
+		<mx:HBox>
+			<s:Label text="Navigation Info(current/numoflines) : " />
+			<s:Label id="navInfo" /> 
+		</mx:HBox>
+		
+		<s:DataGrid id="infoGrid"  width="350" height="100" dataProvider="{initDG}">
+			<s:columns> 
+				<s:ArrayList> 
+					<s:GridColumn dataField="bIdx" headerText="Begin Index"/> 
+					<s:GridColumn dataField="eIdx" headerText="End Index"/>
+					<s:GridColumn dataField="pos" headerText="Active Pos"/> 
+				</s:ArrayList> 
+			</s:columns>			
+		</s:DataGrid>
+		
+		<mx:HRule width="100%" />
+		
+		<s:TextArea  id="mainTextField" verticalScrollPolicy="on" width="100%" height="100%" click="mainTextField_clickHandler(event)" editable="false" skinClass="com.likya.pinara.test.skins.TextAreaLineNumbersSkin" />
+<!--			<s:text>
+				The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+				The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+				The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+			</s:text>
+		</s:TextArea>-->
+		
+		<s:BorderContainer height="25" width="100%" backgroundColor="0xDCDCDC" borderStyle="solid">
+			<s:layout>
+				<s:HorizontalLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" verticalAlign="middle"/>
+			</s:layout>
+			<s:Label text="Line Numbers :" />
+			<s:Label id="lineNumbers" />
+			<s:Spacer width="100%" />
+			<s:HGroup horizontalAlign="right">
+				<s:Label text="File Size :" />
+				<s:Label id="fileSize" right="0" />
+			</s:HGroup>
+		</s:BorderContainer>
+	</s:VGroup>
+		
+</s:TitleWindow>

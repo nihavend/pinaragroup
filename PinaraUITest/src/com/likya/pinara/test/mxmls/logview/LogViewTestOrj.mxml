@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:testhtml="services.testhtml.*">
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.mxmls.PopupForm;
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.TitleWindow;
+			import spark.layouts.HorizontalLayout;
+			
+			import flashx.textLayout.conversion.TextConverter;
+			
+			[Bindable] 
+			private var popupTitle:String = new String();
+			
+			[Bindable] 
+			private var xmlPopup:Boolean = false;
+			
+			private function showPopup(popupData:String):void {
+				
+				var popupForm:PopupForm = PopupForm(PopUpManager.createPopUp(this, PopupForm, true));
+				
+				popupForm.title = popupTitle;
+				
+				// if (xmlPopup) {
+				//	popupForm.tlosXmlPopup.text = popupData;
+				//} else {
+					popupForm.tlosPopup.text = popupData;
+				//}
+				PopUpManager.centerPopUp(popupForm);
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				var result:Object = event.result;
+				// showPopup(testHtml);
+				//tlosPopup.text = testHtml;
+				// Alert.show("" + testHtml.search("Adobe"));
+				// tlosPopup.textFlow = TextConverter.importToFlow(testHtml, TextConverter.TEXT_FIELD_HTML_FORMAT);
+				
+				// myhtmlDisplay.textFlow = TextConverter.importToFlow(testHtml, TextConverter.TEXT_FIELD_HTML_FORMAT);
+				
+				// htmlDisplay.content = String(result);
+				// myhtmlDisplay.content = result;
+				
+				//myHtmlDisplay.htmlText = meta.MYHTML;
+				
+				fillMyhtmlDisplay(myhtmlMx, event);
+				
+				myhtmlSpark.textFlow = TextConverter.importToFlow(String(event.result), TextConverter.PLAIN_TEXT_FORMAT);		
+			}
+			
+			private function fillMyhtmlDisplay(comp:Object, event:ResultEvent):void {
+
+				var localComp:mx.controls.TextArea = mx.controls.TextArea(comp);
+				
+				var testHtml:String = String(event.result);
+				
+				localComp.htmlText = testHtml;
+				
+				/*
+				var searchText:String = "Dosya Sonu";
+				
+				var beginIdx:Number = localComp.htmlText.search(searchText);
+				
+				var length:Number = searchText.length;
+				
+				var endIdx:Number = beginIdx + length;
+				
+				myhtmlMx.selectionBeginIndex = 2000; //beginIdx;
+				myhtmlMx.selectionEndIndex = 2200; //endIdx;*/
+			}
+			
+			private function selectText(element:Object, bidx:Number, eIdx:Number):void {
+				
+				// myhtmlSpark.selectionBeginIndex = bidx;
+				// myhtmlSpark.selectionEndIndex = eIdx;
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+				//outputText.text += "\nxmlService_faultHandler " + event;
+			}
+			
+			private function callService():void {
+				liveTreeDataService.send();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void {
+				liveTreeDataService.send();
+			}
+			// url="http://help.adobe.com/en_US/flex/using/WS2db454920e96a9e51e63e3d11c0bf69084-7fd5.html"
+			
+			protected function textinput1_enterHandler(event:FlexEvent):void {
+				// Alert.show(event.target.text);
+				
+				// var localComp:mx.controls.TextArea = mx.controls.TextArea(comp);
+				
+				var localComp:spark.components.TextArea = myhtmlSpark;
+				
+				var beginIdx:Number = localComp.text.search(event.target.text);
+				var length:Number = event.target.text.length;
+				
+				var endIdx:Number = beginIdx + length;
+				
+				myhtmlSpark.selectRange(beginIdx, endIdx);
+				var leaf:SpanElement = myhtmlSpark.textFlow.findLeaf(beginIdx) as SpanElement;
+				leaf.color = 0x00FF33;
+				myhtmlSpark.setFocus();
+				
+				//localComp.selectionBeginIndex = beginIdx; //beginIdx;
+				//localComp.selectionEndIndex = endIdx; //endIdx;
+				
+				// Alert.show("Text : " + event.target.text + " Begin:" + beginIdx + " End : " + endIdx);
+				
+				// myhtmlMx.setFocus();
+			}
+			
+			
+			protected var oldSearchResult :int = 0;
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				var search_Str : String = searchTxt.text;
+				
+				// truncate the text using substring; this gives you everything in mainTextField after your previous search results
+				var truncatedText : String;
+				truncatedText = mainTextField.text.substring(oldSearchResult);
+				
+				var search_result:int = truncatedText.search(search_Str);
+				mainTextField.setFocus();
+				// when you select the range, you want to offset your result index w/ the characters your chopped off  
+				if(search_result != -1) {
+					mainTextField.selectRange(oldSearchResult+search_result,oldSearchResult+search_result+search_Str.length);
+					mainTextField.scrollToRange(oldSearchResult+search_result - 20);
+					oldSearchResult = oldSearchResult+search_result+search_Str.length;
+				} else {
+					Alert.show('no more results');
+					oldSearchResult = 0;
+				}
+				mainTextField.textFlow.findLeaf(oldSearchResult+search_result - 20);
+			}
+			
+			private function showLogin():void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, LogView, true) as TitleWindow;
+				PopUpManager.centerPopUp(helpWindow);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:HTTPService id="liveTreeDataService" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="http://127.0.0.1:3000/logdetail?fname=myraTrace"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:BasicLayout />
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:String id="htmlSample">
+			<![CDATA[This is <font color="#EE1122">HTML text</font> in a <b>TextArea control</b>. Use the <u>textFlow property</u> of the <font color="#22A050">TextArea control</font> to include basic HTML markup in your text.</s:a>.
+		]]></fx:String>
+	</fx:Declarations>
+	
+	
+	<s:VGroup left="10" right="10" top="10" bottom="10">
+		<s:Button label="Show Log"/>
+		<s:Form height="100%" width="100%" visible="true">
+			<s:FormItem label="Search Text" layout="{new HorizontalLayout()}" width="100%" >
+				<s:TextInput id="searchTxt" text="the" />
+				<s:Button label="Search Next" click="button1_clickHandler(event)" />
+				<s:Button label="ShowLog"/>
+				<s:Button label="Search Next" click="button1_clickHandler(event)" />
+			</s:FormItem>
+			<s:FormItem height="100%" width="100%">
+				<s:TextArea  id="mainTextField" verticalScrollPolicy="on">
+					<s:text>
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+					</s:text>
+				</s:TextArea>
+			</s:FormItem>
+		</s:Form>
+		
+		<mx:HBox verticalAlign="middle" visible="false">
+			<s:Label text="Ara"></s:Label>
+			<s:TextInput enter="textinput1_enterHandler(event)" />
+		</mx:HBox>
+		
+		<s:TextArea id="myhtmlSpark" width="800" height="300" editable="false" selectable="false" visible="false">
+		</s:TextArea>
+		
+		<s:TextArea id="htmlDisplay" width="400" height="100" editable="false" visible="false">
+			<s:content>This is <s:span color="#FF0000">HTML text</s:span>
+				in an <s:span fontWeight="bold">Spark TextArea control</s:span>.
+				Use the <s:span textDecoration="underline">content</s:span> property
+				of the <s:span color="#008800">Spark TextArea control</s:span> 
+				to include basic HTML markup in your text, including
+				<s:a href="http://www.adobe.com" target="_blank">links</s:a>.
+			</s:content>
+		</s:TextArea>
+		
+		<s:TextArea width="400" height="100" editable="false" textFlow="{TextConverter.importToFlow(htmlSample, TextConverter.TEXT_FIELD_HTML_FORMAT)}" visible="false">
+		</s:TextArea>
+
+		<mx:TextArea id="myhtmlMx" width="800" height="300" editable="false" selectable="false" visible="false">
+		</mx:TextArea>
+
+		<s:List id="listLog" visible="false">
+			
+		</s:List>
+		
+	</s:VGroup>
+
+	
+</s:Application>
+
+<!--s:Button click="callService()" visible="false"/>
+<s:Panel>
+<s:RichText id="tlosPopup"  width="100%" height="100%" textAlign="justify" fontFamily="Arial" fontSize="12"/>
+</s:Panel-->
+
+<!--s:layout> 
+	<s:VerticalLayout/> 
+</s:layout>
+
+
+
+<s:Label text="To enable horizontal scrolling, set lineBreak to explicit:"/>
+
+<s:Scroller>  
+	<s:RichEditableText id="tlosPopup" height="300" width="800"
+						editable="false"
+						selectable="true">
+		<s:text>
+			This text scrolls horizontally! This text scrolls horizontally! This text scrolls horizontally!
+			This text scrolls horizontally! This text scrolls horizontally! This text scrolls horizontally!
+		</s:text>
+	</s:RichEditableText>
+</s:Scroller-->
+
+
+<!--s:Scroller>  
+<s:RichEditableText height="100" width="200"
+editable="true"
+selectable="true">
+<s:text>
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+This text scrolls vertically!
+</s:text>
+</s:RichEditableText>
+</s:Scroller-->

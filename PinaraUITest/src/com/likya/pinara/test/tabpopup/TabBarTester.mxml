@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:layout>
+		<s:VerticalLayout paddingLeft="20" paddingTop="20"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+			private function showLogin():void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(helpWindow);
+				
+			}
+		]]>
+	</fx:Script>
+<!--	<s:TabBar>  
+		<mx:ArrayCollection>
+			<fx:String>Flash</fx:String> 
+			<fx:String>Director</fx:String> 
+			<fx:String>Dreamweaver</fx:String> 
+			<fx:String>ColdFusion</fx:String> 
+		</mx:ArrayCollection>
+	</s:TabBar>-->
+	
+	<s:VGroup>
+		
+		<!-- Create a Spark ButtonBar control to navigate 
+		the ViewStack container. -->
+		<s:TabBar dataProvider="{vs}"/>
+		<s:Button y="-27" right="320" label="Login" click="showLogin();"/>
+		<!-- Define the ViewStack and the three child containers. -->
+		
+		<mx:ViewStack id="vs" width="400" height="300" left="8" y="23">
+			<s:NavigatorContent label="Tab 1"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<s:Label left="3" top="5" text="This is my first tab..."/>
+				</s:BorderContainer>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 2"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<s:Label left="3" top="5" text="This is my second tab..."/>
+				</s:BorderContainer>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Tab 3"  width="100%" height="100%">
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<s:Label left="3" top="5" text="This is my third tab..."/>
+				</s:BorderContainer>
+			</s:NavigatorContent>
+		</mx:ViewStack>
+	</s:VGroup>
+</s:Application>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:testhtml="services.testhtml.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			[Bindable] 
+			private var popupTitle:String = new String();
+			
+			[Bindable] 
+			private var xmlPopup:Boolean = false;
+			
+			private function showLogin():void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var fileViewWindow:LogView = PopUpManager.createPopUp(this, LogView, true) as LogView;
+				fileViewWindow.fileTag = "myraTrace";
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(fileViewWindow);
+				
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
+	</s:layout>
+	
+	<s:Button label="Search Next" click="showLogin()"/>
+	
+</s:Application>

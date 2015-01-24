@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:joblistxmlreader="services.joblistxmlreader.*"
+			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import valueObjects.GenericJob;
+			
+			
+			protected function application_creationCompleteHandler(event:FlexEvent):void {
+				//getDataResult.token = serkan.getData();
+				
+				var genericJob:GenericJob = new GenericJob();
+				
+				//var jobListReader:JobListXmlReader = new JobListXmlReader();
+				
+				// Alert.show(genericJob.Id.toString());
+			}
+			
+			private function getDataResultHandler(event:ResultEvent):void {
+				if (event.result != null) {
+					try {
+						var genericJobArray:Array = event.result.toArray();
+						/*
+						for each (var genericJob:GenericJob in genericJobArray) {
+							Alert.show("genericJob.myra2_baseJobInfos.wla_jsName : " + genericJob.myra2_baseJobInfos.wla_jsName);
+							Alert.show("genericJob.dangerZoneGroupId : " + genericJob.dangerZoneGroupId);
+						}
+						*/
+						jobListGrid.dataProvider = new ArrayCollection(genericJobArray);
+						// Alert.show("I'm here getDataResultHandler !" + genericJobArray[0]);
+						// var genericJob:GenericJob = GenericJob(event.result[0]);
+						//Alert.show("I'm here getDataResultHandler !" + genericJob.myra2_baseJobInfos.wla_jsName);
+						//Alert.show("I'm here getDataResultHandler !" + event.result.length);
+					} catch (e:Error){
+						Alert.show(e.message);
+					} 
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:XML id="jobListXml" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUI/xmls/cleanList.xml"/>
+		<s:XMLListCollection id="jobListXmlCollection" source="{jobListXml.children()}" />
+		
+		<!--joblistxmlreader:JobListXmlReader id="serkan" /-->
+		<s:CallResponder id="getDataResult" result="getDataResultHandler(event)" />
+	</fx:Declarations>
+	
+	<s:DataGrid id="jobListGrid">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn headerText="{resourceManager.getString('messages', 'stateGrid')}" width="60">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<s:layout>
+									<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+								</s:layout>
+								<fx:Script>
+									<![CDATA[
+										import com.likya.pinara.test.actscrpts.ImageContainer;
+									]]>
+								</fx:Script>
+								<s:Image source="{ImageContainer.getStatuImage(data.id)}" toolTip="{resourceManager.getString('messages', 'readyTooltip')}"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="80">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<s:layout>
+									<s:VerticalLayout  horizontalAlign="center" verticalAlign="middle"/>
+								</s:layout>
+								<fx:Script>
+									<![CDATA[
+										import com.likya.pinara.test.actscrpts.ImageContainer;
+										
+									]]>
+								</fx:Script>
+								<s:Image source="{ImageContainer.getManageImage(data.id)}" toolTip="{resourceManager.getString('messages', 'readyTooltip')}"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<!--s:GridColumn dataField="baseJobInfos.jsName" labelFunction="getJobNameId" headerText="Job Name" width="150">
+				<s:itemRenderer>
+				<fx:Component>
+				<s:DefaultGridItemRenderer textAlign="left" />
+				</fx:Component>
+				</s:itemRenderer>
+				</s:GridColumn-->
+				<s:GridColumn dataField="myra2_baseJobInfos.wla_jsName" headerText="Job Name" width="150">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn dataField="dangerZoneGroupId" headerText="DZ Group Id">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn dataField="Id" headerText="Job Id">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:DefaultGridItemRenderer textAlign="left" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn dataField="groupId" headerText="Group Id" width="90"/>
+				<s:GridColumn dataField="handlerURI" headerText="handlerURI"/>
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+	
+</s:Application>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:cleanlist="services.cleanlist.*"
+			   xmlns:valueObjects="valueObjects.*"
+			   minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			protected function dataGrid_creationCompleteHandler(event:FlexEvent):void
+			{
+				getDataResult.token = cleanList.getData();
+			}
+			
+			
+			protected function button_clickHandler(event:MouseEvent):void
+			{
+				genericJob3.type = typeTextInput.text;
+				genericJob3.groupId = groupIdTextInput.text;
+				genericJob3.dangerZoneGroupId = dangerZoneGroupIdTextInput.text;
+				genericJob3.handlerURI = handlerURITextInput.text;
+				genericJob3.Id = idTextInput.text;
+				genericJob3.agentId = agentIdTextInput.text;
+				genericJob3.baseJobInfos.jsName = jsNameTextInput.text;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getDataResult"/>
+		<cleanlist:CleanList id="cleanList" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<valueObjects:GenericJob id="genericJob">
+			<valueObjects:baseJobInfos>
+				<valueObjects:BaseJobInfos>
+					<valueObjects:jobTypeDetails>
+						<valueObjects:JobTypeDetails/>
+					</valueObjects:jobTypeDetails>
+				</valueObjects:BaseJobInfos>
+			</valueObjects:baseJobInfos>
+			<valueObjects:DependencyList>
+				<valueObjects:DependencyList_type>
+					<valueObjects:Item>
+						<valueObjects:Item_type/>
+					</valueObjects:Item>
+				</valueObjects:DependencyList_type>
+			</valueObjects:DependencyList>
+			<valueObjects:stateInfos>
+				<valueObjects:StateInfos>
+					<valueObjects:LiveStateInfos>
+						<valueObjects:LiveStateInfos_type/>
+					</valueObjects:LiveStateInfos>
+				</valueObjects:StateInfos>
+			</valueObjects:stateInfos>
+			<valueObjects:management>
+				<valueObjects:Management>
+					<valueObjects:periodInfo>
+						<valueObjects:PeriodInfo/>
+					</valueObjects:periodInfo>
+					<valueObjects:timeManagement>
+						<valueObjects:TimeManagement/>
+					</valueObjects:timeManagement>
+					<valueObjects:cascadingConditions>
+						<valueObjects:CascadingConditions/>
+					</valueObjects:cascadingConditions>
+				</valueObjects:Management>
+			</valueObjects:management>
+			<valueObjects:scheduleInfo>
+				<valueObjects:ScheduleInfo>
+					<valueObjects:daysOfMonth>
+						<valueObjects:DaysOfMonth/>
+					</valueObjects:daysOfMonth>
+				</valueObjects:ScheduleInfo>
+			</valueObjects:scheduleInfo>
+		</valueObjects:GenericJob>
+		<valueObjects:GenericJob id="genericJob2">
+			<valueObjects:baseJobInfos>
+				<valueObjects:BaseJobInfos>
+					<valueObjects:jobTypeDetails>
+						<valueObjects:JobTypeDetails/>
+					</valueObjects:jobTypeDetails>
+				</valueObjects:BaseJobInfos>
+			</valueObjects:baseJobInfos>
+			<valueObjects:DependencyList>
+				<valueObjects:DependencyList_type>
+					<valueObjects:Item>
+						<valueObjects:Item_type>
+							<valueObjects:jsDependencyRule>
+								<valueObjects:JsDependencyRule/>
+							</valueObjects:jsDependencyRule>
+						</valueObjects:Item_type>
+					</valueObjects:Item>
+				</valueObjects:DependencyList_type>
+			</valueObjects:DependencyList>
+		</valueObjects:GenericJob>
+		<valueObjects:GenericJob id="genericJob3">
+			<valueObjects:baseJobInfos>
+				<valueObjects:BaseJobInfos/>
+			</valueObjects:baseJobInfos>
+		</valueObjects:GenericJob>
+		<valueObjects:GenericJob id="genericJob4">
+			<valueObjects:baseJobInfos>
+				<valueObjects:BaseJobInfos>
+					<valueObjects:jobTypeDetails>
+						<valueObjects:JobTypeDetails/>
+					</valueObjects:jobTypeDetails>
+				</valueObjects:BaseJobInfos>
+			</valueObjects:baseJobInfos>
+			<valueObjects:DependencyList>
+				<valueObjects:DependencyList_type>
+					<valueObjects:Item>
+						<valueObjects:Item_type/>
+					</valueObjects:Item>
+				</valueObjects:DependencyList_type>
+			</valueObjects:DependencyList>
+			<valueObjects:stateInfos>
+				<valueObjects:StateInfos>
+					<valueObjects:LiveStateInfos>
+						<valueObjects:LiveStateInfos_type/>
+					</valueObjects:LiveStateInfos>
+				</valueObjects:StateInfos>
+			</valueObjects:stateInfos>
+			<valueObjects:management>
+				<valueObjects:Management>
+					<valueObjects:periodInfo>
+						<valueObjects:PeriodInfo/>
+					</valueObjects:periodInfo>
+					<valueObjects:timeManagement>
+						<valueObjects:TimeManagement/>
+					</valueObjects:timeManagement>
+					<valueObjects:cascadingConditions>
+						<valueObjects:CascadingConditions/>
+					</valueObjects:cascadingConditions>
+				</valueObjects:Management>
+			</valueObjects:management>
+			<valueObjects:scheduleInfo>
+				<valueObjects:ScheduleInfo>
+					<valueObjects:daysOfMonth>
+						<valueObjects:DaysOfMonth/>
+					</valueObjects:daysOfMonth>
+				</valueObjects:ScheduleInfo>
+			</valueObjects:scheduleInfo>
+		</valueObjects:GenericJob>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Binding destination="genericJob" source="dataGrid.selectedItem as GenericJob"/>
+	<fx:Binding destination="genericJob3" source="dataGrid.selectedItem as GenericJob"/>
+	<fx:Binding destination="genericJob4" source="dataGrid.selectedItem as GenericJob"/>
+
+	<s:DataGrid id="dataGrid" creationComplete="dataGrid_creationCompleteHandler(event)">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="type" headerText="type"></s:GridColumn>
+				<s:GridColumn dataField="groupId" headerText="groupId"></s:GridColumn>
+				<s:GridColumn dataField="dangerZoneGroupId" headerText="dangerZoneGroupId"></s:GridColumn>
+				<s:GridColumn dataField="handlerURI" headerText="handlerURI"></s:GridColumn>
+				<s:GridColumn dataField="Id" headerText="Id"></s:GridColumn>
+				<s:GridColumn dataField="agentId" headerText="agentId"></s:GridColumn>
+				<s:GridColumn dataField="baseJobInfos" headerText="baseJobInfos"></s:GridColumn>
+				<s:GridColumn dataField="DependencyList" headerText="DependencyList"></s:GridColumn>
+				<s:GridColumn dataField="stateInfos" headerText="stateInfos"></s:GridColumn>
+				<s:GridColumn dataField="management" headerText="management"></s:GridColumn>
+				<s:GridColumn dataField="scheduleInfo" headerText="scheduleInfo"></s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getDataResult.lastResult}"/>
+		
+	</s:DataGrid>
+	<s:Form defaultButton="{button}">
+		<s:FormItem label="Type">
+			<s:TextInput id="typeTextInput" text="{genericJob3.type}"/>
+		</s:FormItem>
+		<s:FormItem label="GroupId">
+			<s:TextInput id="groupIdTextInput" text="{genericJob3.groupId}"/>
+		</s:FormItem>
+		<s:FormItem label="DangerZoneGroupId">
+			<s:TextInput id="dangerZoneGroupIdTextInput" text="{genericJob3.dangerZoneGroupId}"/>
+		</s:FormItem>
+		<s:FormItem label="HandlerURI">
+			<s:TextInput id="handlerURITextInput" text="{genericJob3.handlerURI}"/>
+		</s:FormItem>
+		<s:FormItem label="Id">
+			<s:TextInput id="idTextInput" text="{genericJob3.Id}"/>
+		</s:FormItem>
+		<s:FormItem label="AgentId">
+			<s:TextInput id="agentIdTextInput" text="{genericJob3.agentId}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="BaseJobInfos"/>
+		<s:FormItem label="JsName">
+			<s:TextInput id="jsNameTextInput" text="{genericJob3.baseJobInfos.jsName}"/>
+		</s:FormItem>
+		<s:Button id="button" label="Submit" click="button_clickHandler(event)"/>
+	</s:Form>
+	<s:Form>
+		<s:FormItem label="Type">
+			<s:Label id="typeLabel" text="{genericJob4.type}"/>
+		</s:FormItem>
+		<s:FormItem label="GroupId">
+			<s:Label id="groupIdLabel" text="{genericJob4.groupId}"/>
+		</s:FormItem>
+		<s:FormItem label="DangerZoneGroupId">
+			<s:Label id="dangerZoneGroupIdLabel" text="{genericJob4.dangerZoneGroupId}"/>
+		</s:FormItem>
+		<s:FormItem label="HandlerURI">
+			<s:Label id="handlerURILabel" text="{genericJob4.handlerURI}"/>
+		</s:FormItem>
+		<s:FormItem label="Id">
+			<s:Label id="idLabel" text="{genericJob4.Id}"/>
+		</s:FormItem>
+		<s:FormItem label="AgentId">
+			<s:Label id="agentIdLabel" text="{genericJob4.agentId}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="BaseJobInfos"/>
+		<s:FormItem label="JsName">
+			<s:Label id="jsNameLabel" text="{genericJob4.baseJobInfos.jsName}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="JobTypeDetails"/>
+		<s:FormItem label="JobCommandType">
+			<s:Label id="jobCommandTypeLabel" text="{genericJob4.baseJobInfos.jobTypeDetails.jobCommandType}"/>
+		</s:FormItem>
+		<s:FormItem label="JobCommand">
+			<s:Label id="jobCommandLabel" text="{genericJob4.baseJobInfos.jobTypeDetails.jobCommand}"/>
+		</s:FormItem>
+		<s:FormItem label="JobPath">
+			<s:Label id="jobPathLabel" text="{genericJob4.baseJobInfos.jobTypeDetails.jobPath}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="JobLogFile">
+			<s:Label id="jobLogFileLabel" text="{genericJob4.baseJobInfos.jobLogFile}"/>
+		</s:FormItem>
+		<s:FormItem label="JobLogPath">
+			<s:Label id="jobLogPathLabel" text="{genericJob4.baseJobInfos.jobLogPath}"/>
+		</s:FormItem>
+		<s:FormItem label="OSystem">
+			<s:Label id="oSystemLabel" text="{genericJob4.baseJobInfos.oSystem}"/>
+		</s:FormItem>
+		<s:FormItem label="JobPriority">
+			<s:Label id="jobPriorityLabel" text="{genericJob4.baseJobInfos.jobPriority}"/>
+		</s:FormItem>
+		<s:FormItem label="JsIsActive">
+			<s:Label id="jsIsActiveLabel" text="{genericJob4.baseJobInfos.jsIsActive}"/>
+		</s:FormItem>
+		<s:FormItem label="UserId">
+			<s:Label id="userIdLabel" text="{genericJob4.baseJobInfos.userId}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="DependencyList_type"/>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="Item_type"/>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="DependencyID">
+			<s:Label id="dependencyIDLabel" text="{genericJob4.DependencyList.Item.dependencyID}"/>
+		</s:FormItem>
+		<s:FormItem label="JsName">
+			<s:Label id="jsNameLabel2" text="{genericJob4.DependencyList.Item.jsName}"/>
+		</s:FormItem>
+		<s:FormItem label="JsId">
+			<s:Label id="jsIdLabel" text="{genericJob4.DependencyList.Item.jsId}"/>
+		</s:FormItem>
+		<s:FormItem label="JsType">
+			<s:Label id="jsTypeLabel" text="{genericJob4.DependencyList.Item.jsType}"/>
+		</s:FormItem>
+		<s:FormItem label="Comment">
+			<s:Label id="commentLabel" text="{genericJob4.DependencyList.Item.comment}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="DependencyExpression">
+			<s:Label id="dependencyExpressionLabel" text="{genericJob4.DependencyList.DependencyExpression}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="StateInfos"/>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="LiveStateInfos_type"/>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="Management"/>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="Trigger">
+			<s:Label id="triggerLabel" text="{genericJob4.management.trigger}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="PeriodInfo"/>
+		<s:FormItem label="Step">
+			<s:Label id="stepLabel" text="{genericJob4.management.periodInfo.step}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="TimeManagement"/>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="ExpectedDuration">
+			<s:Label id="expectedDurationLabel" text="{genericJob4.management.timeManagement.expectedDuration}"/>
+		</s:FormItem>
+		<s:FormItem label="PreviousDuration">
+			<s:Label id="previousDurationLabel" text="{genericJob4.management.timeManagement.previousDuration}"/>
+		</s:FormItem>
+		<s:FormItem label="RealizedDuration">
+			<s:Label id="realizedDurationLabel" text="{genericJob4.management.timeManagement.realizedDuration}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="CascadingConditions"/>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="RunEvenIfFailed">
+			<s:Label id="runEvenIfFailedLabel" text="{genericJob4.management.cascadingConditions.runEvenIfFailed}"/>
+		</s:FormItem>
+		<s:FormItem label="JobSafeToRestart">
+			<s:Label id="jobSafeToRestartLabel" text="{genericJob4.management.cascadingConditions.jobSafeToRestart}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="ScheduleInfo"/>
+		<mx:HRule width="100%"/>
+		<s:FormHeading label="DaysOfMonth"/>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="Days">
+			<s:Label id="daysLabel" text="{genericJob4.scheduleInfo.daysOfMonth.days}"/>
+		</s:FormItem>
+		<mx:HRule width="100%"/>
+		<s:FormItem label="DaysOfWeekIntType">
+			<s:Label text="String[]"/>
+		</s:FormItem>
+	</s:Form>
+
+</s:Application>

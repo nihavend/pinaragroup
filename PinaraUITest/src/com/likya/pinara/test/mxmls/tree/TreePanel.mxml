@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:containers="com.likya.pinara.containers.*"
+		 preinitialize="loadTreeData()" creationComplete="onCreationComplete(true)" xmlns:actscrpts="com.likya.pinara.test.actscrpts.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.events.ResourceEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.controls.Tree;
+			import mx.events.ListEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.Image;
+			
+			
+			[Bindable]
+			private var treeXml:XML;/* = 	<list>
+											<jobGroup title="group_1" id="1">
+												<jobProperty title="Dosyayı Yükle" id="3" ip="1" port="1" />
+												<jobProperty title="Diske yaz" id="1" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="4" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+										</list>;*/
+			
+			[Bindable]
+			[Embed(source="/images/tlosTree.jpg")]
+			private var tlosFolderImg:Class;
+			
+			[Bindable] 
+			private var tlosTreeData:XMLListCollection;// = new XMLListCollection(treeXml.jobGroup); 
+			
+			public function loadTreeData():void {
+				
+				treeXml = <list>
+											<jobGroup title="group_1" id="1">
+												<jobProperty title="Dosyayı Yükle" id="1" ip="1" port="1"/>
+												<jobProperty title="Diske yaz" id="1" ip="1" port="1" />
+												<jobGroup title="group_2" id="2">
+													<jobGroup title="group_2" id="2">
+														<jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+														<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+														<jobGroup title="group_2" id="2">
+															<jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+															<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+														</jobGroup>
+													</jobGroup>
+													<jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+													<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+												</jobGroup>
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="2" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="3" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="4" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="5" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="6" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="7" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="8" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="9" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+											<jobGroup title="group_2" id="2">
+												<jobProperty title="ETL_LOAD_SUBSCDATA" id="10" ip="1" port="1" />
+												<jobProperty title="UPDATE STATUS" id="2" ip="1" port="1" />
+											</jobGroup>
+										</list>;
+				tlosTreeData = new XMLListCollection(treeXml.jobGroup); 
+			}
+			public function onCreationComplete(action:Boolean):void {
+				for (var i:int = 0; i < jobTree.dataProvider.length;i++) {
+					callLater(jobTree.expandChildrenOf, [ jobTree.dataProvider[i], action]);
+				}
+			}
+			
+			private function setWidth():void {
+				// Alert.show("width before : " + jobTree.width);
+				jobTree.percentWidth = 100;
+				// Alert.show("width after : " + jobTree.width);
+			}
+			
+			private function treeLabel(item:Object):String { 
+				
+				var node:XML = XML(item); 
+				//Alert.show(node.localName());
+				if (node.localName() == "jobGroup") 
+					return node.@title + " [Id:" + node.@id + "]"; 
+				else 
+					//return node.@name; 
+					return node.@title + " [Id:" + node.@id + "]"; 
+			} 
+			
+			private function treeIconFunc(item:Object):Class { 
+				
+				var node:XML = XML(item); 
+				if (node.@id == "0") {
+					return tlosFolderImg;
+				} else if (node.localName() == "node") {
+					var consData:ArrayCollection = null //tlosConnections;
+					/*
+					for each (var tlosConn:TlosConnection in consData) {
+						if (node.@ip.toString() == tlosConn.ipAddress && node.@port.toString() == tlosConn.port) {
+							if (tlosConn.enable == "N") {
+								return null //tlosDisabledImage;
+							} else if (tlosConn.isConnected) {
+								return null //tlosConnectedImage;
+							}
+						}
+					}*/
+						
+
+					return tlosFolderImg //tlosDisconnectedImage;
+				} else {
+					
+					
+					tlosFolderImg.scaleX = 0.2;
+					tlosFolderImg.scaleY = 0.2;
+					
+					return tlosFolderImg;
+					
+					// return tlosFolderImg;
+				}
+			}
+			
+			private function tlosTree_itemClickHandler(e:ListEvent):void {
+				
+				var selectedNode:XML = Tree(e.target).selectedItem as XML;
+				var selectedTreeItem:Object = Tree(e.target).selectedItem;
+				
+				// Alert.show("Title : " + selectedNode.@title);
+				// Alert.show("localName : " + selectedNode.localName());
+				if (selectedNode.localName() == "jobGroup") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED));
+				} else if (selectedNode.localName() == "jobProperty") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED));
+				}
+				
+				/*
+				if (selectedNode.@ip.toString() == "1") {
+					disablePage();
+					
+					jobListType = ALL_JOBS_VIEW;
+					getAllTlosJobs();
+					selectedNode = null;
+					
+					currentState = 'tlosState';
+				} else if (selectedNode.@enable == "Y") {
+					enableTlosBasedMenu(true);
+					
+					tlosUser.userName = selectedNode.@userName;
+					tlosUser.userPassword = selectedNode.@password;
+					
+					tlosConnection = new TlosConnection();
+					tlosConnection.id = selectedNode.@id;
+					tlosConnection.tlosName = selectedNode.@name;
+					tlosConnection.ipAddress = selectedNode.@ip.toString();
+					tlosConnection.port = selectedNode.@port;
+					tlosConnection.tlosUserName = selectedNode.@userName;
+					tlosConnection.tlosPassword = selectedNode.@password;
+					
+					jmxService.init(tlosConnection, FILTER_ALL, jmxTimeout);
+					
+					disablePage();
+					
+					jobListType = ONE_TLOS_VIEW;
+					currentState = 'oneTlosState';
+				}
+				*/
+				
+			}
+			
+			private function toggleTreeComp():void {
+				if(toggleTree.toolTip == "Collapse") {
+					toggleTree.toolTip = "Expand";
+					toggleTree.label = "Expand";
+					onCreationComplete(false);
+				} else {
+					toggleTree.toolTip = "Collapse";
+					toggleTree.label = "Collapse";
+					onCreationComplete(true);
+				}
+			}
+			
+			protected function exampleXMLService_resultHandler(event:ResultEvent):void {
+				// trace("xmlService_resultHandler");
+				// Alert.show(event.result as XML);
+				
+				jobTree.dataProvider = new XMLListCollection((event.result as XML).jobGroup);
+				onCreationComplete(true);
+				/*outputText.text += "\nXML loaded";
+				decodeXML(event.result as XML);
+				exampleForm.enabled = true;*/
+			}
+			
+			
+			protected function exampleXMLService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+				//outputText.text += "\nxmlService_faultHandler " + event;
+			}
+			
+			private function refreshTree():void {
+				liveTreee.send();
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:HTTPService id="liveTreee" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="http://127.0.0.1:3000/flex/restsrvc/joblistXML"
+					   result="exampleXMLService_resultHandler(event)"
+					   fault="exampleXMLService_faultHandler(event)"
+					   />
+		
+	</fx:Declarations>
+	
+	<!--title="{resourceManager.getString('messages', 'tlosTree')}" 
+	color="#0D173C" fontWeight="bold" chromeColor="#E2E5E7" dropShadowVisible="true"
+	width="240" height="100%"-->
+	<actscrpts:CollapsiblePanel id="tlosTreePanel" height="100%" width="100%" title="{resourceManager.getString('messages', 'tlosTree')}" >
+		
+		<!--tlosTreeData-->
+		<actscrpts:AutoSizeTree id="jobTree"
+				 iconField="@icon"
+				 labelField="@label"
+				 fontSize="12"
+				 showRoot="true"				 
+				 dataProvider="{tlosTreeData}"
+				 labelFunction="treeLabel"
+				 iconFunction="treeIconFunc"
+				 height="100%"				 
+				 width="220"
+				 focusColor="#E67A7A"				 
+				 textRollOverColor="#FFFFFF"				 
+				 textSelectedColor="#063741"	
+				 contentBackgroundColor="#DAE0E6"
+				 rollOverColor="#596E76"
+				 chromeColor="#E2E5E7"
+				 selectionColor="#8E9DA0"  
+				 fontWeight="bold" 
+				 color="#0D173C"
+				 left="0" top="0" right="0" bottom="0"
+				 itemClick="tlosTree_itemClickHandler(event)" />
+		
+		<s:Button id="toggleTree" y="-27" right="40" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
+		
+		<s:Button id="refreshTreeButton" y="-27" right="10" width="30" click="refreshTree()" toolTip="Refresh" label="R"/>
+		
+	</actscrpts:CollapsiblePanel>	
+</s:Group>

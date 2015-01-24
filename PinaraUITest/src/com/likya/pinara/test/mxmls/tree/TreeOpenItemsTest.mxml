@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:actscrpts="com.likya.pinara.test.actscrpts.*"
+			   minWidth="955" minHeight="600" creationComplete="loadTreeData()">
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.actscrpts.DataLoader;
+			
+			import mx.events.ListEvent;
+			
+			
+			// [Bindable]
+			// [Embed(source="/images/tlosTree.jpg")]
+			// private var tlosFolderImg:Class;
+			
+			// private static var treeXml:XML = <root><list title="ana liste" id="000"/></root>;
+			// private static var treeXmlNew:XML = <root><list title="ana liste" id="000"/></root>;
+			
+			//[Bindable] 
+			//public static var tlosTreeData:XMLListCollection;
+			
+			//[Bindable] 
+			//public static var tlosTreeData:XMLListCollection;
+			
+			// public var treeOpenItems:Object;
+			
+			[Bindable]
+			private var treeXmlList:XMLList = new XMLList();
+			
+			public function loadTreeData():void {
+				
+				var treeXml:XML = DataLoader.loadXMLLong();
+				
+				// trace("treeXml" + treeXml[0].toString());
+				
+				treeXmlList = new XMLList(treeXml);
+				
+				/// trace("treeXmlList" + treeXmlList[0].toString());
+				
+				// tlosTreeData = new XMLListCollection(treeXml.jobGroup); 
+				// treeXmlNew = "";
+				init();
+			}
+			
+			public function XmlExample():void {
+				var employees:XML =
+					<employees>
+						<employee ssn="123-123-1234">
+							<name first="John" last="Doe"/>
+							<address>
+								<street>11 Main St.</street>
+								<city>San Francisco</city>
+								<state>CA</state>
+								<zip>98765</zip>
+							</address>
+						</employee>
+						<employee ssn="789-789-7890">
+							<name first="Mary" last="Roe"/>
+							<address>
+								<street>99 Broad St.</street>
+								<city>Newton</city>
+								<state>MA</state>
+								<zip>01234</zip>
+							</address>
+						</employee>
+					</employees>;
+				
+				trace(employees.employee[0].address.zip);   // 98765
+				
+				trace(employees.employee[1].@ssn);          // 789-789-7890
+				
+				trace(employees.employee.name);             // <name first="John" last="Doe"/>
+				// <name first="Mary" last="Roe"/>
+				
+				trace(employees..zip[0]);                   // 98765
+				
+				trace(employees..@ssn[1]);                  // 789-789-7890
+				
+				trace(employees..name);                     // <name first="John" last="Doe"/>
+				// <name first="Mary" last="Roe"/>
+				
+				trace(employees.employee[0].address.*);     // <street>11 Main St.</street>    
+				// <city>San Francisco</city>
+				// <state>CA</state>
+				// <zip>98765</zip>
+				var node:String = "zip";
+				trace(employees.employee[0].address[node]); // 98765
+				
+				var attribute:String = "ssn";
+				trace(employees.employee[1].@[attribute]);  // 789-789-7890
+				
+				for each (var num:XML in employees..@ssn) {
+					trace(num);                             // 123-123-1234
+				}                                           // 789-789-7890
+				
+				var ssnToFind:String = "789-789-7890";
+				trace(employees.employee.(@ssn == ssnToFind).toXMLString());
+				// <employee ssn="789-789-7890">
+				// <name first="Mary" last="Roe"/>
+				// <address>
+				// <street>99 Broad St.</street>
+				// <city>Newton</city>
+				// <state>MA</state>
+				// <zip>01234</zip>
+				// </address>
+				// </employee>
+			}
+			
+			public function refreshTree():void {
+				
+				trace("enter : refreshTree");
+				
+				var treeOpenItems:Object;
+				treeOpenItems = jobTree.openItems;
+				var treeXml:XML = DataLoader.loadXMLLongNew();
+				try {
+					treeXmlList = new XMLList(treeXml);
+					jobTree.validateNow();
+					// jobTree.openItems = treeOpenItems;
+					// trace(XMLList(treeXml.jobGroup).length());
+					// jobTree.expandItem(treeXml, true);
+					// jobTree.expandItem(treeXml.jobGroup[8], true);
+					// trace("item : " + treeXml.jobGroup[8]);
+					// trace("items in open items : " + new Array(treeOpenItems).length);
+					// trace("items[0] in open items : " + new Array(treeOpenItems)[0]);
+					for each(var item:XML in treeOpenItems) {
+						// trace("item(s) in open items : " + item);
+						// jobTree.expandItem(item, true);
+						// trace(item.name()); // Dedect root node
+						if(item.name() == "list") {
+							trace(treeOpenItems);
+							jobTree.expandItem(treeXmlList[0], true);
+						} else {
+							jobTree.expandItem(treeXmlList..jobGroup.(@id == item.@id)[0], true);
+						}
+					}
+					jobTree.validateNow();
+				} catch(err:Error) {
+					trace(err);
+				}
+				//treeXmlList = new XMLList(treeXml); 
+				//trace("treeXmlList.length() : " + treeXmlList.length());
+				// callLater(refreshTreeAfter);
+				// Alert.show(XML(treeOpenItems));
+				// for each(var item:XML in treeOpenItems) {
+				// 	Alert.show(item[0]);
+				// 	jobTree.expandItem(item[0], true);
+				// 	break;
+				// }
+				//jobTree.validateNow();
+				//Alert.show(treeXmlList[0].jobGroup);
+				//jobTree.expandItem(treeXmlList[0], true);
+				trace("exit : refreshTree");
+
+			}
+			
+			public function refreshTreeAfter():void {
+				// treeOpenItems = jobTree.openItems;
+				// trace("Refresh pressed : " + jobTree.openItems.length);
+				//var treeXml:XML = DataLoader.loadXMLLong();
+				//treeXmlList = new XMLList(treeXml[0]);
+				//jobTree.openItems = treeOpenItems;
+				// jobTree.validateNow();
+				
+				for each(var item:XML in jobTree.openItems) {
+					jobTree.expandItem(item[0], true);
+					trace(item[0]);
+					return;
+					// trace("item : " + item);
+					// trace("id : " + item.@id);
+					//trace(XML(XMLList(jobTree.dataProvider)..jobGroup.(@id == item.@id)));
+					//trace(XMLList(jobTree.dataProvider)..jobGroup);
+					// trace(XMLList(jobTree.dataProvider)..jobGroup.(@id == item.@id));
+					trace(XMLList(jobTree.dataProvider)..jobGroup.(@id == item.@id)[0]);
+					jobTree.expandItem(XMLList(jobTree.dataProvider)..jobGroup.(@id == item.@id)[0], true);
+					// XML(jobTree.dataProvider..jobGroup.(@attr == item.@attr));
+					// jobTree.expandItem(XML(XMLList(jobTree.dataProvider)..jobGroup.(@id == item.@id)) , true);
+					// jobTree.expandItem(item, true);
+					// jobTree.validateNow();
+				}
+				
+				
+				//for (var i:int = 0; i < jobTree.openItems.length;i++) {
+					// trace("id in oi \n" + XMLList(jobTree.openItems[i]));
+					// trace("id in oi \n" + XMLList(jobTree.openItems[i]).jobGroup.@id + "\n");
+					// trace("id in oi" + XML(jobTree.openItems[i]).@id);
+					// trace(XMLList(jobTree.dataProvider)..jobGroup.@id == jobTree.openItems[i].jobGroup.@id);
+					// trace(XMLList(jobTree.dataProvider)..jobGroup.@id + "\n");
+					// jobTree.expandChildrenOf(jobTree.dataProvider[i], true);	
+				//}
+				jobTree.validateNow();
+			}
+			
+			private function setWidth():void {
+				// Alert.show("width before : " + jobTree.width);
+				jobTree.percentWidth = 100;
+				// Alert.show("width after : " + jobTree.width);
+			}
+			
+			private function treeLabel(item:Object):String { 
+				var node:XML = XML(item); 
+				//Alert.show(node.localName());
+				if (node.localName() == "list") { 
+					return node.@title;
+				} else if (node.localName() == "jobGroup") {
+					return node.@title + " [Id:" + node.@id + "]"; 
+				} else {
+					//return node.@name; 
+					return node.@title + " [Id:" + node.@id + "]"; 
+				} 
+			}
+			
+			private function treeIconFunc(item:Object):Class { 
+				return null;
+			}
+			
+			private function tlosTree_itemClickHandler(e:ListEvent):void {				
+			}
+			
+						
+			// public function loadData():void {
+			// 	tlosTreeData = new XMLListCollection(treeXml.jobGroup);
+			// }
+			
+			//public function refreshTree():void {
+				
+				// treeOpenItems = jobTree.openItems;
+				
+				// trace("refreshTree" + treeOpenItems[0].@title);
+				
+				// trace("treeOpenItems : " + XMLList(treeOpenItems)[0].jobGroup);
+				
+				// for (var i:int = 0; i < treeOpenItems.length;i++) {
+					// trace(treeOpenItems[i]);	
+				// }
+				
+				// return;
+				// for (var i:int = 0; i < jobTree.dataProvider.length;i++) {
+				// 	jobTree.expandChildrenOf(jobTree.dataProvider[i], true);	
+				// }
+				/*
+				var openItems:Object = jobTree.openItems;
+				var tlosTreeDataNew:XMLListCollection = new XMLListCollection(treeXmlNew.jobGroup);
+				jobTree.dataProvider = tlosTreeDataNew;
+				jobTree.openItems = openItems;
+				jobTree.validateNow();
+				*/
+			//}
+
+			private var refreshTimer:Timer;
+			private function init():void {
+				refreshTimer = new Timer(3000);
+				refreshTimer.addEventListener(TimerEvent.TIMER, handleTimer);
+			}
+			private function handleTimer(evt:TimerEvent):void {
+				refreshTree();
+			}			
+			private var startTimerState:Boolean = false;
+			protected function startTimer_clickHandler(event:MouseEvent):void {
+				
+				if(!startTimerState) {
+					startTimer.label = "Stop";
+					refreshTimer.start();
+					refreshTreeButton.enabled = false;
+					trace("Timer started !");
+				} else {
+					startTimer.label = "Start";
+					refreshTimer.stop();
+					refreshTimer.reset();
+					refreshTreeButton.enabled = true;
+					trace("Timer stoped !");
+				}
+				
+				startTimerState = !startTimerState;
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:Panel width="100%" height="80%">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout/>
+			</s:layout>
+
+			<s:Button id="startTimer" y="-27" right="10" width="50" label="Start" click="startTimer_clickHandler(event)" toolTip="Start-Stop Timer"/>
+			<s:Button id="refreshTreeButton" y="-27" right="10" width="30" label="R" click="refreshTree()" toolTip="Refresh" enabled="true" />				
+			
+		</s:Group>
+
+		<!--tlosTreeData-->
+		<actscrpts:AutoSizeTree 
+			id="jobTree" left="0" right="0" top="0" bottom="0" width="520" height="100%" 
+			chromeColor="#E2E5E7" color="#0D173C" contentBackgroundColor="#DAE0E6" 
+			dataProvider="{treeXmlList}" 
+			focusColor="#E67A7A" 
+			fontSize="12" fontWeight="bold" iconField="@icon"
+			iconFunction="treeIconFunc" 
+			itemClick="tlosTree_itemClickHandler(event)" 
+			labelField="@label" labelFunction="treeLabel" 
+			openItems="true" rollOverColor="#596E76" 
+			selectionColor="#8E9DA0" 
+			showRoot="true" 
+			textRollOverColor="#FFFFFF" 
+			textSelectedColor="#063741"/>
+		
+	</s:Panel>
+	
+</s:Application>

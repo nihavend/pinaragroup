@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- working_with_tree_controls/TreeKeepOpen.mxml -->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   initialize="initTree()">
+		
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.controls.Alert;
+				
+				[Bindable]
+				public var open:Object = new Object();
+				[Bindable]
+				public var refreshData:Boolean = false;
+				[Bindable]
+				public var switchObj:Object = new Object();
+				[Bindable]
+				public var firstObj:Object = new Object();
+				[Bindable]
+				public var firstObj1:Object = new Object();
+				[Bindable]
+				public var firstObj2:Object = new Object();
+				[Bindable]
+				public var provider:String = "firstObj";
+				
+				private function initTree():void {
+					/*
+					firstObj = new Object();
+					firstObj.label = "Foods";
+					firstObj.children = new Array();
+					firstObj1.label = "Fruits";
+					firstObj1.children = new Array();
+					firstObj2.label = "Oranges";
+					firstObj1.children[0] = firstObj2;
+					firstObj.children[0] = firstObj1;
+					*/
+					
+					var treeXml:XML = <root title="root"><list title="ana liste" id="000"/></root>;
+					firstObj = treeXml;
+					var treeXml2:XML = <root title="root"><list title="ana liste" id="111"/></root>;
+					switchObj = treeXml2;
+					
+				}
+				
+				public function changeProvider():void {
+					open = SampleTree.openItems;
+					refreshData = true;
+					if (provider == "firstObj") {
+						provider = "switchObj";
+						//SampleTree.dataProvider = switchObj;
+						Alert.show(SampleTree.dataProvider.length);
+						SampleTree.dataProvider.removeAll();
+						Alert.show(SampleTree.dataProvider.length);
+						var treeXml2:XML = <root title="root"><list title="ana liste" id="111"/></root>;
+						firstObj = treeXml2;
+						SampleTree.dataProvider = firstObj;
+					} else {
+						provider = "firstObj";
+						SampleTree.dataProvider = firstObj;
+					}
+					
+				}
+				
+				public function renderTree():void {
+					if (refreshData){
+						/* Refresh Tree on update. */
+						SampleTree.invalidateList();
+						refreshData = false;
+						SampleTree.openItems = open;
+						/* Validate and update properties
+						of the Tree and redraw it if necessary. */
+						SampleTree.validateNow();
+						SampleTree.validateDisplayList();
+					}
+				}
+				
+				private function treeLabel(item:Object):String { 
+					var node:XML = XML(item); 
+					return node.@title + "-" + node.@id; 
+				}
+			]]>
+		</fx:Script>
+		
+		<mx:Tree id="SampleTree" render="renderTree()" labelFunction="treeLabel"
+				 width="250" dataProvider="{firstObj}" labelField="@title"/>
+		<s:Button label="Change Data Provider" click="changeProvider()"/>
+		
+</s:Application>

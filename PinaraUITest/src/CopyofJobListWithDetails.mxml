@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="group1_creationCompleteHandler(event)"
+		 width="100%" height="100%" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:comps="com.likya.pinara.comps.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.utils.Transformer;
+			
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			[Bindable]
+			private var serviceUrl:String = "/flex/restsrvc/joblistxml/";
+			
+			[Bindable]
+			public var selectedNetTreeId:String;
+			
+			[Bindable]
+			public var jobListXml:XML;
+			
+			[Bindable]
+			public var jobListXmlCollection:XMLListCollection = new XMLListCollection();
+			
+			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void {
+				addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChangedHandler);
+			}
+			
+			private function rowSelectionChangedHandler(event:ResourceEvent):void {
+				var currentDataItem:XML = XML(event.object);
+				//const eventGrid:Grid = event.currentTarget.grid;
+				// var currentIndx:int = eventGrid.selectedIndex; 
+				//var currentDataItem:Object = eventGrid.selectedItem; 
+				// pinaraSelIndex.text = String(currentIndx); 
+				// pinaraSelLName.text = String(currentDataItem.baseJobInfos.jsName); 
+				//Alert.show((ImageContainer.getImage(1) as Image).name);
+				/*
+				jobCommand.text = currentDataItem.baseJobInfos.jobTypeDetails.jobCommand;
+				jobLogFile.text = "" + currentDataItem.baseJobInfos.jobLogPath + currentDataItem.baseJobInfos.jobLogFile;
+				prevDuration.text = currentDataItem.runtimeParams.previousDuration;
+				
+				var prevDur:Number = Number(prevDuration.text);
+				var realDur:Number = Number(currentDataItem.runtimeParams.realizedDuration);
+				
+				if(!isNaN(prevDur) && !isNaN(realDur)) {
+					diffDuration.text = "" + (realDur - prevDur);
+				} else {
+					diffDuration.text = "-";
+				}
+				 // "" + (currentDataItem.management.timeManagement.previousDuration - currentDataItem.management.timeManagement.realizedDuration);
+				restartable.text = currentDataItem.management.cascadingConditions.jobSafeToRestart;
+				dzGroup.text = currentDataItem.@dangerZoneGroupId;
+				handlerURI.text = currentDataItem.@handlerURI;
+				*/
+				/*<myra-jobprops:DependencyList>
+							<myra-jobprops:sensInfo>
+								<myra-jobprops:sensDep />
+							</myra-jobprops:sensInfo>
+							<wla:Item dependencyID="mydep">*/
+				
+				// Alert.show("currentDataItem : " + currentDataItem);
+				
+				//Alert.show("DependencyList : " + XMLList(currentDataItem.DependencyList.Item));
+				//meToWaitJobs.dataProvider = currentDataItem.DependencyList;
+				
+				/*
+				if(XML(currentDataItem.runtimeParams).hasOwnProperty("waitingMeJobs")) {
+					Alert.show(XMLList(currentDataItem.runtimeParams.waitingMeJobs.jobId));
+				}
+				*/
+				
+				jobBaseInfoId.refreshData(currentDataItem);
+				
+				if(currentDataItem.hasOwnProperty("runtimeParams")) {
+					depListComp.waitingMeJobs.dataProvider = new XMLListCollection(XMLList(currentDataItem.runtimeParams.waitingMeJobs.jobId));
+				}
+				
+				if(currentDataItem.hasOwnProperty("DependencyList")) {
+					depListComp.meToWaitJobs.dataProvider = new XMLListCollection(XMLList(currentDataItem.DependencyList.Item)); 
+				}
+				
+				stateHistory.dataProvider = new XMLListCollection(XML(currentDataItem.stateInfos.LiveStateInfos).children());
+				
+				detailPanel.visible = true;
+				detailPanel.includeInLayout = true;
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				Alert.show("length : " + jobListXmlCollection.children().toXMLString());
+			}
+
+			public static function getNodeByName(xml:XML, nodeName:Object):XMLList {
+				return xml.descendants(nodeName);
+			}
+			
+			public static function getJobNameId(item:Object, column:GridColumn):String {
+				// Alert.show("" + item);
+				//var node:XML = XML(item); 
+				//item["baseJobInfos.jsName"].toString() + item["@Id"].toString();
+				return item.baseJobInfos.jsName.toString() + " [id:" + item.@Id + "]";
+			}
+			
+			public function getExpectedDuration(item:Object, column:GridColumn):String {
+				return item.management.timeManagement.expectedDuration;
+			}
+
+			private function formatedDate(date:String):String{
+				var arr:Array = date.split(/\:/);
+				return arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3];
+			}
+			
+			private function toggleTreeComp():void {
+				if(toggleTree.toolTip == "Collapse") {
+					toggleTree.toolTip = "Expand";
+					toggleTree.label = "Expand";
+					detailPanel.height = 25;
+					// detailPanelGroup.visible = false;
+				} else {
+					toggleTree.toolTip = "Collapse";
+					toggleTree.label = "Collapse";
+					detailPanel.height = 200;
+					// detailPanelGroup.visible = true;
+				}
+			}
+			
+			public function getStateInfo(item:Object, column:GridColumn):String {
+				var stateInfo:String = "";
+
+				if(item.LiveStateInfo.StateName != null) {
+					stateInfo += item.StateName;
+				}
+				if(item.LiveStateInfo.SubstateName != null) {
+					stateInfo +=  ("-" + item.SubstateName);
+				}
+				if(item.LiveStateInfo.StatusName != null) {
+					stateInfo += ("-" + item.StatusName);
+				}
+				
+				return stateInfo;
+			}
+
+			public function getDepInfo(item:Object):String {
+				var depInfo:String = "";
+				//Alert.show("item : " + XML(item).jsName);
+				if(XML(item).jsId != null) {
+					depInfo += "[id:" + XML(item).jsId + "]";
+				}
+				if(XML(item).jsName != null) {
+					depInfo += ("[" + XML(item).jsName + "]");
+				}
+				
+				return depInfo;
+			}
+
+			public function getDepInfoMeJobs(item:Object):String {
+				var depInfo:String = "";
+				//Alert.show("item : " + XML(item).jsName);
+				if(XML(item).jsId != null) {
+					depInfo += "[id:" + XML(item).jsId + "]";
+				}
+				if(XML(item).jsName != null) {
+					depInfo += ("[" + XML(item).jsName + "]");
+				}
+				
+				return depInfo;
+			}
+			
+			public function updateData():void {
+				var testFlag:Boolean = isNaN(Number(selectedNetTreeId));
+				
+				if(testFlag) {
+					Alert.show("Selected NetTree id is not valid ! >> " + selectedNetTreeId);
+					return;
+				}
+				
+				jobListDS.url = serviceUrl + selectedNetTreeId;
+				jobListDS.send();
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				
+				jobListXml = XML(event.result);
+				
+				// var treeOpenItems:Object;
+				
+				// trace(jobListXml);
+				
+				jobListXmlCollection.source = jobListXml.children(); 
+				detailPanel.visible = false;
+				detailPanel.includeInLayout = false;
+			}
+			
+			public function executeJobCommand(event:MouseEvent, jobId:String, tlosName:String):void {
+				
+			}
+			
+			public function testMe(data:Object):int {
+				
+				// Alert.show("" + (data == "false"));
+				
+				if(data == "false") {
+					return 0;
+					Alert.show("" + data);
+				}
+				
+				return 1;
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+			
+		<s:HTTPService id="jobListDS" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+		
+		<!--s:XMLListCollection id="jobListXmlCollection" source="{jobListXml.children()}" /-->
+		
+	</fx:Declarations>
+	
+	<s:layout> 
+		<s:VerticalLayout/> 
+	</s:layout> 
+	
+	<s:Button label="show xml" click="button1_clickHandler(event)" />
+
+	<jobdetail:PinaraJobListGrid jobListXmlCollection="{jobListXmlCollection}" selectedGroupId="{selectedNetTreeId}"/>
+		
+	<s:Panel id="detailPanel" title="Job Summary Detail Form" height="240" width="100%" visible="false" includeInLayout="false">
+
+		<s:Button id="toggleTree" y="-27" right="10" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
+		<s:HGroup width="100%">
+			
+			<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150"/>
+			
+			<!--s:VGroup paddingLeft="5" gap="-10" width="100%">
+				
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Job Command :" width="105"/>
+					<s:TextInput id="jobCommand" top="5" editable="false" />
+					<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+					<s:TextInput id="dzGroup" top="5" editable="false"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Job Log File :" width="105"/>
+					<s:TextInput id="jobLogFile" top="5" editable="false"/>
+					<s:Label text="Restartable :" width="105" paddingLeft="10" />
+					<s:TextInput id="restartable" top="5" editable="false"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Previous Duration :" width="105"/>
+					<s:TextInput id="prevDuration" top="5" editable="false"/>
+					<s:Label text="Parameter :" width="105" paddingLeft="10" />
+					<s:TextInput id="paramValue" top="5" editable="false"/>
+				</s:HGroup>
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Diff Duration :" width="105"/>
+					<s:TextInput id="diffDuration" top="5" editable="false"/>
+				</s:HGroup>
+	
+				<s:HGroup verticalAlign="baseline" paddingTop="15">
+					<s:Label text="Handler URI :" width="105" />
+					<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
+				</s:HGroup>
+	
+			</s:VGroup-->
+			
+			<jobdetail:DepLists id="depListComp" width="100%">
+				<jobdetail:layout>
+					<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
+				</jobdetail:layout>
+			</jobdetail:DepLists>
+
+			<s:VGroup paddingLeft="0" paddingTop="10"  width="100%" clipAndEnableScrolling="true">
+				<s:Label text="İş Tarihçesi :" width="120" />
+				<s:DataGrid id="stateHistory" width="95%" height="120" >
+					<s:columns>
+						<s:ArrayList>
+							<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" width="{this.stateHistory.width * 0.35}"/>
+							<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" />
+						</s:ArrayList>
+					</s:columns>
+				</s:DataGrid> 
+			</s:VGroup>
+			
+		</s:HGroup>
+
+	</s:Panel>
+	
+</s:Group>

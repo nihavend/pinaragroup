@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"  viewSourceURL="srcview/index.html">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.events.SchemaLoadEvent;
+			import mx.rpc.events.XMLLoadEvent;
+			import mx.rpc.xml.Schema;
+			import mx.rpc.xml.SchemaLoader;
+			import mx.rpc.xml.SchemaManager;
+			import mx.rpc.xml.SchemaTypeRegistry;
+			import mx.rpc.xml.XMLEncoder;
+			import mx.utils.ObjectUtil;
+			
+			import vo.ExampleVO;
+			import vo.ItemVO;
+			import vo.StrictXMLDecoder;
+			
+			
+			private var schema:Schema;
+			private var schemaLoader:SchemaLoader;
+			private var schemaManager:SchemaManager;
+			
+			[Bindable]private var exampleVO:ExampleVO;
+			/**
+			 * Creates an instance of SchemaLoader and loads the xsd file.
+			 */
+			private function loadXMLSchema():void
+			{
+				try {				
+					trace("loadXMLSchema()");
+					schemaManager = new SchemaManager();
+					schemaLoader = new SchemaLoader();
+					
+					schemaLoader = new SchemaLoader();
+					schemaLoader.addEventListener(SchemaLoadEvent.LOAD, schemaLoader_loadHandler);
+					schemaLoader.addEventListener(XMLLoadEvent.LOAD, schemaLoader_xmlLoadHandler);
+					schemaLoader.addEventListener(FaultEvent.FAULT, schemaLoader_faultHandler);
+					
+					var fileName:String = "/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/myra-joblist.xsd";
+					// var fileName:String = "/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/example.xsd";
+					
+					outputText.text += "\nLoading schema from " + fileName;
+					
+					schemaLoader.load(fileName);
+					//Alert.show("Loaded !");
+				} catch (e:Error){
+					Alert.show(e.message);
+				} 
+			}
+			
+			/**
+			 * Adds a schema to the SchemaManager and registers any ActionScript classes to specific schema types
+			 */
+			private function setXMLSchema(value:Schema):void
+			{
+				schema = value;
+				
+				//Add the loaded schema to the SchemaManager
+				schemaManager.addSchema(schema);
+				
+				var schemaTypeRegistry:SchemaTypeRegistry;
+				schemaTypeRegistry = SchemaTypeRegistry.getInstance();
+				//Map the XSD type "example" to the ActionScript class ExampleVO
+				schemaTypeRegistry.registerClass(new QName(schema.targetNamespace.uri, "example"), ExampleVO);
+				//Map the XSD type "item" to the ActionScript class ItemVO
+				schemaTypeRegistry.registerClass(new QName(schema.targetNamespace.uri, "item"), ItemVO);
+				
+				
+				//update the user interface
+				loadXMLButton.enabled = true;
+				loadInvalidXMLButton.enabled = true;
+				outputText.text += "\nSchema loaded: " + schema;
+			}
+			
+			
+			/**
+			 * Decodes XML into ActionScript objects using the schema definitions within SchemaManager
+			 */
+			private function decodeXML(xml:XML):void
+			{
+				trace("decodeXML()");
+				var qName:QName;
+				var xmlDecoder:StrictXMLDecoder;
+				var result:*;
+				
+				//define a generic qName for the top level element of the XSD ("result")
+				qName = new QName(schema.targetNamespace.uri, "result");
+				
+				//using a custom StrictXMLDecoder to expose the strictMode for XML validation.
+				//if this is unnecessary then the standard XMLDecoder is fine
+				xmlDecoder = new StrictXMLDecoder();
+				
+				//custom flag to enforce strict mode when validating XML (throws errors if xml is invalid)
+				xmlDecoder.strictMode = strictOccurenceBounds.selected;
+				
+				//makeObjectsBindable automatically uses ArrayCollections rather than Arrays when parsing multiple children
+				//of the same type in the xml (see result>example>items in the xsd)
+				xmlDecoder.makeObjectsBindable = true;
+				
+				xmlDecoder.schemaManager = schemaManager;
+				
+				//reset the temporary value object to null
+				exampleVO = null;
+				
+				try
+				{
+					//creates a generic result object containing the deserialised version of the xml
+					result = xmlDecoder.decode(xml, qName)
+					
+					//if this fails then the ExampleVO object hasn't been correctly mapped to the <example> xml element
+					exampleVO = result.example as ExampleVO;
+					
+					outputText.text += "\n\nDecoding XML:\n" + xml.toXMLString();
+					outputText.text += "\n\nResult:\n" + ObjectUtil.toString(result);
+				}
+				catch(e:Error)
+				{
+					//if strictOccurenceBounds set to true this will catch any errors relating to invalid XML
+					Alert.show(e.message, e.name);
+				}
+				
+			}
+			
+			private function encodeToXML():void
+			{
+				trace("encodeToXML()");
+				var qName:QName;
+				var xmlEncoder:XMLEncoder;
+				var xmlList:XMLList;
+				var o:Object;
+				
+				
+				namespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+				use namespace xsi;
+				
+				//creating a generic qName for the top level <result> element in the XML document
+				qName = new QName(schema.targetNamespace.uri, "result");
+				
+				xmlEncoder = new XMLEncoder();
+				xmlEncoder.schemaManager = schemaManager;
+				
+				o = new Object();//a temporary object that will represent the <result> node of the XML
+				
+				//update the values of the exampleVO object from the form
+				exampleVO.foo = valueFoo.value;
+				exampleVO.bar = valueBar.text;
+				
+				//add the exampleObject to result object
+				o.example = exampleVO;
+				
+				//encode the result
+				xmlList = xmlEncoder.encode(o, qName);
+				
+				
+				outputText.text += "\n\nEncoding object to XML:\n" + ObjectUtil.toString(o);
+				outputText.text += "\n\nResult:\n" + xmlList.toXMLString();
+			}
+			
+			
+			
+			//--------------------------------------- Event Handlers
+			/**
+			 * Dispatched once SchemaLoader has completed loading the entire schema
+			 */
+			private function schemaLoader_loadHandler(event:SchemaLoadEvent):void
+			{
+				trace("schemaLoader_loadHandler " + event.schema);
+				Alert.show("schemaLoader_loadHandler " + event.schema);
+				outputText.text += "\nSchema loaded";
+				setXMLSchema(event.schema);
+				
+			}
+			
+			/**
+			 * Dispatched each time SchemaLoader loads a schema
+			 * This may occur multiple times if a schema contains any imported/included schemas
+			 */
+			private function schemaLoader_xmlLoadHandler(event:XMLLoadEvent):void
+			{
+				trace("schemaLoader_xmlLoadHandler " + event.location);
+			}
+			
+			private function schemaLoader_faultHandler(event:FaultEvent):void
+			{
+				trace("schemaLoader_faultHandler " + event);
+				Alert.show("schemaLoader_faultHandler " + event);
+				
+			}
+			
+			
+			protected function exampleXMLService_resultHandler(event:ResultEvent):void
+			{
+				trace("xmlService_resultHandler");
+				outputText.text += "\nXML loaded";
+				decodeXML(event.result as XML);
+				exampleForm.enabled = true;
+			}
+			
+			
+			protected function exampleXMLService_faultHandler(event:FaultEvent):void
+			{
+				outputText.text += "\nxmlService_faultHandler " + event;
+			}
+			
+			/**
+			 * Dispatched when the user clicks on the loadXMLSchemaButton
+			 */
+			protected function loadSchemaButton_clickHandler(event:MouseEvent):void
+			{
+				outputText.text += "\nLoading XML Schema";
+				loadXMLSchema();
+			}
+			
+			/**
+			 * Dispatched when the user clicks on the loadXMLButton
+			 */
+			protected function loadXMLButton_clickHandler(event:MouseEvent):void
+			{
+				outputText.text += "\n\nRequesting XML from " + exampleXMLService.url;
+				exampleXMLService.send();
+			}
+			/**
+			 * Dispatched when the user clicks on the loadInvalidXMLButton
+			 */
+			protected function loadInvalidXMLButton_clickHandler(event:MouseEvent):void
+			{
+				outputText.text += "\n\nRequesting Invalid XML from " + exampleInvalidXMLService.url;
+				exampleInvalidXMLService.send();
+			}
+			
+			/**
+			 * Dispatched when the user clicks on the encodeXMLButton
+			 */
+			protected function encodeXMLButton_clickHandler(event:MouseEvent):void
+			{
+				encodeToXML();
+			}
+			
+			
+			
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				outputText.text = "";
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:HTTPService id="exampleXMLService"
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="example.xml"
+					   result="exampleXMLService_resultHandler(event)"
+					   fault="exampleXMLService_faultHandler(event)"
+					   />
+		<s:HTTPService id="exampleInvalidXMLService"
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="invalidExample.xml"
+					   result="exampleXMLService_resultHandler(event)"
+					   fault="exampleXMLService_faultHandler(event)"
+					   />
+	</fx:Declarations>
+	<s:HGroup top="20" bottom="20" right="20" left="20">
+		<s:VGroup height="100%">
+			<s:Button id="loadSchemaButton" label="Load Schema"  
+					  click="loadSchemaButton_clickHandler(event)"
+					  />
+			<mx:HRule width="100%" />
+			<s:CheckBox id="strictOccurenceBounds" selected="true" label="StrictOccuranceMode" toolTip="Throws errors if xml doesn't validate against XSD"/>
+			<s:HGroup>
+				<s:Button id="loadXMLButton" label="Load XML" enabled="{schema != null}"
+						  click="loadXMLButton_clickHandler(event)"
+						  />
+				
+				<s:Button id="loadInvalidXMLButton" label="Load Invalid XML" enabled="{schema != null}"
+						  click="loadInvalidXMLButton_clickHandler(event)"
+						  />
+				
+			</s:HGroup>
+			<mx:HRule width="100%" />
+			<mx:Form id="exampleForm" enabled="false">
+				<mx:FormHeading label="ExampleVO" />
+				<mx:FormItem label="foo" >
+					<mx:NumericStepper id="valueFoo" value="{exampleVO.foo}" />
+				</mx:FormItem>
+				<mx:FormItem label="bar" >
+					<mx:TextInput id="valueBar" text="{exampleVO.bar}" />
+				</mx:FormItem>
+				<mx:FormItem label="items" >
+					<s:List id="itemsList" dataProvider="{exampleVO.items}" dropEnabled="true" dragMoveEnabled="true" dragEnabled="true" labelField="name" />
+				</mx:FormItem>
+			</mx:Form>
+			<s:Button id="encodeXMLButton" label="Encode ActionScript" enabled="{exampleVO}"
+					  click="encodeXMLButton_clickHandler(event)"
+					  />
+			<s:Group height="100%" />
+			<s:Button label="Clear text" click="button1_clickHandler(event)" />
+		</s:VGroup>
+		<s:TextArea id="outputText" width="100%" height="100%" />
+	</s:HGroup>
+</s:Application>

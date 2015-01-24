@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridColumn;
+			
+			private function toggleFilter():void {
+				if (checkBox.selected) {
+					arrColl.filterFunction = processFilter;
+				} else {
+					arrColl.filterFunction = null;
+				}
+				arrColl.refresh();
+			}
+			
+			private function processFilter(item:Object):Boolean {
+				return parseFloat(item.value) == 0;
+			}
+			
+			private function value_labelFunc(item:Object, col:DataGridColumn):String {
+				return item[col.dataField].toFixed(2);
+			}
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<s:ArrayCollection id="arrColl">
+			<s:source>
+				<fx:Array>
+					<fx:Object name="ColdFusion" value="0.00" />
+					<fx:Object name="Dreamweaver" value="0.12" />
+					<fx:Object name="Fireworks" value="1.01" />
+					<fx:Object name="Flash" value="0" />
+					<fx:Object name="Flash Player" value="-0.00" />
+					<fx:Object name="Flex" value="0.00" />
+					<fx:Object name="Illustrator" value="2.92" />
+					<fx:Object name="Lightroom" value="0.32" />
+					<fx:Object name="Photoshop" value="0.06" />
+				</fx:Array>
+			</s:source>
+		</s:ArrayCollection>
+	</fx:Declarations>
+
+	
+	
+	
+	<mx:Panel status="{arrColl.length}/{arrColl.source.length} item(s)">
+		<mx:DataGrid id="dataGrid"
+					 dataProvider="{arrColl}"
+					 verticalScrollPolicy="on">
+			<mx:columns>
+				<mx:DataGridColumn dataField="name" />
+				<mx:DataGridColumn dataField="value"
+								   labelFunction="value_labelFunc" />
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:ControlBar>
+			<mx:CheckBox id="checkBox"
+						 label="Filter DataGrid"
+						 click="toggleFilter();" />
+		</mx:ControlBar>
+	</mx:Panel>
+	
+</s:Application>

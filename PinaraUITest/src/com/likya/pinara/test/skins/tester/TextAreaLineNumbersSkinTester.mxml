@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   applicationComplete="applicationCompleteHandler(event)"
+			   pageTitle="Spark TextArea with Line Numbers"
+			   viewSourceURL="srcview/index.html">
+	
+	<!-- Blog Entry: http://flexdevtips.blogspot.com/2010/07/spark-textarea-with-line-numbers.html -->
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.skins.TextAreaLineNumbersSkin;
+			private function randomString(event:Event):void {
+				var lines:int = (Math.random() * 60) + 1;
+				var str:String = "";
+				for (var i:int = 1; i < lines; i++) {
+					if (i > 1) {
+						str += "\n";
+					}
+					str += "Line #" + i.toString(10);
+				}
+				ta.text = str;
+			}
+			
+			private function clearText(event:MouseEvent):void {
+				ta.text = "";
+			}
+			
+			private function applicationCompleteHandler(event:Event):void {
+				ta.setFocus();
+			}
+			
+			protected function fontSizeChangeHandler(event:Event):void {
+				var size:Number = fontSizeDropDown.selectedItem;
+				if (!isNaN(size)) {
+					ta.setStyle('fontSize', size);
+				}
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Button label="Random String"
+			  x="10"
+			  y="10"
+			  click="randomString(event)"/>
+	<s:Button label="Clear"
+			  x="119"
+			  y="10"
+			  click="clearText(event)"/>
+	<s:Label text="Font Size:"
+			 x="227"
+			 y="15"/>
+	<s:DropDownList id="fontSizeDropDown"
+					selectedIndex="3"
+					width="70"
+					x="290"
+					y="10"
+					change="fontSizeChangeHandler(event)">
+		<s:dataProvider>
+			<s:ArrayList>
+				<fx:Number>8</fx:Number>
+				<fx:Number>10</fx:Number>
+				<fx:Number>11</fx:Number>
+				<fx:Number>12</fx:Number>
+				<fx:Number>14</fx:Number>
+				<fx:Number>16</fx:Number>
+			</s:ArrayList>
+		</s:dataProvider>
+	</s:DropDownList>
+	<s:TextArea id="ta"
+				height="300"
+				width="350"
+				x="10"
+				y="35"
+				lineBreak="toFit"
+				skinClass="com.likya.pinara.test.skins.TextAreaLineNumbersSkin"/>
+	
+</s:Application>

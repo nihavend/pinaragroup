@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Menu;
+			private function createAndShow():void {
+				var myMenu:Menu = Menu.createMenu(null, menuData, true);
+				myMenu.show(10, 10);
+			}
+			[Bindable]
+			public var menuData:Array = [
+				{label: "MenuItem A", children: [
+					{label: "A-1", enabled: false},
+					{label: "A-2", type: "normal"},
+					{label: "A-3", type: "normal"},
+					{label: "A-4", type: "normal"}]},
+				{label: "MenuItem B", type: "check", toggled: true},
+				{label: "MenuItem C", type: "check", toggled: false},
+				{type:  "separator"},
+				{label: "MenuItem D", children: [
+					{label: "D-1", type: "radio",groupName: "g1"},
+					{label: "D-2", type: "radio",groupName: "g1"},
+					{label: "D-3", type: "radio",groupName: "g1"},                                            
+					{label: "D-4", type: "radio",groupName: "g1"},
+					{label: "D-5", type: "radio",groupName: "g1", toggled: true},
+					{label: "D-6", type: "radio",groupName: "g1"}]}
+			];
+		]]>
+	</fx:Script>
+	
+	<mx:Button x="300" y="10" label="Open Menu" click="createAndShow();" />
+	
+</s:Application>

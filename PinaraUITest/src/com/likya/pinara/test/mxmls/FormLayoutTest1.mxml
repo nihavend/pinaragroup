@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Panel id="detailPanel" title="Pınara Job Detail Form" height="200" width="100%">
+		
+		<s:Button id="toggleTree" y="-27" right="10" width="80" toolTip="Collapse" label="Collapse"/>
+
+		<s:Form id="stackedForm">                
+			<s:FormItem label="Address" required="true">
+				<s:TextInput width="100%"/>
+			</s:FormItem>       
+			<s:FormItem label="City" required="true">
+				<s:TextInput width="100%"/>
+			</s:FormItem> 
+			<s:FormItem label="State">
+				<s:ComboBox width="100%"/>
+			</s:FormItem>
+			<s:FormItem label="ZipCode" sequenceLabel="4." required="true">
+				<s:TextInput widthInChars="4" restrict="0123456789"/>
+			</s:FormItem>
+		</s:Form>
+		
+		<!--s:Form id="detailPanelGroup" height="200" width="100%">
+			<s:layout>
+				<s:HorizontalLayout/>
+			</s:layout>  
+			
+			<s:VGroup gap="-10">
+				<s:FormItem label="Job Command :" width="240">
+					<s:TextInput id="jobCommand" width="100%" text="serkançççç" right="0" paddingRight="0"/>
+				</s:FormItem>
+				<s:FormItem label="Job Log File :" width="240">
+					<s:Label id="jobLogFile" width="100%"/>
+				</s:FormItem>
+				<s:FormItem label="Previous Duration :" width="240">
+					<s:Label id="prevDuration" />
+				</s:FormItem>
+				<s:FormItem label="Diff Duration :" width="240">
+					<s:Label id="diffDuration" />
+				</s:FormItem>
+				<s:FormItem label="Restartable :" width="240">
+					<s:Label id="restartable" />
+				</s:FormItem>
+				<s:FormItem label="DZ Group Id :">
+					<s:Label id="dzGroup" />
+				</s:FormItem>
+			</s:VGroup>
+			
+			<s:VGroup>
+				<s:FormItem label="Handler URI :" width="240">
+					<s:Label id="handlerURI" />
+				</s:FormItem>
+				<s:FormItem label="Beni bekleyen işler :" width="240">
+				</s:FormItem>
+				<s:List id="waitingMeJobs" height="60">
+					<s:dataProvider>
+						<mx:ArrayCollection>
+							<fx:String>Flex</fx:String> 
+							<fx:String>Flash Builder</fx:String> 
+							<fx:String>Flash</fx:String> 
+							<fx:String>Director</fx:String> 
+							<fx:String>Dreamweaver</fx:String> 
+							<fx:String>ColdFusion</fx:String> 
+							<fx:String>Illustrator</fx:String> 
+							<fx:String>PhotoShop</fx:String> 
+						</mx:ArrayCollection>
+					</s:dataProvider>
+				</s:List>
+			</s:VGroup>
+			
+			<s:VGroup>
+				
+				<s:FormItem label="Parameter :" width="240">
+					<s:Label id="paramValue" />
+				</s:FormItem>
+				<s:FormItem label="Beni bekleyen işler :" width="240">
+					
+				</s:FormItem>
+				<s:List id="meToWaitJobs" height="70"> 
+					<s:dataProvider>
+						<mx:ArrayCollection>
+							<fx:String>Flex</fx:String> 
+							<fx:String>Flash Builder</fx:String> 
+							<fx:String>Flash</fx:String> 
+							<fx:String>Director</fx:String> 
+							<fx:String>Dreamweaver</fx:String> 
+							<fx:String>ColdFusion</fx:String> 
+							<fx:String>Illustrator</fx:String> 
+							<fx:String>PhotoShop</fx:String> 
+						</mx:ArrayCollection>
+					</s:dataProvider>
+				</s:List>
+			</s:VGroup>
+			
+		</s:Form-->
+		
+	</s:Panel>
+	
+</s:Application>
+

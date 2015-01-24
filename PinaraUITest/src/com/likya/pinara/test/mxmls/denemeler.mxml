@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" creationComplete="onCreationComplete()">
+	
+<fx:Script>
+		<![CDATA[
+			
+			public function onCreationComplete():void {
+			/*
+			try {
+			// feedJson = '{ "joblist" : [ {"title" : "job1"}, {"Mobile": "111-111-1111"}, {"Home": "222-222-2222"} ] }';
+			// feedJson = '{ "joblist" : [ { "title" : "job1", "id": "0", "ip": "0", "port":"0" } ] }';
+			feedJson = '{ "joblist" : [ { "jobProperty" : { "title" : "job1", "id": "0", "ip": "0", "port":"0" } } ] }';
+			// Alert.show("feedJson : " + feedJson);
+			tlosTreeData = JSON.parse(feedJson);
+			Alert.show("tlosTreeData : " + tlosTreeData);
+			} catch (e:Error){
+			Alert.show(e.message);
+			} 
+			// tlosTreeData = IList(JSON.parse(feedJson));
+			// Alert.show("" + tlosTreeData);
+			*/
+			}
+
+		]]>
+	</fx:Script>
+	
+</s:Group>

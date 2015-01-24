@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/halo" 
+	viewSourceURL="srcview/index.html" xmlns:actscrpts="com.likya.pinara.test.actscrpts.*" >
+	<fx:Script>
+		<![CDATA[
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace containers "com.likya.pinara.test.actscrpts.*";
+		
+		containers|CollapsiblePanel {
+			skin-class: ClassReference('com.likya.pinara.test.skins.CollapsiblePanelSkin');
+		}
+		
+	</fx:Style>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="confRBGroup" />
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout gap="10" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="30" />
+	</s:layout>
+	
+	<actscrpts:CollapsiblePanel height="100%"
+		title="Configuration ({confRBGroup.selectedValue}, {sampleStepper.value})" >
+		
+		<actscrpts:layout>
+			<s:VerticalLayout paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="10" />
+		</actscrpts:layout>
+		
+		<s:RichText text="Sample options:" />
+		<s:RadioButton label="A" group="{confRBGroup}" selected="true" />
+		<s:RadioButton label="B" group="{confRBGroup}" />
+		<s:RadioButton label="B" group="{confRBGroup}" />
+		
+		<s:RichText text="Sample input:dgdfgdgdfgdfgdfgdfgdfgdfgghfgjfjjfjfgjfgjfgjgjghj" />
+		<s:NumericStepper id="sampleStepper" />
+		
+	</actscrpts:CollapsiblePanel>
+
+	<s:Panel title="Content Panel" width="100%" height="100%">
+		
+		<s:layout>
+			<s:VerticalLayout clipAndEnableScrolling="true" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="10" />
+		</s:layout>
+		
+		<s:RichText width="100%">Content dependent on configuration (charts, grids, etc.). 
+				By collapsing the side panel we gain more space.
+		</s:RichText>
+		
+	</s:Panel>
+	
+</s:Application>

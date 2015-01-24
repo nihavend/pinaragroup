@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema id="schema" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.misprintt.net"
+	targetNamespace="http://www.misprintt.net"
+	elementFormDefault="qualified"
+	>
+	
+	<xs:complexType name="example">
+	    <xs:sequence>
+			<xs:element name="foo" type="xs:int" />
+			<xs:element name="bar" type="xs:string" />
+			<xs:element name="items">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="item" type="item" maxOccurs="5"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="item">
+		<xs:attribute name="name" type="xs:string" />
+	</xs:complexType>
+	
+</xs:schema>
+

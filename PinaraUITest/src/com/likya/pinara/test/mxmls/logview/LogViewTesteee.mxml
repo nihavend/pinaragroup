@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+			import spark.layouts.HorizontalLayout;
+			
+			import flashx.textLayout.conversion.TextConverter;
+			
+			private function showLogin():void {
+				// Create a non-modal TitleWindow container.
+				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
+				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, LogView, true) as TitleWindow;
+				PopUpManager.centerPopUp(helpWindow);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:VGroup left="10" right="10" top="10" bottom="10">
+		
+		<s:Form height="100%" width="100%" visible="true">
+			<s:FormItem label="Search Text" layout="{new HorizontalLayout()}" width="100%" >
+				<s:TextInput id="searchTxt" text="the" />
+			</s:FormItem>
+			<s:FormItem height="100%" width="100%">
+				<s:TextArea  id="mainTextField" verticalScrollPolicy="on">
+					<s:text>
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+						The Quick Brown Fox Jumped Over The Lazy Dogs and Landed on the Other Side of the River, bouncing back and forth between two turtles in an attempt to escape the flying vulture.
+					</s:text>
+				</s:TextArea>
+			</s:FormItem>
+		</s:Form>
+		
+		<mx:HBox verticalAlign="middle" visible="false">
+			<s:Label text="Ara"></s:Label>
+		</mx:HBox>
+		
+		<s:TextArea id="myhtmlSpark" width="800" height="300" editable="false" selectable="false" visible="false">
+		</s:TextArea>
+		
+		<s:TextArea id="htmlDisplay" width="400" height="100" editable="false" visible="false">
+			<s:content>This is <s:span color="#FF0000">HTML text</s:span>
+				in an <s:span fontWeight="bold">Spark TextArea control</s:span>.
+				Use the <s:span textDecoration="underline">content</s:span> property
+				of the <s:span color="#008800">Spark TextArea control</s:span> 
+				to include basic HTML markup in your text, including
+				<s:a href="http://www.adobe.com" target="_blank">links</s:a>.
+			</s:content>
+		</s:TextArea>
+		
+		
+		<mx:TextArea id="myhtmlMx" width="800" height="300" editable="false" selectable="false" visible="false">
+		</mx:TextArea>
+		
+		<s:List id="listLog" visible="false">
+			
+		</s:List>
+		<s:Button label="Show Log" click="showLogin();"/>
+		<mx:Button label="AAAAAAAAAAAAAAAAAA" />
+	</s:VGroup>
+	
+</s:Application>

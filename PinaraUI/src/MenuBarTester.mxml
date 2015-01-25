@@ -13,6 +13,7 @@
 			public var tlosMenuData:XMLListCollection = new XMLListCollection();
 			
 			protected function application1_creationCompleteHandler(event:FlexEvent):void {
+				menuDataXMLList.menuitem.(attribute("label")=="Menu2-0").@enabled = "false";
 				tlosMenuData.source = menuDataXMLList;
 			}
 			

@@ -45,7 +45,9 @@ package com.likya.pinara.utils {
 
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:graphInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 
-			myraJobList = getDependencyInfo(j, myraJobList);
+			// Serkan Taş 25 Ocak Pazar 20:13
+			// Sunucu tarafında bağımlı iş tanımı ile ilgili kısım yapılınca açılacak
+			// myraJobList = getDependencyInfo(j, myraJobList);
 			
 			myraJobList = getStateInfos(j, myraJobList);
 			

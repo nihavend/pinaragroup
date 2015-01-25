@@ -3,6 +3,7 @@
 <s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:mx="library://ns.adobe.com/flex/mx" 
 			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)" 
 			   close="handleCloseEvent();" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:jobcrud="com.likya.pinara.comps.jobcrud.*"
 			   title="Job Definition Window" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
 	<s:layout>
@@ -15,10 +16,34 @@
 			import com.likya.pinara.utils.GenericJobInfo;
 			
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			
+			[Bindable]
+			public var jobDetailXml:XML;
+			
+			
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
+			{
+				if(jobDetailXml != null) {
+					title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
+					Alert.show("This window is created for edit mode !");
+					baseInfoForm.jsName.text = jobDetailXml.baseJobInfos.jsName;
+					baseInfoForm.jsCommand = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
+					/** 
+					 * will be considered after dependecy things  : 
+					 * groupId.text = jobDetailXml.@groupId;
+					 * 
+					 */
+					// lastCs.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsRealTime.startTime);
+					// planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
+					
+				}
+				
+			}
 			// Handle the close button and Cancel button.
 			private function handleCloseEvent():void {
 				PopUpManager.removePopUp(this);
@@ -80,6 +105,7 @@
 				PopUpManager.centerPopUp(dummyWindow);
 				dummyWindow.setFocus();
 			}
+			
 		]]>
 	</fx:Script>
 	

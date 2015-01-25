@@ -2,17 +2,23 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 width="100%" height="27" creationComplete="onCreationComplete()" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
+		 width="100%" height="27" 
+		 creationComplete="onCreationComplete(event)" 
+		 xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.jobcrud.JobEditWindow;
+			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserRole;
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.controls.menuClasses.MenuBarItem;
+			import mx.core.FlexGlobals;
 			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
 			import mx.events.MenuEvent;
 			import mx.managers.PopUpManager;
 			import mx.resources.ResourceManager;
@@ -24,11 +30,74 @@
 			[Bindable]
 			public var tlosMenuData:XMLListCollection = new XMLListCollection();
 			
+			private var currentDataItem:XML;
+			
 			private var timerId:uint;
 			
-			public function onCreationComplete():void {
+			private function setMenuItems(value:String):void {
+				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "editJob")).@enabled = value;
+				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "deleteJob")).@enabled = value;
+			}
+			
+			public function onCreationComplete(event:FlexEvent):void {
 				tlosMenuData.source = menuDataXMLList;
 				pinaraMenuBar.callLater(registerClickEvent);
+				
+				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChanged);
+				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelected);
+				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelected);
+			}
+			
+			private function handleEvent(): void {
+				Alert.show("handler : " + currentDataItem);
+				if(currentDataItem != null) {
+					setMenuItems("true");
+				} else {
+					setMenuItems("false");
+				}
+			}
+			
+			public function rowSelectionChanged(event:ResourceEvent):void {
+				//Alert.show("rowSelectionChangedd");
+				currentDataItem = XML(event.object)
+				handleEvent();
+			}
+			
+			
+			/**
+			 * 	Serkan Taş
+			 *  Timer for looping until the service returns with result called by allJobDetail form
+			 */
+			private var myTimer:Timer;
+			public function jobNodeSelected(event:ResourceEvent):void {
+				// Alert.show("jobNodeSelected");
+				//var currentDataItem:XML = XML(event.object);
+				// currentDataItem = XML(event.object);
+				
+				//var serviceUrl:String = "/flex/restsrvc/jobdetailxml/";
+				//var selectedJobId:String = String(event.object);
+				
+				//jobListDS.url = serviceUrl + selectedJobId;
+				//jobListDS.send();
+				myTimer = new Timer(1000, 0);
+				myTimer.addEventListener("timer", getDataFromParent);
+				myTimer.start();
+				
+				
+			}
+			
+			private function getDataFromParent(event:TimerEvent): void {
+				var allDetailPanel:JobAllDetailPanel = FlexGlobals.topLevelApplication["allJobDetail"] as JobAllDetailPanel;
+				if(allDetailPanel.jobDetailXml != null) {
+					myTimer.stop();
+					// Alert.show("In menu bar : " + allDetailPanel.jobDetailXml);
+					currentDataItem = allDetailPanel.jobDetailXml;
+					handleEvent();
+				}
+			}
+			
+			public function listNodeSelected(event:ResourceEvent):void {
+				setMenuItems("false");
 			}
 			
 			protected function tlosMenuBar_itemClickHandler(event:MenuEvent):void {
@@ -58,6 +127,7 @@
 				} else if (event.label == resourceManager.getString("messages", "pinaraEkran")) {
 					showPinaraEkranLogPopup();
 				} else if (event.label == resourceManager.getString("messages", "suspendApp")) {
+					Alert.show("suspendApp : " + currentDataItem);
 					// suspendApp();
 					Alert.show("Uygulama beklemeye alınacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, suspendApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "resumeApp")) {
@@ -69,8 +139,29 @@
 				} else if (event.label == resourceManager.getString("messages", "shutdownForce")) {
 					// shutdownForce();
 					Alert.show("Uygulama koşulsuz kapatılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, shutdownForce, null, Alert.CANCEL);
+				} else if(event.label == resourceManager.getString("messages", "addJob")) {
+					showAddJob();
+				} else if(event.label == resourceManager.getString("messages", "editJob")) {
+					showEditJob();
+				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
+					Alert.show("Seçili iş silinecek, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, showDeleteJob, null, Alert.CANCEL);
 				}
-
+			}
+			
+			private function showAddJob():void {
+				var addJobWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
+				PopUpManager.centerPopUp(addJobWindow);
+			}
+			
+			private function showEditJob():void {
+				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
+				editJobWindow.jobDetailXml = currentDataItem;
+				PopUpManager.centerPopUp(editJobWindow);
+				//Alert.show("Selected Job id : " + "");
+			}
+			
+			private function showDeleteJob():void {
+				// Delete selected job !!!!!				
 			}
 			
 			protected function mbiAnaSayfa_click(event:MouseEvent):void {
@@ -180,6 +271,16 @@
 				}
 			}
 			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				currentDataItem = XML(event.result);
+				Alert.show("xmlService_resultHandler : " + currentDataItem);
+				handleEvent();
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -205,6 +306,11 @@
 				<menuitem label="{resourceManager.getString('messages', 'manageTloses')}" id="manageTloses" />
 				<menuitem label="{resourceManager.getString('messages', 'addNewUser')}" id="addNewUser" />
 				<menuitem label="{resourceManager.getString('messages', 'manageUsers')}" id="manageUsers" /-->
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'jobOps')}" id="jobOps" role="{UserRole.ADMIN}">			
+				<menuitem label="{resourceManager.getString('messages', 'addJob')}" id="addJob" />			
+				<menuitem label="{resourceManager.getString('messages', 'editJob')}" id="editJob" enabled="false"/>			
+				<menuitem label="{resourceManager.getString('messages', 'deleteJob')}" id="deleteJob" enabled="false"/>
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'help')}" id="help" role="{UserRole.VIEW}">			
 				<menuitem label="{resourceManager.getString('messages', 'userGuide')}"/>			
@@ -251,6 +357,14 @@
 		<s:CallResponder id="resumeAppResult" result="resumeAppResult_resultHandler(event)"/>
 		<s:CallResponder id="shutdownNormalResult"/>
 		<s:CallResponder id="shutdownForceResult"/>
+		
+		<s:HTTPService id="jobListDS" 
+					   method="GET"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
 		
 	</fx:Declarations>
 	

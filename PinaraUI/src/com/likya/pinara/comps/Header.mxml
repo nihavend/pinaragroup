@@ -10,6 +10,7 @@
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserInfo;
 			
+			import mx.controls.Alert;
 			import mx.formatters.DateFormatter;
 			import mx.managers.PopUpManager;
 			
@@ -63,11 +64,10 @@
 			private function showLogin():void {
 				// Create a non-modal TitleWindow container.
 				// var helpWindow:TitleWindow = PopUpManager.createPopUp(this, MyWin, true) as TitleWindow;
-				var helpWindow:TitleWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as TitleWindow;
-				PopUpManager.centerPopUp(helpWindow);
+				// PopUpManager.centerPopUp(helpWindow);
 				
 			}
-			
+
 		]]>
 	</fx:Script>
 	
@@ -101,6 +101,7 @@
 		<mx:Button y="-27" right="30" width="20" click="changeLocale('tr_TR')" icon="{trIcon}" toolTip="Türkçe"/>
 		<mx:Button y="-27" right="5" width="20" click="changeLocale('en_US')" icon="{enIcon}" toolTip="English"/>
 		<s:Button y="-27" right="320" label="Login" click="showLogin();"/>
+		
 		
 	</s:Panel> 
 	

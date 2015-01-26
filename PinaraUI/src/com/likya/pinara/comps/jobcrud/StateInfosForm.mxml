@@ -207,7 +207,7 @@
 				if(statusInfoGrid.selectedIndex != -1) {
 					jobStatusCikar.enabled = true;
 					jobStatusDegistir.enabled = true;
-					jobStatusName.selectedItem = statusInfoGrid.selectedItem.statusname;
+					jobStatusName.selectedItem = "" + statusInfoGrid.selectedItem.statusname;
 					statusDescription.text = statusInfoGrid.selectedItem.desc;
 					//trace(statusInfoGrid.selectedItem.retCodeList);
 					retCodeList.dataProvider = ObjectUtil.copy(statusInfoGrid.selectedItem.retCodeList) as IList;

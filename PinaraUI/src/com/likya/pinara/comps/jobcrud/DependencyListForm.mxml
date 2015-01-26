@@ -16,6 +16,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.SSS;
 			
 			import mx.collections.ArrayCollection;
@@ -27,18 +28,6 @@
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
-			
-			protected function indexOf(label:String, arr:Array):int {
-				var count:int = 0;
-				for each (var item:Object in arr) {
-					if(item.value == label) {
-						break;
-					}
-					count++;
-				}
-				
-				return count;
-			}
 			
 			private function checkGridForItem(checkItem:Object, checkArr:Array):Boolean
 			{
@@ -157,7 +146,7 @@
 					}
 					
 					if(sssTmp.substate != null) {
-						substateName.selectedIndex = indexOf(sssTmp.substate, substateName.dataProvider.toArray());
+						substateName.selectedIndex = JobXmlToView.indexOf(sssTmp.substate, substateName.dataProvider.toArray());
 						substateName_changeHandler(null);
 						if(statusName.dataProvider != null) {
 							(statusName.dataProvider as ArrayCollection).refresh();
@@ -165,7 +154,7 @@
 					}
 					
 					if(sssTmp.status != null) {
-						statusName.selectedIndex = indexOf(sssTmp.status, statusName.dataProvider.toArray());
+						statusName.selectedIndex = JobXmlToView.indexOf(sssTmp.status, statusName.dataProvider.toArray());
 					}
 					
 					

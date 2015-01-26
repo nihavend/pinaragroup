@@ -52,6 +52,9 @@ package com.likya.pinara.utils {
 			myraJobList = getStateInfos(j, myraJobList);
 			
 			myraJobList = getManagementInfo(j, myraJobList);
+			
+			// not implemented yet
+			//myraJobList = getLogAnalysis(j, myraJobList);
 
 			myraJobList = getScheduleInfo(j, myraJobList);
 
@@ -302,6 +305,54 @@ package com.likya.pinara.utils {
 			}
 			
 			return myraJobList;
+		}
+		
+		private static function getLogAnalysis(j:JobEditWindow, myraJobList:XML):XML {
+			/*<wla:logAnalysis active="true" id="100">
+				<wla:findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</wla:findWhat>
+				<wla:action>
+				  <wla:then>
+					<wla:event code="email" id="100">
+					  <lik:EmailList>
+						<lik:email>q@q.com</lik:email>
+					  </lik:EmailList>
+					  <wla:content logLineNumBack="201" logLineNumForward="201">string</wla:content>
+					</wla:event>
+					<wla:forcedResult active="true">
+					  <myra-stateinfo:LiveStateInfo LSIDateTime="string" userId="1">
+						<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
+						<myra-stateinfo:SubstateName>PAUSED</myra-stateinfo:SubstateName>
+						<myra-stateinfo:StatusName>BYUSER</myra-stateinfo:StatusName>
+						<myra-stateinfo:ReturnCode cdId="string">
+						  <myra-stateinfo:Code>3</myra-stateinfo:Code>
+						  <myra-stateinfo:Desc>string</myra-stateinfo:Desc>
+						</myra-stateinfo:ReturnCode>
+					  </myra-stateinfo:LiveStateInfo>
+					</wla:forcedResult>
+				  </wla:then>
+				  <wla:else>
+					<wla:event code="email" id="100">
+					  <lik:EmailList>
+						<lik:email>a@a.com</lik:email>
+					  </lik:EmailList>
+					  <wla:content logLineNumBack="201" logLineNumForward="201">string</wla:content>
+					</wla:event>
+					<wla:forcedResult active="true">
+					  <myra-stateinfo:LiveStateInfo LSIDateTime="string" userId="1">
+						<myra-stateinfo:StateName>RUNNING</myra-stateinfo:StateName>
+						<myra-stateinfo:SubstateName>ON-RESOURCE</myra-stateinfo:SubstateName>
+						<myra-stateinfo:StatusName>BYUSER</myra-stateinfo:StatusName>
+						<myra-stateinfo:ReturnCode cdId="string">
+						  <myra-stateinfo:Code>3</myra-stateinfo:Code>
+						  <myra-stateinfo:Desc>string</myra-stateinfo:Desc>
+						</myra-stateinfo:ReturnCode>
+					  </myra-stateinfo:LiveStateInfo>
+					</wla:forcedResult>
+				  </wla:else>ls
+				</wla:action>
+			  </wla:logAnalysis>*/
+
+			return myraJobList;	
 		}
 		
 		private static function getScheduleInfo(j:JobEditWindow, myraJobList:XML):XML {

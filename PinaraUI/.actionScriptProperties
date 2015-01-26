@@ -50,6 +50,7 @@
     <application path="ServiceTester.mxml"/>
     <application path="TestViewDepGraph.mxml"/>
     <application path="DynamicCombos.mxml"/>
+    <application path="JobEditWindowTester.mxml"/>
   </applications>
   <modules/>
   <workers/>

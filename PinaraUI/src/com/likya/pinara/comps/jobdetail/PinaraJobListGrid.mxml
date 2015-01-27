@@ -53,7 +53,9 @@
 								<s:layout>
 									<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
 								</s:layout>
-								<fx:Script>
+								<jobdetail:StateImageItem id="stateImageItem" data="{data}"/>
+								<!-- Aşağıdaki kısım yerine yukarıdaki StateImageItem componenti yazıldı-->
+								<!--<fx:Script>
 									<![CDATA[
 										import com.likya.pinara.containers.ImageContainer;
 										import com.likya.pinara.containers.ToolTipContainer;
@@ -81,7 +83,7 @@
 										// {trace('XML : ' + XMLList(XML(data.stateInfos.LiveStateInfos).children())[0].StateName)}
 									]]>
 								</fx:Script>
-								<s:Image source="{ImageContainer.resolveStatus(data)}" toolTip="{ToolTipContainer.getToolTip(data) + ':' + mylabelFunc(data)}"/>
+								<s:Image source="{ImageContainer.resolveStatus(data)}" toolTip="{ToolTipContainer.getToolTip(data) + ':' + mylabelFunc(data)}"/>-->
 								<!--<s:Label text="{mylabelFunc(data)}" fontSize="8" />-->
 							</s:GridItemRenderer>
 						</fx:Component>
@@ -90,7 +92,8 @@
 				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="150" maxWidth="250">
 					<s:itemRenderer>
 						<fx:Component>
-							<jobdetail:PinaraJobListGridManageColumn selectedGroupId="{outerDocument.selectedGroupId}" />
+<!--							<jobdetail:PinaraJobListGridManageColumn selectedGroupId="{outerDocument.selectedGroupId}" />-->
+							<jobdetail:PinaraJobListGridManageColumnNew selectedGroupId="{outerDocument.selectedGroupId}" />
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>

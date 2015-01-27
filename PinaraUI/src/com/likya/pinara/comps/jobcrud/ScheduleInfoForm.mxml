@@ -11,13 +11,17 @@
 			import mx.events.ItemClickEvent;
 			
 			private function handleCard(event:ItemClickEvent):void {
-				if (event.currentTarget.selectedValue == "everyDaySchedule") {
+				handleDecoration(event.currentTarget.selectedValue);
+			}
+			
+			public function handleDecoration(selectedValue:String):void {
+				if (selectedValue == "everyDaySchedule") {
 					this.dom.enabled = false;
-				} else if (event.currentTarget.selectedValue == "specificSchedule") {
+				} else if (selectedValue == "specificSchedule") {
 					this.dom.enabled = true;
 				} else {
 					Alert.show("You selected Nothing.");
-				} 
+				}
 			}
 			
 		]]>

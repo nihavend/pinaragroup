@@ -51,6 +51,7 @@
     <application path="TestViewDepGraph.mxml"/>
     <application path="DynamicCombos.mxml"/>
     <application path="JobEditWindowTester.mxml"/>
+    <application path="ManageButtonGroupTester.mxml"/>
   </applications>
   <modules/>
   <workers/>

@@ -1,11 +1,16 @@
 package com.likya.pinara.utils {
+	import com.likya.pinara.comps.jobcrud.DependencyListForm;
 	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm;
 	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm;
 	import com.likya.pinara.comps.jobcrud.ScheduleInfoForm;
 	import com.likya.pinara.comps.jobcrud.StateInfosForm;
+	import com.likya.pinara.event.ResourceEvent;
+	
+	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayList;
 	import mx.controls.DateField;
+	import mx.events.ItemClickEvent;
 	import mx.formatters.DateFormatter;
 	
 	public class JobXmlToView {
@@ -66,15 +71,32 @@ package com.likya.pinara.utils {
 			
 		}
 		
+		public static function prepare_dependencyListForm(dependencyListForm:DependencyListForm, jobDetailXml:XML):void {
+			
+			for each (var item:Object in jobDetailXml.DependencyList.Item) {
+				var stateComposite:String = item.jsDependencyRule.StateName + ":" + item.jsDependencyRule.SubstateName + ":" + item.jsDependencyRule.StatusName;
+				var depArray:Object = {depid:item.@dependencyID, jobinfo:item.jsId + ":" + item.jsName, stateinfo:stateComposite , comment:item.comment };
+				dependencyListForm.dependencyListGrid.dataProvider.addItem(depArray);
+			}
+			dependencyListForm.depExp.text = "" + jobDetailXml.DependencyList.DependencyExpression;
+		}
+		
 		public static function prepare_managementInfoForm(managementInfoForm:JobManagementInfoForm, jobDetailXml:XML):void {
 			
 			var mXML:XMLList = jobDetailXml.management;
 			
 			managementInfoForm.jsJobTriggerType.selectedIndex = JobXmlToView.indexOf(mXML.trigger, managementInfoForm.jsJobTriggerType.dataProvider.toArray());
 			
-			managementInfoForm.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
-			managementInfoForm.stepValue.text = mXML.periodInfo.@step;
-			managementInfoForm.maxCountValue.text = mXML.periodInfo.@maxCount;
+			if(mXML.hasOwnProperty("periodInfo")) {
+				managementInfoForm.periodInfo.selected = true;
+				managementInfoForm.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
+				managementInfoForm.stepValue.text = mXML.periodInfo.@step;
+				managementInfoForm.maxCountValue.text = mXML.periodInfo.@maxCount;
+			} else {
+				managementInfoForm.periodInfo.selected = false;
+			}
+			
+			managementInfoForm.periodInfoDecoration();
 			
 			managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
 			
@@ -109,6 +131,78 @@ package com.likya.pinara.utils {
 		
 		public static function prepare_scheduleInfoForm(scheduleInfoForm:ScheduleInfoForm, jobDetailXml:XML):void {
 
+			
+			var isEveryDayExecute:Boolean = isEveryday(jobDetailXml.scheduleInfo.daysOfWeekIntType);
+			if(isEveryDayExecute) {
+				scheduleInfoForm.everyDaySchedule.selected = true;
+				scheduleInfoForm.handleDecoration("everyDaySchedule");
+			} else {
+				scheduleInfoForm.specificSchedule.selected = true;
+				scheduleInfoForm.handleDecoration("specificSchedule");
+				
+				if(jobDetailXml.scheduleInfo.daysOfMonth.firstDayOfMonth != null) {
+					scheduleInfoForm.fdom.selected = true;
+				}
+				
+				if(jobDetailXml.scheduleInfo.daysOfMonth.lastDayOfMonth != null) {
+					scheduleInfoForm.ldom.selected = true;
+				}
+				
+				for each (var item:Object in jobDetailXml.scheduleInfo.daysOfMonth.days) {
+					scheduleInfoForm.specDays.text += item + ",";
+				}
+				
+				if(scheduleInfoForm.specDays.text.lastIndexOf(",") == scheduleInfoForm.specDays.text.length - 1) {
+					scheduleInfoForm.specDays.text = scheduleInfoForm.specDays.text.substr(0, scheduleInfoForm.specDays.text.length - 1);
+				}
+				
+				for each (var weekdayitem:Object in jobDetailXml.scheduleInfo.daysOfWeekIntType) {
+					
+					switch("" + weekdayitem)
+					{
+						case "1":
+						{
+							scheduleInfoForm.d1.selected = true;
+							break;
+						}
+						case "2":
+						{
+							scheduleInfoForm.d2.selected = true;
+							break;
+						}
+						case "3":
+						{
+							scheduleInfoForm.d3.selected = true;
+							break;
+						}
+						case "4":
+						{
+							scheduleInfoForm.d4.selected = true;
+							break;
+						}
+						case "5":
+						{
+							scheduleInfoForm.d5.selected = true;
+							break;
+						}
+						case "6":
+						{
+							scheduleInfoForm.d6.selected = true;
+							break;
+						}
+						case "7":
+						{
+							scheduleInfoForm.d7.selected = true;
+							break;
+						}
+						default:
+						{
+							break;
+						}
+					}
+				}
+					
+			}
 		}
 		
 		private static function xmlDateToNormal(text:String):String {
@@ -122,6 +216,26 @@ package com.likya.pinara.utils {
 			return dateString;
 		}
 		
+		private static function isEveryday(myList:XMLList):Boolean {
+			var found:Boolean = false;
+			var i:int;
+			for (i = 1; i < 8; i++) {
+				// trace("i : " + i);
+				found = false;
+				for each (var item:Object in myList) {
+					// trace(item);
+					if(i == Number(item)) {
+						found = true;
+						break;
+					}
+				}
+				
+				if(!found) {
+					break;
+				}
+			}
+			return found;
+		}
 	}
 }
 

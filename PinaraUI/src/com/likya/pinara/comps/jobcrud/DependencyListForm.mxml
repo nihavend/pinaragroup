@@ -188,7 +188,7 @@
 			
 			public function updateData():void {
 				jobListDS.url = "/flex/restsrvc/jobsummarylistxml";
-				// jobListDS.send();
+				jobListDS.send();
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {

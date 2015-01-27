@@ -57,6 +57,7 @@
 			private function processSave():void {
 				
 				if(!validateAll()) {
+					Alert.show("Has validation errors !");
 					return;
 				}
 				
@@ -65,8 +66,10 @@
 				// trace("myXML", myXML.toXMLString());
 				Alert.show(myraGenericJob);
 				if(isEditMode) {
+					Alert.show("jobManagerService.updatejob");
 					jobManagerService.updatejob(myraGenericJob);
 				} else {
+					Alert.show("jobManagerService.addjob");
 					jobManagerService.addjob(myraGenericJob);
 				}
 			}
@@ -80,7 +83,7 @@
 				var returnXml:XML;
 				var returnTxt:String = null;
 				
-				// Alert.show("Result : " + event.message.body);
+				Alert.show("Result : " + event.message.body);
 				
 				try {
 					// returnXml = XML(event.result);

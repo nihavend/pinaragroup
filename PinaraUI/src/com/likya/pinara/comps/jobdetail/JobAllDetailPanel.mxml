@@ -95,7 +95,7 @@
 					
 					jobId.text = jobDetailXml.@Id;
 					jobName.text = jobDetailXml.baseJobInfos.jsName;
-					// Visual paramse detail xml'e eklenmedi.
+					
 					// jobState.text = jobDetailXml.visualParams.statu;
 					// manage.text = jobDetailXml.visualParams.commandabilityParams;
 					jobCommandType.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
@@ -176,7 +176,8 @@
 						<s:Label text="Job Name :" width="105" paddingLeft="20" />
 						<s:TextInput id="jobName" top="5" editable="false"/>
 						<s:Label text="Job State :" width="105" paddingLeft="20"/>
-						<s:TextInput id="jobState" top="5" editable="false" />
+						<!--<s:TextInput id="jobState" top="5" editable="false" />-->
+						<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
 					</s:HGroup>
 					<s:HGroup verticalAlign="baseline" paddingTop="15">
 						<s:Label text="Command Type :" width="105" paddingLeft="10" />
@@ -184,7 +185,8 @@
 						<s:Label text="Group Id :" width="105" paddingLeft="20" />
 						<s:TextInput id="groupId" top="5" editable="false"/>
 						<s:Label text="Manage :" width="105" paddingLeft="20" />
-						<s:TextInput id="manage" top="5" editable="false"/>
+						<!--<s:TextInput id="manage" top="5" editable="false"/>-->
+						<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}"/>
 					</s:HGroup>
 					<s:HGroup verticalAlign="baseline" paddingTop="15">
 						<s:Label text="Son ÇZ :" width="105" paddingLeft="10" />

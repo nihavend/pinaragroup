@@ -166,6 +166,7 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation = new mx.rpc.http.Operation(null, "updatejob");
          operation.url = "/flex/restsrvc/updatejob/";
          operation.method = "POST";
+         operation.serializationFilter = serializer0;
          operation.contentType = "application/xml";
          operation.resultType = Object;
          operations.push(operation);

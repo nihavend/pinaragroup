@@ -13,7 +13,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
-			import com.likya.pinara.utils.GenericJobInfo;
+			import com.likya.pinara.utils.ViewToJobXml;
 			import com.likya.pinara.utils.JobXmlToView;
 			
 			import mx.controls.Alert;
@@ -27,19 +27,19 @@
 			[Bindable]
 			public var jobDetailXml:XML;
 			
+			private var isEditMode:Boolean = false;
 			
 			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
 			{
 				if(jobDetailXml != null) {
+					isEditMode = true;
 					title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm, jobDetailXml);
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
+					// JobXmlToView..prepare_dependencyListForm(dependencyListForm, jobDetailXml);
 					JobXmlToView.prepare_managementInfoForm(managementInfoForm, jobDetailXml);
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
-					// lastCs.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsRealTime.startTime);
-					// planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
-					
 				}
 				
 			}
@@ -61,10 +61,14 @@
 				}
 				
 				// Check credentials (not shown) then remove pop up.
-				var myraGenericJob:XML = GenericJobInfo.getXML(this);
+				var myraGenericJob:XML = ViewToJobXml.getXML(this);
 				// trace("myXML", myXML.toXMLString());
 				Alert.show(myraGenericJob);
-				jobManagerService.addjob(myraGenericJob);
+				if(isEditMode) {
+					jobManagerService.updatejob(myraGenericJob);
+				} else {
+					jobManagerService.addjob(myraGenericJob);
+				}
 			}
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
@@ -112,6 +116,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<jobmanager:JobManager id="jobManagerService" result="jobManagerService_resultHandler(event)" fault="jobManagerService_faultHandler(event)"/>
 		<s:CallResponder id="addJob"/>
+		<s:CallResponder id="updateJob"/>
 	</fx:Declarations>
 	
 	<s:VGroup>

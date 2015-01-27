@@ -29,6 +29,20 @@
 				<jsIsActive>false</jsIsActive>
 				<userId>1</userId>
 			  </baseJobInfos>
+			<DependencyList>
+				<Item dependencyID="mydep">
+					<jsName>depJsName</jsName>
+					<jsId>1</jsId>
+					<jsType>JOB</jsType>
+					<comment>no comment</comment>
+					<jsDependencyRule>
+						<StateName>PENDING</StateName>
+						<SubstateName>READY</SubstateName>
+						<StatusName>BYTIME</StatusName>
+					</jsDependencyRule>
+				</Item>
+				<DependencyExpression>I can not express my deps !</DependencyExpression>
+			</DependencyList>
 			  <graphInfo deadBranch="false"/>
 			  <stateInfos>
 				<JobStatusList>
@@ -115,15 +129,18 @@
 				  </jobAutoRetryInfo>
 				</cascadingConditions>
 			  </management>
-			  <scheduleInfo>
-				<daysOfWeekIntType>1</daysOfWeekIntType>
-				<daysOfWeekIntType>2</daysOfWeekIntType>
-				<daysOfWeekIntType>3</daysOfWeekIntType>
-				<daysOfWeekIntType>4</daysOfWeekIntType>
-				<daysOfWeekIntType>5</daysOfWeekIntType>
-				<daysOfWeekIntType>6</daysOfWeekIntType>
-				<daysOfWeekIntType>7</daysOfWeekIntType>
-			  </scheduleInfo>
+				<scheduleInfo>
+					<daysOfMonth>
+						<firstDayOfMonth/>
+						<lastDayOfMonth/>
+						<days>1</days>
+						<days>15</days>
+						<days>30</days>
+					</daysOfMonth>
+					<daysOfWeekIntType>1</daysOfWeekIntType>
+					<daysOfWeekIntType>2</daysOfWeekIntType>
+					<daysOfWeekIntType>3</daysOfWeekIntType>
+				</scheduleInfo>
 			  <runtimeParams>
 				<realizedDuration>00:00:00</realizedDuration>
 				<previousDuration>-</previousDuration>

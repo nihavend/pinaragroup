@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
+			   creationComplete="application1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			
+			public var jobListXmlCollection:XMLListCollection = new XMLListCollection();
+			
+			[Bindable]
+			private var  currentDataItem:XML = <genericJob handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="22" groupId="my_group" agentId="1">
+			  <baseJobInfos>
+				<jsName>My name is</jsName>
+				<jobTypeDetails>
+				  <jobCommandType>BATCH PROCESS</jobCommandType>
+				  <jobCommand>job1.sh</jobCommand>
+				  <jobPath>jobs</jobPath>
+				  <argValues>dorduncu besinci altıncı</argValues>
+				  <envVariables>
+					<entry key="yedinci">yedinci</entry>
+					<entry key="sekizinci">sekizinci</entry>
+					<entry key="dokuzuncu">dokuzuncu</entry>
+				  </envVariables>
+				</jobTypeDetails>
+				<jobLogFile>demo.log</jobLogFile>
+				<jobLogPath>./</jobLogPath>
+				<oSystem>MACOS</oSystem>
+				<jobPriority>4</jobPriority>
+				<jsIsActive>false</jsIsActive>
+				<userId>1</userId>
+			  </baseJobInfos>
+			<DependencyList>
+				<Item dependencyID="mydep">
+					<jsName>depJsName</jsName>
+					<jsId>1</jsId>
+					<jsType>JOB</jsType>
+					<comment>no comment</comment>
+					<jsDependencyRule>
+						<StateName>PENDING</StateName>
+						<SubstateName>READY</SubstateName>
+						<StatusName>BYTIME</StatusName>
+					</jsDependencyRule>
+				</Item>
+				<DependencyExpression>I can not express my deps !</DependencyExpression>
+			</DependencyList>
+			  <graphInfo deadBranch="false"/>
+			  <stateInfos>
+				<JobStatusList>
+				  <JobStatus>
+					<StatusName>FAILED</StatusName>
+					<Desc>benim açıklamam</Desc>
+					<ReturnCodeList osType="MACOS">
+					  <ReturnCode>
+						<Code>0</Code>
+						<Desc>Açıklama</Desc>
+					  </ReturnCode>
+					  <ReturnCode>
+						<Code>1</Code>
+						<Desc>Açıklama-1</Desc>
+					  </ReturnCode>
+					</ReturnCodeList>
+				  </JobStatus>
+				</JobStatusList>
+				<LiveStateInfos>
+				  <LiveStateInfo LSIDateTime="2015-01-26T17:03:07.153+02:00">
+					<StateName>PENDING</StateName>
+					<SubstateName>IDLED</SubstateName>
+					<StatusName>BYTIME</StatusName>
+				  </LiveStateInfo>
+				  <LiveStateInfo LSIDateTime="2015-01-26T17:03:07.074+02:00">
+					<StateName>FINISHED</StateName>
+					<SubstateName>COMPLETED</SubstateName>
+					<StatusName>FAILED</StatusName>
+					<ReturnCode>
+					  <Desc>Cannot run program "/bin/sh" (in directory "jobs"): error=2, No such file or directory</Desc>
+					</ReturnCode>
+				  </LiveStateInfo>
+				  <LiveStateInfo LSIDateTime="2015-01-26T17:03:07.067+02:00">
+					<StateName>RUNNING</StateName>
+					<SubstateName>ON-RESOURCE</SubstateName>
+					<StatusName>TIME-IN</StatusName>
+				  </LiveStateInfo>
+				  <LiveStateInfo LSIDateTime="2015-01-26T17:03:06.939+02:00">
+					<StateName>RUNNING</StateName>
+					<SubstateName>STAGE-IN</SubstateName>
+				  </LiveStateInfo>
+				  <LiveStateInfo LSIDateTime="2015-01-26T17:03:06.469+02:00">
+					<StateName>PENDING</StateName>
+					<SubstateName>IDLED</SubstateName>
+					<StatusName>BYTIME</StatusName>
+				  </LiveStateInfo>
+				  <LiveStateInfo LSIDateTime="2014-01-30T23:41:58.595+02:00">
+					<StateName>PENDING</StateName>
+					<SubstateName>IDLED</SubstateName>
+					<StatusName>BYTIME</StatusName>
+				  </LiveStateInfo>
+				</LiveStateInfos>
+			  </stateInfos>
+			  <management>
+				<trigger>USER</trigger>
+				<periodInfo relativeStart="false" step="PT1H" counter="0" maxCount="3" />
+				<timeManagement>
+				  <bornedPlannedTime>
+					<startTime>2014-03-09T11:43:20.285+02:00</startTime>
+					<stopTime>2024-05-30T23:41:58.352+02:00</stopTime>
+				  </bornedPlannedTime>
+				  <jsPlannedTime>
+					<startTime>2015-01-27T11:43:20.000+02:00</startTime>
+					<stopTime>2024-05-30T23:41:58.352+02:00</stopTime>
+				  </jsPlannedTime>
+				  <jsRealTime>
+					<startTime>2015-01-26T17:03:06.940+02:00</startTime>
+					<stopTime>2015-01-26T17:03:07.079+02:00</stopTime>
+				  </jsRealTime>
+				  <jsTimeOut>
+					<value_integer>88</value_integer>
+					<unit>HOURS</unit>
+				  </jsTimeOut>
+				  <expectedTime>
+					<value_integer>72</value_integer>
+					<unit>MINUTES</unit>
+				  </expectedTime>
+				</timeManagement>
+				<cascadingConditions>
+				  <runEvenIfFailed>false</runEvenIfFailed>
+				  <jobSafeToRestart>false</jobSafeToRestart>
+				  <jobAutoRetryInfo step="PT20S" maxCount="3" >
+					<jobAutoRetry>false</jobAutoRetry>
+				  </jobAutoRetryInfo>
+				</cascadingConditions>
+			  </management>
+				<scheduleInfo>
+					<daysOfMonth>
+						<firstDayOfMonth/>
+						<lastDayOfMonth/>
+						<days>1</days>
+						<days>15</days>
+						<days>30</days>
+					</daysOfMonth>
+					<daysOfWeekIntType>1</daysOfWeekIntType>
+					<daysOfWeekIntType>2</daysOfWeekIntType>
+					<daysOfWeekIntType>3</daysOfWeekIntType>
+				</scheduleInfo>
+			  <runtimeParams>
+				<realizedDuration>00:00:00</realizedDuration>
+				<previousDuration>-</previousDuration>
+				<hasJobLog>false</hasJobLog>
+				<hasJobContent>false</hasJobContent>
+			  </runtimeParams>
+			  <visualParams>
+				<statu>0</statu>
+				<commandabilityParams>
+				  <isPausable>true</isPausable>
+				  <isResumable>false</isResumable>
+				  <isRetryable>false</isRetryable>
+				  <isSkipable>false</isSkipable>
+				  <isStartable>true</isStartable>
+				  <isStopable>false</isStopable>
+				  <isSuccessable>false</isSuccessable>
+				</commandabilityParams>
+			  </visualParams>
+			</genericJob>;
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				//manageButtonGroup.data = currentDataItem;
+				jobListXmlCollection.addItem(currentDataItem);
+				pinaraJobList.dataProvider = jobListXmlCollection;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<jobdetail:StateImageItem id="stateImageItem" data="{currentDataItem}"/>
+	
+	<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{currentDataItem}"/>
+	
+	<s:DataGrid id="pinaraJobList" width="500" height="100" top="50"> 
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn headerText="Old Grid Header" width="150" maxWidth="250">
+					<s:itemRenderer>
+						<fx:Component>
+							<jobdetail:PinaraJobListGridManageColumn selectedGroupId="-1" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+				<s:GridColumn headerText="New Grid Header" width="150" maxWidth="250">
+					<s:itemRenderer>
+						<fx:Component>
+							<jobdetail:PinaraJobListGridManageColumnNew selectedGroupId="-1" />
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+</s:Application>

@@ -22,6 +22,7 @@ public class JobDetailMapper extends JobGridListMapper {
 		XmlCursor xmlCursor = xmlObject.newCursor();
 		xmlCursor.toEndToken();
 		JobGridListMapper.addRuntimeParams(xmlCursor, abstractJobType);
+		JobGridListMapper.addVisualParams(xmlCursor, abstractJobType);
 		
 		if (xmlCursor != null) {
 			xmlCursor.dispose();

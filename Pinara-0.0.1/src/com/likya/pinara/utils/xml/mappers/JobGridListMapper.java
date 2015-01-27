@@ -102,7 +102,7 @@ public class JobGridListMapper {
 		
 	}
 	
-	private static void addVisualParams(XmlCursor xmlCursor, AbstractJobType abstractJobType) {
+	protected static void addVisualParams(XmlCursor xmlCursor, AbstractJobType abstractJobType) {
 		
 		// We could use the convenient xobj.selectPath() or cur.selectPath()
 		// to position the cursor on the <person> element, but let's use the

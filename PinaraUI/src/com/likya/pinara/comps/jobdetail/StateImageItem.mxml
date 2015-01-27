@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.containers.ImageContainer;
+			import com.likya.pinara.containers.ToolTipContainer;
+			
+			[Bindable]
+			public var data:Object;
+			
+			public function mylabelFunc(data:Object):String {
+				var liveStateInfo:XML = XMLList(XML(data.stateInfos.LiveStateInfos).children())[0];
+				
+				var retStr:String = "";
+				
+				if(liveStateInfo.StateName != "" || liveStateInfo.StateName != null) {
+					retStr = liveStateInfo.StateName;
+				}
+				
+				if(liveStateInfo.SubstateName != "" || liveStateInfo.SubstateName != null) {
+					retStr = retStr + "-" + liveStateInfo.SubstateName;
+				}
+				
+				if(liveStateInfo.StatusName != "" || liveStateInfo.StatusName != null) {
+					retStr = retStr + "-" + liveStateInfo.StatusName;
+				}
+				
+				return retStr; // XMLList(XML(data.stateInfos.LiveStateInfos).children())[0].StateName;
+			}
+			
+			// {trace('XML : ' + XMLList(XML(data.stateInfos.LiveStateInfos).children())[0].StateName)}
+		]]>
+	</fx:Script>
+
+	<s:Image source="{ImageContainer.resolveStatus(data)}" toolTip="{ToolTipContainer.getToolTip(data) + ':' + mylabelFunc(data)}"/>
+	
+</s:VGroup>

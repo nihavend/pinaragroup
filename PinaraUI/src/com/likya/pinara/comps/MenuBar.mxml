@@ -63,6 +63,9 @@
 				handleEvent();
 			}
 			
+			public function listNodeSelected(event:ResourceEvent):void {
+				setMenuItems("false");
+			}
 			
 			/**
 			 * 	Serkan Taş
@@ -94,10 +97,6 @@
 					currentDataItem = allDetailPanel.jobDetailXml;
 					handleEvent();
 				}
-			}
-			
-			public function listNodeSelected(event:ResourceEvent):void {
-				setMenuItems("false");
 			}
 			
 			protected function tlosMenuBar_itemClickHandler(event:MenuEvent):void {
@@ -142,7 +141,7 @@
 				} else if(event.label == resourceManager.getString("messages", "addJob")) {
 					showAddJob();
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {
-					showEditJob();
+					Alert.show("İş düzenleme yapabilmeniz için iş durumu PENDING:DEACTIVATED yapılacak, onalıyor musunuz ?", warningStr, Alert.OK|Alert.CANCEL, this, showEditJob, null, Alert.CANCEL);
 				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
 					Alert.show("Seçili iş silinecek, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, showDeleteJob, null, Alert.CANCEL);
 				}
@@ -153,11 +152,13 @@
 				PopUpManager.centerPopUp(addJobWindow);
 			}
 			
-			private function showEditJob():void {
-				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
-				editJobWindow.jobDetailXml = currentDataItem;
-				PopUpManager.centerPopUp(editJobWindow);
-				//Alert.show("Selected Job id : " + "");
+			private function showEditJob(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
+					editJobWindow.jobDetailXml = currentDataItem;
+					PopUpManager.centerPopUp(editJobWindow);
+					//Alert.show("Selected Job id : " + "");	
+				}
 			}
 			
 			private function showDeleteJob():void {

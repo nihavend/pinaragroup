@@ -7,7 +7,7 @@
 		<![CDATA[
 			import com.likya.pinara.comps.jobcrud.DependencyListForm;
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
-			import com.likya.pinara.utils.GenericJobInfo;
+			import com.likya.pinara.utils.ViewToJobXml;
 			
 			import mx.controls.Alert;
 			import mx.managers.PopUpManager;
@@ -37,7 +37,7 @@
 			
 			protected function button3_clickHandler(event:MouseEvent):void
 			{
-				Alert.show(GenericJobInfo.zeroize(tobeParsed.text));
+				Alert.show(ViewToJobXml.zeroize(tobeParsed.text));
 			}
 			
 			protected function button4_clickHandler(event:MouseEvent):void
@@ -56,6 +56,21 @@
 					trace(job);
 					jobList.dataProvider.addItem(job.jobid + ":" + job.jobname);
 				}
+				
+			}
+			
+			protected function button5_clickHandler(event:MouseEvent):void
+			{
+				var jobListXml:XML = 
+					<joblist>
+						<job><jobid>22</jobid><jobname>My name is 22</jobname></job>
+						<job><jobid>23</jobid><jobname>My name is 23</jobname></job>
+						<job><jobid>24</jobid><jobname>My name is 24</jobname></job>
+						<job><jobid>25</jobid><jobname>My name is 25</jobname></job>
+						<jobserkan><jobid>26</jobid><jobname>My name is 26</jobname></jobserkan>
+					</joblist>;
+				
+				Alert.show(jobListXml.hasOwnProperty("jobserkan"));
 				
 			}
 			
@@ -81,6 +96,8 @@
 		<s:List id="jobList" maxHeight="120"> 
 			<mx:ArrayCollection />
 		</s:List>
+		
+		<s:Button id="button5" click="button5_clickHandler(event)" label="button5" />
 		
 	</s:VGroup>
 

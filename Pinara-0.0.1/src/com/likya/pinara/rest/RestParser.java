@@ -42,6 +42,8 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_RESUMEAPP = "resumeapp";
 	
 	public static final String CMD_ADDJOB = "addjob";
+	public static final String CMD_UPDATEJOB = "updatejob";
+	public static final String CMD_DELETEJOB = "deletejob";
 	
 	public static byte[] parse(String uriTxt) {
 
@@ -349,6 +351,26 @@ public class RestParser extends GenericRestParser {
 				e.printStackTrace();
 			}
 //			responseBytes = retStr.getBytes();
+			break;
+			
+		case RestParser.CMD_UPDATEJOB:
+			try {
+				PinaraAppManagerImpl.getInstance().updateJob(bufferString, false);
+				retStr = "<message><result>OK</result></message>";
+			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
+				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
+				e.printStackTrace();
+			}
+			break;
+			
+		case RestParser.CMD_DELETEJOB:
+			try {
+				PinaraAppManagerImpl.getInstance().deleteJob(bufferString, false);
+				retStr = "<message><result>OK</result></message>";
+			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
+				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
+				e.printStackTrace();
+			}
 			break;
 			
 		default:

@@ -62,4 +62,8 @@ public interface PinaraAppManager {
 	
 	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
 	
+	public void updateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
+	
+	public void deleteJob(String jobId, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
+	
 }

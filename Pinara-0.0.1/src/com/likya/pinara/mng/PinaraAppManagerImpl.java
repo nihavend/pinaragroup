@@ -311,18 +311,45 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 
 		return CoreFactory.getInstance().getNetTreeManagerInterface().getFreeJobs();
 	}
+	
+	public void deleteJob(String jobId, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		try {
+			jobOperations.deleteJob(jobId, persist);
+		} catch (UnknownServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			throw new PinaraXMLValidationException(e.getMessage());
+		}
+	}
+	
+	public void updateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		AbstractJobType abstractJobType = validateJob(jobXml, persist);
+		try {
+			jobOperations.addJob(abstractJobType, persist);
+		} catch (UnknownServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		
+		AbstractJobType abstractJobType = validateJob(jobXml, persist);
+		try {
+			jobOperations.addJob(abstractJobType, persist);
+		} catch (UnknownServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private AbstractJobType validateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 
 		if(!authorize()) {
 			throw new PinaraAuthenticationException();
 		}
 
-		String header = "<myra:jobList xmlns:myra=\"http://www.likyateknoloji.com/myra-joblist\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-				"xmlns:myra-jobprops=\"http://www.likyateknoloji.com/myra-jobprops\" xmlns:wla=\"http://www.likyateknoloji.com/wla-gen\" " +
-				"xmlns:lik=\"http://www.likyateknoloji.com/likya-gen\" xmlns:myra-stateinfo=\"http://www.likyateknoloji.com/myra-stateinfo\">";
-		String footer = "</myra:jobList>";
-		
 		JobListDocument jobListDocument;
 
 		try {
@@ -343,14 +370,13 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			
 			AbstractJobType abstractJobType = jobListDocument.getJobList().getGenericJobArray()[0];
 			
-			jobOperations.addJob(abstractJobType, persist);
+			return abstractJobType;
+			
 		} catch (XmlException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (UnknownServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		
+		return null;
 	}
 }

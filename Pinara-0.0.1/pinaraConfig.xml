@@ -1,7 +1,6 @@
 <pinaraConfig version="0.0.1" instanceName="Pinara Deployment Manager" xmlns="http://www.likyateknoloji.com/pinara-config"
 	xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra="http://www.likyateknoloji.com/myra-stateinfo">
-	<senaryoDosyasi>/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/2dep.xml</senaryoDosyasi>
-	<myraConfigFile>/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/myraConfig.xml</myraConfigFile>
+	<senaryoDosyasi>/Users/serkan/git/Myra/MyraSample/data/1.xml</senaryoDosyasi>
 	<serverIpAddress>0.0.0.0</serverIpAddress>
 	<httpPort>3000</httpPort>
 	<httpsPort>3443</httpsPort>
@@ -30,3 +29,5 @@
 	<logFile>myra.log</logFile>
 	<logPath>./</logPath>
 </pinaraConfig>
+	<!--  senaryoDosyasi>/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/2dep.xml</senaryoDosyasi>
+	<myraConfigFile>/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/myraConfig.xml</myraConfigFile -->

@@ -179,7 +179,7 @@
 				//outputText.text += "\nxmlService_faultHandler " + event;
 			}
 			
-			private function refreshTree():void {
+			public function refreshTree():void {
 				liveTreeDataService.send();
 			}
 			

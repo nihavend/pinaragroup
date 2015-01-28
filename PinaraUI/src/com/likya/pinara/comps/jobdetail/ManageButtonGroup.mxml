@@ -150,8 +150,8 @@
 			protected function jobManagerService_resultHandler(event:ResultEvent):void {
 				// Alert.show("Result : " + event.message);
 				// Alert.show("outerDocument.selectedGroupId : " + outerDocument.selectedGroupId);
-				Alert.show("Job Id : " + data.@Id);
-				Alert.show("Group Id : " + selectedGroupId);
+				// Alert.show("Job Id : " + data.@Id);
+				// Alert.show("Group Id : " + selectedGroupId);
 				if(selectedGroupId == null) { // Working on job detail page
 					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, data.@Id));
 				} else {// Working on job list page

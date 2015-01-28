@@ -87,6 +87,8 @@
 				} else if(currentState == "jobDetailState") {
 					allJobDetail.updateData();
 				}
+				
+				jobTree.refreshTree();
 			}
 			
 			private function changeState(event:ResourceEvent):void {

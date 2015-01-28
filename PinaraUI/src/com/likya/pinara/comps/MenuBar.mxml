@@ -49,9 +49,20 @@
 			}
 			
 			private function handleEvent(): void {
-				Alert.show("handler : " + currentDataItem);
-				if(currentDataItem != null) {
-					setMenuItems("true");
+				// Alert.show("handler : " + currentDataItem);
+				
+				// Alert.show("Last State : " + currentDataItem.stateInfos.LiveStateInfos.LiveStateInfo[0]);
+				
+				if(currentDataItem != null && currentDataItem.stateInfos.LiveStateInfos.LiveStateInfo[0] != null) {
+					var stateName:String = currentDataItem.stateInfos.LiveStateInfos.LiveStateInfo[0].StateName;
+					var substateName:String = currentDataItem.stateInfos.LiveStateInfos.LiveStateInfo[0].SubstateName;
+					
+					// Alert.show("stateName.subStateName : " + stateName + "." + substateName);
+					if(stateName == "PENDING" && substateName == "DEACTIVATED") {
+						setMenuItems("true");					
+					} else {
+						setMenuItems("false");
+					}
 				} else {
 					setMenuItems("false");
 				}
@@ -141,7 +152,7 @@
 				} else if(event.label == resourceManager.getString("messages", "addJob")) {
 					showAddJob();
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {
-					Alert.show("İş düzenleme yapabilmeniz için iş durumu PENDING:DEACTIVATED yapılacak, onalıyor musunuz ?", warningStr, Alert.OK|Alert.CANCEL, this, showEditJob, null, Alert.CANCEL);
+					showEditJob();
 				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
 					Alert.show("Seçili iş silinecek, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, showDeleteJob, null, Alert.CANCEL);
 				}
@@ -152,17 +163,20 @@
 				PopUpManager.centerPopUp(addJobWindow);
 			}
 			
-			private function showEditJob(eventObj:CloseEvent):void {
-				if(eventObj.detail == Alert.OK) {
-					var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
-					editJobWindow.jobDetailXml = currentDataItem;
-					PopUpManager.centerPopUp(editJobWindow);
-					//Alert.show("Selected Job id : " + "");	
-				}
+			private function showEditJob():void {
+				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
+				editJobWindow.jobDetailXml = currentDataItem;
+				PopUpManager.centerPopUp(editJobWindow);
+				//Alert.show("Selected Job id : " + "");	
 			}
 			
-			private function showDeleteJob():void {
-				// Delete selected job !!!!!				
+			private function showDeleteJob(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					//Alert.show("deleting job with id : " + currentDataItem.@Id);
+					jobManagerService.deletejob(currentDataItem.@Id);
+					mbiRefresh_click(null);
+				}
+							
 			}
 			
 			protected function mbiAnaSayfa_click(event:MouseEvent):void {
@@ -243,6 +257,11 @@
 				
 				try {
 					returnXml = XML(event.result);
+					//Alert.show(returnXml);
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "NOK") {
+						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+					} 
 				} catch(err:Error) {
 					returnTxt = String(event.result)
 				}
@@ -279,7 +298,7 @@
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
-				Alert.show(event.toString());
+				Alert.show("Fault : " + event.message);
 			}
 			
 		]]>
@@ -358,6 +377,7 @@
 		<s:CallResponder id="resumeAppResult" result="resumeAppResult_resultHandler(event)"/>
 		<s:CallResponder id="shutdownNormalResult"/>
 		<s:CallResponder id="shutdownForceResult"/>
+		<s:CallResponder id="deleteJob"/>
 		
 		<s:HTTPService id="jobListDS" 
 					   method="GET"

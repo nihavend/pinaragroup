@@ -199,8 +199,7 @@ package com.likya.pinara.utils {
 			myraJobList.myra::genericJob.myra_stateinfo::stateInfos.appendChild(<myra-stateinfo:LiveStateInfos xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
 							<myra-stateinfo:LiveStateInfo LSIDateTime="">
 								<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
-								<myra-stateinfo:SubstateName>CREATED</myra-stateinfo:SubstateName>
-								<myra-stateinfo:StatusName>DEPLOYED</myra-stateinfo:StatusName>
+								<myra-stateinfo:SubstateName>DEACTIVATED</myra-stateinfo:SubstateName>
 							</myra-stateinfo:LiveStateInfo>
 						</myra-stateinfo:LiveStateInfos>);
 

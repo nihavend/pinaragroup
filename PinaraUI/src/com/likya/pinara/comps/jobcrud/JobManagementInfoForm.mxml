@@ -83,14 +83,16 @@
 				// jsJobTriggerType.selectedIndex.toString();
 				// jsJobTriggerType.selectedItem.value;
 				if(jsJobTriggerType.selectedItem.code == 0) {
-					periodBox.enabled = true;
-					timeBox.enabled = true;
-					cascCondBox.enabled = true;
+					handleDecoration(true);
 				} else {
-					periodBox.enabled = false;
-					timeBox.enabled = false;
-					cascCondBox.enabled = false;
+					handleDecoration(false);
 				}
+			}
+			
+			public function handleDecoration(value:Boolean):void {
+				periodBox.enabled = value;
+				timeBox.enabled = value;
+				cascCondBox.enabled = value;
 			}
 			
 			protected function autoRetry_changeHandler(event:IndexChangeEvent):void

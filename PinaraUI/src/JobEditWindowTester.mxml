@@ -97,7 +97,7 @@
 				</LiveStateInfos>
 			  </stateInfos>
 			  <management>
-				<trigger>USER</trigger>
+				<trigger>TIME</trigger>
 		        <periodInfo relativeStart="false" step="PT1H" counter="0" maxCount="3" />
 				<timeManagement>
 				  <bornedPlannedTime>

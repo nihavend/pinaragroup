@@ -81,7 +81,7 @@
 			}
 			
 			private function refreshContent(event:ResourceEvent):void {
-				
+				// Alert.show("Refresh Event cought !...");
 				if(currentState == "jobListState") {
 					jobListDetail.updateData();
 				} else if(currentState == "jobDetailState") {

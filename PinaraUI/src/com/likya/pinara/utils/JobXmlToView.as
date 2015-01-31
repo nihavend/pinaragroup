@@ -85,47 +85,56 @@ package com.likya.pinara.utils {
 			
 			var mXML:XMLList = jobDetailXml.management;
 			
-			managementInfoForm.jsJobTriggerType.selectedIndex = JobXmlToView.indexOf(mXML.trigger, managementInfoForm.jsJobTriggerType.dataProvider.toArray());
+			var selectedCombo:Number = JobXmlToView.indexOf(mXML.trigger, managementInfoForm.jsJobTriggerType.dataProvider.toArray());
 			
-			if(mXML.hasOwnProperty("periodInfo")) {
-				managementInfoForm.periodInfo.selected = true;
-				managementInfoForm.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
-				managementInfoForm.stepValue.text = mXML.periodInfo.@step;
-				managementInfoForm.maxCountValue.text = mXML.periodInfo.@maxCount;
+			managementInfoForm.jsJobTriggerType.selectedIndex = selectedCombo;
+			
+			if(selectedCombo == 1) {
+				managementInfoForm.handleDecoration(false);
 			} else {
-				managementInfoForm.periodInfo.selected = false;
+				managementInfoForm.handleDecoration(true);
+				if(mXML.hasOwnProperty("periodInfo")) {
+					managementInfoForm.periodInfo.selected = true;
+					managementInfoForm.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
+					managementInfoForm.stepValue.text = mXML.periodInfo.@step;
+					managementInfoForm.maxCountValue.text = mXML.periodInfo.@maxCount;
+				} else {
+					managementInfoForm.periodInfo.selected = false;
+				}
+				
+				managementInfoForm.periodInfoDecoration();
+				
+				// managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
+				managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
+				
+				var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
+				managementInfoForm.bhour.text = pairs[0];
+				managementInfoForm.bminute.text = pairs[1];
+				managementInfoForm.bsecond.text = pairs[2];
+				
+				// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
+				managementInfoForm.edate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
+				
+				pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
+				managementInfoForm.ehour.text = pairs[0];
+				managementInfoForm.eminute.text = pairs[1];
+				managementInfoForm.esecond.text = pairs[2];
+				
+				managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
+				managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
+				
+				managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
+				managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
+				
+				
+				managementInfoForm.runEvenFailed.selectedItem = "" + mXML.cascadingConditions.runEvenIfFailed;
+				managementInfoForm.safeToRestart.selectedItem = "" + mXML.cascadingConditions.jobSafeToRestart;
+				
+				managementInfoForm.autoRetry.selectedItem = "" + mXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry;
+				
+				managementInfoForm.arStepValue.text = mXML.cascadingConditions.jobAutoRetryInfo.@step;
+				managementInfoForm.maxCountValueAr.text = mXML.cascadingConditions.jobAutoRetryInfo.@maxCount;
 			}
-			
-			managementInfoForm.periodInfoDecoration();
-			
-			managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
-			
-			var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
-			managementInfoForm.bhour.text = pairs[0];
-			managementInfoForm.bminute.text = pairs[1];
-			managementInfoForm.bsecond.text = pairs[2];
-			
-			managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);		
-			pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
-			managementInfoForm.ehour.text = pairs[0];
-			managementInfoForm.eminute.text = pairs[1];
-			managementInfoForm.esecond.text = pairs[2];
-			
-			managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
-			managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
-			
-			managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
-			managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
-			
-			
-			managementInfoForm.runEvenFailed.selectedItem = "" + mXML.cascadingConditions.runEvenIfFailed;
-			managementInfoForm.safeToRestart.selectedItem = "" + mXML.cascadingConditions.jobSafeToRestart;
-
-			managementInfoForm.autoRetry.selectedItem = "" + mXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry;
-
-			managementInfoForm.arStepValue.text = mXML.cascadingConditions.jobAutoRetryInfo.@step;
-			managementInfoForm.maxCountValueAr.text = mXML.cascadingConditions.jobAutoRetryInfo.@maxCount;
-			
 			
 		}
 		

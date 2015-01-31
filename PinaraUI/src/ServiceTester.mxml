@@ -8,6 +8,9 @@
 			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Decoder;
+			import mx.utils.Base64Encoder;
+			import mx.utils.ObjectUtil;
 			
 			
 			protected function button1_clickHandler(event:MouseEvent):void {
@@ -21,15 +24,47 @@
 			protected function uc_clickHandler(event:MouseEvent):void {
 				setSuccessJobResult.token = jobManagerService.setsuccess("1");
 			}
+
+			protected function testTrChar(event:MouseEvent):void {
+				
+				// System.useCodePage = true;
+				jobManagerService.operations["updatejob"].url = "http://127.0.0.1:3000/flex/restsrvc/updatejob/";
+				// jobManagerService.operations["updatejob"].contentType = "application/windows-1254";
+				//jobManagerService.operations["updatejob"].contentType = "application/xml";
+				
+				//jobManagerService.operations["updatejob"].headers = {"Accept-Charset": "utf-8"};
+				// var obj:Object = ObjectUtil.toString(jobManagerService.operations["updatejob"].headers);
+				
+				//trace(obj);
+				// 
+				// obj = ObjectUtil.toString(jobManagerService.operations["updatejob"].contentType);
+				// trace(obj);
+				
+				// var raw:ByteArray = new ByteArray();
+				// var dec:Base64Decoder = new Base64Decoder();
+				// dec.decode("Taş");
+				// raw = dec.toByteArray();
+				
+				//var byteArray:ByteArray = new ByteArray();
+				//byteArray.writeUTFBytes("Taş");
+				
+				//var encoder:Base64Encoder = new Base64Encoder();
+				//encoder.encode("Taş");
+				//var encodedByteArray:ByteArray = new ByteArray();
+				//encodedByteArray.writeUTFBytes(encoder.flush()); 
+				// encodedTxt.text = encodedByteArray.toString();
+				
+				setSuccessJobResult.token = jobManagerService.updatejob("Taş");
+			}
 			
 			protected function jobManagerService_resultHandler(event:ResultEvent):void {
-				// Alert.show("Result : " + XML(event.message.body));								
+				Alert.show("Result : " + XML(event.message.body));				
+				System.useCodePage = false;
 			}
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
 				Alert.show("Fault : " + event.message);	
 			}
-			
 			
 		]]>
 	</fx:Script>
@@ -40,10 +75,14 @@
 		<s:CallResponder id="startJobResult"/>
 		<s:CallResponder id="disableJobResult"/>
 		<s:CallResponder id="setSuccessJobResult"/>
+		<s:CallResponder id="addJob"/>
+		<s:CallResponder id="updateJob"/>
 	</fx:Declarations>
 
 	<s:Button id="bir" click="button1_clickHandler(event)" label="Start Job" left="100" top="100"/>
 	<s:Button id="iki" click="iki_clickHandler(event)" label="Disable Job" left="200" top="100"/>
 	<s:Button id="uc" click="uc_clickHandler(event)" label="Set Success Job" left="300" top="100"/>
+	
+	<s:Button id="Post" click="testTrChar(event)" label="Post" left="100" top="130"/>
 	
 </s:Application>

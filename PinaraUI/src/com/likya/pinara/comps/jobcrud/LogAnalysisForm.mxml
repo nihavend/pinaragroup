@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="100%" height="100%">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ItemClickEvent;
+			
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			public function validateForm():Boolean
+			{
+				/*if(jsOsType.selectedIndex == -1) {
+					Alert.show("Os Type is not selected !");
+					return false;
+				}
+				if(jsJobActivity.selectedIndex == -1) {
+					Alert.show("Job Activity is not selected !");
+					return false;
+				}
+				if(jsJobPriority.selectedIndex == -1) {
+					Alert.show("Job Priority is not selected !");
+					return false;
+				}
+				if(jsName.text == "") {
+					Alert.show("Job Name is not defined !");
+					return false;
+				}
+				if(jsJobPath.text == "") {
+					Alert.show("Job Path is not defined !");
+					return false;
+				}
+				if(jsCommand.text == "") {
+					Alert.show("Job Command is not defined !");
+					return false;
+				}*/
+				
+				return true;
+			}
+			
+			private function handleCard(event:ItemClickEvent):void {
+				handleDecoration(event.currentTarget.selectedValue);
+			}
+			
+			public function handleDecoration(selectedValue:String):void {
+				if (selectedValue == "everyDaySchedule") {
+					//this.dom.enabled = false;
+				} else if (selectedValue == "specificSchedule") {
+					//this.dom.enabled = true;
+				} else {
+					Alert.show("You selected Nothing.");
+				}
+			}
+			
+			protected function patternTypeList_changeHandler (event:IndexChangeEvent):void	{
+				// jsJobTriggerType.selectedIndex.toString();
+				// jsJobTriggerType.selectedItem.value;
+				if(patternType.selectedIndex == 0) {
+					matchCase.enabled = true;
+					matchWholeWordOnly.enabled = true;
+				} else {
+					matchCase.enabled = false;
+					matchWholeWordOnly.enabled = false;
+				}
+			}
+			
+			protected function thenActionCheckBox_clickHandler(event:MouseEvent):void
+			{
+				if(thenActionCheckBox.selected) {
+					elseAction.enabled = true;
+				} else {
+					elseAction.enabled = false;
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="logAnalyseEnable" itemClick="handleCard(event);"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+	<s:VGroup>
+		<s:RadioButton group="{logAnalyseEnable}" 
+					   id="disableLA"
+					   value="false"
+					   label="Disable Log Analyse"
+					   width="150"/>
+		<s:RadioButton group="{logAnalyseEnable}" 
+					   id="enableLA"
+					   value="true"
+					   selected="true"
+					   label="Enable Log Analyse" 
+					   width="200"/>
+	</s:VGroup>
+	
+	<s:Label visible="false" />
+	
+	<s:BorderContainer id="findWhat" width="100%" height="120" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Search Pattern Properties" fontSize="14" fontWeight="bold"/>
+		
+		<s:VGroup top="30">
+			
+			<s:HGroup top="30">
+				<s:FormItem label="Search Direction">
+					<s:DropDownList id="searchDirection" width="120" selectedIndex="0"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>Up</fx:String>
+								<fx:String>Down</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:FormItem>
+				
+				<s:FormItem label="Pattern Type">
+					<s:DropDownList id="patternType" width="120" selectedIndex="0" change="patternTypeList_changeHandler(event)"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>String</fx:String>
+								<fx:String>Regex</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:FormItem>
+				
+				<s:FormItem label="">
+					<s:CheckBox width="150" label="Case Sensitive" id="matchCase"/>
+				</s:FormItem>
+				
+				<s:FormItem label="">
+					<s:CheckBox width="150" label="Exact Match" id="matchWholeWordOnly"/>
+				</s:FormItem>
+				
+			</s:HGroup>
+			
+			<s:FormItem label="Search Pattern">
+				<s:TextInput id="searchPattern" width="300"/>
+			</s:FormItem>
+			
+		</s:VGroup>
+		
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="actionDef" width="100%" height="300" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:VGroup left="20" top="10">
+			
+			<s:BorderContainer id="thenAction" width="100%" height="100" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				
+				<s:Label left="15" top="10" text="[Then] Action Definition" fontSize="14" fontWeight="bold"/>
+				
+				<s:HGroup top="20">
+					<s:FormItem label="Backward Includence In Terms of Line : ">
+						<s:HGroup>
+							<s:TextInput  id="thenLogLineNumBack"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+					<s:FormItem label="Forward Includence In Terms of Line : ">
+						<s:HGroup>
+							<s:TextInput  id="thenLogLineNumForward"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+				</s:HGroup>
+				
+				<s:FormItem label="Predefined Content" top="50">
+					<s:TextInput id="thenActionContent" width="300"/>
+				</s:FormItem>
+				
+			</s:BorderContainer>
+			
+			<s:CheckBox width="150" label="Enable Else Action" id="thenActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
+			
+			<s:BorderContainer id="elseAction" width="100%" height="100" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
+				
+				<s:Label left="15" top="10" text="[Else] Action Definition" fontSize="14" fontWeight="bold"/>
+				
+				<s:HGroup top="20">
+					<s:FormItem label="Backward Includence In Terms of Line : ">
+						<s:HGroup>
+							<s:TextInput  id="elseLogLineNumBack"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+					<s:FormItem label="Forward Includence In Terms of Line : ">
+						<s:HGroup>
+							<s:TextInput  id="elseLogLineNumForward"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+				</s:HGroup>
+				
+				<s:FormItem label="Predefined Content" top="50">
+					<s:TextInput id="elseActionContent" width="300"/>
+				</s:FormItem>
+				
+			</s:BorderContainer>
+			
+		</s:VGroup>
+		
+	</s:BorderContainer>
+</s:Form>

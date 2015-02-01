@@ -129,6 +129,49 @@
 				  </jobAutoRetryInfo>
 				</cascadingConditions>
 			  </management>
+				<logAnalysis active="true" id="100">
+					  <findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>
+					  <action>
+						<then>
+						  <event code="email" id="100">
+							<EmailList>
+							  <email>q@q.com</email>
+							</EmailList>
+							<content logLineNumBack="201" logLineNumForward="201">Buraya mail atılacak ya da loga yazılacak içerik giriliyor. Şimdilik mail yok !</content>
+						  </event>
+						  <forcedResult active="true">
+							<LiveStateInfo LSIDateTime="string" userId="1">
+							  <StateName>PENDING</StateName>
+							  <SubstateName>PAUSED</SubstateName>
+							  <StatusName>BYUSER</StatusName>
+							  <ReturnCode cdId="string">
+								<Code>3</Code>
+								<Desc>string</Desc>
+							  </ReturnCode>
+							</LiveStateInfo>
+						  </forcedResult>
+						</then>
+						<else>
+						  <event code="email" id="100">
+							<EmailList>
+							  <email>a@a.com</email>
+							</EmailList>
+							<content logLineNumBack="201" logLineNumForward="201">string</content>
+						  </event>
+						  <forcedResult active="true">
+							<LiveStateInfo LSIDateTime="string" userId="1">
+							  <StateName>RUNNING</StateName>
+							  <SubstateName>ON-RESOURCE</SubstateName>
+							  <StatusName>BYUSER</StatusName>
+							  <ReturnCode cdId="string">
+								<Code>3</Code>
+								<Desc>string</Desc>
+							  </ReturnCode>
+							</LiveStateInfo>
+						  </forcedResult>
+						</else>ls
+					  </action>
+					</logAnalysis>
 				<scheduleInfo>
 					<daysOfMonth>
 						<firstDayOfMonth/>

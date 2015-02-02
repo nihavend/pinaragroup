@@ -23,6 +23,10 @@
 			
 			public function validateForm():Boolean
 			{
+				if(disableLA.selected) {
+					return true;
+				}
+				
 				if(searchPattern.text == "") {
 					Alert.show("Search Pattern is  not defined !");
 					return false;

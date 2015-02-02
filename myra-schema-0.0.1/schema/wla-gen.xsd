@@ -216,12 +216,12 @@
 	<xs:element name="action">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="then" />
-				<xs:element minOccurs="0" ref="else" />
+				<xs:element ref="thencase" />
+				<xs:element minOccurs="0" ref="elsecase" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="then">
+	<xs:element name="thencase">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="event" />
@@ -229,7 +229,7 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="else">
+	<xs:element name="elsecase">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="event" />

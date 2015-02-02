@@ -53,8 +53,7 @@ package com.likya.pinara.utils {
 			
 			myraJobList = getManagementInfo(j, myraJobList);
 			
-			// not implemented yet
-			//myraJobList = getLogAnalysis(j, myraJobList);
+			myraJobList = getLogAnalysis(j, myraJobList);
 
 			myraJobList = getScheduleInfo(j, myraJobList);
 
@@ -354,7 +353,74 @@ package com.likya.pinara.utils {
 				  </wla:else>ls
 				</wla:action>
 			  </wla:logAnalysis>*/
+			
+			myraJobList.myra::genericJob.appendChild(<wla:logAnalysis xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			
+			var logAnalysisXML:Object = myraJobList.myra::genericJob.wla::logAnalysis;
+			
+			logAnalysisXML.@id = 100;
+			if(j.logAnalysisForm.enableLA.selected) {
+				logAnalysisXML.@active = true;
+			} else {
+				logAnalysisXML.@active = false;
+			}
+			
+			logAnalysisXML.appendChild(<wla:findWhat xmlns:wla="http://www.likyateknoloji.com/wla-gen">{j.logAnalysisForm.searchPattern.text}</wla:findWhat>);
+			
+			logAnalysisXML.wla::findWhat.@direction = j.logAnalysisForm.searchDirection.selectedItem;
+			logAnalysisXML.wla::findWhat.@matchCase = j.logAnalysisForm.matchCase.selected;
+			logAnalysisXML.wla::findWhat.@matchWholeWordOnly = j.logAnalysisForm.matchWholeWordOnly.selected;
+			logAnalysisXML.wla::findWhat.@mode = j.logAnalysisForm.patternType.selectedItem;
+				
+			logAnalysisXML.appendChild(<wla:action xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			
+			
+			// Then Part
+			logAnalysisXML.wla::action.appendChild(<wla:then xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			
+			logAnalysisXML.wla::action.wla::then.appendChild(<wla:event code="email" id="100" xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			logAnalysisXML.wla::action.wla::then.wla::event.appendChild(<wla:content xmlns:wla="http://www.likyateknoloji.com/wla-gen">{j.logAnalysisForm.thenActionContent.text}</wla:content>);
+			logAnalysisXML.wla::action.wla::then.wla::event.wla::content.@logLineNumBack = j.logAnalysisForm.thenLogLineNumBack.text;
+			logAnalysisXML.wla::action.wla::then.wla::event.wla::content.@logLineNumForward = j.logAnalysisForm.thenLogLineNumForward.text;
+			
+			logAnalysisXML.wla::action.wla::then.appendChild(<wla:forcedResult active="true" xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 
+			logAnalysisXML.wla::action.wla::then.wla::forcedResult.appendChild(
+						<myra-stateinfo:LiveStateInfo LSIDateTime="" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+							<myra-stateinfo:StateName>{j.logAnalysisForm.thenSSS.stateName.selectedItem}</myra-stateinfo:StateName>
+							<myra-stateinfo:SubstateName>{j.logAnalysisForm.thenSSS.substateName.selectedItem.value}</myra-stateinfo:SubstateName>
+							<myra-stateinfo:StatusName>{j.logAnalysisForm.thenSSS.statusName.selectedItem.value}</myra-stateinfo:StatusName>
+							<myra-stateinfo:ReturnCode cdId="string">
+						  		<myra-stateinfo:Code>{j.logAnalysisForm.thenRetCode.text}</myra-stateinfo:Code>
+						  		<myra-stateinfo:Desc>{j.logAnalysisForm.thenRetCodeDesc.text}</myra-stateinfo:Desc>
+							</myra-stateinfo:ReturnCode>
+						</myra-stateinfo:LiveStateInfo>);
+			
+			var dateTimeString:String = getformatteddatetime();		
+			
+			logAnalysisXML.wla::action.wla::then.wla::forcedResult.myra_stateinfo::LiveStateInfo.@LSIDateTime = dateTimeString;
+			
+			if(j.logAnalysisForm.elseActionCheckBox.selected) {
+				// Else Part -- else korunaklı kelime olduğundan xml then deki gibi değil olduğu gibi girmemiz gerekiyor !!!
+				logAnalysisXML.wla::action.appendChild(
+					<wla:else xmlns:wla="http://www.likyateknoloji.com/wla-gen">
+						<wla:event code="email" id="100" xmlns:wla="http://www.likyateknoloji.com/wla-gen">
+							<wla:content logLineNumBack={j.logAnalysisForm.elseLogLineNumBack.text} logLineNumForward={j.logAnalysisForm.elseLogLineNumForward.text} xmlns:wla="http://www.likyateknoloji.com/wla-gen">
+								{j.logAnalysisForm.elseActionContent.text}
+							</wla:content>
+						</wla:event>
+						<myra-stateinfo:LiveStateInfo LSIDateTime={dateTimeString} xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+							<myra-stateinfo:StateName>{j.logAnalysisForm.elseSSS.stateName.selectedItem}</myra-stateinfo:StateName>
+							<myra-stateinfo:SubstateName>{j.logAnalysisForm.elseSSS.substateName.selectedItem.value}</myra-stateinfo:SubstateName>
+							<myra-stateinfo:StatusName>{j.logAnalysisForm.elseSSS.statusName.selectedItem.value}</myra-stateinfo:StatusName>
+							<myra-stateinfo:ReturnCode cdId="string">
+								<myra-stateinfo:Code>{j.logAnalysisForm.elseRetCode.text}</myra-stateinfo:Code>
+								<myra-stateinfo:Desc>{j.logAnalysisForm.elseRetCodeDesc.text}</myra-stateinfo:Desc>
+							</myra-stateinfo:ReturnCode>
+						</myra-stateinfo:LiveStateInfo>
+					</wla:else>);
+			}
+			
 			return myraJobList;	
 		}
 		

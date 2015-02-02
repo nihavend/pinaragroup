@@ -129,7 +129,7 @@
 				  </jobAutoRetryInfo>
 				</cascadingConditions>
 			  </management>
-				<logAnalysis active="true" id="100">
+				<!--logAnalysis active="true" id="100">
 					  <findWhat direction="Down" matchCase="true" matchWholeWordOnly="false" mode="regEx">search pattern</findWhat>
 					  <action>
 						<then>
@@ -171,7 +171,7 @@
 						  </forcedResult>
 						</else>ls
 					  </action>
-					</logAnalysis>
+					</logAnalysis-->
 				<scheduleInfo>
 					<daysOfMonth>
 						<firstDayOfMonth/>

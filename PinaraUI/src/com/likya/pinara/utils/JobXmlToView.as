@@ -2,27 +2,30 @@ package com.likya.pinara.utils {
 	import com.likya.pinara.comps.jobcrud.DependencyListForm;
 	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm;
 	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm;
+	import com.likya.pinara.comps.jobcrud.LogAnalysisForm;
 	import com.likya.pinara.comps.jobcrud.ScheduleInfoForm;
 	import com.likya.pinara.comps.jobcrud.StateInfosForm;
-	import com.likya.pinara.event.ResourceEvent;
 	
-	import flash.events.MouseEvent;
-	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.controls.DateField;
-	import mx.events.ItemClickEvent;
 	import mx.formatters.DateFormatter;
 	
 	public class JobXmlToView {
 		
 		public static function indexOf(label:String, arr:Array):int {
+			
+			var found:Boolean = false;
 			var count:int = 0;
 			for each (var item:Object in arr) {
 				if(item.value == label) {
+					found = true;
 					break;
 				}
 				count++;
 			}
+			
+			if(!found) count = -1;
 			
 			return count;
 		}
@@ -136,6 +139,81 @@ package com.likya.pinara.utils {
 				managementInfoForm.maxCountValueAr.text = mXML.cascadingConditions.jobAutoRetryInfo.@maxCount;
 			}
 			
+		}
+		
+		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {
+			
+			var isLogAnalyseEnable:Boolean = jobDetailXml.logAnalysis.@active;
+			
+			if(isLogAnalyseEnable) {
+				logAnalysisForm.enableLA.selected = true;
+			} else {
+				logAnalysisForm.disableLA.selected = true;				
+			}
+			// findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>
+			logAnalysisForm.searchDirection.selectedItem = "" + jobDetailXml.logAnalysis.findWhat.@direction;
+			
+			if(("" + jobDetailXml.logAnalysis.findWhat.@mode == "regEx")) {
+				logAnalysisForm.patternType.selectedItem = "Regex";
+			}
+			
+			if(("" + jobDetailXml.logAnalysis.findWhat.@matchCase == "true")) {
+				logAnalysisForm.matchCase.selected = true;
+			}
+
+			if(("" + jobDetailXml.logAnalysis.findWhat.@matchWholeWordOnly == "true")) {
+				logAnalysisForm.matchWholeWordOnly.selected = true;
+			}
+			
+			logAnalysisForm.searchPattern.text = jobDetailXml.logAnalysis.findWhat;
+			
+			// Then Action Definition
+			logAnalysisForm.thenLogLineNumBack.text = jobDetailXml.logAnalysis.action.then.event.content.@logLineNumBack;
+			logAnalysisForm.thenLogLineNumForward.text = jobDetailXml.logAnalysis.action.then.event.content.@logLineNumForward;
+			logAnalysisForm.thenActionContent.text = jobDetailXml.logAnalysis.action.then.event.content;
+			
+			logAnalysisForm.thenSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.StateName;
+			logAnalysisForm.thenSSS.stateName_changeHandler(null);
+			logAnalysisForm.thenSSS.refreshSubstateNameCombo();
+			
+			if(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.SubstateName != null) {
+				logAnalysisForm.thenSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.thenSSS.substateName.dataProvider.toArray());
+				logAnalysisForm.thenSSS.substateName_changeHandler(null);
+				if(logAnalysisForm.thenSSS.statusName.dataProvider != null) {
+					(logAnalysisForm.thenSSS.statusName.dataProvider as ArrayCollection).refresh();
+				}
+			}
+			
+			if(jobDetailXml.logAnalysis.then.event.forcedResult.LiveStateInfo.StatusName != null) {
+				logAnalysisForm.thenSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.StatusName, logAnalysisForm.thenSSS.statusName.dataProvider.toArray());
+			}
+			
+			logAnalysisForm.thenRetCode.text = jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.ReturnCode.Code;
+			logAnalysisForm.thenRetCodeDesc.text = jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.ReturnCode.Desc;
+			
+			// Else Action Definition
+			logAnalysisForm.elseLogLineNumBack.text = jobDetailXml.logAnalysis.action["else"].event.content.@logLineNumBack;
+			logAnalysisForm.elseLogLineNumForward.text = jobDetailXml.logAnalysis.action["else"].event.content.@logLineNumForward;
+			logAnalysisForm.elseActionContent.text = jobDetailXml.logAnalysis.action["else"].event.content;
+			
+			logAnalysisForm.elseSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StateName;
+			logAnalysisForm.elseSSS.stateName_changeHandler(null);
+			logAnalysisForm.elseSSS.refreshSubstateNameCombo();
+			
+			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.SubstateName != null) {
+				logAnalysisForm.elseSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.elseSSS.substateName.dataProvider.toArray());
+				logAnalysisForm.elseSSS.substateName_changeHandler(null);
+				if(logAnalysisForm.elseSSS.statusName.dataProvider != null) {
+					(logAnalysisForm.elseSSS.statusName.dataProvider as ArrayCollection).refresh();
+				}
+			}
+			
+			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StatusName != null) {
+				logAnalysisForm.elseSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StatusName, logAnalysisForm.elseSSS.statusName.dataProvider.toArray());
+			}
+			
+			logAnalysisForm.elseRetCode.text = jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.ReturnCode.Code;
+			logAnalysisForm.elseRetCodeDesc.text = jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.ReturnCode.Desc;
 		}
 		
 		public static function prepare_scheduleInfoForm(scheduleInfoForm:ScheduleInfoForm, jobDetailXml:XML):void {

@@ -130,7 +130,7 @@
 				</cascadingConditions>
 			  </management>
 				<logAnalysis active="true" id="100">
-					  <findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>
+					  <findWhat direction="Down" matchCase="true" matchWholeWordOnly="false" mode="regEx">search pattern</findWhat>
 					  <action>
 						<then>
 						  <event code="email" id="100">
@@ -160,9 +160,9 @@
 						  </event>
 						  <forcedResult active="true">
 							<LiveStateInfo LSIDateTime="string" userId="1">
-							  <StateName>RUNNING</StateName>
-							  <SubstateName>ON-RESOURCE</SubstateName>
-							  <StatusName>BYUSER</StatusName>
+							  <StateName>FINISHED</StateName>
+							  <SubstateName>COMPLETED</SubstateName>
+							  <StatusName>FAILED</StatusName>
 							  <ReturnCode cdId="string">
 								<Code>3</Code>
 								<Desc>string</Desc>

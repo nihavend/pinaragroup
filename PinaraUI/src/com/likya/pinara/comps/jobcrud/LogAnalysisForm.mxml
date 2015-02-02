@@ -20,33 +20,39 @@
 			import mx.events.ItemClickEvent;
 			
 			import spark.events.IndexChangeEvent;
-			import spark.events.TextOperationEvent;
 			
 			public function validateForm():Boolean
 			{
-				/*if(jsOsType.selectedIndex == -1) {
-					Alert.show("Os Type is not selected !");
+				if(searchPattern.text == "") {
+					Alert.show("Search Pattern is  not defined !");
 					return false;
 				}
-				if(jsJobActivity.selectedIndex == -1) {
-					Alert.show("Job Activity is not selected !");
+				
+				if(thenSSS.stateName.selectedIndex == -1) {
+					Alert.show("[Then] State is not selected !");
 					return false;
 				}
+				
+				if(elseActionCheckBox.selected && elseSSS.stateName.selectedIndex == -1) {
+					Alert.show("[Else] State is not selected !");
+					return false;
+				}
+				/*
 				if(jsJobPriority.selectedIndex == -1) {
-					Alert.show("Job Priority is not selected !");
-					return false;
+				Alert.show("Job Priority is not selected !");
+				return false;
 				}
 				if(jsName.text == "") {
-					Alert.show("Job Name is not defined !");
-					return false;
+				Alert.show("Job Name is not defined !");
+				return false;
 				}
 				if(jsJobPath.text == "") {
-					Alert.show("Job Path is not defined !");
-					return false;
+				Alert.show("Job Path is not defined !");
+				return false;
 				}
 				if(jsCommand.text == "") {
-					Alert.show("Job Command is not defined !");
-					return false;
+				Alert.show("Job Command is not defined !");
+				return false;
 				}*/
 				
 				return true;
@@ -57,10 +63,12 @@
 			}
 			
 			public function handleDecoration(selectedValue:String):void {
-				if (selectedValue == "everyDaySchedule") {
-					//this.dom.enabled = false;
-				} else if (selectedValue == "specificSchedule") {
-					//this.dom.enabled = true;
+				if (selectedValue == "false") {
+					findWhat.enabled = false;
+					actionDef.enabled = false;
+				} else if (selectedValue == "true") {
+					findWhat.enabled = true;
+					actionDef.enabled = true;
 				} else {
 					Alert.show("You selected Nothing.");
 				}
@@ -80,7 +88,7 @@
 			
 			protected function thenActionCheckBox_clickHandler(event:MouseEvent):void
 			{
-				if(thenActionCheckBox.selected) {
+				if(elseActionCheckBox.selected) {
 					elseAction.enabled = true;
 				} else {
 					elseAction.enabled = false;
@@ -114,6 +122,7 @@
 	</s:VGroup>
 	
 	<s:Label visible="false" />
+	
 	
 	<s:BorderContainer id="findWhat" width="100%" height="120" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
@@ -195,7 +204,7 @@
 					<s:TextInput id="thenActionContent" width="300"/>
 				</s:FormItem>
 				
-				<comps:SSSView paddingTop="90"/>
+				<comps:SSSView paddingTop="90" id="thenSSS"/>
 				
 				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
 					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
@@ -206,7 +215,7 @@
 				
 			</s:BorderContainer>
 			
-			<s:CheckBox width="150" label="Enable Else Action" id="thenActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
+			<s:CheckBox width="150" label="Enable Else Action" id="elseActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
 			
 			<s:BorderContainer id="elseAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
 				
@@ -237,7 +246,7 @@
 					<s:TextInput id="elseActionContent" width="300"/>
 				</s:FormItem>
 				
-				<comps:SSSView paddingTop="90"/>
+				<comps:SSSView paddingTop="90" id="elseSSS"/>
 				
 				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
 					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
@@ -251,4 +260,5 @@
 		</s:VGroup>
 		
 	</s:BorderContainer>
+	
 </s:Form>

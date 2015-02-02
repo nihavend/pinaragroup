@@ -40,13 +40,13 @@ public class LogAnalyser {
 		
 		Action logAction = logAnalysis.getAction();
 				
-		if (logAction.getThen() != null) {
-			parseEvent(logAction.getThen().getEvent());
-		} else if (logAction.getElse() != null) {
-			parseEvent(logAction.getElse().getEvent());
+		if (logAction.getThencase() != null) {
+			parseEvent(logAction.getThencase().getEvent());
+		} else if (logAction.getElsecase() != null) {
+			parseEvent(logAction.getElsecase().getEvent());
 		}
 
-		if(logAction.getThen() != null || logAction.getElse() != null) {
+		if(logAction.getThencase() != null || logAction.getElsecase() != null) {
 			
 			boolean result = false;
 
@@ -84,9 +84,9 @@ public class LogAnalyser {
 			logContent.append(defaultLogContent);
 			
 			if(result) {
-				liveStateInfo = logAction.getThen().getForcedResult().getLiveStateInfo();
+				liveStateInfo = logAction.getThencase().getForcedResult().getLiveStateInfo();
 			} else {
-				liveStateInfo = logAction.getElse().getForcedResult().getLiveStateInfo();
+				liveStateInfo = logAction.getElsecase().getForcedResult().getLiveStateInfo();
 			}
 			
 		}

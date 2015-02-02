@@ -53,14 +53,23 @@
 			
 			protected function validateAll():Boolean
 			{
-				return baseInfoForm.validateForm() && stateInfosForm.validateForm() && managementInfoForm.validateForm();
+				var formsValid:Boolean = true;
+				
+				formsValid = formsValid && baseInfoForm.validateForm();
+				formsValid = formsValid && stateInfosForm.validateForm();
+				// formsValid = formsValid && dependencyListForm.validateForm();
+				formsValid = formsValid && managementInfoForm.validateForm();
+				formsValid = formsValid && logAnalysisForm.validateForm();
+				// formsValid = formsValid && scheduleInfoForm.validateForm();
+				
+				return formsValid;
 			}
 			
 			// Handle the OK button.
 			private function processSave():void {
 				
 				if(!validateAll()) {
-					Alert.show("Has validation errors !");
+					// Alert.show("Has validation errors !");
 					return;
 				}
 				

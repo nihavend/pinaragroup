@@ -12,7 +12,7 @@
 				// not required
 			}
 			
-			protected function stateName_changeHandler(event:IndexChangeEvent):void
+			public function stateName_changeHandler(event:IndexChangeEvent):void
 			{
 				var data:ArrayCollection = new ArrayCollection();
 				
@@ -66,7 +66,15 @@
 				substateName.dataProvider = data;
 			}
 			
-			protected function substateName_changeHandler(event:IndexChangeEvent):void
+			public function refreshSubstateNameCombo():void {
+				if(substateName.dataProvider != null) {
+					// trace("Before : " + ObjectUtil.toString(substateName.dataProvider));
+					(substateName.dataProvider as ArrayCollection).refresh();
+					// trace("After : " + ObjectUtil.toString(substateName.dataProvider));
+				}
+			}
+			
+			public function substateName_changeHandler(event:IndexChangeEvent):void
 			{
 				var data:ArrayCollection = new ArrayCollection();
 				

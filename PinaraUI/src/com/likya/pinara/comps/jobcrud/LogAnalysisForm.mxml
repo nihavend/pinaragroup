@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:MyComp="*"
-		width="100%" height="100%">
+		width="100%" height="100%" xmlns:comps="com.likya.pinara.comps.*">
 	
 	<!--
 	<fx:Declarations>
@@ -121,9 +121,9 @@
 		
 		<s:VGroup top="30">
 			
-			<s:HGroup top="30">
+			<s:HGroup top="30" gap="-20">
 				<s:FormItem label="Search Direction">
-					<s:DropDownList id="searchDirection" width="120" selectedIndex="0"> 
+					<s:DropDownList id="searchDirection" selectedIndex="0"> 
 						<s:dataProvider>
 							<mx:ArrayList>
 								<fx:String>Up</fx:String>
@@ -134,7 +134,7 @@
 				</s:FormItem>
 				
 				<s:FormItem label="Pattern Type">
-					<s:DropDownList id="patternType" width="120" selectedIndex="0" change="patternTypeList_changeHandler(event)"> 
+					<s:DropDownList id="patternType" selectedIndex="0" change="patternTypeList_changeHandler(event)"> 
 						<s:dataProvider>
 							<mx:ArrayList>
 								<fx:String>String</fx:String>
@@ -145,11 +145,11 @@
 				</s:FormItem>
 				
 				<s:FormItem label="">
-					<s:CheckBox width="150" label="Case Sensitive" id="matchCase"/>
+					<s:CheckBox label="Case Sensitive" id="matchCase"/>
 				</s:FormItem>
 				
 				<s:FormItem label="">
-					<s:CheckBox width="150" label="Exact Match" id="matchWholeWordOnly"/>
+					<s:CheckBox label="Exact Match" id="matchWholeWordOnly"/>
 				</s:FormItem>
 				
 			</s:HGroup>
@@ -162,16 +162,16 @@
 		
 	</s:BorderContainer>
 	
-	<s:BorderContainer id="actionDef" width="100%" height="300" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+	<s:BorderContainer id="actionDef" width="100%" height="400" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
-		<s:VGroup left="20" top="10">
+		<s:VGroup left="10" top="10">
 			
-			<s:BorderContainer id="thenAction" width="100%" height="100" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			<s:BorderContainer id="thenAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 				
 				<s:Label left="15" top="10" text="[Then] Action Definition" fontSize="14" fontWeight="bold"/>
 				
 				<s:HGroup top="20">
-					<s:FormItem label="Backward Includence In Terms of Line : ">
+					<s:FormItem label="Include Back Line : ">
 						<s:HGroup>
 							<s:TextInput  id="thenLogLineNumBack"
 										  restrict="0-999999"
@@ -180,7 +180,7 @@
 						</s:HGroup>
 					</s:FormItem>
 					
-					<s:FormItem label="Forward Includence In Terms of Line : ">
+					<s:FormItem label="Include For Line : ">
 						<s:HGroup>
 							<s:TextInput  id="thenLogLineNumForward"
 										  restrict="0-999999"
@@ -195,16 +195,25 @@
 					<s:TextInput id="thenActionContent" width="300"/>
 				</s:FormItem>
 				
+				<comps:SSSView paddingTop="90"/>
+				
+				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
+					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+					<s:TextInput id="thenRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
+					<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+					<s:TextInput id="thenRetCodeDesc" width="250"/>
+				</s:HGroup>
+				
 			</s:BorderContainer>
 			
 			<s:CheckBox width="150" label="Enable Else Action" id="thenActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
 			
-			<s:BorderContainer id="elseAction" width="100%" height="100" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
+			<s:BorderContainer id="elseAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
 				
 				<s:Label left="15" top="10" text="[Else] Action Definition" fontSize="14" fontWeight="bold"/>
 				
-				<s:HGroup top="20">
-					<s:FormItem label="Backward Includence In Terms of Line : ">
+				<s:HGroup top="20" gap="-20">
+					<s:FormItem label="Include Back Line : ">
 						<s:HGroup>
 							<s:TextInput  id="elseLogLineNumBack"
 										  restrict="0-999999"
@@ -213,7 +222,7 @@
 						</s:HGroup>
 					</s:FormItem>
 					
-					<s:FormItem label="Forward Includence In Terms of Line : ">
+					<s:FormItem label="Include For Line : ">
 						<s:HGroup>
 							<s:TextInput  id="elseLogLineNumForward"
 										  restrict="0-999999"
@@ -227,6 +236,15 @@
 				<s:FormItem label="Predefined Content" top="50">
 					<s:TextInput id="elseActionContent" width="300"/>
 				</s:FormItem>
+				
+				<comps:SSSView paddingTop="90"/>
+				
+				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
+					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+					<s:TextInput id="elseRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
+					<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+					<s:TextInput id="elseRetCodeDesc" width="250"/>
+				</s:HGroup>
 				
 			</s:BorderContainer>
 			

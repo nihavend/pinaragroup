@@ -143,6 +143,12 @@ package com.likya.pinara.utils {
 		
 		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {
 			
+			if(!jobDetailXml.hasOwnProperty("logAnalysis")) {
+				logAnalysisForm.disableLA.selected = true;	
+				logAnalysisForm.handleDecoration("false");
+				return;
+			}
+			
 			var isLogAnalyseEnable:Boolean = jobDetailXml.logAnalysis.@active;
 			
 			if(isLogAnalyseEnable) {
@@ -155,6 +161,8 @@ package com.likya.pinara.utils {
 			
 			if(("" + jobDetailXml.logAnalysis.findWhat.@mode == "regEx")) {
 				logAnalysisForm.patternType.selectedItem = "Regex";
+			} else {
+				logAnalysisForm.patternType.selectedItem = "String";
 			}
 			
 			if(("" + jobDetailXml.logAnalysis.findWhat.@matchCase == "true")) {

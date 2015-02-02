@@ -135,7 +135,7 @@
 		
 		<!-- Create a Spark ButtonBar control to navigate 
 		the ViewStack container. -->
-		<s:TabBar dataProvider="{vs}"/>
+		<s:TabBar dataProvider="{vs}" width="750"/>
 		<!-- Define the ViewStack and the three child containers. -->
 		
 		<mx:ViewStack id="vs" width="100%" height="600" left="8" y="23" creationPolicy="all">

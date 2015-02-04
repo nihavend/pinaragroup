@@ -8,7 +8,7 @@
 			
 			import mx.managers.PopUpManager;
 			
-			private var  currentDataItem:XML = <genericJob handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="22" groupId="my_group" agentId="1">
+			private var currentDataItem1:XML = <genericJob handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="22" groupId="my_group" agentId="1">
 			  <baseJobInfos>
 				<jsName>My name is</jsName>
 				<jobTypeDetails>
@@ -203,6 +203,117 @@
 				</commandabilityParams>
 			  </visualParams>
 			</genericJob>;
+			
+			
+			
+			private var currentDataItem:XML = <genericJob handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="23" groupId="my_group" agentId="1">
+  <baseJobInfos>
+	<jsName>232</jsName>
+	<jobTypeDetails>
+	  <jobCommandType>BATCH PROCESS</jobCommandType>
+	  <jobCommand>323223</jobCommand>
+	  <jobPath>323232</jobPath>
+	  <argValues/>
+	</jobTypeDetails>
+	<jobLogFile/>
+	<jobLogPath/>
+	<oSystem>MACOS</oSystem>
+	<jobPriority>1</jobPriority>
+	<jsIsActive>true</jsIsActive>
+	<userId>007</userId>
+  </baseJobInfos>
+  <graphInfo deadBranch="false"/>
+  <stateInfos>
+	<JobStatusList>
+	  <JobStatus>
+		<StatusName>SUCCESS</StatusName>
+		<Desc>2</Desc>
+		<ReturnCodeList osType="MACOS">
+		  <ReturnCode>
+			<Code>2</Code>
+			<Desc>2</Desc>
+		  </ReturnCode>
+		</ReturnCodeList>
+	  </JobStatus>
+	</JobStatusList>
+	<LiveStateInfos>
+	  <LiveStateInfo LSIDateTime="2015-02-04T08:59:08.000+02:00">
+		<StateName>PENDING</StateName>
+		<SubstateName>DEACTIVATED</SubstateName>
+	  </LiveStateInfo>
+	</LiveStateInfos>
+  </stateInfos>
+  <management>
+	<trigger>TIME</trigger>
+	<timeManagement>
+	  <bornedPlannedTime>
+		<startTime>2015-02-04T22:22:22.000+02:00</startTime>
+		<stopTime>2015-02-18T22:22:22.000+02:00</stopTime>
+	  </bornedPlannedTime>
+	  <jsPlannedTime>
+		<startTime>2015-02-04T22:22:22.000+02:00</startTime>
+		<stopTime>2015-02-18T22:22:22.000+02:00</stopTime>
+	  </jsPlannedTime>
+	  <jsTimeOut>
+		<value_integer>2</value_integer>
+		<unit>HOURS</unit>
+	  </jsTimeOut>
+	  <expectedTime>
+		<value_integer>2</value_integer>
+		<unit>HOURS</unit>
+	  </expectedTime>
+	</timeManagement>
+	<cascadingConditions>
+	  <runEvenIfFailed>true</runEvenIfFailed>
+	  <jobSafeToRestart>true</jobSafeToRestart>
+	  <jobAutoRetryInfo step="P1D">
+		<jobAutoRetry>true</jobAutoRetry>
+	  </jobAutoRetryInfo>
+	</cascadingConditions>
+  </management>
+  <logAnalysis id="100" active="true">
+	<findWhat direction="Up" matchCase="false" matchWholeWordOnly="false" mode="normal">patt</findWhat>
+	<action>
+	  <thencase>
+		<event code="email" id="100">
+		  <content/>
+		</event>
+		<forcedResult active="true">
+		  <LiveStateInfo LSIDateTime="2015-02-04T08:59:08.000+02:00">
+			<StateName>CANCELLED</StateName>
+		  </LiveStateInfo>
+		</forcedResult>
+	  </thencase>
+	</action>
+  </logAnalysis>
+  <scheduleInfo>
+	<daysOfWeekIntType>1</daysOfWeekIntType>
+	<daysOfWeekIntType>2</daysOfWeekIntType>
+	<daysOfWeekIntType>3</daysOfWeekIntType>
+	<daysOfWeekIntType>4</daysOfWeekIntType>
+	<daysOfWeekIntType>5</daysOfWeekIntType>
+	<daysOfWeekIntType>6</daysOfWeekIntType>
+	<daysOfWeekIntType>7</daysOfWeekIntType>
+  </scheduleInfo>
+  <runtimeParams>
+	<realizedDuration>-</realizedDuration>
+	<previousDuration>-</previousDuration>
+	<hasJobLog>false</hasJobLog>
+	<hasJobContent>false</hasJobContent>
+  </runtimeParams>
+  <visualParams>
+	<statu>9</statu>
+	<commandabilityParams>
+	  <isPausable>true</isPausable>
+	  <isResumable>false</isResumable>
+	  <isRetryable>false</isRetryable>
+	  <isSkipable>false</isSkipable>
+	  <isStartable>true</isStartable>
+	  <isStopable>false</isStopable>
+	  <isSuccessable>false</isSuccessable>
+	</commandabilityParams>
+  </visualParams>
+</genericJob>;
 			
 			protected function button1_clickHandler(event:MouseEvent):void {
 				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;

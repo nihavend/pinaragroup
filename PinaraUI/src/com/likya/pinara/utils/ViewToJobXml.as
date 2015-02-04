@@ -405,11 +405,11 @@ package com.likya.pinara.utils {
 			}
 			
 			if(j.logAnalysisForm.thenSSS.substateName.selectedIndex > -1) {
-				thencaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.thenSSS.substateName.selectedItem}</myra-stateinfo:SubstateName>);
+				thencaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.thenSSS.substateName.selectedItem.value}</myra-stateinfo:SubstateName>);
 			} 
 			
 			if(j.logAnalysisForm.thenSSS.statusName.selectedIndex > -1) {
-				thencaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.thenSSS.statusName.selectedItem}</myra-stateinfo:StatusName>);
+				thencaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.thenSSS.statusName.selectedItem.value}</myra-stateinfo:StatusName>);
 			}
 			
 			if(j.logAnalysisForm.thenRetCode.text != "" || j.logAnalysisForm.thenRetCodeDesc.text != "") {
@@ -450,11 +450,11 @@ package com.likya.pinara.utils {
 				}
 				
 				if(j.logAnalysisForm.elseSSS.substateName.selectedIndex > -1) {
-					elsecaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.elseSSS.substateName.selectedItem}</myra-stateinfo:SubstateName>);
+					elsecaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.elseSSS.substateName.selectedItem.value}</myra-stateinfo:SubstateName>);
 				} 
 
 				if(j.logAnalysisForm.elseSSS.statusName.selectedIndex > -1) {
-					elsecaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.elseSSS.statusName.selectedItem}</myra-stateinfo:StatusName>);
+					elsecaseXML.wla::forcedResult.myra_stateinfo::LiveStateInfo.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{j.logAnalysisForm.elseSSS.statusName.selectedItem.value}</myra-stateinfo:StatusName>);
 				}
 				
 				if(j.logAnalysisForm.elseRetCode.text != null || j.logAnalysisForm.elseRetCodeDesc.text != null) {

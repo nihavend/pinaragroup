@@ -6,6 +6,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.Transformer;
 			
@@ -13,6 +14,7 @@
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.formatters.DateFormatter;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 
@@ -147,6 +149,16 @@
 				}
 			}
 			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var dummyWindow:DummyForm = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
+				dummyWindow.title="Job XML";
+				dummyWindow.htmlTextAsHTML = jobDetailXml;
+				PopUpManager.centerPopUp(dummyWindow);
+				dummyWindow.setFocus();
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -178,6 +190,7 @@
 						<s:Label text="Job State :" width="105" paddingLeft="20"/>
 						<!--<s:TextInput id="jobState" top="5" editable="false" />-->
 						<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
+						<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
 					</s:HGroup>
 					<s:HGroup verticalAlign="baseline" paddingTop="15">
 						<s:Label text="Command Type :" width="105" paddingLeft="10" />

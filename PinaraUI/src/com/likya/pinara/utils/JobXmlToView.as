@@ -176,28 +176,28 @@ package com.likya.pinara.utils {
 			logAnalysisForm.searchPattern.text = jobDetailXml.logAnalysis.findWhat;
 			
 			// Then Action Definition
-			logAnalysisForm.thenLogLineNumBack.text = jobDetailXml.logAnalysis.action.then.event.content.@logLineNumBack;
-			logAnalysisForm.thenLogLineNumForward.text = jobDetailXml.logAnalysis.action.then.event.content.@logLineNumForward;
-			logAnalysisForm.thenActionContent.text = jobDetailXml.logAnalysis.action.then.event.content;
+			logAnalysisForm.thenLogLineNumBack.text = jobDetailXml.logAnalysis.action.thencase.event.content.@logLineNumBack;
+			logAnalysisForm.thenLogLineNumForward.text = jobDetailXml.logAnalysis.action.thencase.event.content.@logLineNumForward;
+			logAnalysisForm.thenActionContent.text = jobDetailXml.logAnalysis.action.thencase.event.content;
 			
-			logAnalysisForm.thenSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.StateName;
+			logAnalysisForm.thenSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.StateName;
 			logAnalysisForm.thenSSS.stateName_changeHandler(null);
 			logAnalysisForm.thenSSS.refreshSubstateNameCombo();
 			
-			if(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.SubstateName != null) {
-				logAnalysisForm.thenSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.thenSSS.substateName.dataProvider.toArray());
+			if(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
+				logAnalysisForm.thenSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.thenSSS.substateName.dataProvider.toArray());
 				logAnalysisForm.thenSSS.substateName_changeHandler(null);
 				if(logAnalysisForm.thenSSS.statusName.dataProvider != null) {
 					(logAnalysisForm.thenSSS.statusName.dataProvider as ArrayCollection).refresh();
 				}
 			}
 			
-			if(jobDetailXml.logAnalysis.then.event.forcedResult.LiveStateInfo.StatusName != null) {
-				logAnalysisForm.thenSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.StatusName, logAnalysisForm.thenSSS.statusName.dataProvider.toArray());
+			if(jobDetailXml.logAnalysis.thencase.event.forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
+				logAnalysisForm.thenSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.StatusName, logAnalysisForm.thenSSS.statusName.dataProvider.toArray());
 			}
 			
-			logAnalysisForm.thenRetCode.text = jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.ReturnCode.Code;
-			logAnalysisForm.thenRetCodeDesc.text = jobDetailXml.logAnalysis.action.then.forcedResult.LiveStateInfo.ReturnCode.Desc;
+			logAnalysisForm.thenRetCode.text = jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Code;
+			logAnalysisForm.thenRetCodeDesc.text = jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Desc;
 			
 			// Else Action Definition
 			logAnalysisForm.elseLogLineNumBack.text = jobDetailXml.logAnalysis.action["else"].event.content.@logLineNumBack;
@@ -208,7 +208,7 @@ package com.likya.pinara.utils {
 			logAnalysisForm.elseSSS.stateName_changeHandler(null);
 			logAnalysisForm.elseSSS.refreshSubstateNameCombo();
 			
-			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.SubstateName != null) {
+			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
 				logAnalysisForm.elseSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.elseSSS.substateName.dataProvider.toArray());
 				logAnalysisForm.elseSSS.substateName_changeHandler(null);
 				if(logAnalysisForm.elseSSS.statusName.dataProvider != null) {
@@ -216,7 +216,7 @@ package com.likya.pinara.utils {
 				}
 			}
 			
-			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StatusName != null) {
+			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
 				logAnalysisForm.elseSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StatusName, logAnalysisForm.elseSSS.statusName.dataProvider.toArray());
 			}
 			

@@ -9,7 +9,8 @@
 			import spark.events.IndexChangeEvent;
 			
 			public function resetList(item:DropDownList):void {
-				// not required
+				item.dataProvider = null;
+				item.enabled = false;
 			}
 			
 			public function stateName_changeHandler(event:IndexChangeEvent):void

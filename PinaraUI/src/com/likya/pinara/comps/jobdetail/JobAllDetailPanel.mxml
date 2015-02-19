@@ -8,6 +8,7 @@
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.model.UserRole;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
 			
 			import mx.collections.ArrayCollection;
@@ -68,7 +69,7 @@
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
-				Alert.show(event.toString());
+				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 			public function updateData():void {
@@ -80,6 +81,9 @@
 				}
 				
 				jobDetailDS.url = serviceUrl + selectedJobId;
+				
+				BasicAuthenticationHandler.authAndSend(jobDetailDS);
+				
 				jobDetailDS.send();
 			}
 			
@@ -164,7 +168,7 @@
 	
 	<fx:Declarations>
 		<s:HTTPService id="jobDetailDS" 
-					   method="GET"
+					   method="POST"
 					   showBusyCursor="true"
 					   resultFormat="e4x"
 					   result="xmlService_resultHandler(event)"

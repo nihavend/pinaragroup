@@ -26,13 +26,20 @@ public class RestfulHandler implements HttpHandler {
 		
 		URI myUri = httpExchange.getRequestURI();
 		
-		String uriTxt = myUri.toString();
+		// String uriTxt = myUri.toString();
+		String uriTxt = myUri.getPath();
+		
+		String query = myUri.getQuery();
+		boolean hiddenGet = false;
+		if (query != null && query.split("=").length > 1 && query.split("=")[1].equals("GET")) {
+			hiddenGet = true;
+		}
 		
 		uriTxt = uriTxt.replace("/" + WebManager.RESTFUL_CTX + "/", "");
 
 		byte responseBytes[];
 				
-		if (httpExchange.getRequestMethod().equals("POST")) {
+		if (!hiddenGet && httpExchange.getRequestMethod().equals("POST")) {
 			responseBytes = RestParser.parsePost(uriTxt, httpExchange.getRequestBody());
 		} else {
 			responseBytes = RestParser.parse(uriTxt);

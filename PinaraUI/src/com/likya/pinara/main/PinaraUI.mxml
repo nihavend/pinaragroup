@@ -36,7 +36,7 @@
 			private var httpServiceUrl:String = "/flex/restsrvc/joblistxml/";
 			
 			[Bindable]
-			private var currentUser:UserInfo;
+			public var currentUser:UserInfo;
 			
 			public function disablePage():void {
 				mainApp.enabled = false;
@@ -73,8 +73,8 @@
 				
 				currentUser = new UserInfo();
 				
-				currentState = "anaSayfaState";
-				// currentState = "loggedOutState";
+				// currentState = "anaSayfaState";
+				currentState = "loggedOutState";
 				// currentState = "loggedInState";
 				
 				
@@ -109,11 +109,6 @@
 				// Alert.show("New State : " + currentState);
 			}
 
-			private function checkLogin(event:ResourceEvent):void {
-				// Alert.show("Burada authentacion yapılacak !", "Hata", Alert.OK, this, null, null);
-				// authAndSend(UserInfo(event.object));
-				doWork(UserInfo(event.object));
-			}
 			
 			private function getLoginDataResultHandler(event:Event):void {
 				// Alert.show("event.result : " + event.toString());
@@ -135,7 +130,12 @@
 			}
 			
 			private function resultFailed(event:FaultEvent):void {
-				Alert.show(event.message.toString());
+				Alert.show("resultFailed : " + event.message.toString());
+			}
+			
+			private function logoutHttpResult(event:HTTPStatusEvent):void {
+				// Do nothing
+				trace();
 			}
 			
 			private function httpResult(event:HTTPStatusEvent):void {
@@ -155,16 +155,39 @@
 			}
 			
 			private function securityError(event:SecurityErrorEvent):void {
-				Alert.show(event.toString());
+				Alert.show("securityError : " + event.toString());
 			}
 			
-			private function doWork(userInfo:UserInfo):void {
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				// Alert.show(event.toString());
+				// trace(event.toString());
+			}
+			
+			private function checkLogin(event:ResourceEvent):void {
+				// Alert.show("Burada authentacion yapılacak !", "Hata", Alert.OK, this, null, null);
+				// authAndSend(UserInfo(event.object));
+				doWork(UserInfo(event.object), false);
+			}
+
+			private function logout(event:ResourceEvent):void {
+				
+				currentUser.username = "";
+				currentUser.password = "";
+				currentState = 'loggedOutState';
+				doWork(currentUser, true);
+				currentUser = null;
+				loginForm.password.text = "";
+				application_creationCompleteHandler();
+			}
+			
+			private function doWork(userInfo:UserInfo, islogout:Boolean):void {
 				
 				try {
 
 					currentUser.username = userInfo.username;
+					currentUser.password = userInfo.password;
 					
-					var req:URLRequest = new URLRequest(httpServiceUrl);
+					var req:URLRequest = new URLRequest("/flex/restsrvc/authanticate/");
 					req.method = URLRequestMethod.POST;
 					req.data = new URLVariables("name=John+Doe");
 					
@@ -178,13 +201,18 @@
 					
 					var loader:URLLoader = new URLLoader();
 					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler); 
-					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityError);
-	
+					loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+					if(islogout) {
+						loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, logoutHttpResult);
+					} else {
+						loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
+					}
+					
 					loader.load(req);
 				
 				} catch (e:Error){
-					Alert.show(e.message);
+					Alert.show("doWork : " + e.message);
 				} 
 			}
 			
@@ -193,12 +221,6 @@
 				if(resourceManager.localeChain[0] != locale.toString()) {
 					resourceManager.localeChain = [locale];
 				}
-			}
-			
-			private function logout(event:ResourceEvent):void {
-				currentUser = null;
-				currentState = 'loggedOutState';
-				application_creationCompleteHandler();
 			}
 			
 			
@@ -225,7 +247,7 @@
 	</s:layout>
 	
 	<s:Group width="100%" height="100%" includeIn="loggedOutState" >
-		<comps:LoginForm  left="381" right="380" top="259" bottom="264" horizontalCenter="0" verticalCenter="-3"/>
+		<comps:LoginForm id="loginForm" left="381" right="380" top="259" bottom="264" horizontalCenter="0" verticalCenter="-3"/>
 	</s:Group>
 	
 	

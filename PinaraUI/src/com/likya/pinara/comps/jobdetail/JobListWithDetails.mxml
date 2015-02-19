@@ -12,6 +12,7 @@
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.modules.IModuleInterface;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
 			
 			import mx.collections.XMLListCollection;
@@ -198,11 +199,14 @@
 				checkForDepGraph(Number(selectedNetTreeId));
 				
 				jobListDS.url = serviceUrl + selectedNetTreeId;
+				
+				BasicAuthenticationHandler.authAndSend(jobListDS);
+				
 				jobListDS.send();
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
-				Alert.show(event.toString());
+				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {
@@ -317,7 +321,7 @@
 	<fx:Declarations>
 			
 		<s:HTTPService id="jobListDS" 
-					   method="GET"
+					   method="POST"
 					   showBusyCursor="true"
 					   resultFormat="e4x"
 					   result="xmlService_resultHandler(event)"

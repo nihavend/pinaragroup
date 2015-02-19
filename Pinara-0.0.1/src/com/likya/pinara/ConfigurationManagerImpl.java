@@ -3,7 +3,6 @@ package com.likya.pinara;
 import java.util.HashMap;
 
 import com.likya.pinara.comm.TcpManagementConsole;
-import com.likya.pinara.gui.Authorization;
 import com.likya.pinara.infobus.PinaraMailServer;
 import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
@@ -19,7 +18,11 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 	
 	private PinaraAuthorization pinaraAuthorization;
 	
-	private HashMap<String, Authorization> authorizationList;
+	public PinaraAuthorization getPinaraAuthorization() {
+		return pinaraAuthorization;
+	}
+
+	private HashMap<String, PinaraAuthorization> authorizationList;
 	
 	private PinaraAppManager pinaraAppManager;
 	
@@ -49,7 +52,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 		this.pinaraConfig = pinaraConfig;
 	}
 
-	public void setAuthorizationList(HashMap<String, Authorization> authorizationList) {
+	public void setAuthorizationList(HashMap<String, PinaraAuthorization> authorizationList) {
 		this.authorizationList = authorizationList;
 	}
 
@@ -89,7 +92,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 		this.pinaraAppManager = pinaraAppManager;
 	}
 
-	public HashMap<String, Authorization> getAuthorizationList() {
+	public HashMap<String, PinaraAuthorization> getAuthorizationList() {
 		return authorizationList;
 	}
 

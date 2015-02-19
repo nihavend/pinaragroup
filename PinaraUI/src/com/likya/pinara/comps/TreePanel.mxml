@@ -9,13 +9,18 @@
 		<![CDATA[
 			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.main.PinaraUI;
+			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Tree;
+			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Encoder;
 			
 			[Bindable]
 			[Embed(source="/images/tlosTree.jpg")]
@@ -175,12 +180,12 @@
 			
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
-				Alert.show(event.toString());
-				//outputText.text += "\nxmlService_faultHandler " + event;
+				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 			public function refreshTree():void {
-				liveTreeDataService.send();
+				// liveTreeDataService.send();
+				BasicAuthenticationHandler.authAndSend(liveTreeDataService);
 			}
 			
 			public function loadData():void {
@@ -219,7 +224,7 @@
 	<fx:Declarations>
 		
 		<s:HTTPService id="liveTreeDataService" 
-					   method="GET"
+					   method="POST"
 					   showBusyCursor="true"
 					   resultFormat="e4x"
 					   url="{serviceUrl}"

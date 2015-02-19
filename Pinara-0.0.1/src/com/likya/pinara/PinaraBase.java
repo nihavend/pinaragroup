@@ -79,6 +79,7 @@ public abstract class PinaraBase {
 			AuthorizationLoader.persistAuthorizationList(authorizationList);
 		}
 
+		configurationManager.setAuthorizationList(authorizationList);
 		configurationManager.setPinaraAuthorization(authorizationList.get("pinara"));
 
 		logger.info(Pinara.getMessage("PinaraServer.9"));

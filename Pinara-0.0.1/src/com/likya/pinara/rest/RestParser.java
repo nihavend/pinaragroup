@@ -46,6 +46,8 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_UPDATEJOB = "updatejob";
 	public static final String CMD_DELETEJOB = "deletejob";
 	
+	public static final String CMD_AUTH = "authanticate";
+	
 	public static byte[] parse(String uriTxt) {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
@@ -389,6 +391,11 @@ public class RestParser extends GenericRestParser {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
+			break;
+			
+			
+		case RestParser.CMD_AUTH:
+			retStr = "<message><result>OK</result></message>";
 			break;
 			
 		default:

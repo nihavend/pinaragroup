@@ -84,7 +84,6 @@
 				
 				BasicAuthenticationHandler.authAndSend(jobDetailDS);
 				
-				jobDetailDS.send();
 			}
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {

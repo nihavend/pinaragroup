@@ -14,6 +14,7 @@
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.ViewToJobXml;
 			
@@ -80,10 +81,10 @@
 				// Alert.show(myraGenericJob);
 				if(isEditMode) {
 					// Alert.show("jobManagerService.updatejob");
-					jobManagerService.updatejob(myraGenericJob);
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", myraGenericJob); //jobManagerService.updatejob(myraGenericJob);
 				} else {
 					// Alert.show("jobManagerService.addjob");
-					jobManagerService.addjob(myraGenericJob);
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "addjob", myraGenericJob); //jobManagerService.addjob(myraGenericJob);
 				}
 				refreshAfter();
 			}

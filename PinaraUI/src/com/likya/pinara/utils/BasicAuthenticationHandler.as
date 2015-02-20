@@ -37,7 +37,7 @@ package com.likya.pinara.utils
 			service.send();
 		}
 		
-		public static function authAndCall(service:HTTPServiceWrapper, operationName:String, parameter:String):mx.rpc.AsyncToken {
+		public static function authAndCall(service:HTTPServiceWrapper, operationName:String, parameter:String = null):mx.rpc.AsyncToken {
 			
 			var encoder:Base64Encoder = new Base64Encoder();
 			encoder.insertNewLines = false;
@@ -46,10 +46,17 @@ package com.likya.pinara.utils
 			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
 			
 			service.operations[operationName].headers["Authorization"] = "Basic " + encoder.toString();
-			service.operations[operationName].method = "POST";
-			service.operations[operationName].contentType = "application/xml";
-			if(service.operations[operationName].url.indexOf('?_method=GET') <= 0) {
-				service.operations[operationName].url += "?_method=GET";
+			
+			if(service.operations[operationName].method == "GET") {
+				service.operations[operationName].method = "POST";
+				service.operations[operationName].contentType = "application/xml";
+				if(service.operations[operationName].url.indexOf('?_method=GET') <= 0) {
+					service.operations[operationName].url += "?_method=GET";
+				}
+			}
+			
+			if(parameter == null) {
+				return service.operations[operationName].send();
 			}
 			
 			return service.operations[operationName].send(parameter);
@@ -58,7 +65,8 @@ package com.likya.pinara.utils
 		public static function service_faultHandler(event:FaultEvent):void {
 			// Alert.show("xmlService_faultHandler : " + event.toString());
 			//outputText.text += "\nxmlService_faultHandler " + event;
-			if (event.statusCode == 400) {
+			if(event.statusCode == 200) {
+			} else if (event.statusCode == 400) {
 				Alert.show("Kullacını adı ya da şifre hatalı !");
 			} else {
 				Alert.show("Unexpected Event : " + event.toString());

@@ -7,6 +7,7 @@
 		<![CDATA[
 			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
@@ -71,47 +72,47 @@
 						{
 							case STOP_JOB:
 							{
-								stopJobResult.token = jobManagerService.stop(jobId);
+								stopJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "stop", jobId); //jobManagerService.stop(jobId);
 								break;
 							}
 							case START_JOB:
 							{
-								startJobResult.token = jobManagerService.start(jobId);
+								startJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "start", jobId); //jobManagerService.start(jobId);
 								break;
 							}
 							case SETSUCCESS_JOB:
 							{
-								setSuccessJobResult.token = jobManagerService.setsuccess(jobId);
+								setSuccessJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "setsuccess", jobId); //jobManagerService.setsuccess(jobId);
 								break;
 							}
 							case SKIP_JOB:
 							{
-								skipJobResult.token = jobManagerService.skip(jobId);
+								skipJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "skip", jobId); //jobManagerService.skip(jobId);
 								break;
 							}
 							case PAUSE_JOB:
 							{
-								pauseJobResult.token = jobManagerService.pause(jobId);
+								pauseJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "pause", jobId); //jobManagerService.pause(jobId);
 								break;
 							}
 							case RESUME_JOB:
 							{
-								resumeJobResult.token = jobManagerService.resume(jobId);
+								resumeJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "resume", jobId); //jobManagerService.resume(jobId);
 								break;
 							}
 							case RETRY_JOB:
 							{
-								retryJobResult.token = jobManagerService.retry(jobId);
+								retryJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "retry", jobId); //jobManagerService.retry(jobId);
 								break;
 							}
 							case ENABLE_JOB:
 							{
-								enableJobResult.token = jobManagerService.enable(jobId);
+								enableJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "enable", jobId); //jobManagerService.enable(jobId);
 								break;
 							}
 							case DISABLE_JOB:
 							{
-								disableJobResult.token = jobManagerService.disable(jobId);
+								disableJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "disable", jobId); //jobManagerService.disable(jobId);
 								break;
 							}
 								

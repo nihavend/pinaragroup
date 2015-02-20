@@ -1,5 +1,6 @@
 package com.likya.pinara.utils
 {
+	import com.adobe.fiber.services.wrapper.HTTPServiceWrapper;
 	import com.likya.pinara.main.PinaraUI;
 	import com.likya.pinara.model.UserInfo;
 	
@@ -7,6 +8,7 @@ package com.likya.pinara.utils
 	
 	import mx.controls.Alert;
 	import mx.core.FlexGlobals;
+	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.http.mxml.HTTPService;
 	import mx.utils.Base64Encoder;
@@ -33,6 +35,24 @@ package com.likya.pinara.utils
 			}
 			
 			service.send();
+		}
+		
+		public static function authAndCall(service:HTTPServiceWrapper, operationName:String, parameter:String):mx.rpc.AsyncToken {
+			
+			var encoder:Base64Encoder = new Base64Encoder();
+			encoder.insertNewLines = false;
+			//encoder.encode("pinara:pinara");
+			var tmpUserInfo:UserInfo = (FlexGlobals.topLevelApplication as PinaraUI).currentUser;
+			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
+			
+			service.operations[operationName].headers["Authorization"] = "Basic " + encoder.toString();
+			service.operations[operationName].method = "POST";
+			service.operations[operationName].contentType = "application/xml";
+			if(service.operations[operationName].url.indexOf('?_method=GET') <= 0) {
+				service.operations[operationName].url += "?_method=GET";
+			}
+			
+			return service.operations[operationName].send(parameter);
 		}
 		
 		public static function service_faultHandler(event:FaultEvent):void {

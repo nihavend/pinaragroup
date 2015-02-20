@@ -16,6 +16,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.SSS;
 			
@@ -188,7 +189,7 @@
 			
 			public function updateData():void {
 				jobListDS.url = "/flex/restsrvc/jobsummarylistxml";
-				jobListDS.send();
+				BasicAuthenticationHandler.authAndSend(jobListDS);
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
@@ -368,7 +369,7 @@
 	<fx:Declarations>
 		
 		<s:HTTPService id="jobListDS" 
-					   method="GET"
+					   method="POST"
 					   showBusyCursor="true"
 					   resultFormat="e4x"
 					   result="xmlService_resultHandler(event)"

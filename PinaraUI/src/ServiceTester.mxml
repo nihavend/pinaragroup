@@ -5,12 +5,38 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			
 			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.rpc.http.Operation;
 			import mx.utils.Base64Decoder;
 			import mx.utils.Base64Encoder;
 			import mx.utils.ObjectUtil;
+			
+			public var currentUser:UserInfo = new UserInfo();
+/*			
+			operation = new mx.rpc.http.Operation(null, "disable");
+			operation.url = "/flex/restsrvc/disablejob/{jobId}";
+			operation.method = "GET";
+			argsArray = new Array("jobId");
+			operation.argumentNames = argsArray;         
+			operation.serializationFilter = serializer0;
+			operation.properties = new Object();
+			operation.properties["urlParamNames"] = ["jobId"];
+			operation.resultType = Object;
+			operations.push(operation);
+			
+			
+			operation = new mx.rpc.http.Operation(null, "addjob");
+			operation.url = "/flex/restsrvc/addjob/";
+			operation.method = "POST";
+			operation.serializationFilter = serializer0;
+			operation.contentType = "application/xml";
+			operation.resultType = Object;
+			operations.push(operation);*/
 			
 			
 			protected function button1_clickHandler(event:MouseEvent):void {
@@ -18,9 +44,28 @@
 			}
 			
 			protected function iki_clickHandler(event:MouseEvent):void {
-				disableJobResult.token = jobManagerService.disable("1");
+				// disableJobResult.token = jobManagerService.disable("1");
+				currentUser.username = "pinara";
+				currentUser.password = "pinara";
+				disableJobResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "disable", "1");
 			}
 			
+			protected function iki_clickHandlerAUTH(event:MouseEvent):void {
+				
+				var encoder:Base64Encoder = new Base64Encoder();
+				encoder.insertNewLines = false;
+				encoder.encode("pinara:pinara");
+				
+				jobManagerService.operations["disable"].headers["Authorization"] = "Basic " + encoder.toString();
+				jobManagerService.operations["disable"].method = "POST";
+				jobManagerService.operations["disable"].contentType = "application/xml";
+				if(jobManagerService.operations["disable"].url.indexOf('?_method=GET') <= 0) {
+					jobManagerService.operations["disable"].url += "?_method=GET";
+				}
+				
+				disableJobResult.token = jobManagerService.operations["disable"].send("1");
+				
+			}
 			protected function uc_clickHandler(event:MouseEvent):void {
 				setSuccessJobResult.token = jobManagerService.setsuccess("1");
 			}

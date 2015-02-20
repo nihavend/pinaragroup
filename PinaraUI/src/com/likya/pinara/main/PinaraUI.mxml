@@ -143,7 +143,8 @@
 				// Alert.show(event.toString());
 				
 				if(event.status == 200) {
-					currentState = "loggedInState";
+					// currentState = "loggedInState";
+					currentState = "anaSayfaState"
 					// Alert.show("Giriş başarılı :)");
 				} else if (event.status == 400) {
 					Alert.show("Kullacını adı ya da şifre hatalı !");

@@ -202,7 +202,6 @@
 				
 				BasicAuthenticationHandler.authAndSend(jobListDS);
 				
-				jobListDS.send();
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {

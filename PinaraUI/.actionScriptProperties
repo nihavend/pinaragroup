@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties analytics="false" mainApplicationPath="com/likya/pinara/main/PinaraUI.mxml" projectUUID="d699ba95-f884-4adf-adeb-d53a38aeac26" version="11">
-  <compiler additionalCompilerArguments="-services &quot;/Users/serkan/Desktop/Demo/apache-tomcat-8.0.18/webapps/tlmctest/WEB-INF/flex/services-config.xml&quot; -locale en_US tr_TR" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="false" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot" outputFolderPath="bin-debug" removeUnusedRSL="true" rootURL="" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-services &quot;/Users/serkan/Desktop/Demo/apache-tomcat-8.0.18/webapps/tlmctest/WEB-INF/flex/services-config.xml&quot; -locale en_US tr_TR" autoRSLOrdering="true" copyDependentFiles="true" flex3CompatMode="false" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderLocation="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="locale/{locale}"/>
     </compilerSourcePath>
@@ -35,23 +35,23 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
-    <application path="com/likya/pinara/main/PinaraUI.mxml"/>
-    <application path="com/likya/pinara/modules/RemoteSchProps.mxml"/>
     <application path="AboutWindowsTester.mxml"/>
-    <application path="ChainedCombos.mxml"/>
-    <application path="DummyWindowsTester.mxml"/>
-    <application path="GerenicJobXMLTester.mxml"/>
-    <application path="GridListTester.mxml"/>
-    <application path="HtmlTester.mxml"/>
     <application path="MenuBarTester.mxml"/>
+    <application path="GerenicJobXMLTester.mxml"/>
     <application path="ModuleTester.mxml"/>
-    <application path="NumericTester.mxml"/>
-    <application path="ServiceTester.mxml"/>
-    <application path="TestViewDepGraph.mxml"/>
-    <application path="DynamicCombos.mxml"/>
+    <application path="GridListTester.mxml"/>
     <application path="JobEditWindowTester.mxml"/>
+    <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
     <application path="ManageButtonGroupTester.mxml"/>
+    <application path="DynamicCombos.mxml"/>
+    <application path="HtmlTester.mxml"/>
+    <application path="ServiceTester.mxml"/>
+    <application path="DummyWindowsTester.mxml"/>
+    <application path="ChainedCombos.mxml"/>
+    <application path="com/likya/pinara/main/PinaraUI.mxml"/>
+    <application path="TestViewDepGraph.mxml"/>
+    <application path="com/likya/pinara/modules/RemoteSchProps.mxml"/>
+    <application path="NumericTester.mxml"/>
   </applications>
   <modules/>
   <workers/>

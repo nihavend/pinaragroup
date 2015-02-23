@@ -6,6 +6,7 @@
 			   xmlns:containers="com.likya.pinara.containers.*" 
 			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
 			   currentState="loggedOutState" 
+			   preloader="com.likya.pinara.comps.DownloadProgressBarSubClassMin"
 			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()">
 	
 	<fx:Metadata>

@@ -8,7 +8,7 @@
 				<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
 				<lik:jobCommand>job1-err.sh</lik:jobCommand>
 				<!-- lik:jobCommand>job1.sh</lik:jobCommand -->
-				<lik:jobPath>/Users/serkan/Desktop/tlos2.0.0</lik:jobPath>
+				<lik:jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</lik:jobWorkDir>
 			</lik:jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -89,7 +89,7 @@
 				<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
 				<lik:jobCommand>job1-err.sh</lik:jobCommand>
 				<!-- lik:jobCommand>job1.sh</lik:jobCommand -->
-				<lik:jobPath>/Users/serkan/Desktop/tlos2.0.0</lik:jobPath>
+				<lik:jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</lik:jobWorkDir>
 			</lik:jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -161,7 +161,7 @@
 				<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
 				<lik:jobCommand>job1-err.sh</lik:jobCommand>
 				<!-- lik:jobCommand>job1.sh</lik:jobCommand -->
-				<lik:jobPath>/Users/serkan/Desktop/tlos2.0.0</lik:jobPath>
+				<lik:jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</lik:jobWorkDir>
 			</lik:jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -233,7 +233,7 @@
 				<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
 				<lik:jobCommand>job1-err.sh</lik:jobCommand>
 				<!-- lik:jobCommand>job1.sh</lik:jobCommand -->
-				<lik:jobPath>/Users/serkan/Desktop/tlos2.0.0</lik:jobPath>
+				<lik:jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</lik:jobWorkDir>
 			</lik:jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>

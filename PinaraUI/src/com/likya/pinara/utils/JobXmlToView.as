@@ -34,7 +34,7 @@ package com.likya.pinara.utils {
 			
 			baseInfoForm.jsName.text = jobDetailXml.baseJobInfos.jsName;
 			baseInfoForm.jsCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
-			baseInfoForm.jsJobPath.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobPath;
+			baseInfoForm.jsJobWorkDir.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobWorkDir;
 			// Alert.show("" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType);
 			baseInfoForm.jsJobType.selectedItem = "" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
 			// Alert.show(baseInfoForm.jsJobType.selectedItem);

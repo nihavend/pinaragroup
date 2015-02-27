@@ -18,7 +18,7 @@
 				<jobTypeDetails>
 				  <jobCommandType>BATCH PROCESS</jobCommandType>
 				  <jobCommand>job1.sh</jobCommand>
-				  <jobPath>jobs</jobPath>
+				  <jobWorkDir>jobs</jobWorkDir>
 				  <argValues>dorduncu besinci altıncı</argValues>
 				  <envVariables>
 					<entry key="yedinci">yedinci</entry>

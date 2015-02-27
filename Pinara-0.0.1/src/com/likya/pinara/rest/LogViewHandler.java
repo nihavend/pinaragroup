@@ -140,12 +140,12 @@ public class LogViewHandler extends FileViewHandler {
 				JobImpl jobImpl = PinaraAppManagerImpl.getInstance().getJobQueue().get(viewTypeInfo.viewSubTypeText);
 
 				if (jobImpl != null) {
-					String jobfilePath = jobImpl.getAbstractJobType().getBaseJobInfos().getJobTypeDetails().getJobPath();
+					String jobWorkDir = jobImpl.getAbstractJobType().getBaseJobInfos().getJobTypeDetails().getJobWorkDir();
 					viewFile = jobImpl.getAbstractJobType().getBaseJobInfos().getJobTypeDetails().getJobCommand();
-					if (jobfilePath.endsWith(File.separator) || viewFile.startsWith(File.separator)) {
-						viewFile = jobfilePath + viewFile;
+					if (jobWorkDir.endsWith(File.separator) || viewFile.startsWith(File.separator)) {
+						viewFile = jobWorkDir + viewFile;
 					} else {
-						viewFile = jobfilePath + File.separator + viewFile;
+						viewFile = jobWorkDir + File.separator + viewFile;
 					}
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.TOXML);
 				} else {

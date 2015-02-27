@@ -221,21 +221,21 @@ public class PinaraFileUtils extends FileUtils {
 	
 	public static boolean checkFile(AbstractJobType abstractJobType, boolean isLog) {
 		
-		String filePath = null;
+		String jobWorkDir = null;
 		String fileName = null;
 		
 		if(isLog) {
-			filePath = abstractJobType.getBaseJobInfos().getJobLogPath();
+			jobWorkDir = abstractJobType.getBaseJobInfos().getJobLogPath();
 			fileName = abstractJobType.getBaseJobInfos().getJobLogFile();
 		} else {
-			filePath = abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobPath();
+			jobWorkDir = abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobWorkDir();
 			fileName = abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobCommand();
 		}
 		
-		if (filePath.endsWith(File.separator) || fileName.startsWith(File.separator)) {
-			fileName = filePath + fileName;
+		if (jobWorkDir.endsWith(File.separator) || fileName.startsWith(File.separator)) {
+			fileName = jobWorkDir + fileName;
 		} else {
-			fileName = filePath + File.separator + fileName;
+			fileName = jobWorkDir + File.separator + fileName;
 		}
 		
 		return checkFile(fileName);

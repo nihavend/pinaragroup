@@ -50,10 +50,6 @@
 				Alert.show("Job Name is not defined !");
 				return false;
 				}
-				if(jsJobPath.text == "") {
-				Alert.show("Job Path is not defined !");
-				return false;
-				}
 				if(jsCommand.text == "") {
 				Alert.show("Job Command is not defined !");
 				return false;

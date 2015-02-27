@@ -8,7 +8,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -109,7 +109,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -189,7 +189,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -266,7 +266,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -353,7 +353,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -439,7 +439,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -526,7 +526,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -612,7 +612,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -698,7 +698,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -784,7 +784,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>
@@ -870,7 +870,7 @@
 				<jobCommandType>BATCH PROCESS</jobCommandType>
 				<jobCommand>job1-err.sh</jobCommand>
 				<!-- jobCommand>job1.sh</jobCommand -->
-				<jobPath>/Users/serkan/Desktop/tlos2.0.0</jobPath>
+				<jobWorkDir>/Users/serkan/Desktop/tlos2.0.0</jobWorkDir>
 			</jobTypeDetails>
 			<jobLogFile>demo.log</jobLogFile>
 			<jobLogPath>./</jobLogPath>

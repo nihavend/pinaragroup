@@ -39,10 +39,6 @@
 					Alert.show("Job Name is not defined !");
 					return false;
 				}
-				if(jsJobPath.text == "") {
-					Alert.show("Job Path is not defined !");
-					return false;
-				}
 				if(jsCommand.text == "") {
 					Alert.show("Job Command is not defined !");
 					return false;
@@ -99,21 +95,21 @@
 	<s:FormItem label="Name">
 		<s:TextInput id="jsName" width="100%"/>
 		<s:helpContent>
-			<s:Label text="Enter a neme for your Job"/>
+			<s:Label text="Enter a name for your Job"/>
 		</s:helpContent>
 	</s:FormItem>
 
-	<s:FormItem label="Job Path">
-		<s:TextInput id="jsJobPath" width="100%"/>
+	<s:FormItem label="Job Work Directory">
+		<s:TextInput id="jsJobWorkDir" width="100%"/>
 		<s:helpContent>
-			<s:Label text="Enter your Job Physical Path"/>
+			<s:Label text="Enter your Job Working Path (Leave blank if same as job path)"/>
 		</s:helpContent>
 	</s:FormItem>
 	
 	<s:FormItem label="Command">
 		<s:TextInput id="jsCommand" width="100%"/>
 		<s:helpContent>
-			<s:Label text="Enter the command for your Job"/>
+			<s:Label text="Enter the command for your Job with full path"/>
 		</s:helpContent>
 	</s:FormItem>
 	

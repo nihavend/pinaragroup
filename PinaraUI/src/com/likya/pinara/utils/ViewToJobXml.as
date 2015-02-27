@@ -590,7 +590,7 @@ package com.likya.pinara.utils {
 			
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobCommandType xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobCommand xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
-			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobPath xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
+			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobWorkDir xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:argValues xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 
 			baseJobInfosXML.wla::jsName = j.baseInfoForm.jsName.text;
@@ -604,7 +604,7 @@ package com.likya.pinara.utils {
 			
 			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommandType = j.baseInfoForm.jsJobType.selectedItem;
 			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommand = j.baseInfoForm.jsCommand.text;
-			baseJobInfosXML.lik::jobTypeDetails.lik::jobPath = j.baseInfoForm.jsJobPath.text; 
+			baseJobInfosXML.lik::jobTypeDetails.lik::jobWorkDir = j.baseInfoForm.jsJobWorkDir.text; 
 			baseJobInfosXML.lik::jobTypeDetails.lik::argValues = j.baseInfoForm.jsJobArgs.text; 
 			
 			

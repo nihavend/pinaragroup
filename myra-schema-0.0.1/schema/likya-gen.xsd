@@ -81,7 +81,7 @@
 				<!-- xs:element ref="eventTypeDef" minOccurs="0" /-->
 				<xs:element ref="jobCommandType" minOccurs="0" />
 				<xs:element ref="jobCommand" minOccurs="0" />
-				<xs:element ref="jobPath" minOccurs="0" />
+				<xs:element ref="jobWorkDir" minOccurs="0" />
 				<xs:element ref="argValues" minOccurs="0" />
 				<xs:element ref="envVariables" minOccurs="0" />
 			</xs:sequence>
@@ -119,7 +119,7 @@
 			<xs:restriction base="xs:string" />
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="jobPath">
+	<xs:element name="jobWorkDir">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<!-- xs:pattern value="^(.*?/|.*?\\)?([^\./|^\.\\]+)(?:\.([^\\]*)|)$"/ -->

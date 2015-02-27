@@ -49,10 +49,10 @@
 		<s:TextInput id="jsName" width="100%"/>
 	</s:FormItem>
 	
-	<s:FormItem label="Job Path">
-		<s:TextInput id="jsPath" width="100%"/>
+	<s:FormItem label="Job Work Directory">
+		<s:TextInput id="jsWorkDir" width="100%"/>
 		<s:helpContent>
-			<s:Label text="Enter your Job Physical Path"/>
+			<s:Label text="Enter your Job Working Directory (Leave blank if same with job path)"/>
 		</s:helpContent>
 	</s:FormItem>
 	 

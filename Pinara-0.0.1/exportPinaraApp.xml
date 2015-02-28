@@ -8,7 +8,7 @@
                 <attribute name="Main-Class" value="com.likya.pinara.Pinara"/>
                 <attribute name="Class-Path" value=". pinara-0.0.1_lib/myra-0.0.1.jar pinara-0.0.1_lib/myra-schema-0.0.1.jar pinara-0.0.1_lib/winp-1.14.jar pinara-0.0.1_lib/junit-3.8.1.jar pinara-0.0.1_lib/commons-collections-3.2.1.jar pinara-0.0.1_lib/eval-0.5.jar pinara-0.0.1_lib/myra-commons-0.0.1.jar pinara-0.0.1_lib/likya-commons-0.0.1.jar pinara-0.0.1_lib/joda-time-2.2.jar pinara-0.0.1_lib/log4j-1.2.17.jar pinara-0.0.1_lib/commons-codec-1.8.jar pinara-0.0.1_lib/commons-lang-2.6.jar pinara-0.0.1_lib/xmlbeans-2.6.0.jar pinara-0.0.1_lib/stax-api-1.0.1.jar pinara-0.0.1_lib/gson-2.2.3.jar pinara-0.0.1_lib/jmxremote_optional-1.0.0.jar pinara-0.0.1_lib/activation-1.1.1.jar pinara-0.0.1_lib/dsn-1.5.0.jar pinara-0.0.1_lib/javax.mail-1.5.0.jar pinara-0.0.1_lib/imap-1.5.0.jar pinara-0.0.1_lib/mailapi-1.4.3.jar pinara-0.0.1_lib/pop3-1.5.0.jar pinara-0.0.1_lib/smtp-1.5.0.jar pinara-0.0.1_lib/jsch-0.1.50.jar"/>
             </manifest>
-            <fileset dir="/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/target/classes"/>
+            <fileset dir="/Users/serkan/git/pinaragroup/Pinara-0.0.1/target/classes"/>
         </jar>
         <delete dir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
         <mkdir dir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
@@ -36,5 +36,8 @@
         <copy file="/Users/serkan/.m2/repository/com/sun/mail/pop3/1.5.0/pop3-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
         <copy file="/Users/serkan/.m2/repository/com/sun/mail/smtp/1.5.0/smtp-1.5.0.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
         <copy file="/Users/serkan/.m2/repository/jsch/jsch/0.1.50/jsch-0.1.50.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
+    	
+    	<delete file="/Users/serkan/Desktop/pinara/flexroot/PinaraUI.swf"/>
+    	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot/PinaraUI.swf" todir="/Users/serkan/Desktop/pinara/flexroot"/>
     </target>
 </project>

@@ -144,8 +144,9 @@ package com.likya.pinara.utils {
 		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {
 			
 			if(!jobDetailXml.hasOwnProperty("logAnalysis")) {
-				logAnalysisForm.disableLA.selected = true;	
-				logAnalysisForm.handleDecoration("false");
+				logAnalysisForm.currentState = "undefined";
+				// logAnalysisForm.disableLA.selected = true;
+				// logAnalysisForm.handleDecoration("false");
 				return;
 			}
 			

@@ -140,6 +140,12 @@ public abstract class FileViewHandler implements HttpHandler {
 
 	public String getLimited(String[] queryParamArr, String viewFile, FileTypeInfo fileTypeInfo) throws Throwable {
 
+		String response = null;
+		
+		if(!PinaraFileUtils.checkFile(viewFile)) {
+			return response;
+		}
+		
 		int beginOffset = -1;
 		int endOffset = -1;
 
@@ -154,8 +160,6 @@ public abstract class FileViewHandler implements HttpHandler {
 				endOffset = Integer.parseInt(endOffStr);
 			}
 		}
-
-		String response = null;
 
 		switch (fileTypeInfo) {
 

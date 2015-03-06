@@ -35,6 +35,10 @@ public class LogViewHandler extends FileViewHandler {
 				// response = TlosServer.getTlosParameters().getConfigFileContent();
 				// TlosParameters.setRequestedFileName(TlosServer.getConfigFileName());
 				viewFile = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getMyraConfigFile();
+				if(viewFile == null) {
+					response = returnFault(-99, "There is no configuration for file " + viewTypeInfo.viewSubTypeText);
+					break;
+				}
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {

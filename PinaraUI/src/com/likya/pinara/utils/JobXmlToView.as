@@ -47,7 +47,7 @@ package com.likya.pinara.utils {
 			baseInfoForm.jsJobLogFile.text = jobDetailXml.baseJobInfos.jobLogFile;
 			baseInfoForm.jsJobLogPath.text = jobDetailXml.baseJobInfos.jobLogPath;
 			
-			baseInfoForm.jsOsType.selectedItem = "" + jobDetailXml.baseJobInfos.oSystem;
+			//baseInfoForm.jsOsType.selectedItem = "" + jobDetailXml.baseJobInfos.oSystem;
 			
 			baseInfoForm.jsJobPriority.selectedItem = "" + jobDetailXml.baseJobInfos.jobPriority;
 			baseInfoForm.jsJobActivity.selectedItem = "" + jobDetailXml.baseJobInfos.jsIsActive;

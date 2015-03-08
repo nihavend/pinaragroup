@@ -620,7 +620,7 @@ package com.likya.pinara.utils {
 			baseJobInfosXML.wla::jsName = j.baseInfoForm.jsName.text;
 			baseJobInfosXML.wla::jobLogFile = j.baseInfoForm.jsJobLogFile.text;
 			baseJobInfosXML.wla::jobLogPath = j.baseInfoForm.jsJobLogPath.text;
-			baseJobInfosXML.wla::oSystem = j.baseInfoForm.jsOsType.selectedItem;
+			//baseJobInfosXML.wla::oSystem = j.baseInfoForm.jsOsType.selectedItem;
 			baseJobInfosXML.wla::jobPriority = j.baseInfoForm.jsJobPriority.selectedItem;
 			baseJobInfosXML.myra_jobprops::jsIsActive = j.baseInfoForm.jsJobActivity.selectedItem;
 			baseJobInfosXML.lik::userId = "007";

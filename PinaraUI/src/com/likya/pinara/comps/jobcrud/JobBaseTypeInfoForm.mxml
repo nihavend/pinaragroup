@@ -21,12 +21,15 @@
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
+			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
+			public var jsJobWorkDir:TextInput = new TextInput();
+			
 			public function validateForm():Boolean
 			{
-				if(jsOsType.selectedIndex == -1) {
+				/*if(jsOsType.selectedIndex == -1) {
 					Alert.show("Os Type is not selected !");
 					return false;
-				}
+				}*/
 				if(jsJobActivity.selectedIndex == -1) {
 					Alert.show("Job Activity is not selected !");
 					return false;
@@ -99,17 +102,17 @@
 		</s:helpContent>
 	</s:FormItem>
 
-	<s:FormItem label="Job Work Directory">
+<!--	<s:FormItem label="Job Work Directory">
 		<s:TextInput id="jsJobWorkDir" width="100%"/>
 		<s:helpContent>
 			<s:Label text="Enter your Job Working Path (Leave blank if same as job path)"/>
 		</s:helpContent>
-	</s:FormItem>
+	</s:FormItem>-->
 	
 	<s:FormItem label="Command">
-		<s:TextInput id="jsCommand" width="100%"/>
+		<s:TextInput id="jsCommand" width="300" />
 		<s:helpContent>
-			<s:Label text="Enter the command for your Job with full path"/>
+			<s:Label text="Enter the command for your Job with full path" left="50"/>
 		</s:helpContent>
 	</s:FormItem>
 	
@@ -171,8 +174,11 @@
 			<s:Label text="Enter your Job Log File Physical Path"/>
 		</s:helpContent>
 	</s:FormItem>
-	
-	<s:FormItem label="OS Type">
+	<!--	
+		Bu kısmı server tarafından otomatik olarak yapmaya karar verdim, 
+		SW den kalma bir bölüm
+	-->	
+	<!--<s:FormItem label="OS Type">
 		<s:DropDownList id="jsOsType" width="160" prompt="Select Operating System" selectedIndex="1"> 
 			<s:dataProvider>
 				<mx:ArrayList>
@@ -243,14 +249,14 @@
 					<fx:String>OpenBSD</fx:String>
 					<fx:String>Not_Applicable</fx:String>
 					<fx:String>Windows_XP</fx:String>
-					<fx:String>z_OS</fx:String>
-					<fx:String>Windows</fx:String><!--== Added for generic name control ==-->
-					<fx:String>Unix</fx:String> <!--== Added for generic name control ==-->
-					<fx:String>other</fx:String>
+					<fx:String>z_OS</fx:String-->
+					<!--<fx:String>Windows</fx:String--><!--== Added for generic name control ==-->
+					<!--<fx:String>Unix</fx:String--> <!--== Added for generic name control ==-->
+					<!--<fx:String>other</fx:String>
 				</mx:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>
-	</s:FormItem>
+	</s:FormItem>-->
 
 	<s:FormItem label="Priority">
 		<s:DropDownList id="jsJobPriority" width="120" prompt="Select Priority" selectedIndex="0"> 

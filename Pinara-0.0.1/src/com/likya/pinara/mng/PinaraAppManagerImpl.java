@@ -29,6 +29,7 @@ import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
+import com.likya.xsd.myra.model.wlagen.OperatingSystemTypeEnumeration;
 
 public final class PinaraAppManagerImpl implements PinaraAppManager {
 	
@@ -362,6 +363,10 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			ArrayList<String> errMsgLst = new ArrayList<String>();
 			
 			jobListDocument = JobListDocument.Factory.parse(jobXml.toString());
+	
+			// setting default not important
+			jobListDocument.getJobList().getGenericJobArray(0).getBaseJobInfos().setOSystem(OperatingSystemTypeEnumeration.WINDOWS);
+			
 			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument, errMsgLst)) {
 				System.err.println("JobList.xml is null or damaged !");
 				

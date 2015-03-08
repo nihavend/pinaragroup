@@ -27,7 +27,7 @@
 			
 			
 			
-			
+
 			[Bindable]
 			public var jobDetailXml:XML;
 			
@@ -46,7 +46,7 @@
 					JobXmlToView.prepare_logAnalysisForm(logAnalysisForm, jobDetailXml);
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
 				}
-				
+
 			}
 			// Handle the close button and Cancel button.
 			private function handleCloseEvent():void {

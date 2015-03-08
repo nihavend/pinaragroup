@@ -6,16 +6,12 @@ import org.apache.xmlbeans.XmlException;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.ValidPlatforms;
 import com.likya.myra.commons.utils.XMLValidations;
-import com.likya.myra.jef.InputStrategy;
-import com.likya.myra.jef.InputStrategyImpl;
-import com.likya.myra.jef.core.CoreFactory;
-import com.likya.myra.jef.core.ManagementOperations;
 import com.likya.myra.jef.utils.Starter;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
+import com.likya.pinara.utils.PersistApi;
 import com.likya.pinara.utils.license.LicenseManager;
 import com.likya.pinara.utils.license.ValidateLicense;
-import com.likya.xsd.myra.model.config.MyraConfigDocument;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 
@@ -127,74 +123,74 @@ public class Pinara extends PinaraBase {
 	
 	private boolean initMyra() throws Throwable {
 
-		String senaryoFile = pinara.getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
+		JobListDocument jobListDocument = PersistApi.deserialize();
 
 		PinaraOutput testOutput = PinaraOutput.getInstance();
 		
-		Starter.startForce(senaryoFile, testOutput);
+		Starter.startForce(jobListDocument, testOutput);
 
 		return true;
 
 	}
 
-	public boolean initMyraOld() throws Throwable {
-
-		StringBuffer xmlString = getMyraData();
-
-		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
-
-		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
-			throw new Exception("JobList.xml is null or damaged !");
-		}
-
-		InputStrategy inputStrategy = new InputStrategyImpl();
-
-		MyraConfigDocument myraConfigDocument = null;
-		
-		// String myraConfigFile = "/Users/serkan/git/localgit/TL-2.0.0-Test/conf/myraConfig.xml";
-
-		String myraConfigFile = getConfigurationManager().getPinaraConfig().getMyraConfigFile();
-
-		xmlString = FileUtils.readFile(myraConfigFile);
-		
-		com.likya.myra.jef.ConfigurationManager configurationManager;
-
-		try {
-			myraConfigDocument = MyraConfigDocument.Factory.parse(xmlString.toString());
-			
-			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), myraConfigDocument)) {
-				throw new Exception("myraConfigDocument is null or damaged !");
-			}
-
-			configurationManager = new com.likya.myra.jef.ConfigurationManagerImpl(myraConfigDocument);
-		} catch (XmlException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		inputStrategy.setConfigurationManager(configurationManager);
-		inputStrategy.setJobListDocument(jobListDocument);
-
-		PinaraOutput testOutput = PinaraOutput.getInstance();
-
-		CoreFactory coreFactory = (CoreFactory) CoreFactory.getInstance(inputStrategy, testOutput);
-
-		if (!validateJobList(jobListDocument)) {
-			throw new Exception("Invalid jobListDocument !");
-		}
-
-		ManagementOperations managementOperations = coreFactory.getManagementOperations();
-
-		try {
-			managementOperations.start();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
-
-	}
+//	public boolean initMyraOld() throws Throwable {
+//
+//		StringBuffer xmlString = getMyraData();
+//
+//		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
+//
+//		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+//			throw new Exception("JobList.xml is null or damaged !");
+//		}
+//
+//		InputStrategy inputStrategy = new InputStrategyImpl();
+//
+//		MyraConfigDocument myraConfigDocument = null;
+//		
+//		// String myraConfigFile = "/Users/serkan/git/localgit/TL-2.0.0-Test/conf/myraConfig.xml";
+//
+//		String myraConfigFile = getConfigurationManager().getPinaraConfig().getMyraConfigFile();
+//
+//		xmlString = FileUtils.readFile(myraConfigFile);
+//		
+//		com.likya.myra.jef.ConfigurationManager configurationManager;
+//
+//		try {
+//			myraConfigDocument = MyraConfigDocument.Factory.parse(xmlString.toString());
+//			
+//			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), myraConfigDocument)) {
+//				throw new Exception("myraConfigDocument is null or damaged !");
+//			}
+//
+//			configurationManager = new com.likya.myra.jef.ConfigurationManagerImpl(myraConfigDocument);
+//		} catch (XmlException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//
+//		inputStrategy.setConfigurationManager(configurationManager);
+//		inputStrategy.setJobListDocument(jobListDocument);
+//
+//		PinaraOutput testOutput = PinaraOutput.getInstance();
+//
+//		CoreFactory coreFactory = (CoreFactory) CoreFactory.getInstance(inputStrategy, testOutput);
+//
+//		if (!validateJobList(jobListDocument)) {
+//			throw new Exception("Invalid jobListDocument !");
+//		}
+//
+//		ManagementOperations managementOperations = coreFactory.getManagementOperations();
+//
+//		try {
+//			managementOperations.start();
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//
+//		return true;
+//
+//	}
 
 	public static StringBuffer getMyraData() throws Exception {
 

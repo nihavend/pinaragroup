@@ -364,7 +364,7 @@ public class RestParser extends GenericRestParser {
 		
 		case RestParser.CMD_ADDJOB:
 			try {
-				PinaraAppManagerImpl.getInstance().addJob(bufferString, false);
+				extractPostInfo(bufferString, (byte)0x01);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
@@ -375,7 +375,7 @@ public class RestParser extends GenericRestParser {
 			
 		case RestParser.CMD_UPDATEJOB:
 			try {
-				PinaraAppManagerImpl.getInstance().updateJob(bufferString, false);
+				extractPostInfo(bufferString, (byte)0x02);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
@@ -385,7 +385,7 @@ public class RestParser extends GenericRestParser {
 			
 		case RestParser.CMD_DELETEJOB:
 			try {
-				PinaraAppManagerImpl.getInstance().deleteJob(bufferString, false);
+				extractPostInfo(bufferString, (byte)0x03);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
@@ -407,6 +407,34 @@ public class RestParser extends GenericRestParser {
 		responseBytes = retStr.getBytes();
 		
 		return responseBytes;
+		
+	}
+	
+	private static void extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		
+		//<data><serialize></serialize><datamess>" + myraGenericJob + "</datamess></data>
+		String myraGenericJob = bufferString.split("<datamess>")[1].split("</datamess>")[0];
+		String serializeInfo = bufferString.split("<serialize>")[1].split("</serialize>")[0];
+		
+		switch (command) {
+		
+		case 0x01:
+			PinaraAppManagerImpl.getInstance().addJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
+			break;
+		case 0x02:
+			PinaraAppManagerImpl.getInstance().updateJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
+			break;
+		case 0x03:
+			PinaraAppManagerImpl.getInstance().deleteJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
+			break;
+		default:
+			try {
+				throw new Exception("Undefined command value : " + command);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}
 		
 	}
 }

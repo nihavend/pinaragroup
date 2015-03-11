@@ -21,17 +21,19 @@ import com.likya.pinara.utils.license.LikyaSecurity;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public class PersistApi {
+	
+	private static final String FILE_EXT = ".pnr";
 
 	public static void serialize(JobListDocument jobListDocument) throws Exception {
 
 		String fileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
-		String dstFile = fileName + ".bin";
+		String dstFile = fileName + FILE_EXT;
 
 		String tmpDstFile = dstFile + ".tmp";
 
 		byte[] data = encryptedArray(jobListDocument);
 
-		FileOutputStream outputStream = new FileOutputStream(fileName);
+		FileOutputStream outputStream = new FileOutputStream(tmpDstFile);
 
 		GZIPOutputStream gzip = new GZIPOutputStream(outputStream);
 
@@ -56,7 +58,11 @@ public class PersistApi {
 
 		JobListDocument jobListDocument;
 
-		String srcFileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
+		String srcFileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
+		
+		if (!FileUtils.checkFile(srcFileName)) {
+			return null;
+		}
 
 		FileInputStream inputStream = new FileInputStream(srcFileName);
 

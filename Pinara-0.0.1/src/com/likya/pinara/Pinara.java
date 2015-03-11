@@ -125,6 +125,13 @@ public class Pinara extends PinaraBase {
 
 		JobListDocument jobListDocument = PersistApi.deserialize();
 
+		if(jobListDocument == null) {
+			jobListDocument = JobListDocument.Factory.newInstance();
+			jobListDocument.addNewJobList();
+			
+			PersistApi.serialize(jobListDocument);
+		} 
+		
 		PinaraOutput testOutput = PinaraOutput.getInstance();
 		
 		Starter.startForce(jobListDocument, testOutput);

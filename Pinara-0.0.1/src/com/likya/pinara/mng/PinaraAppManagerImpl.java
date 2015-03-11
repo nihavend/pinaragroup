@@ -26,6 +26,7 @@ import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
+import com.likya.pinara.utils.PersistApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
@@ -316,6 +317,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 	public void deleteJob(String jobId, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 		try {
 			jobOperations.deleteJob(jobId, persist);
+			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
 		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -328,6 +330,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
 			jobOperations.updateJob(abstractJobType, persist);
+			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
 		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -342,7 +345,11 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
 			jobOperations.addJob(abstractJobType, persist);
+			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
 		} catch (UnknownServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -15,6 +15,8 @@ package com.likya.pinara.event {
 		
 		public static const REFRESH:String = "refresh";
 		
+		public static const UPDATE_TREE:String = "updatetree";
+		
 		public static const ROW_SELECTION_CHANGED:String = "rowSelectionChangedEvent";
 		
 		public var object:Object;

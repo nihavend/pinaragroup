@@ -217,8 +217,10 @@
 				// trace(jobListXml);
 				
 				jobListXmlCollection.source = jobListXml.children(); 
-				detailPanel.visible = false;
-				detailPanel.includeInLayout = false;
+				if(detailPanel != null) {
+					detailPanel.visible = false;
+					detailPanel.includeInLayout = false;
+				}
 				
 			}
 			

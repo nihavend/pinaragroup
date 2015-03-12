@@ -20,6 +20,7 @@
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
@@ -67,8 +68,30 @@
 				return formsValid;
 			}
 			
+			private function checkConfirmSave():void {
+				if(isEditMode) {
+					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+				} else {
+					Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+				}
+			}
+			
+			private function checkConfirmSerialization(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					Alert.okLabel = resourceManager.getString("messages", "AlertokLabel");
+					Alert.cancelLabel = resourceManager.getString("messages", "AlertcancelLabel");
+					Alert.show(resourceManager.getString("messages", "serializeConfirm"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processSave, null, Alert.CANCEL);
+				}
+			}
+			
 			// Handle the OK button.
-			private function processSave():void {
+			private function processSave(eventObj:CloseEvent):void {
+
+				var serializationInfo:String = "false";
+				
+				if(eventObj.detail == Alert.OK) {
+					serializationInfo = "true";
+				}
 				
 				if(!validateAll()) {
 					// Alert.show("Has validation errors !");
@@ -79,12 +102,15 @@
 				var myraGenericJob:XML = ViewToJobXml.getXML(this);
 				// trace("myXML", myXML.toXMLString());
 				// Alert.show(myraGenericJob);
+				
+				var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + myraGenericJob + "</datamess></data>");
+				
 				if(isEditMode) {
 					// Alert.show("jobManagerService.updatejob");
-					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", myraGenericJob); //jobManagerService.updatejob(myraGenericJob);
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", packedResponse); //jobManagerService.updatejob(myraGenericJob);
 				} else {
 					// Alert.show("jobManagerService.addjob");
-					BasicAuthenticationHandler.authAndCall(jobManagerService, "addjob", myraGenericJob); //jobManagerService.addjob(myraGenericJob);
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "addjob", packedResponse); //jobManagerService.addjob(myraGenericJob);
 				}
 				refreshAfter();
 			}
@@ -182,7 +208,7 @@
 		<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="8">
 			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="300">
 				<s:Button label="Save"
-						  click="processSave();" /> 
+						  click="checkConfirmSave();" /> 
 				<s:Button label="Cancel"
 						  click="handleCloseEvent();"/> 
 			</s:HGroup>

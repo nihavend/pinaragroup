@@ -12,6 +12,7 @@
 			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserRole;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
@@ -154,7 +155,7 @@
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {
 					showEditJob();
 				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
-					Alert.show("Seçili iş silinecek, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, showDeleteJob, null, Alert.CANCEL);
+					Alert.show(resourceManager.getString("messages", "confirmDelete"), warningStr, Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
 				}
 			}
 			
@@ -163,6 +164,13 @@
 				PopUpManager.centerPopUp(addJobWindow);
 			}
 			
+			private function checkConfirmSerialization(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					Alert.okLabel = resourceManager.getString("messages", "AlertokLabel");
+					Alert.cancelLabel = resourceManager.getString("messages", "AlertcancelLabel");
+					Alert.show(resourceManager.getString("messages", "serializeConfirm"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, showDeleteJob, null, Alert.CANCEL);
+				}
+			}
 			private function showEditJob():void {
 				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
 				editJobWindow.jobDetailXml = currentDataItem;
@@ -171,12 +179,14 @@
 			}
 			
 			private function showDeleteJob(eventObj:CloseEvent):void {
+				var serializationInfo:String = "false";
 				if(eventObj.detail == Alert.OK) {
 					//Alert.show("deleting job with id : " + currentDataItem.@Id);
-					jobManagerService.deletejob(currentDataItem.@Id);
-					mbiRefresh_click(null);
-				}
-							
+					serializationInfo = "true";
+				} 
+				var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + currentDataItem.@Id + "</datamess></data>");
+				BasicAuthenticationHandler.authAndCall(jobManagerService, "deletejob", packedResponse);
+				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 			}
 			
 			protected function mbiAnaSayfa_click(event:MouseEvent):void {

@@ -95,17 +95,17 @@
 			
 			private function tlosTree_itemClickHandler(e:ListEvent):void {
 				
-				var selectedNode:XML = Tree(e.target).selectedItem as XML;
 				var selectedTreeItem:Object = Tree(e.target).selectedItem;
+				var selectedNode:XML = selectedTreeItem as XML;
 				
 				// Alert.show("Title : " + selectedNode.@title);
 				// Alert.show("localName : " + selectedNode.localName());
 				if (selectedNode.localName() == "list") {
 					dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
 				} if (selectedNode.localName() == "jobGroup") {
-					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedNode.@id));
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeItem));
 				} else if (selectedNode.localName() == "jobProperty") {
-					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedNode.@id));
+					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedTreeItem));
 				}
 				
 				/*

@@ -6,7 +6,7 @@
 			   xmlns:containers="com.likya.pinara.containers.*" 
 			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
 			   currentState="loggedOutState" 
-			   preloader="com.likya.pinara.comps.DownloadProgressBarSubClassMin"
+			   preloader="com.likya.pinara.utils.DownloadProgressBarSubClassMin"
 			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()">
 	
 	<fx:Metadata>
@@ -28,6 +28,7 @@
 			import com.likya.pinara.model.UserInfo;
 			
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 			import mx.resources.ResourceBundle;
 			import mx.rpc.events.FaultEvent;
 			import mx.utils.Base64Encoder;
@@ -38,6 +39,11 @@
 			
 			[Bindable]
 			public var currentUser:UserInfo;
+			
+			[Bindable]
+			public var currentListNodeId:String;
+			
+			private var selectedTreeNode:Object;
 			
 			public function disablePage():void {
 				mainApp.enabled = false;
@@ -72,6 +78,8 @@
 				addEventListener(ResourceEvent.ANASAYFA, changeState);
 				addEventListener(ResourceEvent.REFRESH, refreshContent);
 				
+				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
+				
 				currentUser = new UserInfo();
 				
 				// currentState = "anaSayfaState";
@@ -92,15 +100,66 @@
 				jobTree.refreshTree();
 			}
 			
+			private function updateTree(event:ResourceEvent):void {
+				
+				selectedTreeNode = jobTree.liveTree.getParentItem(jobTree.liveTree.selectedItem);
+				//jobTree.liveTree.selectedItem = selectedTreeNode;
+				//selectedTreeNodeIdx = jobTree.liveTree.selectedIndex;
+				
+				jobTree.liveTree.addEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
+				jobTree.refreshTree();
+			}
+			
+			private function onTreeUpdateComplete(event:FlexEvent):void {
+				
+				jobTree.liveTree.removeEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
+				//var xNodes:XMLList = jobTree.liveTree..xNodes..jobGroup(@id == "-1");
+				//trace(selectedTreeNode.@id);
+				
+				jobTree.liveTree.validateNow();
+				// var selectedLocal:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup.(@id == selectedTreeNode.@id)[0];
+				
+				var searchResult:XMLList = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+				
+				if (searchResult[0] != undefined)
+					expandNode(searchResult[0]);
+				
+				//trace("selectedLocal :" + selectedLocal);
+				jobTree.liveTree.selectedItem = searchResult[0];
+				//jobTree.liveTree.validateNow();
+				//jobTree.liveTree.selectedIndex = selectedTreeNodeIdx;
+				//jobTree.liveTree.scrollToIndex(jobTree.liveTree.selectedIndex);
+				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, null));
+			}
+			
+			private function expandNode(xmlNode:XML):void
+			{
+				while (xmlNode.parent() != null) {
+					xmlNode = xmlNode.parent();
+					jobTree.liveTree.expandItem(xmlNode, true, false);
+				}
+			}
+			
 			private function changeState(event:ResourceEvent):void {
 				
 				if(event.type == ResourceEvent.LISTNODE_SELECTED) {
 					currentState = "jobListState";
-					jobListDetail.selectedNetTreeId = String(event.object);
+					if(event.object == null) {
+						if(currentListNodeId != null) {
+							jobListDetail.selectedNetTreeId = currentListNodeId;
+						} else {
+							Alert.show("Warning : Code : 3428");
+							currentState = "anaSayfaState";
+						}
+					} else {
+						jobListDetail.selectedNetTreeId = XML(event.object).@id;
+						currentListNodeId = jobListDetail.selectedNetTreeId;
+					}
 					jobListDetail.updateData();
 				} else if(event.type == ResourceEvent.JOBNODE_SELECTED) {
 					currentState = "jobDetailState";
-					allJobDetail.selectedJobId = String(event.object);
+					allJobDetail.selectedJobId = XML(event.object).@id;
+					currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
 					allJobDetail.updateData();
 				} else if(event.type == ResourceEvent.ANASAYFA) {
 					// currentState = "loggedInState";

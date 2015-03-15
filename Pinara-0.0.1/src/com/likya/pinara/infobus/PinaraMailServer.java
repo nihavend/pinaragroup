@@ -153,7 +153,7 @@ public class PinaraMailServer implements Runnable {
 		// Send message
 			Transport.send(message);
 		} catch(AuthenticationFailedException a) {
-			Pinara.getLogger().info("Hatalı kullanıcı adı veya şifre nedeni ile e-posta sunucusuna bağlanamadı !");
+			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.9"));
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
 		} catch(MessagingException me) {
 			Pinara.getLogger().info(me.getLocalizedMessage());

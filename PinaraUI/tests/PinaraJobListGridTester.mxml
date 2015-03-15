@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   minWidth="955" minHeight="600" 
+			   preinitialize="application1_preinitializeHandler(event)"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			
+			[Bindable]
+			private var jobListXmlCollection:XMLListCollection = new XMLListCollection();
+			
+			protected function application1_preinitializeHandler(event:FlexEvent):void 
+			{
+				// Burada çağrılınca Durum kolon başlığı görünmüyor.
+				// myFunc();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// Burada çağrılınca Durum kolon başlığı sorun yok.
+				myFunc();
+				
+			}
+			
+			protected function myFunc():void
+			{
+				var treeXml:XML = 
+					<jobList >
+					  <genericJob  handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="23" groupId="my_group" agentId="1"     >
+						<baseJobInfos>
+						  <jsName>ilk tanımlı iş</jsName>
+						  <jobTypeDetails>
+							<jobCommandType>BATCH PROCESS</jobCommandType>
+							<jobCommand>jobs/job.sh</jobCommand>
+							<jobWorkDir/>
+							<argValues/>
+						  </jobTypeDetails>
+						  <jobLogFile/>
+						  <jobLogPath/>
+						  <oSystem>Windows</oSystem>
+						  <jobPriority>1</jobPriority>
+						  <jsIsActive>true</jsIsActive>
+						  <userId>007</userId>
+						</baseJobInfos>
+						<graphInfo deadBranch="false"/>
+						<stateInfos>
+						  <JobStatusList>
+							<JobStatus>
+							  <StatusName>SUCCESS</StatusName>
+							  <Desc>111</Desc>
+							  <ReturnCodeList osType="MACOS">
+								<ReturnCode>
+								  <Code>0</Code>
+								  <Desc>214314</Desc>
+								</ReturnCode>
+							  </ReturnCodeList>
+							</JobStatus>
+						  </JobStatusList>
+						  <LiveStateInfos>
+							<LiveStateInfo LSIDateTime="2015-03-11T12:12:14.000+02:00">
+							  <StateName>PENDING</StateName>
+							  <SubstateName>DEACTIVATED</SubstateName>
+							</LiveStateInfo>
+						  </LiveStateInfos>
+						</stateInfos>
+						<management>
+						  <trigger>TIME</trigger>
+						  <timeManagement>
+							<bornedPlannedTime>
+							  <startTime>2015-03-11T11:11:11.000+02:00</startTime>
+							  <stopTime>2015-03-18T11:11:11.000+02:00</stopTime>
+							</bornedPlannedTime>
+							<jsPlannedTime>
+							  <startTime>2015-03-11T11:11:11.000+02:00</startTime>
+							  <stopTime>2015-03-18T11:11:11.000+02:00</stopTime>
+							</jsPlannedTime>
+							<jsTimeOut>
+							  <value_integer>1111</value_integer>
+							  <unit>HOURS</unit>
+							</jsTimeOut>
+							<expectedTime>
+							  <value_integer>1111</value_integer>
+							  <unit>HOURS</unit>
+							</expectedTime>
+						  </timeManagement>
+						  <cascadingConditions>
+							<runEvenIfFailed>true</runEvenIfFailed>
+							<jobSafeToRestart>true</jobSafeToRestart>
+							<jobAutoRetryInfo step="P1D" maxCount="4">
+							  <jobAutoRetry>true</jobAutoRetry>
+							</jobAutoRetryInfo>
+						  </cascadingConditions>
+						</management>
+						<scheduleInfo>
+						  <daysOfWeekIntType>1</daysOfWeekIntType>
+						  <daysOfWeekIntType>2</daysOfWeekIntType>
+						  <daysOfWeekIntType>3</daysOfWeekIntType>
+						  <daysOfWeekIntType>4</daysOfWeekIntType>
+						  <daysOfWeekIntType>5</daysOfWeekIntType>
+						  <daysOfWeekIntType>6</daysOfWeekIntType>
+						  <daysOfWeekIntType>7</daysOfWeekIntType>
+						</scheduleInfo>
+						<runtimeParams>
+						  <realizedDuration>-</realizedDuration>
+						  <previousDuration>-</previousDuration>
+						  <hasJobLog>false</hasJobLog>
+						  <hasJobContent>false</hasJobContent>
+						</runtimeParams>
+						<visualParams>
+						  <statu>9</statu>
+						  <commandabilityParams>
+							<isPausable>true</isPausable>
+							<isResumable>false</isResumable>
+							<isRetryable>false</isRetryable>
+							<isSkipable>false</isSkipable>
+							<isStartable>true</isStartable>
+							<isStopable>false</isStopable>
+							<isSuccessable>false</isSuccessable>
+						  </commandabilityParams>
+						</visualParams>
+					  </genericJob>
+					  <genericJob  handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="24" groupId="my_group" agentId="1"     >
+						<baseJobInfos>
+						  <jsName>serkan işiiiii</jsName>
+						  <jobTypeDetails>
+							<jobCommandType>BATCH PROCESS</jobCommandType>
+							<jobCommand>jobs/job1.sh</jobCommand>
+							<jobWorkDir/>
+							<argValues/>
+						  </jobTypeDetails>
+						  <jobLogFile/>
+						  <jobLogPath/>
+						  <oSystem>Windows</oSystem>
+						  <jobPriority>1</jobPriority>
+						  <jsIsActive>true</jsIsActive>
+						  <userId>007</userId>
+						</baseJobInfos>
+						<graphInfo deadBranch="false"/>
+						<stateInfos>
+						  <JobStatusList>
+							<JobStatus>
+							  <StatusName>SUCCESS</StatusName>
+							  <Desc>1111</Desc>
+							  <ReturnCodeList osType="MACOS">
+								<ReturnCode>
+								  <Code>0</Code>
+								  <Desc>fwerwt</Desc>
+								</ReturnCode>
+							  </ReturnCodeList>
+							</JobStatus>
+						  </JobStatusList>
+						  <LiveStateInfos>
+							<LiveStateInfo LSIDateTime="2015-03-11T12:40:58.000+02:00">
+							  <StateName>PENDING</StateName>
+							  <SubstateName>DEACTIVATED</SubstateName>
+							</LiveStateInfo>
+						  </LiveStateInfos>
+						</stateInfos>
+						<management>
+						  <trigger>TIME</trigger>
+						  <timeManagement>
+							<bornedPlannedTime>
+							  <startTime>2015-03-11T22:22:22.000+02:00</startTime>
+							  <stopTime>2015-03-25T23:11:11.000+02:00</stopTime>
+							</bornedPlannedTime>
+							<jsPlannedTime>
+							  <startTime>2015-03-11T22:22:22.000+02:00</startTime>
+							  <stopTime>2015-03-25T23:11:11.000+02:00</stopTime>
+							</jsPlannedTime>
+							<jsTimeOut>
+							  <value_integer>11</value_integer>
+							  <unit>HOURS</unit>
+							</jsTimeOut>
+							<expectedTime>
+							  <value_integer>11</value_integer>
+							  <unit>HOURS</unit>
+							</expectedTime>
+						  </timeManagement>
+						  <cascadingConditions>
+							<runEvenIfFailed>true</runEvenIfFailed>
+							<jobSafeToRestart>true</jobSafeToRestart>
+							<jobAutoRetryInfo step="P1D">
+							  <jobAutoRetry>true</jobAutoRetry>
+							</jobAutoRetryInfo>
+						  </cascadingConditions>
+						</management>
+						<scheduleInfo>
+						  <daysOfWeekIntType>1</daysOfWeekIntType>
+						  <daysOfWeekIntType>2</daysOfWeekIntType>
+						  <daysOfWeekIntType>3</daysOfWeekIntType>
+						  <daysOfWeekIntType>4</daysOfWeekIntType>
+						  <daysOfWeekIntType>5</daysOfWeekIntType>
+						  <daysOfWeekIntType>6</daysOfWeekIntType>
+						  <daysOfWeekIntType>7</daysOfWeekIntType>
+						</scheduleInfo>
+						<runtimeParams>
+						  <realizedDuration>-</realizedDuration>
+						  <previousDuration>-</previousDuration>
+						  <hasJobLog>false</hasJobLog>
+						  <hasJobContent>false</hasJobContent>
+						</runtimeParams>
+						<visualParams>
+						  <statu>9</statu>
+						  <commandabilityParams>
+							<isPausable>true</isPausable>
+							<isResumable>false</isResumable>
+							<isRetryable>false</isRetryable>
+							<isSkipable>false</isSkipable>
+							<isStartable>true</isStartable>
+							<isStopable>false</isStopable>
+							<isSuccessable>false</isSuccessable>
+						  </commandabilityParams>
+						</visualParams>
+					  </genericJob>
+					</jobList>;
+				
+				jobListXmlCollection.source = treeXml.children(); 
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<jobdetail:PinaraJobListGrid jobListXmlCollection="{jobListXmlCollection}" selectedGroupId="{000}"/>
+</s:Application>

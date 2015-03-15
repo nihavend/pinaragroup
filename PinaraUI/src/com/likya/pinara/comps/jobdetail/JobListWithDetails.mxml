@@ -316,6 +316,12 @@
 				Alert.show("Fault : " + event.message);	
 			}
 			
+			protected function pinaraJobListGrid_creationCompleteHandler(event:FlexEvent):void
+			{
+				pinaraJobListGrid.jobListXmlCollection = jobListXmlCollection;
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -353,7 +359,7 @@
 				
 				<s:Button label="show xml" click="button1_clickHandler(event)" visible="false" includeInLayout="false"/>
 				
-				<jobdetail:PinaraJobListGrid jobListXmlCollection="{jobListXmlCollection}" selectedGroupId="{selectedNetTreeId}"/>
+				<jobdetail:PinaraJobListGrid selectedGroupId="{selectedNetTreeId}" id="pinaraJobListGrid" creationComplete="pinaraJobListGrid_creationCompleteHandler(event)"/>
 				
 				<s:Panel id="detailPanel" title="Job Summary Detail Form" height="{detailPanelDefHeight}" width="100%" visible="false" includeInLayout="false">
 					

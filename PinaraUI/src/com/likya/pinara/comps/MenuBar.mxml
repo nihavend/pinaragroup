@@ -139,16 +139,12 @@
 					showPinaraEkranLogPopup();
 				} else if (event.label == resourceManager.getString("messages", "suspendApp")) {
 					Alert.show("suspendApp : " + currentDataItem);
-					// suspendApp();
 					Alert.show("Uygulama beklemeye alınacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, suspendApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "resumeApp")) {
-					// resumeApp();
 					Alert.show("Uygulama beklemeden çıkarılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, resumeApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "shutdownNormal")) {
-					// shutdownNormal();
 					Alert.show("Uygulama normal kapatılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, shutdownNormal, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "shutdownForce")) {
-					// shutdownForce();
 					Alert.show("Uygulama koşulsuz kapatılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, shutdownForce, null, Alert.CANCEL);
 				} else if(event.label == resourceManager.getString("messages", "addJob")) {
 					showAddJob();
@@ -231,25 +227,29 @@
 
 			private function suspendApp(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
-					suspendAppResult.token = jobManagerService.suspendapp();
+					// suspendAppResult.token = jobManagerService.suspendapp();
+					suspendAppResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "suspendapp");
 				}
 			}
 
 			private function resumeApp(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
-					resumeAppResult.token = jobManagerService.resumeapp();
+					// resumeAppResult.token = jobManagerService.resumeapp();
+					resumeAppResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "resumeapp");
 				}
 			}
 
 			private function shutdownNormal(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
-					shutdownNormalResult.token = jobManagerService.stopapp();
+					//shutdownNormalResult.token = jobManagerService.stopapp();
+					shutdownNormalResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "stopapp");
 				}
 			}
 			
 			private function shutdownForce(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
-					shutdownForceResult.token = jobManagerService.fstopapp();
+					//shutdownForceResult.token = jobManagerService.fstopapp();
+					shutdownForceResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "fstopapp");
 				}
 			}
 

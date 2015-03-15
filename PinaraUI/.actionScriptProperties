@@ -35,23 +35,7 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="AboutWindowsTester.mxml"/>
-    <application path="MenuBarTester.mxml"/>
-    <application path="GerenicJobXMLTester.mxml"/>
-    <application path="ModuleTester.mxml"/>
-    <application path="GridListTester.mxml"/>
-    <application path="JobEditWindowTester.mxml"/>
-    <application path="com/likya/pinara/modules/ViewDepGraph.mxml"/>
-    <application path="ManageButtonGroupTester.mxml"/>
-    <application path="DynamicCombos.mxml"/>
-    <application path="HtmlTester.mxml"/>
-    <application path="ServiceTester.mxml"/>
-    <application path="DummyWindowsTester.mxml"/>
-    <application path="ChainedCombos.mxml"/>
     <application path="com/likya/pinara/main/PinaraUI.mxml"/>
-    <application path="TestViewDepGraph.mxml"/>
-    <application path="com/likya/pinara/modules/RemoteSchProps.mxml"/>
-    <application path="NumericTester.mxml"/>
   </applications>
   <modules/>
   <workers/>

@@ -17,6 +17,7 @@
 			import mx.utils.ObjectUtil;
 			
 			public var currentUser:UserInfo = new UserInfo();
+
 /*			
 			operation = new mx.rpc.http.Operation(null, "disable");
 			operation.url = "/flex/restsrvc/disablejob/{jobId}";

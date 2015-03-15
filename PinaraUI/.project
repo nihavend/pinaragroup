@@ -22,4 +22,15 @@
 			<location>/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot</location>
 		</link>
 	</linkedResources>
+	<filteredResources>
+		<filter>
+			<id>1426454198425</id>
+			<name></name>
+			<type>6</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-*Tester</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

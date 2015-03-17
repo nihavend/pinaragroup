@@ -2,6 +2,7 @@ package com.likya.pinara.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -27,8 +28,8 @@ public class PersistApi {
 	public static void serialize(JobListDocument jobListDocument) throws Exception {
 
 		String fileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
-		String dstFile = fileName + FILE_EXT;
-
+		
+		String dstFile = Pinara.DATA_PATH + File.separator + fileName + FILE_EXT;
 		String tmpDstFile = dstFile + ".tmp";
 
 		byte[] data = encryptedArray(jobListDocument);
@@ -50,7 +51,7 @@ public class PersistApi {
 			}
 			Files.move(tmpPath, dstPath, StandardCopyOption.REPLACE_EXISTING);
 		} else {
-			throw new Exception(fileName + " is not created, serialization failed !");
+			throw new Exception(dstFile + " is not created, serialization failed !");
 		}
 	}
 
@@ -58,7 +59,7 @@ public class PersistApi {
 
 		JobListDocument jobListDocument;
 
-		String srcFileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
+		String srcFileName = Pinara.DATA_PATH + File.separator + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
 		
 		if (!FileUtils.checkFile(srcFileName)) {
 			return null;

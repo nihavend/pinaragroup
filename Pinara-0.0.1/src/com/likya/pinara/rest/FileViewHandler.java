@@ -67,6 +67,9 @@ public abstract class FileViewHandler implements HttpHandler {
 		if (query != null && query.length() > 0 && (viewTypeInfo = getViewTypeInfo(query)) != null) { // means there is no ? in url
 			try {
 				response = handleView(viewTypeInfo);
+				if(response == null) {
+					response = returnFault(-1, "File not found !");
+				}
 			} catch (Throwable e) {
 				e.printStackTrace();
 				response = returnFault(e);
@@ -123,7 +126,11 @@ public abstract class FileViewHandler implements HttpHandler {
 	protected ViewTypeInfo getViewTypeInfo(String query) {
 
 		ViewTypeInfo viewTypeInfo = null;
-
+		
+		if(query.indexOf("_method=GET") >= 0) {
+			query = query.replace("_method=GET&", "");
+		}
+		
 		String[] queryParamArr = query.split("&");
 
 		String viewTypeText = null;

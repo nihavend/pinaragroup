@@ -23,7 +23,7 @@ import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 
 public class Pinara extends PinaraBase {
 
-	private static final String CONFIG_PATH = "conf";
+	public static final String CONFIG_PATH = "conf";
 	private static final String CONFIG_FILE = "pinaraConfig.xml";
 	
 	public static final String DATA_PATH = "data";

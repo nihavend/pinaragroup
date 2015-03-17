@@ -3,14 +3,20 @@ package com.likya.pinara.rest;
 import java.io.File;
 
 import com.likya.commons.utils.FileUtils;
+import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
+import com.likya.pinara.utils.PersistApi;
 
 public class LogViewHandler extends FileViewHandler {
 
 	public String handleView(ViewTypeInfo viewTypeInfo) {
 
+		String confPath = Pinara.CONFIG_PATH + File.separator;
+		String dataPath = Pinara.DATA_PATH + File.separator;
+		String logPath = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getLogPath() + File.separator;
+		
 		String response = returnFault();
 
 		String viewFile = null;
@@ -22,7 +28,7 @@ public class LogViewHandler extends FileViewHandler {
 			switch (viewTypeInfo.viewSubTypeText) {
 
 			case "pinaraConfig":
-				viewFile = "pinaraConfig.xml";
+				viewFile = confPath + "pinaraConfig.xml";
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {
@@ -34,11 +40,7 @@ public class LogViewHandler extends FileViewHandler {
 			case "myraConfig":
 				// response = TlosServer.getTlosParameters().getConfigFileContent();
 				// TlosParameters.setRequestedFileName(TlosServer.getConfigFileName());
-				viewFile = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getMyraConfigFile();
-				if(viewFile == null) {
-					response = returnFault(-99, "There is no configuration for file " + viewTypeInfo.viewSubTypeText);
-					break;
-				}
+				viewFile = confPath + CoreFactory.CONFIG_FILE;
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {
@@ -51,9 +53,10 @@ public class LogViewHandler extends FileViewHandler {
 				// response = TlosServer.getTlosParameters().getScenarioFileContent();
 				// isXml = true;
 				// TlosParameters.setRequestedFileName(TlosServer.getTlosParameters().getScenarioFile());
-				viewFile = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
+				viewFile = dataPath + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + PersistApi.FILE_EXT;
 				try {
-					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
+					String viewFileTmp = PersistApi.createTxtCopy();
+					response = getLimited(viewTypeInfo.queryParamArr, viewFileTmp, FileTypeInfo.TOXML);
 				} catch (Throwable t) {
 					t.printStackTrace();
 					response = returnFault(t);
@@ -61,7 +64,7 @@ public class LogViewHandler extends FileViewHandler {
 				break;
 				
 			case "myraLog":
-				viewFile = "myraTrace.log";
+				viewFile = logPath + "myraTrace.log";
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.TOXML);
 				} catch (Throwable t) {
@@ -72,7 +75,7 @@ public class LogViewHandler extends FileViewHandler {
 				break;
 
 			case "pinaraLog":
-				viewFile = "pinaraTrace.log";
+				viewFile = logPath + "pinaraTrace.log";
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.TOXML);
 				} catch (Throwable t) {
@@ -83,7 +86,7 @@ public class LogViewHandler extends FileViewHandler {
 				break;
 				
 			case "pinaraEkran":
-				viewFile = "pinaraEkran.log";
+				viewFile = logPath + "pinaraEkran.log";
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.TOXML);
 				} catch (Throwable t) {

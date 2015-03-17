@@ -16,6 +16,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.likya.commons.utils.FileUtils;
+import com.likya.myra.jef.core.CoreFactory;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.utils.license.LicenseMap;
 import com.likya.pinara.utils.license.LikyaSecurity;
@@ -23,7 +24,7 @@ import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public class PersistApi {
 	
-	private static final String FILE_EXT = ".pnr";
+	public static final String FILE_EXT = ".pnr";
 
 	public static void serialize(JobListDocument jobListDocument) throws Exception {
 
@@ -54,18 +55,43 @@ public class PersistApi {
 			throw new Exception(dstFile + " is not created, serialization failed !");
 		}
 	}
+	
+	public static void serializeAsFlat(String dstFileName, String text) throws Exception {
+		
+		FileOutputStream outputStream = new FileOutputStream(dstFileName);
+
+		outputStream.write(text.getBytes());
+		outputStream.close();
+
+		return;
+	}
 
 	public static JobListDocument deserialize() throws Exception {
 
 		JobListDocument jobListDocument;
 
+		String decryptedString = deserializeAsFlat();
+
+		jobListDocument = JobListDocument.Factory.parse(decryptedString);
+
+		return jobListDocument;
+
+	}
+	
+	public static String deserializeAsFlat() throws Exception {
+		
 		String srcFileName = Pinara.DATA_PATH + File.separator + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
 		
-		if (!FileUtils.checkFile(srcFileName)) {
+		return deserializeAsFlat(srcFileName);
+	}
+	
+	public static String deserializeAsFlat(String fileName) throws Exception {
+		
+		if (!FileUtils.checkFile(fileName)) {
 			return null;
 		}
 
-		FileInputStream inputStream = new FileInputStream(srcFileName);
+		FileInputStream inputStream = new FileInputStream(fileName);
 
 		GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
 
@@ -84,11 +110,19 @@ public class PersistApi {
 		out.close();
 		
 		String decryptedString = PersistApi.decryptedString(out.toByteArray());
-
-		jobListDocument = JobListDocument.Factory.parse(decryptedString);
-
-		return jobListDocument;
-
+		
+		return decryptedString;
+	}
+	
+	public static String createTxtCopy() throws Exception {
+		
+		String text = deserializeAsFlat();
+		
+		String dstFileName = CoreFactory.MYRA_DATA_PATH + File.separator + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT + ".view";
+		
+		serializeAsFlat(dstFileName, text);
+		
+		return dstFileName;
 	}
 
 	public static byte[] encryptedArray(JobListDocument jobListDocument) throws Exception {

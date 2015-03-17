@@ -1,5 +1,11 @@
 package com.likya.pinara;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
@@ -17,6 +23,11 @@ import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 
 public class Pinara extends PinaraBase {
 
+	private static final String CONFIG_PATH = "conf";
+	private static final String CONFIG_FILE = "pinaraConfig.xml";
+	
+	public static final String DATA_PATH = "data";
+	
 	private Pinara() {
 		super();
 	}
@@ -24,33 +35,16 @@ public class Pinara extends PinaraBase {
 	private static Pinara pinara;
 
 	public static void main(String[] args) {
+		
+		checkDataPath();
+
+		ConfigurationManager configurationManager = loadConfig();
 
 		registerMessageBundle();
 
 		parseCmdArgs(args);
 
 		checkStartUp();
-
-		ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-
-		PinaraConfigDocument pinaraConfigDocument = null;
-
-		String configFile = "pinaraConfig.xml";
-
-		StringBuffer xmlString = FileUtils.readFile(configFile);
-
-		try {
-			pinaraConfigDocument = PinaraConfigDocument.Factory.parse(xmlString.toString());
-
-			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), pinaraConfigDocument)) {
-				throw new XmlException(configFile + " is null or damaged !");
-			}
-
-			configurationManager.setPinaraConfig(pinaraConfigDocument.getPinaraConfig());
-		} catch (XmlException e) {
-			e.printStackTrace();
-			return;
-		}
 
 		try {
 			initPinara(configurationManager);
@@ -60,13 +54,56 @@ public class Pinara extends PinaraBase {
 		}
 
 	}
+	
+	private static void checkDataPath() {
+		Path dataPath = Paths.get(DATA_PATH);
+		if (Files.notExists(dataPath)) {
+			try {
+				Files.createDirectory(dataPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+	}
+
+	private static ConfigurationManager loadConfig() {
+
+		ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+
+		PinaraConfigDocument pinaraConfigDocument = null;
+
+		Path configFile = Paths.get(CONFIG_PATH + File.separator + CONFIG_FILE);
+
+		if (Files.notExists(configFile)) {
+			printerr("Dosya belirtilen dizinde bulunamadı : " + configFile.toString());
+			System.exit(-1);
+		}
+
+		StringBuffer xmlString = FileUtils.readFile(configFile.toString());
+
+		try {
+			pinaraConfigDocument = PinaraConfigDocument.Factory.parse(xmlString.toString());
+
+			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), pinaraConfigDocument)) {
+				throw new XmlException(configFile + " is null or damaged !");
+			}
+
+			configurationManager.setPinaraConfig(pinaraConfigDocument.getPinaraConfig());
+
+		} catch (XmlException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		return configurationManager;
+	}
 
 	private static void initPinara(ConfigurationManager configurationManager) throws Exception, Throwable {
 
-		
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.PINARA_CONSOLE, Level.INFO);
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.MYRA_CONSOLE, Level.INFO);
-		
+
 		pinara = new Pinara();
 
 		pinara.setConfigurationManager(configurationManager);
@@ -82,7 +119,7 @@ public class Pinara extends PinaraBase {
 		if (!pinara.initMyra()) {
 			throw new Exception();
 		}
-		
+
 		PinaraAppManagerImpl.initialize();
 
 		pinara.sendStartUpInfos();
@@ -120,84 +157,84 @@ public class Pinara extends PinaraBase {
 		}
 
 	}
-	
+
 	private boolean initMyra() throws Throwable {
 
 		JobListDocument jobListDocument = PersistApi.deserialize();
 
-		if(jobListDocument == null) {
+		if (jobListDocument == null) {
 			jobListDocument = JobListDocument.Factory.newInstance();
 			jobListDocument.addNewJobList();
-			
+
 			PersistApi.serialize(jobListDocument);
-		} 
-		
+		}
+
 		PinaraOutput testOutput = PinaraOutput.getInstance();
-		
+
 		Starter.startForce(jobListDocument, testOutput);
 
 		return true;
 
 	}
 
-//	public boolean initMyraOld() throws Throwable {
-//
-//		StringBuffer xmlString = getMyraData();
-//
-//		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
-//
-//		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
-//			throw new Exception("JobList.xml is null or damaged !");
-//		}
-//
-//		InputStrategy inputStrategy = new InputStrategyImpl();
-//
-//		MyraConfigDocument myraConfigDocument = null;
-//		
-//		// String myraConfigFile = "/Users/serkan/git/localgit/TL-2.0.0-Test/conf/myraConfig.xml";
-//
-//		String myraConfigFile = getConfigurationManager().getPinaraConfig().getMyraConfigFile();
-//
-//		xmlString = FileUtils.readFile(myraConfigFile);
-//		
-//		com.likya.myra.jef.ConfigurationManager configurationManager;
-//
-//		try {
-//			myraConfigDocument = MyraConfigDocument.Factory.parse(xmlString.toString());
-//			
-//			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), myraConfigDocument)) {
-//				throw new Exception("myraConfigDocument is null or damaged !");
-//			}
-//
-//			configurationManager = new com.likya.myra.jef.ConfigurationManagerImpl(myraConfigDocument);
-//		} catch (XmlException e) {
-//			e.printStackTrace();
-//			return false;
-//		}
-//
-//		inputStrategy.setConfigurationManager(configurationManager);
-//		inputStrategy.setJobListDocument(jobListDocument);
-//
-//		PinaraOutput testOutput = PinaraOutput.getInstance();
-//
-//		CoreFactory coreFactory = (CoreFactory) CoreFactory.getInstance(inputStrategy, testOutput);
-//
-//		if (!validateJobList(jobListDocument)) {
-//			throw new Exception("Invalid jobListDocument !");
-//		}
-//
-//		ManagementOperations managementOperations = coreFactory.getManagementOperations();
-//
-//		try {
-//			managementOperations.start();
-//		} catch (Throwable e) {
-//			e.printStackTrace();
-//			return false;
-//		}
-//
-//		return true;
-//
-//	}
+	//	public boolean initMyraOld() throws Throwable {
+	//
+	//		StringBuffer xmlString = getMyraData();
+	//
+	//		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
+	//
+	//		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+	//			throw new Exception("JobList.xml is null or damaged !");
+	//		}
+	//
+	//		InputStrategy inputStrategy = new InputStrategyImpl();
+	//
+	//		MyraConfigDocument myraConfigDocument = null;
+	//		
+	//		// String myraConfigFile = "/Users/serkan/git/localgit/TL-2.0.0-Test/conf/myraConfig.xml";
+	//
+	//		String myraConfigFile = getConfigurationManager().getPinaraConfig().getMyraConfigFile();
+	//
+	//		xmlString = FileUtils.readFile(myraConfigFile);
+	//		
+	//		com.likya.myra.jef.ConfigurationManager configurationManager;
+	//
+	//		try {
+	//			myraConfigDocument = MyraConfigDocument.Factory.parse(xmlString.toString());
+	//			
+	//			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), myraConfigDocument)) {
+	//				throw new Exception("myraConfigDocument is null or damaged !");
+	//			}
+	//
+	//			configurationManager = new com.likya.myra.jef.ConfigurationManagerImpl(myraConfigDocument);
+	//		} catch (XmlException e) {
+	//			e.printStackTrace();
+	//			return false;
+	//		}
+	//
+	//		inputStrategy.setConfigurationManager(configurationManager);
+	//		inputStrategy.setJobListDocument(jobListDocument);
+	//
+	//		PinaraOutput testOutput = PinaraOutput.getInstance();
+	//
+	//		CoreFactory coreFactory = (CoreFactory) CoreFactory.getInstance(inputStrategy, testOutput);
+	//
+	//		if (!validateJobList(jobListDocument)) {
+	//			throw new Exception("Invalid jobListDocument !");
+	//		}
+	//
+	//		ManagementOperations managementOperations = coreFactory.getManagementOperations();
+	//
+	//		try {
+	//			managementOperations.start();
+	//		} catch (Throwable e) {
+	//			e.printStackTrace();
+	//			return false;
+	//		}
+	//
+	//		return true;
+	//
+	//	}
 
 	public static StringBuffer getMyraData() throws Exception {
 

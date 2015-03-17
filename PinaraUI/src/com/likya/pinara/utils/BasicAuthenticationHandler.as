@@ -31,7 +31,16 @@ package com.likya.pinara.utils
 			service.request.data = new URLVariables("name=ifthisdataisnotpassedPOSTmethodisconvertedtoGETbyflashplayer");
 			
 			if(service.url.indexOf('?_method=GET') <= 0) {
-				service.url += "?_method=GET";
+				if(service.url.indexOf('?') > 0) { // Has url param var başına eklenecek
+					var pairs:Array = service.url.split('?');
+					if(pairs.length == 2) {
+						service.url = pairs[0] + "?_method=GET" + "&" + pairs[1];
+					} else {
+						service.url = pairs[0] + "?_method=GET";
+					}
+				} else { // boş sona eklenecek
+					service.url += "?_method=GET";
+				}
 			}
 			
 			service.send();

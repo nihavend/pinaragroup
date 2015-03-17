@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/com/likya/pinara/resources/messages.properties=UTF-8
 encoding//src/com/likya/pinara/resources/messages_en.properties=UTF-8
+encoding//src/com/likya/pinara/resources/messages_entr.properties=UTF-8
 encoding//src/com/likya/pinara/resources/messages_fr.properties=UTF-8
+encoding//src/com/likya/pinara/resources/messages_tr.properties=UTF-8
 encoding/<project>=UTF-8
 encoding/src=UTF-8

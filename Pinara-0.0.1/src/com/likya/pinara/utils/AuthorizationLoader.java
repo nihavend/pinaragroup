@@ -1,5 +1,6 @@
 package com.likya.pinara.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,11 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
+import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraAuthorization;
 
 public class AuthorizationLoader {
 
-	public static String fileToPersist = "Pinara.authorization";
+	public static String fileToPersist = Pinara.DATA_PATH + File.separator + "Pinara.authorization";
 
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, PinaraAuthorization> readAuthorizationList() throws Exception {

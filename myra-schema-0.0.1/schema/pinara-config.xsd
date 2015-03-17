@@ -16,7 +16,6 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="senaryoDosyasi" type="fileNameType" minOccurs="0" maxOccurs="1" />
-				<xs:element name="myraConfigFile" type="fileNameType" minOccurs="0" maxOccurs="1" />
 				<xs:choice>
 					<xs:element name="serverHostName" type="xs:string" />
 					<xs:element name="serverIpAddress" type="likya-gen:ipAddressType" />

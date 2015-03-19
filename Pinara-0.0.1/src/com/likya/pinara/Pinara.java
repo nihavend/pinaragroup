@@ -16,6 +16,7 @@ import com.likya.myra.jef.utils.Starter;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
 import com.likya.pinara.utils.PersistApi;
+import com.likya.pinara.utils.RecoveryHelper;
 import com.likya.pinara.utils.license.LicenseManager;
 import com.likya.pinara.utils.license.ValidateLicense;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
@@ -27,6 +28,9 @@ public class Pinara extends PinaraBase {
 	private static final String CONFIG_FILE = "pinaraConfig.xml";
 	
 	public static final String DATA_PATH = "data";
+	
+	public static String suspendFlag = "unlocked";
+	public static boolean forceToRecover = false;
 	
 	private Pinara() {
 		super();
@@ -160,18 +164,31 @@ public class Pinara extends PinaraBase {
 
 	private boolean initMyra() throws Throwable {
 
-		JobListDocument jobListDocument = PersistApi.deserialize();
-
-		if (jobListDocument == null) {
-			jobListDocument = JobListDocument.Factory.newInstance();
-			jobListDocument.addNewJobList();
-
-			PersistApi.serialize(jobListDocument);
+		if(RecoveryHelper.isInRecoveryState()) {
+			suspendFlag = "locked";
+			synchronized (suspendFlag) {
+				getLogger().warn("Waiting user to decide what to do recover or go ahead !");
+				suspendFlag.wait();
+			}
 		}
 
 		PinaraOutput testOutput = PinaraOutput.getInstance();
-
-		Starter.startForce(jobListDocument, testOutput);
+		
+		if(forceToRecover) {
+			Starter.startRecover(testOutput);
+		} else {
+		
+			JobListDocument jobListDocument = PersistApi.deserialize();
+	
+			if (jobListDocument == null) {
+				jobListDocument = JobListDocument.Factory.newInstance();
+				jobListDocument.addNewJobList();
+	
+				PersistApi.serialize(jobListDocument);
+			}
+	
+			Starter.start(jobListDocument, testOutput);
+		}
 
 		return true;
 

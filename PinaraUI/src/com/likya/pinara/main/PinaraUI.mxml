@@ -7,7 +7,7 @@
 			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
 			   currentState="loggedOutState" 
 			   preloader="com.likya.pinara.utils.DownloadProgressBarSubClassMin"
-			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()">
+			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
 	
 	<fx:Metadata>
 		[ResourceBundle("messages")]
@@ -20,17 +20,24 @@
 		<s:State name="jobDetailState"/>
 		<s:State name="graphState"/>
 		<s:State name="anaSayfaState"/>
+		<s:State name="dummyState"/>
 	</s:states>
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
 			import mx.resources.ResourceBundle;
 			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			import mx.utils.Base64Encoder;
 			
 			
@@ -168,23 +175,51 @@
 				
 				// Alert.show("New State : " + currentState);
 			}
-
 			
+			private function doRecoveryOnDemand(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					recover.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "recover");
+				} else {
+					norecover.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "norecover");
+				}
+			}
+			
+			private function setAnaSayfaState():void {
+				currentState = "anaSayfaState";
+			}
+				
 			private function getLoginDataResultHandler(event:Event):void {
 				// Alert.show("event.result : " + event.toString());
+				var resultStr:String = XML(event.target.data).result;
+				if(resultStr == "RECOVER_CONFIRM") {
+					var warningStr:String = resourceManager.getString("messages", "warning");
+					var okLabel:String = Alert.okLabel;
+					var cancelLabel:String = Alert.cancelLabel;
+					var width:Number = Alert.buttonWidth;
+					
+					Alert.okLabel = "Recover Etsin";
+					Alert.cancelLabel = "Sıfırdan Başlasın";
+					Alert.buttonWidth = 120;
+					Alert.show("Uygulama nasıl başlasın ?", warningStr, Alert.OK|Alert.CANCEL, this, doRecoveryOnDemand, null, Alert.CANCEL);
+					Alert.okLabel = okLabel;
+					Alert.cancelLabel = cancelLabel;
+					Alert.buttonWidth = width;
+				} else {
+					setAnaSayfaState();
+				}
 				/*
 				Alert.show("event.result : " + event.result);
 				currentState = "tlosState";
 				if (event.result != null) {
-					var myColl:ArrayCollection = (ArrayCollection (event.result));
-					
-					var result:String = myColl.toArray().valueOf()[0].toString();
-					
-					if (result == "1") {
-						dispatchEvent(new ResourceEvent(ResourceEvent.LOGIN));
-					} else {
-						Alert.show("Kullacını adı ya da şifre hatalı !");
-					}
+				var myColl:ArrayCollection = (ArrayCollection (event.result));
+				
+				var result:String = myColl.toArray().valueOf()[0].toString();
+				
+				if (result == "1") {
+				dispatchEvent(new ResourceEvent(ResourceEvent.LOGIN));
+				} else {
+				Alert.show("Kullacını adı ya da şifre hatalı !");
+				}
 				}
 				*/
 			}
@@ -204,7 +239,7 @@
 				
 				if(event.status == 200) {
 					// currentState = "loggedInState";
-					currentState = "anaSayfaState"
+					// currentState = "anaSayfaState"
 					// Alert.show("Giriş başarılı :)");
 				} else if (event.status == 400) {
 					Alert.show("Kullacını adı ya da şifre hatalı !");
@@ -229,7 +264,7 @@
 				// authAndSend(UserInfo(event.object));
 				doWork(UserInfo(event.object), false);
 			}
-
+			
 			private function logout(event:ResourceEvent):void {
 				
 				currentUser.username = "";
@@ -244,7 +279,7 @@
 			private function doWork(userInfo:UserInfo, islogout:Boolean):void {
 				
 				try {
-
+					
 					currentUser.username = userInfo.username;
 					currentUser.password = userInfo.password;
 					
@@ -271,7 +306,7 @@
 					}
 					
 					loader.load(req);
-				
+					
 				} catch (e:Error){
 					Alert.show("doWork : " + e.message);
 				} 
@@ -284,11 +319,83 @@
 				}
 			}
 			
+			protected function jobManagerService_faultHandler(event:FaultEvent):void {
+				Alert.show("Fault : " + event.message);	
+			}
+			
+			protected function norecover_resultHandler(event:ResultEvent):void {
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.result);
+					//Alert.show(returnXml);
+					returnXml = XML(event.message.body);
+					if(returnXml != "OK") {
+						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+					} else {
+						setAnaSayfaState();
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+			}
+			
+			
+			//
+			private var dummyWindow:DummyForm;
+			protected function showDummyWindow(xmlText:String):void {
+				dummyWindow = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
+				dummyWindow.width = 220;
+				dummyWindow.height = 80;
+				dummyWindow.myText.width = 200;
+				dummyWindow.myText.height = 30;
+				dummyWindow.title="Please be patient..."
+				dummyWindow.htmlTextAsHTML = xmlText;
+				PopUpManager.centerPopUp(dummyWindow);
+				dummyWindow.setFocus();
+			}
+			private var myTimer:Timer;
+			protected function recover_resultHandler(event:ResultEvent):void
+			{
+				currentState = "dummyState";
+				showDummyWindow("Waiting for recovery to complete...");
+				CursorManager.setBusyCursor();
+				myTimer = new Timer(1000, 0);
+				myTimer.addEventListener("timer", checkRecoverIsCompleted);
+				myTimer.start();
+			}
+			public function checkRecoverIsCompleted(event:TimerEvent):void {
+				myTimer.stop();
+				getappstate.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "getappstate");
+			} 
+			
+			protected function getappstate_resultHandler(event:ResultEvent):void
+			{
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml == "STATE_RECOVER") {
+						trace("Still recovering... !");
+						myTimer.start();
+					} else {
+						myTimer.stop();
+						PopUpManager.removePopUp(dummyWindow);
+						setAnaSayfaState();
+						CursorManager.removeBusyCursor();
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+				
+			}
 			
 		]]>
 	</fx:Script>
-
-	<fx:Style>
+	
+		<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/halo";
 		@namespace containers "com.likya.pinara.containers.*";
@@ -301,8 +408,14 @@
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
-
+		<jobmanager:JobManager showBusyCursor="true" id="jobManagerService" fault="jobManagerService_faultHandler(event)"/>
+		<s:CallResponder id="recover" result="recover_resultHandler(event)"/>
+		<s:CallResponder id="norecover" result="norecover_resultHandler(event)"/>
+		<s:CallResponder id="getappstate" result="getappstate_resultHandler(event)" />
+<!--		<s:CallResponder id="recover" result="suspendAppResult_resultHandler(event)"/>
+		<s:CallResponder id="norecover" result="resumeAppResult_resultHandler(event)"/>
+-->	</fx:Declarations>
+	
 	<s:layout>
 		<s:VerticalLayout gap="10" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="20" />
 	</s:layout>
@@ -313,9 +426,9 @@
 	
 	
 	
-	<comps:Header userInfo="{currentUser}" excludeFrom="loggedOutState"/>
+	<comps:Header userInfo="{currentUser}" excludeFrom="loggedOutState, dummyState"/>
 	
-	<s:Group id="mainApp" width="100%" height="100%" excludeFrom="loggedOutState">
+	<s:Group id="mainApp" width="100%" height="100%" excludeFrom="loggedOutState, dummyState">
 		
 		<s:layout>
 			<s:HorizontalLayout clipAndEnableScrolling="true" paddingRight="0" paddingLeft="0" paddingTop="10" paddingBottom="10" />
@@ -327,16 +440,16 @@
 			<s:layout>
 				<s:VerticalLayout clipAndEnableScrolling="true" paddingRight="0" paddingLeft="0" paddingTop="10" paddingBottom="10" />
 			</s:layout>
-			<comps:MenuBar excludeFrom="loggedOutState" />
+			<comps:MenuBar excludeFrom="loggedOutState, dummyState" />
 			<s:BitmapImage source="@Embed('/images/likya.jpg')" left="0" right="0" top="0" bottom="0" scaleMode="stretch" includeIn="anaSayfaState" />
 			<!--mx:SWFLoader width="950" height="500" source="http://www.youtube.com/v/ojASzi1Kb8c" includeIn="loggedInState"/--> 
 			<!--comps:MainPanel includeIn="jobListState" height="100%"/-->
-			<jobdetail:JobListWithDetails height="100%" excludeFrom="anaSayfaState, jobDetailState, loggedOutState" id="jobListDetail"/>
+			<jobdetail:JobListWithDetails height="100%" excludeFrom="anaSayfaState, jobDetailState, loggedOutState, dummyState" id="jobListDetail"/>
 			<jobdetail:JobAllDetailPanel includeIn="jobDetailState" id="allJobDetail" height="100%"/>
 		</s:Group>
 		
 	</s:Group>
-
-	<comps:Footer excludeFrom="loggedOutState" />	
+	
+	<comps:Footer excludeFrom="loggedOutState, dummyState" />	
 	
 </s:Application>

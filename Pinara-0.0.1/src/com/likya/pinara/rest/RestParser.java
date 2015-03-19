@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gson.Gson;
+import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
@@ -47,6 +48,11 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_DELETEJOB = "deletejob";
 	
 	public static final String CMD_AUTH = "authanticate";
+	
+	public static final String CMD_RECOVER = "recover";
+	public static final String CMD_NORECOVER = "norecover";
+	
+	public static final String CMD_APPSTATE = "appstate";
 	
 	public static byte[] parse(String uriTxt) {
 
@@ -309,6 +315,29 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 			
+		case RestParser.CMD_RECOVER:
+			if(Pinara.suspendFlag.equals("locked")) {
+				Pinara.forceToRecover = true;
+				synchronized (Pinara.suspendFlag) {
+					Pinara.suspendFlag.notifyAll();
+				}
+			}
+			retStr = "<result>OK</result>";
+			break;
+			
+		case RestParser.CMD_NORECOVER:
+			if(Pinara.suspendFlag.equals("locked")) {
+				synchronized (Pinara.suspendFlag) {
+					Pinara.suspendFlag.notifyAll();
+				}
+			}
+			retStr = "<result>OK</result>";
+			break;
+
+		case RestParser.CMD_APPSTATE:
+			retStr = "<result>" + CoreFactory.getInstance().getManagementOperations().getExecutionState() + "</result>";
+			break;
+			
 		default:
 			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
 			
@@ -395,7 +424,12 @@ public class RestParser extends GenericRestParser {
 			
 			
 		case RestParser.CMD_AUTH:
-			retStr = "<message><result>OK</result></message>";
+			if(Pinara.suspendFlag.equals("locked")) {
+				retStr = "<message><result>RECOVER_CONFIRM</result></message>";	
+			} else {
+				retStr = "<message><result>OK</result></message>";
+			}
+			
 			break;
 			
 		default:

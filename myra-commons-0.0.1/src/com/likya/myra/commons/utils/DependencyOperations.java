@@ -270,7 +270,7 @@ public class DependencyOperations {
 				
 				boolean isManuel = LiveStateInfoUtils.equalStatesPIU(jobQueue.get(key));
 				if (isManuel) {
-					logger.warn("Job Id : " + abstractJobType.getId() + " >> Bağımlılık bilgilerinde manuel işlere bağmlılık tanımı var :" + key);
+					logger.warn("Job Id : " + abstractJobType.getId() + " >> Bağımlılık bilgilerinde manuel işlere bağımlılık tanımı var :" + key);
 					// return false;
 				}
 				

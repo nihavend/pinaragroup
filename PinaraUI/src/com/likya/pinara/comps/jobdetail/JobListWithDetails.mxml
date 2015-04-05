@@ -189,7 +189,7 @@
 			}
 			
 			public function updateData():void {
-				var testFlag:Boolean = isNaN(Number(selectedNetTreeId));
+				var testFlag:Boolean = isNaN(Number(selectedNetTreeId)) || selectedNetTreeId == "";
 				
 				if(testFlag) {
 					Alert.show("Selected NetTree id is not valid ! >> " + selectedNetTreeId);
@@ -212,6 +212,9 @@
 				
 				jobListXml = XML(event.result);
 				
+				if(jobListXml.contains("NOK")) {
+					Alert.show(jobListXml);
+				}
 				// var treeOpenItems:Object;
 				
 				// trace(jobListXml);

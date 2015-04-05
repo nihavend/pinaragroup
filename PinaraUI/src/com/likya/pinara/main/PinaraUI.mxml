@@ -159,7 +159,13 @@
 							currentState = "anaSayfaState";
 						}
 					} else {
-						jobListDetail.selectedNetTreeId = XML(event.object).@id;
+						// bazen id attribute olmadan direk olarak da gelebiliyor.
+						// Bu nedenle kontrol kondu Serkan...j
+						if (!XML(event.object).hasOwnProperty("@id")) {
+							jobListDetail.selectedNetTreeId = XML(event.object);
+						} else {
+							jobListDetail.selectedNetTreeId = XML(event.object).@id;
+						}
 						currentListNodeId = jobListDetail.selectedNetTreeId;
 					}
 					jobListDetail.updateData();
@@ -172,7 +178,7 @@
 					// currentState = "loggedInState";
 					currentState = "anaSayfaState";
 				}
-				
+				menuBar.registerClickEvent();
 				// Alert.show("New State : " + currentState);
 			}
 			
@@ -440,7 +446,7 @@
 			<s:layout>
 				<s:VerticalLayout clipAndEnableScrolling="true" paddingRight="0" paddingLeft="0" paddingTop="10" paddingBottom="10" />
 			</s:layout>
-			<comps:MenuBar excludeFrom="loggedOutState, dummyState" />
+			<comps:MenuBar excludeFrom="loggedOutState, dummyState" id="menuBar"/>
 			<s:BitmapImage source="@Embed('/images/likya.jpg')" left="0" right="0" top="0" bottom="0" scaleMode="stretch" includeIn="anaSayfaState" />
 			<!--mx:SWFLoader width="950" height="500" source="http://www.youtube.com/v/ojASzi1Kb8c" includeIn="loggedInState"/--> 
 			<!--comps:MainPanel includeIn="jobListState" height="100%"/-->

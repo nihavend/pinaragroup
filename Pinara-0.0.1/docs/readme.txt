@@ -19,3 +19,10 @@ recover, persist işlemleri ile ilgili dosyalar bulunacaktır.
 
 Myra ve pinara log dosyalarını log dizine atacaklardır. Bu dizin log4j.xml'de tanımlıdır. Başka bir işleme gerek yoktur.
 log4j, log dizini yok ise oluşturacaktır.
+
+
+Persistency Durumu:
+
+hem pinara hem de myra için persistent tanımı yapılabilir. İki tanım ayrı ayır yapılmalıdır. Biri diğerini etkilemez.
+recover konusunda ise, kararı kullanıcı vermeli. Eğer myra persistent ise, açılışta kullanıcı uygulamaya bilgi vermeli ve recover 
+yapma kararını kullanıcıya bırakmalı.

@@ -188,8 +188,8 @@
 		<!--s:Label text="isStartable : {data.visualParams.commandabilityParams.isStartable}" paddingTop="5"/-->
 		
 		<s:Image id="disableJob" source="{ImageContainer.getManageImage(0)}" toolTip="{resourceManager.getString('messages', 'disableJobTooltip')}" 
-				 includeInLayout="{data.visualParams.commandabilityParams.isStartable == true}" buttonMode="true"
-				 visible="{data.visualParams.commandabilityParams.isStartable == true}"
+				 includeInLayout="{data.visualParams.commandabilityParams.isDisablable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isDisablable == true}"
 				 click="executeJobCommand(event, data.@Id, data.Id)" />
 		
 		<s:Image id="startJob" source="{ImageContainer.getManageImage(1)}" toolTip="{resourceManager.getString('messages', 'startJobTooltip')}" 
@@ -203,8 +203,8 @@
 				 click="executeJobCommand(event, data.@Id, data.Id)" />
 		
 		<s:Image id="enableJob" source="{ImageContainer.getManageImage(3)}" toolTip="{resourceManager.getString('messages', 'enableJobTooltip')}" 
-				 includeInLayout="{data.visualParams.commandabilityParams.isStartable == true}" buttonMode="true"
-				 visible="{data.visualParams.commandabilityParams.isStartable == true}"
+				 includeInLayout="{data.visualParams.commandabilityParams.isEnablable == true}" buttonMode="true"
+				 visible="{data.visualParams.commandabilityParams.isEnablable == true}"
 				 click="executeJobCommand(event, data.@Id, data.Id)" />
 		
 		<s:Image id="retryJob" source="{ImageContainer.getManageImage(4)}" toolTip="{resourceManager.getString('messages', 'retryJobTooltip')}" 

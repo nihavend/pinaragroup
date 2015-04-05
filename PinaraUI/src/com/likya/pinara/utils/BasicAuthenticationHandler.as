@@ -74,6 +74,7 @@ package com.likya.pinara.utils
 		public static function service_faultHandler(event:FaultEvent):void {
 			// Alert.show("xmlService_faultHandler : " + event.toString());
 			//outputText.text += "\nxmlService_faultHandler " + event;
+			Alert.show(event.fault.faultString);
 			if(event.statusCode == 200) {
 			} else if (event.statusCode == 400) {
 				Alert.show("Kullacını adı ya da şifre hatalı !");

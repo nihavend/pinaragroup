@@ -266,8 +266,8 @@
 				<s:DropDownList id="autoRetry" width="120" selectedIndex="0" change="autoRetry_changeHandler(event)"> 
 					<s:dataProvider>
 						<mx:ArrayList>
-							<fx:String>true</fx:String>
 							<fx:String>false</fx:String>
+							<fx:String>true</fx:String>
 						</mx:ArrayList>
 					</s:dataProvider>
 				</s:DropDownList>
@@ -277,14 +277,14 @@
 			</s:FormItem>
 			
 			<s:FormItem label="Delay between auto retry" top="60">
-				<s:TextInput id="arStepValue" width="100%"/>
+				<s:TextInput id="arStepValue" width="100%" enabled="false"/>
 				<s:helpContent>
 					<s:Label text="Define delay, e.g. P1D"/>
 				</s:helpContent>
 			</s:FormItem>
 			
 			<s:FormItem label="Maximum Count" top="90">
-				<s:TextInput id="maxCountValueAr" width="100%"/>
+				<s:TextInput id="maxCountValueAr" width="100%" enabled="false"/>
 				<s:helpContent>
 					<s:Label text="Maximum Count of Execution"/>
 				</s:helpContent>

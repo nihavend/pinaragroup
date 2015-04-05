@@ -87,6 +87,7 @@ public class RestParser extends GenericRestParser {
 
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				retStr = "NetTree id not defined or invalid : " + uriTxt;
+				retStr = "<result>NOK : " + retStr + "</result>";
 //				responseBytes = retStr.getBytes();
 				break;
 			}

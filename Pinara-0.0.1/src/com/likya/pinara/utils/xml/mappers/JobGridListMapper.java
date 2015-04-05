@@ -157,6 +157,14 @@ public class JobGridListMapper {
 		xmlCursor.beginElement("isSuccessable");
 		xmlCursor.insertChars("" + Commandability.isSuccessable(abstractJobType));
 		xmlCursor.toNextToken();
+		
+		xmlCursor.beginElement("isDisablable");
+		xmlCursor.insertChars("" + Commandability.isDisablable(abstractJobType));
+		xmlCursor.toNextToken();
+		
+		xmlCursor.beginElement("isEnablable");
+		xmlCursor.insertChars("" + Commandability.isEnablable(abstractJobType));
+		xmlCursor.toNextToken();
 	}
 
 	protected static String removeNameSpaces(String inXmlTxt) throws Exception {

@@ -111,6 +111,16 @@
 				}
 			}
 			
+			// Menu items with no child : anasayfa
+			protected function mbiAnaSayfa_click(event:MouseEvent):void {
+				dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
+			}
+			
+			// Menu items with no child : refresh
+			protected function mbiRefresh_click(event:MouseEvent):void {
+				var ret:Boolean = dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH, null, true));
+			}
+			
 			protected function tlosMenuBar_itemClickHandler(event:MenuEvent):void {
 				var userRole:UserRole = null;
 				
@@ -185,15 +195,7 @@
 				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 			}
 			
-			protected function mbiAnaSayfa_click(event:MouseEvent):void {
-				dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
-			}
-			
-			protected function mbiRefresh_click(event:MouseEvent):void {
-				var ret:Boolean = dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH, null, true));
-			}
-			
-			protected function registerClickEvent():void {
+			public function registerClickEvent():void {
 				var mbi:MenuBarItem = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
 				//Alert.show("registerClickEvent : pinaraMenuBar.menuBarItems.length" + pinaraMenuBar.menuBarItems.length);
 				mbi.addEventListener(MouseEvent.CLICK, mbiAnaSayfa_click);

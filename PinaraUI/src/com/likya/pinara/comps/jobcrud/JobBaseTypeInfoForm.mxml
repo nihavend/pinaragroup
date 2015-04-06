@@ -18,6 +18,7 @@
 		<![CDATA[
 			import mx.controls.Alert;
 			
+			import spark.components.NavigatorContent;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
@@ -39,11 +40,11 @@
 					return false;
 				}
 				if(jsName.text == "") {
-					Alert.show("Job Name is not defined !");
+					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
 					return false;
 				}
 				if(jsCommand.text == "") {
-					Alert.show("Job Command is not defined !");
+					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
 					return false;
 				}
 				
@@ -98,7 +99,7 @@
 	<s:FormItem label="Name">
 		<s:TextInput id="jsName" width="100%"/>
 		<s:helpContent>
-			<s:Label text="Enter a name for your Job"/>
+			<s:Label text="* Enter a name for your Job"/>
 		</s:helpContent>
 	</s:FormItem>
 
@@ -112,7 +113,7 @@
 	<s:FormItem label="Command">
 		<s:TextInput id="jsCommand" width="300" />
 		<s:helpContent>
-			<s:Label text="Enter the command for your Job with full path" left="50"/>
+			<s:Label text="* Enter the command for your Job with full path" left="50"/>
 		</s:helpContent>
 	</s:FormItem>
 	

@@ -32,13 +32,13 @@
 			[Bindable]
 			public var jobDetailXml:XML;
 			
-			private var isEditMode:Boolean = false;
+			// 0 new ; 1 edit ; 2 clone
+			[Bindable]
+			public var isMode:Number = 0;
 			
 			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
 			{
 				if(jobDetailXml != null) {
-					isEditMode = true;
-					title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm, jobDetailXml);
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
@@ -48,6 +48,11 @@
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
 				}
 
+				if(isMode == 1) {
+					title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
+				} else if(isMode == 2) {
+					jobDetailXml.@Id = "";
+				}
 			}
 			// Handle the close button and Cancel button.
 			private function handleCloseEvent():void {
@@ -73,12 +78,11 @@
 					// Alert.show("Has validation errors !");
 					return;
 				}
-				if(isEditMode) {
-					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
-				} else {
+				if(isMode == 0 || isMode == 2) { // add or clone
 					Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+				} else if(isMode == 1) { // edit update
+					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);		}
 				}
-			}
 			
 			private function checkConfirmSerialization(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
@@ -104,13 +108,13 @@
 				
 				var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + myraGenericJob + "</datamess></data>");
 				
-				if(isEditMode) {
-					// Alert.show("jobManagerService.updatejob");
-					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", packedResponse); //jobManagerService.updatejob(myraGenericJob);
-				} else {
+				if(isMode == 0 || isMode == 2) { // add or clone
 					// Alert.show("jobManagerService.addjob");
 					BasicAuthenticationHandler.authAndCall(jobManagerService, "addjob", packedResponse); //jobManagerService.addjob(myraGenericJob);
-				}
+				} else if(isMode == 1) { // edit update			
+					// Alert.show("jobManagerService.updatejob");
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", packedResponse); //jobManagerService.updatejob(myraGenericJob);
+				} 
 				refreshAfter();
 			}
 			

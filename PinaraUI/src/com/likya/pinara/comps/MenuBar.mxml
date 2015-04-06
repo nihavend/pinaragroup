@@ -38,6 +38,7 @@
 			private function setMenuItems(value:String):void {
 				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "editJob")).@enabled = value;
 				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "deleteJob")).@enabled = value;
+				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "cloneJob")).@enabled = value;
 			}
 			
 			public function onCreationComplete(event:FlexEvent):void {
@@ -160,6 +161,8 @@
 					showAddJob();
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {
 					showEditJob();
+				} else if(event.label == resourceManager.getString("messages", "cloneJob")) {
+					showCloneJob();
 				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
 					Alert.show(resourceManager.getString("messages", "confirmDelete"), warningStr, Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
 				}
@@ -180,10 +183,17 @@
 			private function showEditJob():void {
 				var editJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
 				editJobWindow.jobDetailXml = currentDataItem;
+				editJobWindow.isMode = 1;
 				PopUpManager.centerPopUp(editJobWindow);
 				//Alert.show("Selected Job id : " + "");	
 			}
-			
+			private function showCloneJob():void {
+				var cloneJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
+				cloneJobWindow.jobDetailXml = currentDataItem;
+				cloneJobWindow.isMode = 2;
+				PopUpManager.centerPopUp(cloneJobWindow);
+				//Alert.show("Selected Job id : " + "");	
+			}			
 			private function showDeleteJob(eventObj:CloseEvent):void {
 				var serializationInfo:String = "false";
 				if(eventObj.detail == Alert.OK) {
@@ -343,6 +353,7 @@
 				<menuitem label="{resourceManager.getString('messages', 'addJob')}" id="addJob" />			
 				<menuitem label="{resourceManager.getString('messages', 'editJob')}" id="editJob" enabled="false"/>			
 				<menuitem label="{resourceManager.getString('messages', 'deleteJob')}" id="deleteJob" enabled="false"/>
+				<menuitem label="{resourceManager.getString('messages', 'cloneJob')}" id="cloneJob" enabled="false"/>
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'help')}" id="help" role="{UserRole.VIEW}">			
 				<menuitem label="{resourceManager.getString('messages', 'userGuide')}"/>			

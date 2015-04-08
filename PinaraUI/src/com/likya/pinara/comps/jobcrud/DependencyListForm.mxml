@@ -3,7 +3,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:MyComp="*"
-		width="100%" height="100%" creationComplete="updateData()">
+		width="100%" height="100%">
 	
 	<!--
 	<fx:Declarations>
@@ -29,6 +29,14 @@
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var filterId:String;
+			
+			public function validateForm():Boolean
+			{
+				return true;
+			}
 			
 			private function checkGridForItem(checkItem:Object, checkArr:Array):Boolean
 			{
@@ -188,7 +196,11 @@
 			}
 			
 			public function updateData():void {
-				jobListDS.url = "/flex/restsrvc/jobsummarylistxml";
+				if(filterId != null && !isNaN(Number(filterId))) {
+					jobListDS.url = "/flex/restsrvc/jobsummarylistxml/" + filterId;
+				} else {
+					jobListDS.url = "/flex/restsrvc/jobsummarylistxml";
+				}
 				BasicAuthenticationHandler.authAndSend(jobListDS);
 			}
 			

@@ -68,6 +68,18 @@ public class LiveStateInfoUtils {
 		return liveStateInfoSrc.getStateName().equals(liveStateInfoTrg.getStateName()) && liveStateInfoSrc.getSubstateName().equals(liveStateInfoTrg.getSubstateName()) && liveStateInfoSrc.getStatusName().equals(liveStateInfoTrg.getStatusName());
 	}
 
+	public static boolean equalStates(AbstractJobType abstractJobType, StateName.Enum stateNameEnum) {
+		return LiveStateInfoUtils.equalStates(abstractJobType.getStateInfos().getLiveStateInfos().getLiveStateInfoArray(0), stateNameEnum);
+	}
+
+	public static boolean equalStates(AbstractJobType abstractJobType, StateName.Enum stateNameEnum, SubstateName.Enum substateNameEnum) {
+		return LiveStateInfoUtils.equalStates(abstractJobType.getStateInfos().getLiveStateInfos().getLiveStateInfoArray(0), stateNameEnum, substateNameEnum);
+	}
+	
+	public static boolean equalStates(AbstractJobType abstractJobType, StateName.Enum stateNameEnum, SubstateName.Enum substateNameEnum, StatusName.Enum statusNameEnum) {
+		return LiveStateInfoUtils.equalStates(abstractJobType.getStateInfos().getLiveStateInfos().getLiveStateInfoArray(0), stateNameEnum, substateNameEnum, statusNameEnum);
+	}
+	
 	/**
 	 * @param liveStateInfo
 	 * @return true if equals to PENDING-IDLED-BYTIME

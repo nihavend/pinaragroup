@@ -124,10 +124,14 @@
 					
 					if(jobDetailXml.hasOwnProperty("runtimeParams")) {
 						depListComp.waitingMeJobs.dataProvider = new XMLListCollection(XMLList(jobDetailXml.runtimeParams.waitingMeJobs.jobId));
+					} else {
+						depListComp.waitingMeJobs.dataProvider = null;
 					}
 					
 					if(jobDetailXml.hasOwnProperty("DependencyList")) {
 						depListComp.meToWaitJobs.dataProvider = new XMLListCollection(XMLList(jobDetailXml.DependencyList.Item)); 
+					} else {
+						depListComp.meToWaitJobs.dataProvider = null;
 					}
 					
 					stateHistory.dataProvider = new XMLListCollection(XML(jobDetailXml.stateInfos.LiveStateInfos).children());

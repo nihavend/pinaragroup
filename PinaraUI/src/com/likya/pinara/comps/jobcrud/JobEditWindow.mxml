@@ -42,7 +42,8 @@
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm, jobDetailXml);
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
-					// JobXmlToView..prepare_dependencyListForm(dependencyListForm, jobDetailXml);
+					JobXmlToView.prepare_dependencyListForm(dependencyListForm, jobDetailXml);
+					dependencyListForm.updateData();
 					JobXmlToView.prepare_managementInfoForm(managementInfoForm, jobDetailXml);
 					JobXmlToView.prepare_logAnalysisForm(logAnalysisForm, jobDetailXml);
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
@@ -65,7 +66,7 @@
 				
 				formsValid = formsValid && baseInfoForm.validateForm();
 				formsValid = formsValid && stateInfosForm.validateForm();
-				// formsValid = formsValid && dependencyListForm.validateForm();
+				formsValid = formsValid && dependencyListForm.validateForm();
 				formsValid = formsValid && managementInfoForm.validateForm();
 				formsValid = formsValid && logAnalysisForm.validateForm();
 				// formsValid = formsValid && scheduleInfoForm.validateForm();

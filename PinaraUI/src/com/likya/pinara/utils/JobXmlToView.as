@@ -76,6 +76,7 @@ package com.likya.pinara.utils {
 		
 		public static function prepare_dependencyListForm(dependencyListForm:DependencyListForm, jobDetailXml:XML):void {
 			
+			dependencyListForm.filterId = jobDetailXml.@Id;
 			for each (var item:Object in jobDetailXml.DependencyList.Item) {
 				var stateComposite:String = item.jsDependencyRule.StateName + ":" + item.jsDependencyRule.SubstateName + ":" + item.jsDependencyRule.StatusName;
 				var depArray:Object = {depid:item.@dependencyID, jobinfo:item.jsId + ":" + item.jsName, stateinfo:stateComposite , comment:item.comment };

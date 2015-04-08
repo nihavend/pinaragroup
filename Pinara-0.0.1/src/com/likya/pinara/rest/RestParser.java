@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gson.Gson;
+import com.likya.myra.commons.utils.IdFilter;
+import com.likya.myra.commons.utils.SSSFilter;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.utils.JobQueueOperations;
@@ -18,6 +20,7 @@ import com.likya.pinara.utils.xml.mappers.JobGridListMapper;
 import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
+import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
 
 public class RestParser extends GenericRestParser {
 
@@ -137,7 +140,12 @@ public class RestParser extends GenericRestParser {
 			
 			Collection<AbstractJobType> jobSummaryList = null;
 			try {
-				jobSummaryList = PinaraAppManagerImpl.getInstance().getJobList(filterStates);
+				// jobSummaryList = PinaraAppManagerImpl.getInstance().getJobList(filterStates);
+				jobSummaryList = SSSFilter.noneFilter(JobQueueOperations.toAbstractJobTypeList(PinaraAppManagerImpl.getInstance().getJobQueue()).values(), StateName.PENDING, SubstateName.DEACTIVATED);
+				if(restCommArr.length == 2) { // means that list should be filter against jobId
+					String idArray [] = { restCommArr[1] };
+					jobSummaryList = IdFilter.noneFilter(jobSummaryList, idArray);
+				}
 			} catch (PinaraAuthenticationException e) {
 				e.printStackTrace();
 			}

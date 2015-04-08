@@ -32,14 +32,12 @@ package com.likya.pinara.utils {
 					<myra:genericJob xsi:type="myra:simpleProperties" />
 				</myra:jobList>;
 
-			myraJobList.myra::genericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteInShell";
-			myraJobList.myra::genericJob.@Id = "22";
-			myraJobList.myra::genericJob.@groupId = "my_group";
-			myraJobList.myra::genericJob.@agentId = "1";
-			
+			myraJobList.myra::genericJob.@handlerURI = j.jobDetailXml.@handlerURI; //"com.likya.myra.jef.jobs.ExecuteInShell";
+			myraJobList.myra::genericJob.@Id = j.jobDetailXml.@Id; //"22";
+			myraJobList.myra::genericJob.@groupId = j.jobDetailXml.@groupId; //"my_group";
+			myraJobList.myra::genericJob.@agentId = j.jobDetailXml.@agentId; //"1";
+
 			// Alert.show("myraJobList.myra::genericJob.@handlerURI : " + myraJobList.myra::genericJob.@handlerURI);
-			
-			// TO-DO Aşağıdaki 2 fonksiyon yeni ns yapısına uygun hale getirilecek ardından dependency yapılacak
 			
 			myraJobList = getBaseJobInfos(j, myraJobList);
 
@@ -47,7 +45,7 @@ package com.likya.pinara.utils {
 
 			// Serkan Taş 25 Ocak Pazar 20:13
 			// Sunucu tarafında bağımlı iş tanımı ile ilgili kısım yapılınca açılacak
-			// myraJobList = getDependencyInfo(j, myraJobList);
+			myraJobList = getDependencyInfo(j, myraJobList);
 			
 			myraJobList = getStateInfos(j, myraJobList);
 			
@@ -63,25 +61,23 @@ package com.likya.pinara.utils {
 		
 		private static function getDependencyInfo(j:JobEditWindow, myraJobList:XML):XML {
 			
-			// Ekran tarafı yapılmadan burası yapılamaz
-			
-/*			<myra2:DependencyList xmlns:myra2="http://www.likyateknoloji.com/myra-jobprops">
-				<myra2:sensInfo>
-					<myra2:sensTime delay="PT30S" relativeStart="true" />
-				</myra2:sensInfo>
-			<wla:Item dependencyID="mydep">
-				<wla:jsName>depJsName</wla:jsName>
-				<wla:jsId>0</wla:jsId>
-				<wla:jsType>JOB</wla:jsType>
-				<lik:comment>no comment</lik:comment>
-				<myra1:jsDependencyRule>
-					<myra1:StateName>PENDING</myra1:StateName>
-					<myra1:SubstateName>IDLED</myra1:SubstateName>
-					<myra1:StatusName>BYTIME</myra1:StatusName>
-				</myra1:jsDependencyRule>
-			</wla:Item>
-			<myra2:DependencyExpression>mydep</myra2:DependencyExpression>
-		</myra2:DependencyList>*/
+			/*
+			<myra-jobprops:DependencyList>
+				<myra-jobprops:sensInfo>
+					<myra-jobprops:sensTime delay="PT30S" relativeStart="true" />
+				</myra-jobprops:sensInfo>
+				<wla:Item dependencyID="mydep">
+					<wla:jsName>depJsName</wla:jsName>
+					<wla:jsId>1</wla:jsId>
+					<wla:jsType>JOB</wla:jsType>
+					<lik:comment>no comment</lik:comment>
+					<myra-stateinfo:jsDependencyRule>
+						<myra-stateinfo:StateName>FINISHED</myra-stateinfo:StateName>
+					</myra-stateinfo:jsDependencyRule>
+				</wla:Item>
+				<myra-jobprops:DependencyExpression>mydep</myra-jobprops:DependencyExpression>
+			</myra-jobprops:DependencyList>			
+			*/
 			
 			if(j.dependencyListForm.dependencyListGrid.dataProvider.length == 0) {
 				return myraJobList;
@@ -109,18 +105,18 @@ package com.likya.pinara.utils {
 				dependencyListXML.wla::Item[counter].appendChild(<wla:jsType xmlns:wla="http://www.likyateknoloji.com/wla-gen">JOB</wla:jsType>);
 				dependencyListXML.wla::Item[counter].appendChild(<lik:comment xmlns:lik="http://www.likyateknoloji.com/likya-gen">{item.comment}</lik:comment>);
 				
-				dependencyListXML.wla::Item[counter].appendChild(<myra-jobprops:jsDependencyRule xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
+				dependencyListXML.wla::Item[counter].appendChild(<myra-stateinfo:jsDependencyRule xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"/>);
 				
 				var sssTmp:SSS = new SSS(item.stateinfo);
 				
-				dependencyListXML.wla::Item[counter].myra_jobprops::jsDependencyRule.appendChild(<myra-jobprops:StateName xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{sssTmp.state}</myra-jobprops:StateName>);
+				dependencyListXML.wla::Item[counter].myra_stateinfo::jsDependencyRule.appendChild(<myra-stateinfo:StateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.state}</myra-stateinfo:StateName>);
 				
 				if(sssTmp.substate != null) {
-					dependencyListXML.wla::Item[counter].myra_jobprops::jsDependencyRule.appendChild(<myra-jobprops:SubstateName xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{sssTmp.substate}</myra-jobprops:SubstateName>);
+					dependencyListXML.wla::Item[counter].myra_stateinfo::jsDependencyRule.appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.substate}</myra-stateinfo:SubstateName>);
 				}
 				
 				if(sssTmp.status != null) {
-					dependencyListXML.wla::Item[counter].myra_jobprops::jsDependencyRule.appendChild(<myra-jobprops:StatusName xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{sssTmp.status}</myra-jobprops:StatusName>);
+					dependencyListXML.wla::Item[counter].myra_stateinfo::jsDependencyRule.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.status}</myra-stateinfo:StatusName>);
 				}
 				
 			}

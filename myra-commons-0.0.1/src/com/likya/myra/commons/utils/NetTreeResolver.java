@@ -33,6 +33,10 @@ public class NetTreeResolver {
 	public NetTreeResolver() {
 		super();
 	}
+	
+	public static synchronized String generateVirtualId() {
+		return "" + System.currentTimeMillis();
+	}
 
 	public static StringBuilder runAlgorythm(XmlObject[] objectArray, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) throws Exception {
 		
@@ -62,7 +66,7 @@ public class NetTreeResolver {
 			}
 
 			NetTree netTree = new NetTree();
-			netTree.virtualId = "" + System.currentTimeMillis();
+			netTree.virtualId = generateVirtualId();
 
 			started = System.currentTimeMillis();
 			mainScan(idKey, netTree, jobMap, netTreeMap, freeJobs);

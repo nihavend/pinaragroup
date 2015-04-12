@@ -69,7 +69,7 @@ public class NetTreeResolver {
 			netTree.virtualId = generateVirtualId();
 
 			started = System.currentTimeMillis();
-			mainScan(idKey, netTree, jobMap, netTreeMap, freeJobs);
+			scan(idKey, netTree, jobMap, netTreeMap, freeJobs);
 			ended = System.currentTimeMillis();
 			outputStr.append("mainScan total duration for [" + idKey + "] >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
 
@@ -101,7 +101,7 @@ public class NetTreeResolver {
 		return jobListIdx;
 	}
 
-	private static void mainScan(String idKey, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+	private static void scan(String idKey, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
 
 		AbstractJobType abstractJobType = jobMap.get(idKey);
 
@@ -118,26 +118,38 @@ public class NetTreeResolver {
 			freeJobs.put(idKey, abstractJobType);
 			jobMap.remove(idKey);
 		} else {
-			netTree.members.add(abstractJobType);
-			jobMap.remove(idKey);
-			if (isUppable) {
-				//				started = System.currentTimeMillis();
-				upScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
-				//				ended = System.currentTimeMillis();
-				// System.err.println("upScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
-			}
-			if (isDownable) {
-				//				started = System.currentTimeMillis();
-				downScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
-				//				ended = System.currentTimeMillis();
-				// System.err.println("downScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
-			} else {
-				// This job is one of the last jobs of branch
-				abstractJobType.getGraphInfo().setLastNodeOfBranch(true);
-			}
-
-			netTreeMap.put(netTree.virtualId, netTree);
+			innerscan(idKey, jobMap, netTree, netTreeMap, freeJobs);
 		}
+	}
+	
+	private static void innerscan(String idKey, HashMap<String, AbstractJobType> jobMap, NetTree netTree, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+		
+		AbstractJobType abstractJobType = jobMap.get(idKey);
+		
+		boolean isUppable = abstractJobType.getDependencyList() != null && abstractJobType.getDependencyList().sizeOfItemArray() != 0;
+
+		//		long started = System.currentTimeMillis();
+		boolean isDownable = findMeInDeps(abstractJobType, jobMap);
+		
+		netTree.members.add(abstractJobType);
+		jobMap.remove(idKey);
+		if (isUppable) {
+			//				started = System.currentTimeMillis();
+			upScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
+			//				ended = System.currentTimeMillis();
+			// System.err.println("upScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
+		}
+		if (isDownable) {
+			//				started = System.currentTimeMillis();
+			downScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
+			//				ended = System.currentTimeMillis();
+			// System.err.println("downScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
+		} else {
+			// This job is one of the last jobs of branch
+			abstractJobType.getGraphInfo().setLastNodeOfBranch(true);
+		}
+
+		netTreeMap.put(netTree.virtualId, netTree);
 	}
 
 	private static void upScan(AbstractJobType abstractJobType, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
@@ -155,7 +167,7 @@ public class NetTreeResolver {
 				// AbstractJobType innerJob = jobMap.get(item.getJsId());
 				// netTree.members.add(innerJob);
 				// upScan(innerJob, members, jobMap);
-				mainScan(item.getJsId(), netTree, jobMap, netTreeMap, freeJobs);
+				innerscan(item.getJsId(), jobMap, netTree, netTreeMap, freeJobs);
 			}
 		}
 
@@ -181,7 +193,7 @@ public class NetTreeResolver {
 						// netTree.members.add(innerJob);
 						// AbstractJobType tmpJob = jobMap.remove(innerJob.getId());
 						// downScan(tmpJob, members, jobMap);
-						mainScan(innerJob.getId(), netTree, jobMap, netTreeMap, freeJobs);
+						innerscan(innerJob.getId(), jobMap, netTree, netTreeMap, freeJobs);
 					}
 				}
 			}

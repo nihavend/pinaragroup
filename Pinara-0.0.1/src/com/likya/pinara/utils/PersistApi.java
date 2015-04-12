@@ -71,6 +71,8 @@ public class PersistApi {
 		JobListDocument jobListDocument;
 
 		String decryptedString = deserializeAsFlat();
+		
+		if(decryptedString == null) return null;
 
 		jobListDocument = JobListDocument.Factory.parse(decryptedString);
 

@@ -37,7 +37,10 @@
   <applications>
     <application path="com/likya/pinara/main/PinaraUI.mxml"/>
   </applications>
-  <modules/>
+  <modules>
+    <module application="src/com/likya/pinara/main/PinaraUI.mxml" destPath="com/likya/pinara/modules/ViewDepGraph.swf" optimize="true" sourcePath="src/com/likya/pinara/modules/ViewDepGraph.mxml"/>
+    <module application="src/com/likya/pinara/main/PinaraUI.mxml" destPath="com/likya/pinara/modules/RemoteSchProps.swf" optimize="true" sourcePath="src/com/likya/pinara/modules/RemoteSchProps.mxml"/>
+  </modules>
   <workers/>
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>

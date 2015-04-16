@@ -106,7 +106,8 @@ public class RestParser extends GenericRestParser {
 				} else if(PinaraAppManagerImpl.getInstance().getNetTreeMap().containsKey(netTreeId)) {
 					retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
 				} else {
-					retStr = "NetTree id is not mapped to a nettree : " + netTreeId;
+					// retStr = "NetTree id is not mapped to a nettree : " + netTreeId;
+					retStr = "<result>NOK : " + "NetTree id is not mapped to a nettree : " + netTreeId + "</result>";
 				}
 				
 				// retStr = NetTreeMapper.getMapped(Pinara.getInstance().getConfigurationManager().getPinaraAppManager().getJobList(filterStates));
@@ -119,7 +120,8 @@ public class RestParser extends GenericRestParser {
 		case JOBDETAIL_XML_CMD:
 
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
-				retStr = "Job id not defined or invalid : " + uriTxt;
+				// retStr = "Job id not defined or invalid : " + uriTxt;
+				retStr = "<result>NOK : " + "Job id not defined or invalid : " + uriTxt + "</result>";
 //				responseBytes = retStr.getBytes();
 				break;
 			}

@@ -10,6 +10,7 @@
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
+			import com.likya.pinara.utils.WindowUtils;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.XMLListCollection;
@@ -87,6 +88,22 @@
 			}
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {
+				
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "NOK") {
+						WindowUtils.showDummyWindow(this, returnXml.desc.toString());
+						return;
+					} else {
+						//PopUpManager.removePopUp(this);
+					}
+				} catch(err:Error) {
+					Alert.show("Result : " + err.message);
+					returnTxt = String(event.result)
+				}
 				
 				jobDetailXml = XML(event.result);
 				

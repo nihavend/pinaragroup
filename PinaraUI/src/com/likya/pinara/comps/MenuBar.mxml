@@ -38,7 +38,7 @@
 			private function setMenuItems(value:String):void {
 				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "editJob")).@enabled = value;
 				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "deleteJob")).@enabled = value;
-				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "cloneJob")).@enabled = value;
+				menuDataXMLList.menuitem.(attribute("label")==resourceManager.getString("messages", "cloneJob")).@enabled = true;
 			}
 			
 			public function onCreationComplete(event:FlexEvent):void {

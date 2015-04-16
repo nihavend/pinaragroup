@@ -105,7 +105,7 @@ package com.likya.pinara.utils {
 			var counter:int = 0;
 			for each (var item:Object in j.dependencyListForm.dependencyListGrid.dataProvider.toArray()) {
 				dependencyListXML.appendChild(<wla:Item xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
-				dependencyListXML.wla::Item.@dependencyID = item.depid;
+				dependencyListXML.wla::Item[counter].@dependencyID = item.depid;
 				
 				var pairs:Array = item.jobinfo.split(':');
 				

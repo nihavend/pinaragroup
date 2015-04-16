@@ -295,7 +295,8 @@
 				myViewStack.addElement(depGraphTab);
 				depGraphTab.addElement(depGraphElement);
 				
-				depGraphService.getdepgraph(selectedNetTreeId);
+				// depGraphService.getdepgraph(selectedNetTreeId);
+				BasicAuthenticationHandler.authAndCall(depGraphService, "getdepgraph", selectedNetTreeId);
 			}
 			
 			

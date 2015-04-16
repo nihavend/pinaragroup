@@ -17,6 +17,7 @@
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.ViewToJobXml;
+			import com.likya.pinara.utils.WindowUtils;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -140,7 +141,7 @@
 					returnXml = XML(event.message.body);
 					// Alert.show("Result : " + returnXml.toString());
 					if(returnXml.result == "NOK") {
-						showDummyWindow(returnXml.desc.toString());
+						WindowUtils.showDummyWindow(this, returnXml.desc.toString());
 					} else {
 						PopUpManager.removePopUp(this);
 					}
@@ -152,14 +153,6 @@
 				// Alert.show("Result : " + event.message.body);
 				// trace(returnXml);
 				
-			}
-			
-			protected function showDummyWindow(xmlText:String):void {
-				var dummyWindow:DummyForm = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
-				dummyWindow.title="Content of the error message..."
-				dummyWindow.htmlTextAsHTML = xmlText;
-				PopUpManager.centerPopUp(dummyWindow);
-				dummyWindow.setFocus();
 			}
 			
 		]]>

@@ -21,6 +21,12 @@ public class NetTreeResolver {
 		
 		protected String virtualId;
 		protected ArrayList<AbstractJobType> members = new ArrayList<AbstractJobType>();
+
+		public NetTree() {
+			super();
+			virtualId = generateVirtualId();
+		}
+
 		
 		public String getVirtualId() {
 			return virtualId;
@@ -34,7 +40,7 @@ public class NetTreeResolver {
 		super();
 	}
 	
-	public static synchronized String generateVirtualId() {
+	private static synchronized String generateVirtualId() {
 		return "" + System.currentTimeMillis();
 	}
 
@@ -66,7 +72,6 @@ public class NetTreeResolver {
 			}
 
 			NetTree netTree = new NetTree();
-			netTree.virtualId = generateVirtualId();
 
 			started = System.currentTimeMillis();
 			scan(idKey, netTree, jobMap, netTreeMap, freeJobs);

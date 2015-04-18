@@ -128,6 +128,7 @@ package com.likya.pinara.utils {
 					dependencyListXML.wla::Item[counter].myra_stateinfo::jsDependencyRule.appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.status}</myra-stateinfo:StatusName>);
 				}
 				
+				counter ++;
 			}
 			
 			dependencyListXML.appendChild(<myra-jobprops:DependencyExpression xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{j.dependencyListForm.depExp.text}</myra-jobprops:DependencyExpression>);

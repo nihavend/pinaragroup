@@ -16,7 +16,8 @@ public class GraphViewHandler implements HttpHandler {
 
 		URI myUri = httpExchange.getRequestURI();
 		
-		String uriTxt = myUri.toString();
+		// String uriTxt = myUri.toString();
+		String uriTxt = myUri.getPath();
 		
 		uriTxt = uriTxt.replace("/" + WebManager.GRAPHVIEW_CTX + "/", "");
 		

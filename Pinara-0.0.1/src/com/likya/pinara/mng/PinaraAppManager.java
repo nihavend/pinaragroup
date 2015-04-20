@@ -58,7 +58,7 @@ public interface PinaraAppManager {
 	
 	public HashMap<String, NetTree> getNetTreeMap() throws PinaraAuthenticationException;
 
-	public HashMap<String, AbstractJobType> getFreeJobs() throws PinaraAuthenticationException;
+	public HashMap<String, String> getFreeJobs() throws PinaraAuthenticationException;
 	
 	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
 	

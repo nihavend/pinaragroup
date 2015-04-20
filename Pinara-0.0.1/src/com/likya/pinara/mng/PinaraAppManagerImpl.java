@@ -305,7 +305,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		return CoreFactory.getInstance().getNetTreeManagerInterface().getNetTreeMap();
 	}
 
-	public HashMap<String, AbstractJobType> getFreeJobs() throws PinaraAuthenticationException {
+	public HashMap<String, String> getFreeJobs() throws PinaraAuthenticationException {
 		
 		if(!authorize()) {
 			throw new PinaraAuthenticationException();

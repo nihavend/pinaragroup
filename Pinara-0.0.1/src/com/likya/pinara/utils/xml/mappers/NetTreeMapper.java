@@ -8,6 +8,8 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
+import com.likya.myra.jef.core.CoreFactory;
+import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -23,7 +25,10 @@ public class NetTreeMapper {
 		return xmlCursor;
 	}
 	
-	private static XmlCursor addJobProperty(XmlCursor xmlCursor, AbstractJobType abstractJobType) {
+	private static XmlCursor addJobProperty(XmlCursor xmlCursor, String jobId) {
+		
+		HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
+		AbstractJobType abstractJobType = jobQueue.get(jobId).getAbstractJobType();
 		
 		xmlCursor.beginElement("jobProperty");
 		xmlCursor.insertAttributeWithValue("title", abstractJobType.getBaseJobInfos().getJsName());
@@ -44,7 +49,7 @@ public class NetTreeMapper {
 		String retValue = "";
 		
 		HashMap<String, NetTree> netTreeMap = PinaraAppManagerImpl.getInstance().getNetTreeMap();
-		HashMap<String, AbstractJobType> freeJobs = PinaraAppManagerImpl.getInstance().getFreeJobs();
+		HashMap<String, String> freeJobs = PinaraAppManagerImpl.getInstance().getFreeJobs();
 		
 		XmlObject xmlObject = XmlObject.Factory.newInstance();
 		
@@ -58,8 +63,8 @@ public class NetTreeMapper {
 		xmlCursor = addJobGroup(xmlCursor, "-1", "Independents");
 		// add free jobs to list
 		
-		for(AbstractJobType abstractJobType : freeJobs.values()) {
-			xmlCursor = addJobProperty(xmlCursor, abstractJobType);
+		for(String jobId : freeJobs.values()) {
+			xmlCursor = addJobProperty(xmlCursor, jobId);
 		}
 		
 		xmlCursor.toNextToken(); // exit from jobGroup
@@ -68,8 +73,8 @@ public class NetTreeMapper {
 			
 			xmlCursor = addJobGroup(xmlCursor, netTree.getVirtualId(), "Dep Group");
 			
-			for(AbstractJobType abstractJobType : netTree.getMembers()) {
-				xmlCursor = addJobProperty(xmlCursor, abstractJobType);
+			for(String jobId : netTree.getMembers()) {
+				xmlCursor = addJobProperty(xmlCursor, jobId);
 			}
 			
 			xmlCursor.toNextToken(); // exit from jobGroup

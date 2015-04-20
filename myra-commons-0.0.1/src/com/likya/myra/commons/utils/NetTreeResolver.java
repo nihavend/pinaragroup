@@ -20,7 +20,7 @@ public class NetTreeResolver {
 	public static class NetTree {
 		
 		protected String virtualId;
-		protected ArrayList<AbstractJobType> members = new ArrayList<AbstractJobType>();
+		protected ArrayList<String> members = new ArrayList<String>();
 
 		public NetTree() {
 			super();
@@ -31,7 +31,7 @@ public class NetTreeResolver {
 		public String getVirtualId() {
 			return virtualId;
 		}
-		public ArrayList<AbstractJobType> getMembers() {
+		public ArrayList<String> getMembers() {
 			return members;
 		}
 	}
@@ -44,7 +44,7 @@ public class NetTreeResolver {
 		return "" + System.currentTimeMillis();
 	}
 
-	public static StringBuilder runAlgorythm(XmlObject[] objectArray, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) throws Exception {
+	public static StringBuilder runAlgorythm(XmlObject[] objectArray, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) throws Exception {
 		
 		// NetTreeResolver.netTreeMap = netTreeMap;
 		// NetTreeResolver.freeJobs = freeJobs;
@@ -106,7 +106,7 @@ public class NetTreeResolver {
 		return jobListIdx;
 	}
 
-	private static void scan(String idKey, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+	private static void scan(String idKey, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {
 
 		AbstractJobType abstractJobType = jobMap.get(idKey);
 
@@ -120,14 +120,14 @@ public class NetTreeResolver {
 		// System.err.println("Working for : " + idKey + " " + abstractJobType.getBaseJobInfos().getJsName() + " [isUppable : " + isUppable + "][isDownable : " + isDownable + "]");
 
 		if (!isUppable && !isDownable) {
-			freeJobs.put(idKey, abstractJobType);
+			freeJobs.put(idKey, idKey);
 			jobMap.remove(idKey);
 		} else {
 			innerscan(idKey, jobMap, netTree, netTreeMap, freeJobs);
 		}
 	}
 	
-	private static void innerscan(String idKey, HashMap<String, AbstractJobType> jobMap, NetTree netTree, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+	private static void innerscan(String idKey, HashMap<String, AbstractJobType> jobMap, NetTree netTree, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {
 		
 		AbstractJobType abstractJobType = jobMap.get(idKey);
 		
@@ -136,7 +136,7 @@ public class NetTreeResolver {
 		//		long started = System.currentTimeMillis();
 		boolean isDownable = findMeInDeps(abstractJobType, jobMap);
 		
-		netTree.members.add(abstractJobType);
+		netTree.members.add(abstractJobType.getId());
 		jobMap.remove(idKey);
 		if (isUppable) {
 			//				started = System.currentTimeMillis();
@@ -157,7 +157,7 @@ public class NetTreeResolver {
 		netTreeMap.put(netTree.virtualId, netTree);
 	}
 
-	private static void upScan(AbstractJobType abstractJobType, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+	private static void upScan(AbstractJobType abstractJobType, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {
 
 		DependencyList dependencyList = abstractJobType.getDependencyList();
 
@@ -178,7 +178,7 @@ public class NetTreeResolver {
 
 	}
 
-	private static void downScan(AbstractJobType me, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) {
+	private static void downScan(AbstractJobType me, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {
 
 		Iterator<String> jobMapIterator = new ArrayList<String>(jobMap.keySet()).iterator();
 

@@ -206,7 +206,7 @@ public class NetTreeResolver {
 
 	}
 
-	private static boolean findMeInDeps(AbstractJobType me, HashMap<String, AbstractJobType> jobMap) {
+	public static boolean findMeInDeps(AbstractJobType me, HashMap<String, AbstractJobType> jobMap) {
 
 		Iterator<AbstractJobType> jobMapIterator = jobMap.values().iterator();
 

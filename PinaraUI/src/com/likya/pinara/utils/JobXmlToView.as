@@ -79,7 +79,7 @@ package com.likya.pinara.utils {
 			dependencyListForm.filterId = jobDetailXml.@Id;
 			for each (var item:Object in jobDetailXml.DependencyList.Item) {
 				var stateComposite:String = item.jsDependencyRule.StateName + ":" + item.jsDependencyRule.SubstateName + ":" + item.jsDependencyRule.StatusName;
-				var depArray:Object = {depid:item.@dependencyID, jobinfo:item.jsId + ":" + item.jsName, stateinfo:stateComposite , comment:item.comment };
+				var depArray:Object = {depid:item.@dependencyID, jobinfo:item.jsId + ":" + item.jsName, stateinfo:stateComposite , comment:"" + item.comment }; // çift tırnak ile string yapmaz isek, tag ile birlikte node alınıyor, içerik değil.
 				dependencyListForm.dependencyListGrid.dataProvider.addItem(depArray);
 			}
 			dependencyListForm.depExp.text = "" + jobDetailXml.DependencyList.DependencyExpression;

@@ -444,7 +444,7 @@
 					<s:VGroup>
 						<s:HGroup>				
 							<s:FormItem label="State" width="140">
-								<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)"> 
+								<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4"> 
 									<s:dataProvider>
 										<mx:ArrayList>
 											<fx:String>PENDING</fx:String>
@@ -458,7 +458,7 @@
 							</s:FormItem>
 							
 							<s:FormItem label="Subtate" width="170">
-								<s:DropDownList id="substateName" width="110" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="false"> 
+								<s:DropDownList id="substateName" width="120" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="true" selectedIndex="0"> 
 									<s:dataProvider>
 										<mx:ArrayList>
 											<!--<fx:String>CREATED</fx:String>
@@ -471,22 +471,23 @@
 											<fx:String>STAGE-OUT</fx:String>
 											<fx:String>MIGRATING</fx:String>
 											<fx:String>HELD</fx:String>
-											<fx:String>ON-RESOURCE</fx:String>
+											<fx:String>ON-RESOURCE</fx:String-->
 											<fx:String>COMPLETED</fx:String>
 											<fx:String>STOPPED</fx:String>
-											<fx:String>SKIPPED</fx:String>-->
+											<fx:String>SKIPPED</fx:String>
+
 										</mx:ArrayList>
 									</s:dataProvider>
 								</s:DropDownList>
 							</s:FormItem>
 							<s:FormItem label="Status">
-								<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="false"> 
+								<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="0"> 
 									<s:dataProvider>
 										<mx:ArrayList>
-											<!--<fx:String>SUCCESS</fx:String>
+											<fx:String>SUCCESS</fx:String>
 											<fx:String>WARNING</fx:String>
 											<fx:String>FAILED</fx:String>
-											<fx:String>LOOKFOR-RESOURCE</fx:String>
+											<!--fx:String>LOOKFOR-RESOURCE</fx:String>
 											<fx:String>WAITING</fx:String>
 											<fx:String>TRANSFERING</fx:String>
 											<fx:String>TIME-IN</fx:String>

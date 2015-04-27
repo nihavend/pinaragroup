@@ -144,18 +144,21 @@
 		
 		<s:FormItem label="Başlangıç Tarih ve Saati : " top="30">
 			<s:HGroup>
-				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY"/>
+				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 				<s:TextInput  id="bhour"
+							  text="00"
 							  restrict="0-23"
 							  widthInChars="3"
 							  maxChars="2" />
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="bminute"
+							  text="00"
 							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />	
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="bsecond"
+							  text="00"
 							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />
@@ -167,18 +170,21 @@
 		
 		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
 			<s:HGroup>
-				<mx:DateField id="edate" top="50" left="10"  formatString="DD/MM/YYYY"/>
+				<mx:DateField id="edate" top="50" left="10"  formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 				<s:TextInput  id="ehour"
+							  text="23"
 							  restrict="0-23"
 							  widthInChars="3"
 							  maxChars="2" />
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="eminute"
+							  text="59"
 							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />	
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
 				<s:TextInput  id="esecond"
+							  text="59"
 							  restrict="0-59"
 							  widthInChars="3"
 							  maxChars="2" />
@@ -192,6 +198,7 @@
 			<s:HGroup>
 				<s:TextInput  id="timoutValue"
 							  restrict="0-999999"
+							  text="1"
 							  widthInChars="10"
 							  maxChars="9" />
 				<s:DropDownList id="timeoutUnit" width="120" selectedIndex="0"> 
@@ -210,6 +217,7 @@
 			<s:HGroup>
 				<s:TextInput  id="expectedValue"
 							  restrict="0-999999"
+							  text="1"
 							  widthInChars="10"
 							  maxChars="9" />
 				<s:DropDownList id="expectedTimeUnit" width="120" selectedIndex="0"> 

@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
+import com.likya.myra.commons.model.UnresolvedDependencyException;
+import com.likya.myra.commons.utils.JobDependencyResolver;
 import com.likya.myra.commons.utils.JobListFilter;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
@@ -29,6 +32,7 @@ import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.pinara.utils.PersistApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
+import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.wlagen.OperatingSystemTypeEnumeration;
 
@@ -52,6 +56,9 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		if (pinaraManager == null) {
 			pinaraManager = new PinaraAppManagerImpl();
 			monitoringOperations = CoreFactory.getInstance().getMonitoringOperations();
+			if(monitoringOperations == null) {
+				throw new NullArgumentException("monitoringOperations");
+			}
 			jobOperations = CoreFactory.getInstance().getJobOperations();
 			managementOperations = CoreFactory.getInstance().getManagementOperations();
 		}
@@ -384,6 +391,17 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			}
 			
 			AbstractJobType abstractJobType = jobListDocument.getJobList().getGenericJobArray()[0];
+			
+			DependencyList dependencyList = abstractJobType.getDependencyList();
+			if (dependencyList != null && dependencyList.getItemArray().length != 0) {
+				try {
+					JobDependencyResolver.validateDepExp(null, dependencyList.getDependencyExpression(), abstractJobType.getBaseJobInfos().getJsName());
+				} catch (UnresolvedDependencyException e) {
+					String errMsg = "Dependency expression is not defined or invalid !";
+					System.err.println(errMsg);
+					throw new PinaraXMLValidationException(errMsg);
+				}
+			}
 			
 			return abstractJobType;
 			

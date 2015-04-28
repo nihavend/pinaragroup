@@ -17,6 +17,30 @@ import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
 import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
 
 public class JobDependencyResolver {
+	
+	
+	public static Expression validateDepExp(Logger logger, String dependencyExpression, String ownerJsName) throws UnresolvedDependencyException {
+
+		if(dependencyExpression == null || dependencyExpression.equals("")) {
+			throw new UnresolvedDependencyException("Dependency expression is not defined !");
+		}
+		
+		dependencyExpression = dependencyExpression.replace("AND", "&&");
+		dependencyExpression = dependencyExpression.replace("OR", "||");
+
+		Expression exp = null;
+		try {
+			exp = new Expression(dependencyExpression);
+		} catch (Throwable t) {
+			String errorMessage = "     > " + ownerJsName + " isi icin hatali bagimlilik tanimlamasi yapilmis ! (" + dependencyExpression + ") kontrol ediniz.";
+			if(logger != null) {
+				logger.error(errorMessage);
+			}
+			throw new UnresolvedDependencyException(errorMessage);
+		}
+
+		return exp;
+	}
 
 	/* SpcLookupTable spcLookupTable, String runId */
 
@@ -30,25 +54,15 @@ public class JobDependencyResolver {
 			return true;
 		}
 
-		String dependencyExpression = dependencyList.getDependencyExpression().trim().toUpperCase();
-
-		Item[] dependencyArray = dependencyList.getItemArray();
-
 		try {
 
 			String ownerJsName = ownerJob.getBaseJobInfos().getJsName();
+			
+			String dependencyExpression = dependencyList.getDependencyExpression().trim().toUpperCase();
+			
+			Expression exp = validateDepExp(logger, dependencyExpression, ownerJsName);
 
-			dependencyExpression = dependencyExpression.replace("AND", "&&");
-			dependencyExpression = dependencyExpression.replace("OR", "||");
-
-			Expression exp = null;
-			try {
-				exp = new Expression(dependencyExpression);
-			} catch (Throwable t) {
-				String errorMessage = "     > " + ownerJsName + " isi icin hatali bagimlilik tanimlamasi yapilmis ! (" + dependencyExpression + ") kontrol ediniz.";
-				logger.error(errorMessage);
-				throw new UnresolvedDependencyException(errorMessage);
-			}
+			Item[] dependencyArray = dependencyList.getItemArray();
 
 			ArrayIterator dependencyArrayIterator = new ArrayIterator(dependencyArray);
 

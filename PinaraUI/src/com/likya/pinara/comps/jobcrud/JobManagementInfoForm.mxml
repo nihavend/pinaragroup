@@ -33,17 +33,17 @@
 					return false;
 				}*/
 				
-				if(bdate.text == "") {
+/*				if(bdate.text == "") {
 					Alert.show("Begin date is not defined !");
 					return false;
 				}	
-				
+*/				
 				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
 					Alert.show("Begin time is not defined !");
 					return false;
 				}	
 				
-				if(edate.text == "") {
+/*				if(edate.text == "") {
 					Alert.show("End date is not defined !");
 					return false;
 				}	
@@ -52,7 +52,7 @@
 					Alert.show("End time is not defined !");
 					return false;
 				}	
-				
+*/				
 				if(timoutValue.text == "") {
 					Alert.show("Timeout is not defined !");
 					return false;
@@ -142,9 +142,9 @@
 		
 		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
 		
-		<s:FormItem label="Başlangıç Tarih ve Saati : " top="30">
+		<s:FormItem label="Başlama Tarih ve Saati : " top="30">
 			<s:HGroup>
-				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
+				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" /> <!--selectedDate="{new Date()"-->
 				<s:TextInput  id="bhour"
 							  text="00"
 							  restrict="0-23"
@@ -168,7 +168,7 @@
 			</s:helpContent>
 		</s:FormItem>
 		
-		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
+<!--		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
 			<s:HGroup>
 				<mx:DateField id="edate" top="50" left="10"  formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 				<s:TextInput  id="ehour"
@@ -192,7 +192,7 @@
 			<s:helpContent>
 				<s:Label text="DD/MM/YYYY hh:mm:ss"/>
 			</s:helpContent>
-		</s:FormItem>
+		</s:FormItem>-->
 		
 		<s:FormItem label="Time-out değeri               :" top="90">
 			<s:HGroup>

@@ -250,7 +250,8 @@
 					var isDepGraph:Boolean = false;
 					
 					if(selectedNetTreeId > 0) {
-						isDepGraph = true;
+						// Graph disabled because not working yet !
+						// isDepGraph = true;
 					}
 					
 					if(!isDepGraph && myViewStack.getChildByName("depGraph") != null) {

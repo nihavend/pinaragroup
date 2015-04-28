@@ -117,13 +117,16 @@ package com.likya.pinara.utils {
 				managementInfoForm.bsecond.text = pairs[2];
 				
 				// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
+				
+				/*
+				end date prosessin belirleyecegi bir durum
 				managementInfoForm.edate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
 				
 				pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
 				managementInfoForm.ehour.text = pairs[0];
 				managementInfoForm.eminute.text = pairs[1];
 				managementInfoForm.esecond.text = pairs[2];
-				
+				*/
 				managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
 				managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
 				

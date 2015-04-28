@@ -131,7 +131,21 @@ package com.likya.pinara.utils {
 				counter ++;
 			}
 			
-			dependencyListXML.appendChild(<myra-jobprops:DependencyExpression xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{j.dependencyListForm.depExp.text}</myra-jobprops:DependencyExpression>);
+			if(counter > 0) {
+				var depExp:String = j.dependencyListForm.depExp.text;
+				if(depExp == null || depExp == "") {
+					depExp = "";
+					for (var i:int = 0; i < j.dependencyListForm.dependencyListGrid.dataProvider.toArray().length; i++) {
+						item = j.dependencyListForm.dependencyListGrid.dataProvider.toArray()[i];
+						if(i == 0) {
+							depExp = item.depid;
+							continue;
+						}
+						depExp = depExp + " AND " + item.depid;
+					}
+				}
+				dependencyListXML.appendChild(<myra-jobprops:DependencyExpression xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{depExp}</myra-jobprops:DependencyExpression>);
+			}
 			
 			return myraJobList;
 		}
@@ -272,10 +286,9 @@ package com.likya.pinara.utils {
 				managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
 				managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
 				
-				sDate = j.managementInfoForm.edate.selectedDate;
-				dateString = currentDF.format(sDate);
 				
-				dateString = dateString + "T" + zeroize(j.managementInfoForm.ehour.text) + ":" + zeroize(j.managementInfoForm.eminute.text) + ":" + zeroize(j.managementInfoForm.esecond.text) + ".000+02:00";
+				// end date olmaycak....zira bunu process belirleyecek
+				// dateString = currentDF.format(sDate);
 				
 				managementInfoXML.timeManagement.bornedPlannedTime.stopTime = dateString;
 				managementInfoXML.timeManagement.jsPlannedTime.stopTime = dateString;
@@ -308,8 +321,6 @@ package com.likya.pinara.utils {
 					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm.autoRetry.selectedItem;
 				}
 			
-				
-				
 			}
 			
 			return myraJobList;

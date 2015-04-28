@@ -105,11 +105,12 @@
 			private function getDataFromParent(event:TimerEvent): void {
 				var allDetailPanel:JobAllDetailPanel = FlexGlobals.topLevelApplication["allJobDetail"] as JobAllDetailPanel;
 				if(allDetailPanel.jobDetailXml != null) {
-					myTimer.stop();
+					//myTimer.stop();
 					// Alert.show("In menu bar : " + allDetailPanel.jobDetailXml);
 					currentDataItem = allDetailPanel.jobDetailXml;
 					handleEvent();
 				}
+				myTimer.stop();
 			}
 			
 			// Menu items with no child : anasayfa

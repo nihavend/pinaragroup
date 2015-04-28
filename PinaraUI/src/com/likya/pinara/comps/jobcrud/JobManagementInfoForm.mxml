@@ -144,7 +144,7 @@
 		
 		<s:FormItem label="Başlama Tarih ve Saati : " top="30">
 			<s:HGroup>
-				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" /> <!--selectedDate="{new Date()"-->
+				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 				<s:TextInput  id="bhour"
 							  text="00"
 							  restrict="0-23"

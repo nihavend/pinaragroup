@@ -162,7 +162,8 @@
 			}
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);	
+				// Alert.show("Fault : " + event.message);	
+				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 		]]>

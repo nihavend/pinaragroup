@@ -57,6 +57,9 @@ public class RestParser extends GenericRestParser {
 	
 	public static final String CMD_APPSTATE = "appstate";
 	
+	public static final String CMD_ENABLEGRP = "enablegrp";
+	public static final String CMD_DISABLEGRP = "disablegrp";
+	
 	public static byte[] parse(String uriTxt) {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
@@ -349,6 +352,14 @@ public class RestParser extends GenericRestParser {
 			retStr = "<result>" + CoreFactory.getInstance().getManagementOperations().getExecutionState() + "</result>";
 			break;
 			
+		case RestParser.CMD_ENABLEGRP:
+			retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
+			break;
+		
+		case RestParser.CMD_DISABLEGRP:
+			retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
+			break;
+
 		default:
 			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
 			

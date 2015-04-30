@@ -12,7 +12,6 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;

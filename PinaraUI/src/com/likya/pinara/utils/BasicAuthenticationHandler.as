@@ -4,12 +4,15 @@ package com.likya.pinara.utils
 	import com.likya.pinara.main.PinaraUI;
 	import com.likya.pinara.model.UserInfo;
 	
+	import flash.display.DisplayObject;
 	import flash.net.URLVariables;
 	
 	import mx.controls.Alert;
 	import mx.core.FlexGlobals;
+	import mx.managers.PopUpManager;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
+	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.mxml.HTTPService;
 	import mx.utils.Base64Encoder;
 
@@ -82,5 +85,33 @@ package com.likya.pinara.utils
 				Alert.show("Unexpected Event : " + event.toString());
 			}
 		}
+		
+		public static function service_resultHandler(refObject:DisplayObject, event:ResultEvent):ResultEvent {
+			
+			var returnXml:XML;
+			var returnTxt:String = null;
+			
+			try {
+				returnXml = XML(event.message.body);
+				returnTxt = "" + returnXml;
+				if(startsWith(returnTxt, "NOK : ")) {
+					WindowUtils.showDummyWindow(refObject, returnTxt.substr(6));
+				} 
+				
+			} catch(err:Error) {
+				Alert.show("Result : " + err.message);
+				returnTxt = String(event.result)
+			}
+			
+			// Alert.show("Result : " + event.message.body);
+			// trace(returnXml);
+			
+			return event;
+		}
+		
+		private static function startsWith(haystack:String, needle:String):Boolean {
+			return haystack.indexOf(needle) == 0;
+		}
+		
 	}
 }

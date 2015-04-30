@@ -28,9 +28,6 @@
 			
 			import spark.components.TitleWindow;
 			
-			[Bindable]
-			public var tlosMenuData:XMLListCollection = new XMLListCollection();
-			
 			private var currentDataItem:XML;
 			
 			private var timerId:uint;
@@ -42,9 +39,6 @@
 			}
 			
 			public function onCreationComplete(event:FlexEvent):void {
-				tlosMenuData.source = menuDataXMLList;
-				pinaraMenuBar.callLater(registerClickEvent);
-				
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChanged);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelected);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelected);
@@ -194,7 +188,8 @@
 				cloneJobWindow.isMode = 2;
 				PopUpManager.centerPopUp(cloneJobWindow);
 				//Alert.show("Selected Job id : " + "");	
-			}			
+			}	
+			
 			private function showDeleteJob(eventObj:CloseEvent):void {
 				var serializationInfo:String = "false";
 				if(eventObj.detail == Alert.OK) {
@@ -207,9 +202,13 @@
 			}
 			
 			public function registerClickEvent():void {
-				var mbi:MenuBarItem = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
+
+				var mbi:MenuBarItem;
 				//Alert.show("registerClickEvent : pinaraMenuBar.menuBarItems.length" + pinaraMenuBar.menuBarItems.length);
+				
+				mbi = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
 				mbi.addEventListener(MouseEvent.CLICK, mbiAnaSayfa_click);
+
 				mbi = pinaraMenuBar.menuBarItems[1] as MenuBarItem;
 				mbi.addEventListener(MouseEvent.CLICK, mbiRefresh_click);
 			}
@@ -324,6 +323,13 @@
 				Alert.show("Fault : " + event.message);
 			}
 			
+			protected function pinaraMenuBar_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				pinaraMenuBar.callLater(registerClickEvent);
+				// registerClickEvent();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -415,9 +421,10 @@
 	
 	
 	<mx:MenuBar id="pinaraMenuBar" width="100%" chromeColor="#B4CBE1" color="#0D173C" 
-				dataProvider="{tlosMenuData}" fontFamily="Arial" fontWeight="bold" horizontalCenter="0"
+				dataProvider="{menuDataXMLList}" fontFamily="Arial" fontWeight="bold" horizontalCenter="0"
 				itemClick="tlosMenuBar_itemClickHandler(event)" 
 				labelField="@label" selectionColor="#A8C6EE"
-				symbolColor="#F7F4F4"/>
+				symbolColor="#F7F4F4"
+				creationComplete="pinaraMenuBar_creationCompleteHandler(event)"/>
 	
 </s:Group>

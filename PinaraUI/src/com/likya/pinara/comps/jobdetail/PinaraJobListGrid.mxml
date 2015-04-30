@@ -4,13 +4,17 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
 		 width="100%" height="100%" 
 		 xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
-		 xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
+		 xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:grpmanager="com.likya.pinara.services.grpmanager.*" >
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
 			
 			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
 			import spark.components.Grid;
 			import spark.events.GridSelectionEvent;
@@ -35,17 +39,48 @@
 				return item.runtimeParams.realizedDuration;
 			}
 			
+			protected function grpMngService_resultHandler(event:ResultEvent):void
+			{
+				BasicAuthenticationHandler.service_resultHandler(this, event);
+			}
+			
+			protected function grpMngService_faultHandler(event:FaultEvent):void
+			{
+				BasicAuthenticationHandler.service_faultHandler(event);
+				
+			}
+			
+			protected function enableAllBtn_clickHandler(event:MouseEvent):void
+			{
+				BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);
+				
+			}
+			
+			protected function disableAllBtn_clickHandler(event:MouseEvent):void
+			{
+				BasicAuthenticationHandler.authAndCall(grpMngService, "disablegrp", selectedGroupId);
+				
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
+		<jobmanager:JobManager id="grpMngService" result="grpMngService_resultHandler(event)" fault="grpMngService_faultHandler(event)"/>
+		<s:CallResponder id="enablegrp"/>
+		<s:CallResponder id="disablegrp"/>
 	</fx:Declarations>
 		<!-- Define a Button control to open the menu -->
+	
 	<s:layout>
 		<s:VerticalLayout />
 	</s:layout>
 	
-	<jobdetail:GridStatuFilter data="{jobListXmlCollection}" width="100%" height="20"/>
-		
+	<s:HGroup>
+		<jobdetail:GridStatuFilter data="{jobListXmlCollection}" width="100%" height="20"/>
+		<s:Button id="enableAllBtn" label="Enable All Jobs" visible="false" click="enableAllBtn_clickHandler(event)" />
+		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" click="disableAllBtn_clickHandler(event)" />
+	</s:HGroup>
+	
 	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}" > 
 		<s:columns>
 			<s:ArrayList>

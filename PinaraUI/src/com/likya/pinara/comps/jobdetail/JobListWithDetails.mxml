@@ -206,6 +206,51 @@
 				
 				BasicAuthenticationHandler.authAndSend(jobListDS);
 				
+				permitEnableAllBtn();
+				
+			}
+			
+			protected function isAllDisableable():Boolean
+			{
+				var disableable:Boolean = true;
+				for each (var item:Object in jobListXmlCollection) {
+					var test:String = "" + item.visualParams.commandabilityParams.isDisablable;
+					if(test == "false") {
+						disableable = false;
+						break;
+					}
+				}
+				return disableable;
+			}
+			
+			protected function permitEnableAllBtn():void
+			{
+				if(pinaraJobListGrid == null) {
+					// not ready yet
+					return;
+				}
+				if(selectedNetTreeId == '-1') {
+					pinaraJobListGrid.enableAllBtn.visible = false;
+					return;
+				}
+				
+				var found:Boolean = false;
+				
+				for each (var item:Object in jobListXmlCollection) {
+					if(item.visualParams.commandabilityParams.isEnablable) {
+						found = true;
+						break;
+					}
+				}
+				
+				if(found) {
+					pinaraJobListGrid.enableAllBtn.visible = true;
+				} 
+				
+				if(isAllDisableable()) {
+					pinaraJobListGrid.disableAllBtn.visible = true;
+				} 
+				
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
@@ -328,7 +373,7 @@
 			protected function pinaraJobListGrid_creationCompleteHandler(event:FlexEvent):void
 			{
 				pinaraJobListGrid.jobListXmlCollection = jobListXmlCollection;
-				
+				permitEnableAllBtn();
 			}
 			
 		]]>

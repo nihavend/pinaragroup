@@ -96,12 +96,13 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
 
          operation = new mx.rpc.http.Operation(null, "retry");
          operation.url = "/flex/restsrvc/retryjob/{jobId}";
-         operation.method = "GET";
+         operation.method = "POST";
          argsArray = new Array("jobId");
          operation.argumentNames = argsArray;         
          operation.serializationFilter = serializer0;
          operation.properties = new Object();
          operation.properties["urlParamNames"] = ["jobId"];
+         operation.contentType = "application/x-www-form-urlencoded";
          operation.resultType = Object;
          operations.push(operation);
 
@@ -119,11 +120,10 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation = new mx.rpc.http.Operation(null, "disable");
          operation.url = "/flex/restsrvc/disablejob/{jobId}";
          operation.method = "GET";
-         argsArray = new Array("jobId");
-         operation.argumentNames = argsArray;         
          operation.serializationFilter = serializer0;
          operation.properties = new Object();
          operation.properties["urlParamNames"] = ["jobId"];
+         operation.contentType = "application/xml";
          operation.resultType = Object;
          operations.push(operation);
 
@@ -194,6 +194,26 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation = new mx.rpc.http.Operation(null, "getappstate");
          operation.url = "/flex/restsrvc/appstate";
          operation.method = "GET";
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "enablegrp");
+         operation.url = "/flex/restsrvc/enablegrp/{grpId}";
+         operation.method = "GET";
+         argsArray = new Array("grpId");
+         operation.argumentNames = argsArray;         
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["grpId"];
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "disablegrp");
+         operation.url = "/flex/restsrvc/disablegrp/{grpId}";
+         operation.method = "GET";
+         argsArray = new Array("grpId");
+         operation.argumentNames = argsArray;         
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["grpId"];
          operation.resultType = Object;
          operations.push(operation);
 
@@ -550,6 +570,42 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getappstate");
 		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'enablegrp' operation. It returns an mx.rpc.AsyncToken whose 
+      * result property will be populated with the result of the operation when the server response is received. 
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function enablegrp(grpId:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("enablegrp");
+		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(grpId) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'disablegrp' operation. It returns an mx.rpc.AsyncToken whose 
+      * result property will be populated with the result of the operation when the server response is received. 
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value. 
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function disablegrp(grpId:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("disablegrp");
+		var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(grpId) ;
         return _internal_token;
     }
      

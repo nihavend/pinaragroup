@@ -12,7 +12,6 @@
 			import com.likya.pinara.utils.Transformer;
 			
 			import mx.collections.XMLListCollection;
-			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -52,7 +51,7 @@
 			
 			protected function enableAllBtn_clickHandler(event:MouseEvent):void
 			{
-				BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);
+				BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);				
 				
 			}
 			
@@ -66,8 +65,6 @@
 	</fx:Script>
 	<fx:Declarations>
 		<jobmanager:JobManager id="grpMngService" result="grpMngService_resultHandler(event)" fault="grpMngService_faultHandler(event)"/>
-		<s:CallResponder id="enablegrp"/>
-		<s:CallResponder id="disablegrp"/>
 	</fx:Declarations>
 		<!-- Define a Button control to open the menu -->
 	

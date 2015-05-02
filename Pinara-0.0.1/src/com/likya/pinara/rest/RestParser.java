@@ -353,11 +353,43 @@ public class RestParser extends GenericRestParser {
 			break;
 			
 		case RestParser.CMD_ENABLEGRP:
-			retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
+			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
+				retStr = "Group id not defined or invalid : " + uriTxt;
+				retStr = "<result>NOK : " + retStr + "</result>";
+				break;
+			}
+			
+			String grpId = restCommArr[1];
+			
+			try {
+				PinaraAppManagerImpl.getInstance().enableGroup(grpId);
+				retStr = "<result>OK</result>";
+			} catch (PinaraAuthenticationException e) {
+				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
+				e.printStackTrace();
+			}			
+			
+			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
 		
 		case RestParser.CMD_DISABLEGRP:
-			retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
+			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
+				retStr = "Group id not defined or invalid : " + uriTxt;
+				retStr = "<result>NOK : " + retStr + "</result>";
+				break;
+			}
+			
+			grpId = restCommArr[1];
+			
+			try {
+				PinaraAppManagerImpl.getInstance().disableGroup(grpId);
+				retStr = "<result>OK</result>";
+			} catch (PinaraAuthenticationException e) {
+				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
+				e.printStackTrace();
+			}			
+			
+			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
 
 		default:

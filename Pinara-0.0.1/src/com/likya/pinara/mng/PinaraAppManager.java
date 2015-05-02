@@ -66,4 +66,7 @@ public interface PinaraAppManager {
 	
 	public void deleteJob(String jobId, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException;
 	
+	public void enableGroup(String grpId) throws PinaraAuthenticationException;
+
+	public void disableGroup(String grpId) throws PinaraAuthenticationException;
 }

@@ -16,6 +16,7 @@ import com.likya.myra.commons.utils.JobListFilter;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.commons.utils.StateFilter;
+import com.likya.myra.jef.core.Commandability;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.JobOperations;
 import com.likya.myra.jef.core.ManagementOperations;
@@ -146,6 +147,48 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			throw new PinaraAuthenticationException();
 		}
 		jobOperations.enableJob(jobName);
+	}
+	
+	public void enableGroup(String grpId) throws PinaraAuthenticationException {
+		
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		
+		HashMap<String, NetTree> netTreeMap = PinaraAppManagerImpl.getInstance().getNetTreeMap();
+		HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
+		
+		if(netTreeMap.containsKey(grpId)) {
+			NetTree netTree = netTreeMap.get(grpId);
+			for(String jobId : netTree.getMembers()) {
+				AbstractJobType abstractJobType = jobQueue.get(jobId).getAbstractJobType();
+				if(Commandability.isEnablable(abstractJobType)) {
+					jobOperations.enableJob(jobId);
+				}
+			}
+		}
+		
+	}
+	
+	public void disableGroup(String grpId) throws PinaraAuthenticationException {
+		
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		
+		HashMap<String, NetTree> netTreeMap = PinaraAppManagerImpl.getInstance().getNetTreeMap();
+		HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
+		
+		if(netTreeMap.containsKey(grpId)) {
+			NetTree netTree = netTreeMap.get(grpId);
+			for(String jobId : netTree.getMembers()) {
+				AbstractJobType abstractJobType = jobQueue.get(jobId).getAbstractJobType();
+				if(Commandability.isDisablable(abstractJobType)) {
+					jobOperations.disableJob(jobId);
+				}
+			}
+		}
+		
 	}
 
 	

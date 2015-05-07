@@ -6,16 +6,15 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
 import com.likya.myra.commons.model.UnresolvedDependencyException;
 import com.likya.myra.commons.utils.JobDependencyResolver;
 import com.likya.myra.commons.utils.JobListFilter;
-import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.commons.utils.StateFilter;
+import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.jef.core.Commandability;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.JobOperations;
@@ -57,9 +56,6 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		if (pinaraManager == null) {
 			pinaraManager = new PinaraAppManagerImpl();
 			monitoringOperations = CoreFactory.getInstance().getMonitoringOperations();
-			if(monitoringOperations == null) {
-				throw new NullArgumentException("monitoringOperations");
-			}
 			jobOperations = CoreFactory.getInstance().getJobOperations();
 			managementOperations = CoreFactory.getInstance().getManagementOperations();
 		}

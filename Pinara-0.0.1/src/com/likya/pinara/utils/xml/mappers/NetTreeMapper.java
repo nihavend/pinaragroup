@@ -16,7 +16,7 @@ import com.likya.xsd.myra.model.joblist.AbstractJobType;
 
 public class NetTreeMapper {
 	
-	private static XmlCursor addJobGroup(XmlCursor xmlCursor, String groupId, String title) {
+	public static XmlCursor addJobGroup(XmlCursor xmlCursor, String groupId, String title) {
 		
 		xmlCursor.beginElement("jobGroup");
 		xmlCursor.insertAttributeWithValue("title", title);
@@ -25,7 +25,7 @@ public class NetTreeMapper {
 		return xmlCursor;
 	}
 	
-	private static XmlCursor addJobProperty(XmlCursor xmlCursor, String jobId) {
+	public static XmlCursor addJobProperty(XmlCursor xmlCursor, String jobId) {
 		
 		HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
 		AbstractJobType abstractJobType = jobQueue.get(jobId).getAbstractJobType();

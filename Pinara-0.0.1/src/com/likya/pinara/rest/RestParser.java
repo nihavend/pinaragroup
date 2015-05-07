@@ -15,6 +15,7 @@ import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
+import com.likya.pinara.utils.xml.mappers.GroupTreeMapper;
 import com.likya.pinara.utils.xml.mappers.JobDetailMapper;
 import com.likya.pinara.utils.xml.mappers.JobGridListMapper;
 import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
@@ -25,6 +26,7 @@ import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
 public class RestParser extends GenericRestParser {
 
 	private static final String NETTREE_XML_CMD = "nettreexml";
+	private static final String GROUPTREE_XML_CMD = "grouptreexml";
 	private static final String JOBLIST_XML_CMD = "joblistxml";
 	private static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
@@ -87,6 +89,14 @@ public class RestParser extends GenericRestParser {
 				e1.printStackTrace();
 			}
 //			responseBytes = retStr.getBytes();
+			break;
+			
+		case GROUPTREE_XML_CMD:
+			try {
+				retStr = GroupTreeMapper.getMapped();
+			} catch (PinaraAuthenticationException e1) {
+				e1.printStackTrace();
+			}
 			break;
 
 		case JOBLIST_XML_CMD:

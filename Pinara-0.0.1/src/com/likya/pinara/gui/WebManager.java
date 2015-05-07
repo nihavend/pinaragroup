@@ -12,7 +12,6 @@ import com.likya.pinara.rest.RestfulHandler;
 import com.likya.pinara.utils.PasswordService;
 import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.BasicAuthenticator;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -80,11 +79,10 @@ public class WebManager {
 //		}
 
 		public Result authenticate(HttpExchange arg0) {
-			
-			Headers rmap = (Headers) arg0.getRequestHeaders();
-			String auth = rmap.getFirst("Authorization");
-			
-			System.out.println(auth);
+			// Aşağıdakiler debug için
+			// Headers rmap = (Headers) arg0.getRequestHeaders();
+			// String auth = rmap.getFirst("Authorization");
+			// System.out.println(auth);
 			
 			Result superResult = super.authenticate(arg0);
 

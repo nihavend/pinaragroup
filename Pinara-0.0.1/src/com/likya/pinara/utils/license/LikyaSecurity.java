@@ -45,7 +45,10 @@ public class LikyaSecurity {
 
 	public static String decrypt(byte[] encryptionBytes, Key key) throws Exception {
 
+		long startTime = System.currentTimeMillis();
 		cipher = Cipher.getInstance(xform);
+		long duration = System.currentTimeMillis() - startTime;
+		System.err.println("Cipher.getInstance(xform)" + " in " + duration + " ms");
 		paramSpec = new IvParameterSpec(iv);
 		cipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 

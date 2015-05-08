@@ -193,7 +193,8 @@
 			}
 			
 			public function updateData():void {
-				var testFlag:Boolean = isNaN(Number(selectedNetTreeId)) || selectedNetTreeId == "";
+				
+				var testFlag:Boolean = /*isNaN(Number(selectedNetTreeId)) ||*/ selectedNetTreeId == "";
 				
 				if(testFlag) {
 					Alert.show("Selected NetTree id is not valid ! >> " + selectedNetTreeId);

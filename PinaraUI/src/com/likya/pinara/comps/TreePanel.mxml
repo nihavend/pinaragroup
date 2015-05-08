@@ -9,18 +9,14 @@
 		<![CDATA[
 			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.event.ResourceEvent;
-			import com.likya.pinara.main.PinaraUI;
-			import com.likya.pinara.model.UserInfo;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Tree;
-			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.utils.Base64Encoder;
 			
 			[Bindable]
 			[Embed(source="/images/tlosTree.jpg")]
@@ -184,8 +180,19 @@
 			}
 			
 			public function refreshTree():void {
-				// liveTreeDataService.send();
 				BasicAuthenticationHandler.authAndSend(liveTreeDataService);
+			}
+			
+			public function changeView():void {
+				if(BasicAuthenticationHandler.startsWith(liveTreeDataService.url, "/flex/restsrvc/nettreexml/")) {
+					liveTreeDataService.url = "/flex/restsrvc/grouptreexml/";
+					depGrpButton.label = "D";
+				} else {
+					liveTreeDataService.url = "/flex/restsrvc/nettreexml/";
+					depGrpButton.label = "G";
+				}
+				
+				refreshTree();
 			}
 			
 			public function loadData():void {
@@ -262,10 +269,12 @@
 				 left="0" top="0" right="0" bottom="0"
 				 openItems="true"
 				 itemClick="tlosTree_itemClickHandler(event)" />
+
+		<s:Button id="depGrpButton" y="-27" right="92" width="30" click="changeView()" toolTip="(D)ep/(G)rp View" label="D"/>
+
+		<s:Button id="toggleTree" y="-27" right="32" width="60" click="toggleTreeComp()" toolTip="Expand" label="Expand"/>
 		
-		<s:Button id="toggleTree" y="-27" right="40" width="80" click="toggleTreeComp()" toolTip="Expand" label="Expand"/>
-		
-		<s:Button id="refreshTreeButton" y="-27" right="10" width="30" click="refreshTree()" toolTip="Refresh" label="R"/>
+		<s:Button id="refreshTreeButton" y="-27" right="2" width="30" click="refreshTree()" toolTip="Refresh" label="R"/>
 		
 	</containers:CollapsiblePanel>	
 </s:Group>

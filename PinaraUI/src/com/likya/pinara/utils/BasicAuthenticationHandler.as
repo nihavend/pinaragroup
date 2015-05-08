@@ -109,7 +109,7 @@ package com.likya.pinara.utils
 			return event;
 		}
 		
-		private static function startsWith(haystack:String, needle:String):Boolean {
+		public static function startsWith(haystack:String, needle:String):Boolean {
 			return haystack.indexOf(needle) == 0;
 		}
 		

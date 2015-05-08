@@ -8,7 +8,7 @@ import java.util.Collection;
 import com.google.gson.Gson;
 import com.likya.myra.commons.utils.IdFilter;
 import com.likya.myra.commons.utils.SSSFilter;
-import com.likya.myra.jef.core.CoreFactory;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
@@ -32,7 +32,7 @@ public class RestParser extends GenericRestParser {
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
 
 	public static final String CMD_JOBLIST = "jobList";
-	
+
 	public static final String CMD_STOPJOB = "stopjob";
 	public static final String CMD_STARTJOB = "startjob";
 	public static final String CMD_SETSUCCESSJOB = "setsuccessjob";
@@ -47,27 +47,27 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_FSTOPAPP = "fstopapp";
 	public static final String CMD_SUSPENDAPP = "suspendapp";
 	public static final String CMD_RESUMEAPP = "resumeapp";
-	
+
 	public static final String CMD_ADDJOB = "addjob";
 	public static final String CMD_UPDATEJOB = "updatejob";
 	public static final String CMD_DELETEJOB = "deletejob";
-	
+
 	public static final String CMD_AUTH = "authanticate";
-	
+
 	public static final String CMD_RECOVER = "recover";
 	public static final String CMD_NORECOVER = "norecover";
-	
+
 	public static final String CMD_APPSTATE = "appstate";
-	
+
 	public static final String CMD_ENABLEGRP = "enablegrp";
 	public static final String CMD_DISABLEGRP = "disablegrp";
-	
+
 	public static byte[] parse(String uriTxt) {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
 
-		StateName.Enum filterStates[] = { StateName.RUNNING, StateName.CANCELLED, StateName.FAILED, StateName.FINISHED, StateName.PENDING};
-		
+		StateName.Enum filterStates[] = { StateName.RUNNING, StateName.CANCELLED, StateName.FAILED, StateName.FINISHED, StateName.PENDING };
+
 		String retStr = "";
 
 		String restCommArr[] = uriTxt.split("/");
@@ -81,6 +81,18 @@ public class RestParser extends GenericRestParser {
 		switch (restCommArr[0]) {
 
 		case NETTREE_XML_CMD:
+			CoreStateInfo coreStateInfo;
+			try {
+				System.out.print("Checking if application is ready...");
+				while (PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+					Thread.sleep(1000);
+				}
+			} catch (PinaraAuthenticationException | InterruptedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+			System.out.println("OK !");
 			// retStr = FileUtils.readFile(xmlPath + "netTree.xml").toString();
 			try {
 				// retStr = NetTreeMapper.getMapped(Pinara.getInstance().getConfigurationManager().getPinaraAppManager().getJobList(filterStates));
@@ -88,9 +100,9 @@ public class RestParser extends GenericRestParser {
 			} catch (PinaraAuthenticationException e1) {
 				e1.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case GROUPTREE_XML_CMD:
 			try {
 				retStr = GroupTreeMapper.getMapped();
@@ -101,33 +113,42 @@ public class RestParser extends GenericRestParser {
 
 		case JOBLIST_XML_CMD:
 
-			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
-				retStr = "NetTree id not defined or invalid : " + uriTxt;
+			if (restCommArr.length != 2) {
+				retStr = "NetTree/Group id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + retStr + "</result>";
-//				responseBytes = retStr.getBytes();
+				//				responseBytes = retStr.getBytes();
 				break;
 			}
-
-			String netTreeId = restCommArr[1];
-			// System.err.println("Job Id : " + netTreeId);
-			//retStr = FileUtils.readFile(xmlPath + "cleanList.xml").toString();
 			
-			try {
+			if(isInteger(restCommArr[1])) {
 				
-				if(netTreeId.equals("-1")) {
-					retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getFreeJobs(), filterStates));					
-				} else if(PinaraAppManagerImpl.getInstance().getNetTreeMap().containsKey(netTreeId)) {
-					retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
-				} else {
-					// retStr = "NetTree id is not mapped to a nettree : " + netTreeId;
-					retStr = "<result>NOK : " + "NetTree id is not mapped to a nettree : " + netTreeId + "</result>";
+				String netTreeId = restCommArr[1];
+				
+				try {
+
+					if (netTreeId.equals("-1")) {
+						retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getFreeJobs(), filterStates));
+					} else if (PinaraAppManagerImpl.getInstance().getNetTreeMap().containsKey(netTreeId)) {
+						retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
+					} else {
+						retStr = "<result>NOK : " + "NetTree id is not mapped to a nettree : " + netTreeId + "</result>";
+					}
+
+				} catch (PinaraAuthenticationException e1) {
+					e1.printStackTrace();
 				}
 				
-				// retStr = NetTreeMapper.getMapped(Pinara.getInstance().getConfigurationManager().getPinaraAppManager().getJobList(filterStates));
-			} catch (PinaraAuthenticationException e1) {
-				e1.printStackTrace();
+			} else {
+
+				String groupId = restCommArr[1];
+				if(GroupTreeMapper.resolveGroups().containsKey(groupId)) {
+					retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(GroupTreeMapper.resolveGroups().get(groupId), filterStates));
+				} else {
+					retStr = "<result>NOK : " + "Group id is not mapped to a group : " + groupId + "</result>";
+				}
+				
 			}
-//			responseBytes = retStr.getBytes();
+
 			break;
 
 		case JOBDETAIL_XML_CMD:
@@ -135,7 +156,7 @@ public class RestParser extends GenericRestParser {
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				// retStr = "Job id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + "Job id not defined or invalid : " + uriTxt + "</result>";
-//				responseBytes = retStr.getBytes();
+				//				responseBytes = retStr.getBytes();
 				break;
 			}
 
@@ -148,34 +169,34 @@ public class RestParser extends GenericRestParser {
 			} catch (PinaraAuthenticationException e1) {
 				e1.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
 
 		case RestParser.JOBSUMMARYLIST_XML_CMD:
-			
+
 			Collection<AbstractJobType> jobSummaryList = null;
 			try {
 				// jobSummaryList = PinaraAppManagerImpl.getInstance().getJobList(filterStates);
 				jobSummaryList = SSSFilter.noneFilter(JobQueueOperations.toAbstractJobTypeList(PinaraAppManagerImpl.getInstance().getJobQueue()).values(), StateName.PENDING, SubstateName.DEACTIVATED);
-				if(restCommArr.length == 2) { // means that list should be filter against jobId
-					String idArray [] = { restCommArr[1] };
+				if (restCommArr.length == 2) { // means that list should be filter against jobId
+					String idArray[] = { restCommArr[1] };
 					jobSummaryList = IdFilter.noneFilter(jobSummaryList, idArray);
 				}
 			} catch (PinaraAuthenticationException e) {
 				e.printStackTrace();
 			}
-			
+
 			retStr = "<joblist>";
-			for(Object abstractJobType : jobSummaryList.toArray()) {
+			for (Object abstractJobType : jobSummaryList.toArray()) {
 				retStr += "<job>";
-				retStr += "<jobid>" + ((AbstractJobType)abstractJobType).getId() + "</jobid>";
-				retStr += "<jobname>" + ((AbstractJobType)abstractJobType).getBaseJobInfos().getJsName() + "</jobname>";
+				retStr += "<jobid>" + ((AbstractJobType) abstractJobType).getId() + "</jobid>";
+				retStr += "<jobname>" + ((AbstractJobType) abstractJobType).getBaseJobInfos().getJsName() + "</jobname>";
 				retStr += "</job>";
 			}
 			retStr += "</joblist>";
-			
-		break;
-		
+
+			break;
+
 		case RestParser.CMD_JOBLIST:
 
 			Collection<AbstractJobType> jobList = null;
@@ -186,7 +207,7 @@ public class RestParser extends GenericRestParser {
 			}
 
 			retStr = new Gson().toJson(JobQueueOperations.getKeyList(jobList));
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
 
 		case RestParser.CMD_STOPJOB:
@@ -197,9 +218,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_STARTJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().startJob(restCommArr[1]);
@@ -208,9 +229,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_SETSUCCESSJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().setSuccess(restCommArr[1]);
@@ -219,9 +240,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_SKIPJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().skipJob(restCommArr[1]);
@@ -230,9 +251,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_PAUSEJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().pauseJob(restCommArr[1]);
@@ -241,9 +262,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_RESUMEJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().resumeJob(restCommArr[1]);
@@ -252,9 +273,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_RETRYJOB:
 			try {
 				PinaraAppManagerImpl.getInstance().retryExecution(restCommArr[1]);
@@ -263,7 +284,7 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
 
 		case RestParser.CMD_ENABLEJOB:
@@ -274,9 +295,8 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-
 
 		case RestParser.CMD_DISABLEJOB:
 			try {
@@ -286,9 +306,9 @@ public class RestParser extends GenericRestParser {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_STOPAPP:
 			try {
 				PinaraAppManagerImpl.getInstance().gracefulShutDown();
@@ -298,7 +318,7 @@ public class RestParser extends GenericRestParser {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case RestParser.CMD_FSTOPAPP:
 			try {
 				PinaraAppManagerImpl.getInstance().forceFullShutDown();
@@ -312,8 +332,8 @@ public class RestParser extends GenericRestParser {
 		case RestParser.CMD_SUSPENDAPP:
 			try {
 				PinaraAppManagerImpl.getInstance().suspendApp();
-				CoreStateInfo coreStateInfo = PinaraAppManagerImpl.getInstance().getExecutionState();
-				if(coreStateInfo.equals(CoreStateInfo.STATE_SUSPENDED)) {
+				coreStateInfo = PinaraAppManagerImpl.getExecutionState();
+				if (coreStateInfo.equals(CoreStateInfo.STATE_SUSPENDED)) {
 					retStr = "<result>OK</result>";
 				} else {
 					retStr = "<result>NOK</result>";
@@ -327,8 +347,8 @@ public class RestParser extends GenericRestParser {
 		case RestParser.CMD_RESUMEAPP:
 			try {
 				PinaraAppManagerImpl.getInstance().resumeApp();
-				CoreStateInfo coreStateInfo = PinaraAppManagerImpl.getInstance().getExecutionState();
-				if(coreStateInfo.equals(CoreStateInfo.STATE_WORKING)) {
+				coreStateInfo = PinaraAppManagerImpl.getExecutionState();
+				if (coreStateInfo.equals(CoreStateInfo.STATE_WORKING)) {
 					retStr = "<result>OK</result>";
 				} else {
 					retStr = "<result>NOK</result>";
@@ -338,9 +358,9 @@ public class RestParser extends GenericRestParser {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case RestParser.CMD_RECOVER:
-			if(Pinara.suspendFlag.equals("locked")) {
+			if (Pinara.suspendFlag.equals("locked")) {
 				Pinara.forceToRecover = true;
 				synchronized (Pinara.suspendFlag) {
 					Pinara.suspendFlag.notifyAll();
@@ -348,9 +368,14 @@ public class RestParser extends GenericRestParser {
 			}
 			retStr = "<result>OK</result>";
 			break;
-			
+
 		case RestParser.CMD_NORECOVER:
-			if(Pinara.suspendFlag.equals("locked")) {
+			try {
+				System.out.println(PinaraAppManagerImpl.getExecutionState());
+			} catch (PinaraAuthenticationException e1) {
+				e1.printStackTrace();
+			}
+			if (Pinara.suspendFlag.equals("locked")) {
 				synchronized (Pinara.suspendFlag) {
 					Pinara.suspendFlag.notifyAll();
 				}
@@ -359,52 +384,52 @@ public class RestParser extends GenericRestParser {
 			break;
 
 		case RestParser.CMD_APPSTATE:
-			retStr = "<result>" + CoreFactory.getInstance().getManagementOperations().getExecutionState() + "</result>";
+			retStr = "<result>" + ManagementOperationsImpl.getExecutionState() + "</result>";
 			break;
-			
+
 		case RestParser.CMD_ENABLEGRP:
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				retStr = "Group id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + retStr + "</result>";
 				break;
 			}
-			
+
 			String grpId = restCommArr[1];
-			
+
 			try {
 				PinaraAppManagerImpl.getInstance().enableGroup(grpId);
 				retStr = "<result>OK</result>";
 			} catch (PinaraAuthenticationException e) {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
-			}			
-			
+			}
+
 			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
-		
+
 		case RestParser.CMD_DISABLEGRP:
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				retStr = "Group id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + retStr + "</result>";
 				break;
 			}
-			
+
 			grpId = restCommArr[1];
-			
+
 			try {
 				PinaraAppManagerImpl.getInstance().disableGroup(grpId);
 				retStr = "<result>OK</result>";
 			} catch (PinaraAuthenticationException e) {
 				retStr = "<result>NOK : " + e.getLocalizedMessage() + "</result>";
 				e.printStackTrace();
-			}			
-			
+			}
+
 			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
 
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
-			
+			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>";
+
 			break;
 		}
 
@@ -412,35 +437,33 @@ public class RestParser extends GenericRestParser {
 		// System.err.println(uriTxt + " command received and response forwarded !");
 
 		responseBytes = retStr.getBytes();
-		
+
 		return responseBytes;
 
 	}
-	
-	
+
 	public static byte[] parsePost(String uriTxt, InputStream inputStream) throws IOException {
-		
-		
+
 		ArrayList<Byte> byteArrLst = new ArrayList<Byte>();
-		
+
 		String bufferString = "";
-		
+
 		byte b;
 		while ((b = (byte) inputStream.read()) != -1) {
 			// bufferString = bufferString + (char) i;
 			// barr[count ++] = b;
 			byteArrLst.add(b);
 		}
-		
-		byte [] barr = new byte [byteArrLst.size()];
+
+		byte[] barr = new byte[byteArrLst.size()];
 
 		int count = 0;
-		for(Object mbyte : byteArrLst.toArray()) {
-			barr[count ++] = ((Byte)mbyte).byteValue();
+		for (Object mbyte : byteArrLst.toArray()) {
+			barr[count++] = ((Byte) mbyte).byteValue();
 		}
-		
+
 		bufferString = new String(barr);
-		
+
 		//System.out.println(bufferString);
 
 		String retStr = "";
@@ -454,68 +477,67 @@ public class RestParser extends GenericRestParser {
 		}
 
 		switch (restCommArr[0]) {
-		
+
 		case RestParser.CMD_ADDJOB:
 			try {
-				extractPostInfo(bufferString, (byte)0x01);
+				extractPostInfo(bufferString, (byte) 0x01);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
-//			responseBytes = retStr.getBytes();
+			//			responseBytes = retStr.getBytes();
 			break;
-			
+
 		case RestParser.CMD_UPDATEJOB:
 			try {
-				extractPostInfo(bufferString, (byte)0x02);
+				extractPostInfo(bufferString, (byte) 0x02);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case RestParser.CMD_DELETEJOB:
 			try {
-				extractPostInfo(bufferString, (byte)0x03);
+				extractPostInfo(bufferString, (byte) 0x03);
 				retStr = "<message><result>OK</result></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
 			break;
-			
-			
+
 		case RestParser.CMD_AUTH:
-			if(Pinara.suspendFlag.equals("locked")) {
-				retStr = "<message><result>RECOVER_CONFIRM</result></message>";	
+			if (Pinara.suspendFlag.equals("locked")) {
+				retStr = "<message><result>RECOVER_CONFIRM</result></message>";
 			} else {
 				retStr = "<message><result>OK</result></message>";
 			}
-			
+
 			break;
-			
+
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
-			
+			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>";
+
 			break;
 		}
-		
+
 		responseBytes = retStr.getBytes();
-		
+
 		return responseBytes;
-		
+
 	}
-	
+
 	private static void extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException {
-		
+
 		//<data><serialize></serialize><datamess>" + myraGenericJob + "</datamess></data>
 		String myraGenericJob = bufferString.split("<datamess>")[1].split("</datamess>")[0];
 		String serializeInfo = bufferString.split("<serialize>")[1].split("</serialize>")[0];
-		
+
 		switch (command) {
-		
+
 		case 0x01:
 			PinaraAppManagerImpl.getInstance().addJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 			break;
@@ -533,7 +555,6 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 		}
-		
+
 	}
 }
-

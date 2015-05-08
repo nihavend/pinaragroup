@@ -42,7 +42,7 @@ package com.likya.pinara.utils {
 			} else { 
 				myraJobList.myra::genericJob.@handlerURI = j.jobDetailXml.@handlerURI; //"com.likya.myra.jef.jobs.ExecuteInShell";
 				myraJobList.myra::genericJob.@Id = j.jobDetailXml.@Id; //"22";
-				myraJobList.myra::genericJob.@groupId = j.jobDetailXml.@groupId; //"my_group";
+				// myraJobList.myra::genericJob.@groupId = j.jobDetailXml.@groupId; //"my_group";
 				myraJobList.myra::genericJob.@agentId = j.jobDetailXml.@agentId; //"1";
 			}
 			
@@ -615,6 +615,8 @@ package com.likya.pinara.utils {
 		}
 		
 		private static function getBaseJobInfos(j:JobEditWindow, myraJobList:XML):XML {
+			
+			myraJobList.myra::genericJob.@groupId = j.baseInfoForm.jsJobGroup.text;
 			
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:baseJobInfos xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 			

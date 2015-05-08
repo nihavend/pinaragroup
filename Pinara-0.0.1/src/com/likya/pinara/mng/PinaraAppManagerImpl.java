@@ -19,6 +19,7 @@ import com.likya.myra.jef.core.Commandability;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.JobOperations;
 import com.likya.myra.jef.core.ManagementOperations;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.core.MonitoringOperations;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
@@ -62,7 +63,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		return pinaraManager;
 	}
 	
-	private boolean authorize() {
+	private static boolean authorize() {
 		return AuthanticationImpl.authorize(Pinara.getInstance().getConfigurationManager().getUser());
 	}
 	
@@ -229,7 +230,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 
 	private void shutDown(boolean isForced) throws PinaraAuthenticationException {
 		
-		managementOperations.setExecutionState(CoreStateInfo.STATE_STOP);
+		ManagementOperationsImpl.setExecutionState(CoreStateInfo.STATE_STOP);
 		
 		PinaraMailServer pinaraMailServer = Pinara.getInstance().getConfigurationManager().getPinaraMailServer();
 		PinaraOutputManager pinaraOutputManager = Pinara.getInstance().getConfigurationManager().getPinaraOutputManager();
@@ -273,11 +274,19 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		
 	}
 	
-	public CoreStateInfo getExecutionState() throws PinaraAuthenticationException {
+	public static CoreStateInfo getExecutionState() throws PinaraAuthenticationException {
 		if(!authorize()) {
 			throw new PinaraAuthenticationException();
 		}
-		return managementOperations.getExecutionState();
+		return ManagementOperationsImpl.getExecutionState();
+	}
+	
+	public static void setExecutionState(CoreStateInfo coreStateInfo) throws PinaraAuthenticationException {
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		ManagementOperationsImpl.setExecutionState(coreStateInfo);
+		return;
 	}
 	
 	public void cleanUpRepeatatives() throws PinaraAuthenticationException {

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 import com.likya.myra.jef.core.CoreFactory;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.pinara.Pinara;
@@ -103,7 +104,7 @@ public class ServerSocketHandler implements Runnable {
 				if (isThreshold) {
 					tlosInfo.setTlosStatus(TrxInfo.STATE_JOBOVERFLOW);
 					tlosInfo.setErrCode(0);
-				} else if (CoreFactory.getInstance().getManagementOperations().getExecutionState() == CoreStateInfo.STATE_SUSPENDED/*TrxInfo.STATE_SUSPENDED*/) {
+				} else if (ManagementOperationsImpl.getExecutionState() == CoreStateInfo.STATE_SUSPENDED) {
 					tlosInfo.setTlosStatus(TrxInfo.STATE_SUSPENDED);
 					tlosInfo.setErrCode(0);
 				} else {

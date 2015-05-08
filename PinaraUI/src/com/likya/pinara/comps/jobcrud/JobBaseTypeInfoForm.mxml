@@ -116,6 +116,13 @@
 			<s:Label text="* Enter the command for your Job with full path" left="50"/>
 		</s:helpContent>
 	</s:FormItem>
+
+	<s:FormItem label="Group">
+		<s:TextInput id="jsJobGroup" width="300" />
+		<s:helpContent>
+			<s:Label text="* Enter job group name" left="50"/>
+		</s:helpContent>
+	</s:FormItem>
 	
 	<s:FormItem label="Job Type">
 		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="false"> 

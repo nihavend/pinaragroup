@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.jef.jobs.JobImpl;
-import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -44,8 +43,6 @@ public interface PinaraAppManager {
 
 	public void forceFullShutDown() throws PinaraAuthenticationException;
 	
-	public CoreStateInfo getExecutionState() throws PinaraAuthenticationException;
-
 	public void cleanUpRepeatatives() throws PinaraAuthenticationException;
 
 	public String setJobInputParam(String jobName, String parameterList) throws PinaraAuthenticationException;

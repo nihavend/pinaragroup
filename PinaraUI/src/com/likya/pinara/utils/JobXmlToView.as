@@ -32,6 +32,7 @@ package com.likya.pinara.utils {
 		
 		public static function prepare_baseInfoForm(baseInfoForm:JobBaseTypeInfoForm, jobDetailXml:XML):void {
 			
+			baseInfoForm.jsJobGroup.text = jobDetailXml.@groupId;
 			baseInfoForm.jsName.text = jobDetailXml.baseJobInfos.jsName;
 			baseInfoForm.jsCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
 			baseInfoForm.jsJobWorkDir.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobWorkDir;

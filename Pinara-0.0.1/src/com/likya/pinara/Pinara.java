@@ -12,6 +12,7 @@ import org.apache.xmlbeans.XmlException;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.ValidPlatforms;
 import com.likya.myra.commons.utils.XMLValidations;
+import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.utils.Starter;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
@@ -108,25 +109,49 @@ public class Pinara extends PinaraBase {
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.PINARA_CONSOLE, Level.INFO);
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.MYRA_CONSOLE, Level.INFO);
 
+		long startTime = System.currentTimeMillis();
 		pinara = new Pinara();
+		long duration = System.currentTimeMillis() - startTime;
+		System.err.println("new Pinara()" + " in " + duration + " ms");
 
 		pinara.setConfigurationManager(configurationManager);
 
 		pinara.loadAuthenticationInfo();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.loadAuthenticationInfo()" + " in " + duration + " ms");
 
 		pinara.startInfoServers();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.startInfoServers()" + " in " + duration + " ms");
 
 		pinara.startCommServer();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.startCommServer()" + " in " + duration + " ms");
 
 		pinara.startWebManager();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.startWebManager()" + " in " + duration + " ms");
 
 		if (!pinara.initMyra()) {
 			throw new Exception();
 		}
+		
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.initMyra()" + " in " + duration + " ms");
 
 		PinaraAppManagerImpl.initialize();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("PinaraAppManagerImpl.initialize()" + " in " + duration + " ms");
+
+		if(PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+			PinaraAppManagerImpl.setExecutionState(CoreStateInfo.STATE_WORKING);
+		}
 
 		pinara.sendStartUpInfos();
+		duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.sendStartUpInfos()" + " in " + duration + " ms");
+		System.out.println();
+
 	}
 
 	private static void checkStartUp() {

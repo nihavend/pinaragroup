@@ -434,8 +434,10 @@
 							<s:DataGrid id="stateHistory" width="95%" height="120" >
 								<s:columns>
 									<s:ArrayList>
-										<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" width="{this.stateHistory.width * 0.35}"/>
-										<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" />
+										<!-- width="{this.stateHistory.width * 0.35}" birinci kolon icin verince kolon başlık kısmı çizilemiyor. serkan...-->
+										
+										<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
+										<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}" />
 									</s:ArrayList>
 								</s:columns>
 							</s:DataGrid> 

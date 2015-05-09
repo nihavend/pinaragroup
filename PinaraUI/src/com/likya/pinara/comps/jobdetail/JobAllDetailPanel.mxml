@@ -258,8 +258,8 @@
 					<s:DataGrid id="stateHistory" width="55%" height="150" >
 						<s:columns>
 							<s:ArrayList>
-								<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" width="{this.stateHistory.width * 0.35}"/>
-								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" />
+								<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" />
+								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
 							</s:ArrayList>
 						</s:columns>
 					</s:DataGrid> 

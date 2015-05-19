@@ -66,13 +66,7 @@
       </annotation>
       <annotation name="original signature">
         <item name="returnType">opaque</item>
-        <item name="inputParamNames">jobId</item>
-        <item name="inputParams">string</item>
       </annotation>
-      <annotation name="Properties">
-        <item name="urlParamNames">jobId</item>
-      </annotation>
-      <parameter name="jobId" type="string"/>
     </function>
     <function name="start" return-type="opaque">
       <annotation name="analyze group">
@@ -199,52 +193,6 @@
       </annotation>
       <annotation name="url group">
         <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/retryjob/{jobId}</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">jobId</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <annotation name="Properties">
-        <item name="urlParamNames">jobId</item>
-      </annotation>
-      <parameter name="jobId" type="string"/>
-    </function>
-    <function name="enable" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">GET</item>
-        <item name="url">/flex/restsrvc/enablejob/{jobId}</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/enablejob/{jobId}</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">jobId</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <annotation name="Properties">
-        <item name="urlParamNames">jobId</item>
-      </annotation>
-      <parameter name="jobId" type="string"/>
-    </function>
-    <function name="disable" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">GET</item>
-        <item name="url">/flex/restsrvc/disablejob/{jobId}</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablejob/{jobId}</item>
       </annotation>
       <annotation name="original signature">
         <item name="returnType">opaque</item>
@@ -427,6 +375,91 @@
       <annotation name="original signature">
         <item name="returnType">opaque</item>
       </annotation>
+    </function>
+    <function name="enablegrp" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/enablegrp/{grpId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/enablegrp/{grpId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">grpId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">grpId</item>
+      </annotation>
+      <parameter name="grpId" type="string"/>
+    </function>
+    <function name="enable" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/enablejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/enablejob/{jobId}</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="disablegrp" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/disablegrp/{grpId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablegrp/{grpId}</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">grpId</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParamNames">grpId</item>
+        <item name="inputParams">string</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="grpId" type="string"/>
+    </function>
+    <function name="disable" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/disablejob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablejob/{jobId}</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
     </function>
   </service>
 </model>

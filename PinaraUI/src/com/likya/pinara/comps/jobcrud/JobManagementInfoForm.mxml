@@ -138,11 +138,11 @@
 		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
 	</s:FormItem>
 	
-	<s:BorderContainer id="timeBox" width="100%" height="160" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+	<s:BorderContainer id="timeBox" width="100%" height="125" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
 		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
 		
-		<s:FormItem label="Başlama Tarih ve Saati : " top="30">
+		<s:FormItem label="Başlama Tarih ve Saati : " top="20">
 			<s:HGroup>
 				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 				<s:TextInput  id="bhour"
@@ -168,33 +168,7 @@
 			</s:helpContent>
 		</s:FormItem>
 		
-<!--		<s:FormItem label="Bitiş Tarih ve Saati          :" top="60">
-			<s:HGroup>
-				<mx:DateField id="edate" top="50" left="10"  formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
-				<s:TextInput  id="ehour"
-							  text="23"
-							  restrict="0-23"
-							  widthInChars="3"
-							  maxChars="2" />
-				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<s:TextInput  id="eminute"
-							  text="59"
-							  restrict="0-59"
-							  widthInChars="3"
-							  maxChars="2" />	
-				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<s:TextInput  id="esecond"
-							  text="59"
-							  restrict="0-59"
-							  widthInChars="3"
-							  maxChars="2" />
-			</s:HGroup>
-			<s:helpContent>
-				<s:Label text="DD/MM/YYYY hh:mm:ss"/>
-			</s:helpContent>
-		</s:FormItem>-->
-		
-		<s:FormItem label="Time-out değeri               :" top="90">
+		<s:FormItem label="Time-out değeri               :" top="50">
 			<s:HGroup>
 				<s:TextInput  id="timoutValue"
 							  restrict="0-999999"
@@ -213,7 +187,7 @@
 			</s:HGroup>
 		</s:FormItem>
 
-		<s:FormItem label="Beklenen çalışma süresi:" top="120">
+		<s:FormItem label="Beklenen çalışma süresi:" top="80">
 			<s:HGroup>
 				<s:TextInput  id="expectedValue"
 							  restrict="0-999999"
@@ -234,11 +208,11 @@
 		
 	</s:BorderContainer>
 	
-	<s:BorderContainer id="cascCondBox" width="100%" height="240" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+	<s:BorderContainer id="cascCondBox" width="100%" height="230" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
 		<s:Label left="15" top="10" text="Cascading Conditions" fontSize="14" fontWeight="bold"/>
 		
-		<s:FormItem label="Run Even Failed" top="30">
+		<s:FormItem label="Run Even Failed" top="20">
 			<s:DropDownList id="runEvenFailed" width="120" selectedIndex="0"> 
 				<s:dataProvider>
 					<mx:ArrayList>
@@ -252,7 +226,7 @@
 			</s:helpContent>
 		</s:FormItem>
 		
-		<s:FormItem label="Is Safe To Restart" top="60">
+		<s:FormItem label="Is Safe To Restart" top="50">
 			<s:DropDownList id="safeToRestart" width="120" selectedIndex="0"> 
 				<s:dataProvider>
 					<mx:ArrayList>
@@ -266,7 +240,7 @@
 			</s:helpContent>
 		</s:FormItem>
 		
-		<s:BorderContainer id="auotRetryBox" left="10" top="100" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		<s:BorderContainer id="auotRetryBox" left="10" top="90" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 			
 			<s:Label left="15" top="10" text="Auto Retry Info" fontSize="14" fontWeight="bold"/>
 			

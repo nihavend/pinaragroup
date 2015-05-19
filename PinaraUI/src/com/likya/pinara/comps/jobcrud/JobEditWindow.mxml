@@ -171,7 +171,7 @@
 		<s:TabBar dataProvider="{vs}" width="750"/>
 		<!-- Define the ViewStack and the three child containers. -->
 		
-		<mx:ViewStack id="vs" width="100%" height="600" left="8" y="23" creationPolicy="all">
+		<mx:ViewStack id="vs" width="100%" height="550" left="8" y="23" creationPolicy="all">
 			
 			<s:NavigatorContent id="baseInfo" label="Base Information of Job">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">

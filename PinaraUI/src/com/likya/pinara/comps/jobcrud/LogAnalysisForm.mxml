@@ -134,7 +134,7 @@
 	<s:HGroup>
 		<utils:ToggleSwitch id="laToggle" selected="false" selectedLabel="Defined" deselectedLabel="Undefined" styleName="toggleSwitch" change="laToggle_changeHandler(event)" />
 		
-		<s:VGroup includeIn="defined">
+		<s:HGroup includeIn="defined">
 			<s:RadioButton group="{logAnalyseEnable}" 
 						   id="disableLA"
 						   value="false"
@@ -146,17 +146,17 @@
 						   selected="true"
 						   label="Enable Log Analyse" 
 						   width="200"/>
-		</s:VGroup>		
+		</s:HGroup>		
 	</s:HGroup>
 	
 	<s:Label visible="false" />
 	
 	
-	<s:BorderContainer id="findWhat" width="100%" height="120" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+	<s:BorderContainer id="findWhat" width="100%" height="90" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
 		
 		<s:Label left="15" top="10" text="Search Pattern Properties" fontSize="14" fontWeight="bold"/>
 		
-		<s:VGroup top="30">
+		<s:VGroup top="20" gap="-10">
 			
 			<s:HGroup top="30" gap="-20">
 				<s:FormItem label="Search Direction">

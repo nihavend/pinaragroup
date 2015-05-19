@@ -550,12 +550,14 @@ package com.likya.pinara.utils {
 
 			} else {
 				
+				var daysOfMonthXML:XML = <myra-jobprops:daysOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />;
+				
 				if(j.scheduleInfoForm.fdom.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:firstDayOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
+					daysOfMonthXML.appendChild(<myra-jobprops:firstDayOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
 				}
 
 				if(j.scheduleInfoForm.ldom.selected) {
-					scheduleInfoXML.appendChild(<myra-jobprops:lastDayOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
+					daysOfMonthXML.appendChild(<myra-jobprops:lastDayOfMonth xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
 				}
 				
 				if(j.scheduleInfoForm.specDays.text.length > 0) {
@@ -569,21 +571,25 @@ package com.likya.pinara.utils {
 							if(item.indexOf('-') > 0) {
 								var dashList:Array = item.split('-');
 								if(dashList.length == 1) {
-									scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[0]}</myra-jobprops:days>);
+									daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[0]}</myra-jobprops:days>);
 								} else if(dashList.length > 1) {
 									var counter:int = 0;								
 									for each (var dashitem:String in dashList) {
-										scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[counter ++]}</myra-jobprops:days>);
+										daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[counter ++]}</myra-jobprops:days>);
 									}
 								}
 							} else {
-								scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{item}</myra-jobprops:days>);
+								daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{item}</myra-jobprops:days>);
 							}
 						}
 					} else {
-						scheduleInfoXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{specDays}</myra-jobprops:days>);
+						daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{specDays}</myra-jobprops:days>);
 					}
 					
+				}
+				
+				if(daysOfMonthXML.children().length() != 0) {
+					scheduleInfoXML.appendChild(daysOfMonthXML);
 				}
 				
 				if(j.scheduleInfoForm.d1.selected) {

@@ -26,7 +26,7 @@ import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 public class Pinara extends PinaraBase {
 
 	public static final String CONFIG_PATH = "conf";
-	private static final String CONFIG_FILE = "pinaraConfig.xml";
+	public static final String CONFIG_FILE = "pinaraConfig.xml";
 	
 	public static final String DATA_PATH = "data";
 	
@@ -71,7 +71,7 @@ public class Pinara extends PinaraBase {
 			}
 		}
 	}
-
+	
 	private static ConfigurationManager loadConfig() {
 
 		ConfigurationManager configurationManager = new ConfigurationManagerImpl();
@@ -81,7 +81,7 @@ public class Pinara extends PinaraBase {
 		Path configFile = Paths.get(CONFIG_PATH + File.separator + CONFIG_FILE);
 
 		if (Files.notExists(configFile)) {
-			printerr("Dosya belirtilen dizinde bulunamadı : " + configFile.toString());
+			printlnerr("Dosya belirtilen dizinde bulunamadı : " + configFile.toString());
 			System.exit(-1);
 		}
 

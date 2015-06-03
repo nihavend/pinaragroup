@@ -26,8 +26,5 @@
 	<mcInfo>
 		<jmxPort>3002</jmxPort>
 	</mcInfo>
-<!-- 	<logFile>myra.log</logFile> -->
 	<logPath>logs</logPath>
 </pinaraConfig>
-	<!--  senaryoDosyasi>/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/2dep.xml</senaryoDosyasi>
-	<myraConfigFile>/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/myraConfig.xml</myraConfigFile -->

@@ -39,5 +39,11 @@
     	
     	<delete file="/Users/serkan/Desktop/pinara/flexroot/PinaraUI.swf"/>
     	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot/PinaraUI.swf" todir="/Users/serkan/Desktop/pinara/flexroot"/>
+    	
+       	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/start-no-tr.bat" todir="/Users/serkan/Desktop/pinara"/>
+       	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/start.bat" todir="/Users/serkan/Desktop/pinara"/>
+       	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/start.sh" todir="/Users/serkan/Desktop/pinara"/>
+       	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/README.txt" todir="/Users/serkan/Desktop/pinara"/>
+      
     </target>
 </project>

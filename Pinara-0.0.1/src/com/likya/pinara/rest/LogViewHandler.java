@@ -28,7 +28,7 @@ public class LogViewHandler extends FileViewHandler {
 			switch (viewTypeInfo.viewSubTypeText) {
 
 			case "pinaraConfig":
-				viewFile = confPath + "pinaraConfig.xml";
+				viewFile = confPath + Pinara.CONFIG_FILE;
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {

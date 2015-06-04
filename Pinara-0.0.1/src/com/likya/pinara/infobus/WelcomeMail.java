@@ -58,7 +58,7 @@ public class WelcomeMail extends MultipartMail {
 		multipart.addBodyPart(mimeBodyPartHtml);
 		
 		MimeBodyPart mimeBodyPartImage = new MimeBodyPart();
-		String imgUrl = "/webroot/img/likya_mail.jpg";
+		String imgUrl = "/com/likya/pinara/resources/likya_mail.jpg";
 		URL url = this.getClass().getResource(imgUrl);
 		// new
 		// URL("jar:file:/D:/tmp/LikyaTlosOrj.jar!/webroot/img/likya_mail.jpg")

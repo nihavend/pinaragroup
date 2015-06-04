@@ -1,7 +1,41 @@
 package com.likya.pinara.rest;
 
-public class GenericRestParser {
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
+
+public abstract class GenericRestParser {
+	
+	public static String getSwitchId(String bufferString, String uriTxt, InputStream inputStream) throws IOException {
+
+		ArrayList<Byte> byteArrLst = new ArrayList<Byte>();
+
+		byte b;
+		while ((b = (byte) inputStream.read()) != -1) {
+			// bufferString = bufferString + (char) i;
+			// barr[count ++] = b;
+			byteArrLst.add(b);
+		}
+
+		byte[] barr = new byte[byteArrLst.size()];
+
+		int count = 0;
+		for (Object mbyte : byteArrLst.toArray()) {
+			barr[count++] = ((Byte) mbyte).byteValue();
+		}
+
+		bufferString = new String(barr);
+
+		String restCommArr[] = uriTxt.split("/");
+
+		if (restCommArr.length == 0) {
+			return null;
+		}
+
+		return restCommArr[0];
+	}
+	
 	public static boolean isInteger(String str) {
 
 		if (str == null) {

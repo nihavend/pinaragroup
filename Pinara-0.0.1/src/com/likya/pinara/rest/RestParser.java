@@ -2,7 +2,6 @@ package com.likya.pinara.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gson.Gson;
@@ -33,24 +32,24 @@ public class RestParser extends GenericRestParser {
 
 	public static final String CMD_JOBLIST = "jobList";
 
-	public static final String CMD_STOPJOB = "stopjob";
-	public static final String CMD_STARTJOB = "startjob";
-	public static final String CMD_SETSUCCESSJOB = "setsuccessjob";
-	public static final String CMD_SKIPJOB = "skipjob";
-	public static final String CMD_PAUSEJOB = "pausejob";
-	public static final String CMD_RESUMEJOB = "resumejob";
-	public static final String CMD_RETRYJOB = "retryjob";
-	public static final String CMD_ENABLEJOB = "enablejob";
-	public static final String CMD_DISABLEJOB = "disablejob";
+	public static final String CMD_JOBSTOP = "stopjob";
+	public static final String CMD_JOBSTART = "startjob";
+	public static final String CMD_JOBSETSUCCESS = "setsuccessjob";
+	public static final String CMD_JOBSKIP = "skipjob";
+	public static final String CMD_JOBPAUSE = "pausejob";
+	public static final String CMD_JOBRESUME = "resumejob";
+	public static final String CMD_JOBRETRY = "retryjob";
+	public static final String CMD_JOBENABLE = "enablejob";
+	public static final String CMD_JOBDISABLE = "disablejob";
 
-	public static final String CMD_STOPAPP = "stopapp";
-	public static final String CMD_FSTOPAPP = "fstopapp";
-	public static final String CMD_SUSPENDAPP = "suspendapp";
-	public static final String CMD_RESUMEAPP = "resumeapp";
+	public static final String CMD_APPSTOP = "stopapp";
+	public static final String CMD_APPFSTOP = "fstopapp";
+	public static final String CMD_APPSUSPEND = "suspendapp";
+	public static final String CMD_APPRESUME = "resumeapp";
 
-	public static final String CMD_ADDJOB = "addjob";
-	public static final String CMD_UPDATEJOB = "updatejob";
-	public static final String CMD_DELETEJOB = "deletejob";
+	public static final String CMD_JOBADD = "addjob";
+	public static final String CMD_JOBUPDATE = "updatejob";
+	public static final String CMD_JOBDELETE = "deletejob";
 
 	public static final String CMD_AUTH = "authanticate";
 
@@ -59,9 +58,9 @@ public class RestParser extends GenericRestParser {
 
 	public static final String CMD_APPSTATE = "appstate";
 
-	public static final String CMD_ENABLEGRP = "enablegrp";
-	public static final String CMD_DISABLEGRP = "disablegrp";
-
+	public static final String CMD_GRPENABLE = "enablegrp";
+	public static final String CMD_GRPDISABLE = "disablegrp";
+	
 	public static byte[] parse(String uriTxt) {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
@@ -210,7 +209,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_STOPJOB:
+		case RestParser.CMD_JOBSTOP:
 			try {
 				PinaraAppManagerImpl.getInstance().stopJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -221,7 +220,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_STARTJOB:
+		case RestParser.CMD_JOBSTART:
 			try {
 				PinaraAppManagerImpl.getInstance().startJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -232,7 +231,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_SETSUCCESSJOB:
+		case RestParser.CMD_JOBSETSUCCESS:
 			try {
 				PinaraAppManagerImpl.getInstance().setSuccess(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -243,7 +242,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_SKIPJOB:
+		case RestParser.CMD_JOBSKIP:
 			try {
 				PinaraAppManagerImpl.getInstance().skipJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -254,7 +253,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_PAUSEJOB:
+		case RestParser.CMD_JOBPAUSE:
 			try {
 				PinaraAppManagerImpl.getInstance().pauseJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -265,7 +264,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_RESUMEJOB:
+		case RestParser.CMD_JOBRESUME:
 			try {
 				PinaraAppManagerImpl.getInstance().resumeJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -276,7 +275,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_RETRYJOB:
+		case RestParser.CMD_JOBRETRY:
 			try {
 				PinaraAppManagerImpl.getInstance().retryExecution(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -287,7 +286,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_ENABLEJOB:
+		case RestParser.CMD_JOBENABLE:
 			try {
 				PinaraAppManagerImpl.getInstance().enableJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -298,7 +297,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_DISABLEJOB:
+		case RestParser.CMD_JOBDISABLE:
 			try {
 				PinaraAppManagerImpl.getInstance().disableJob(restCommArr[1]);
 				retStr = "<result>OK</result>";
@@ -309,7 +308,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_STOPAPP:
+		case RestParser.CMD_APPSTOP:
 			try {
 				PinaraAppManagerImpl.getInstance().gracefulShutDown();
 				retStr = "<result>OK</result>";
@@ -319,7 +318,7 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 
-		case RestParser.CMD_FSTOPAPP:
+		case RestParser.CMD_APPFSTOP:
 			try {
 				PinaraAppManagerImpl.getInstance().forceFullShutDown();
 				retStr = "<result>OK</result>";
@@ -329,7 +328,7 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 
-		case RestParser.CMD_SUSPENDAPP:
+		case RestParser.CMD_APPSUSPEND:
 			try {
 				PinaraAppManagerImpl.getInstance().suspendApp();
 				coreStateInfo = PinaraAppManagerImpl.getExecutionState();
@@ -344,7 +343,7 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 
-		case RestParser.CMD_RESUMEAPP:
+		case RestParser.CMD_APPRESUME:
 			try {
 				PinaraAppManagerImpl.getInstance().resumeApp();
 				coreStateInfo = PinaraAppManagerImpl.getExecutionState();
@@ -387,7 +386,7 @@ public class RestParser extends GenericRestParser {
 			retStr = "<result>" + ManagementOperationsImpl.getExecutionState() + "</result>";
 			break;
 
-		case RestParser.CMD_ENABLEGRP:
+		case RestParser.CMD_GRPENABLE:
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				retStr = "Group id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + retStr + "</result>";
@@ -407,7 +406,7 @@ public class RestParser extends GenericRestParser {
 			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
 
-		case RestParser.CMD_DISABLEGRP:
+		case RestParser.CMD_GRPDISABLE:
 			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
 				retStr = "Group id not defined or invalid : " + uriTxt;
 				retStr = "<result>NOK : " + retStr + "</result>";
@@ -426,7 +425,7 @@ public class RestParser extends GenericRestParser {
 
 			// retStr = "<result>NOK : " + "Service not implemented !" + "</result>";
 			break;
-
+			
 		default:
 			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>";
 
@@ -444,41 +443,22 @@ public class RestParser extends GenericRestParser {
 
 	public static byte[] parsePost(String uriTxt, InputStream inputStream) throws IOException {
 
-		ArrayList<Byte> byteArrLst = new ArrayList<Byte>();
-
-		String bufferString = "";
-
-		byte b;
-		while ((b = (byte) inputStream.read()) != -1) {
-			// bufferString = bufferString + (char) i;
-			// barr[count ++] = b;
-			byteArrLst.add(b);
-		}
-
-		byte[] barr = new byte[byteArrLst.size()];
-
-		int count = 0;
-		for (Object mbyte : byteArrLst.toArray()) {
-			barr[count++] = ((Byte) mbyte).byteValue();
-		}
-
-		bufferString = new String(barr);
-
-		//System.out.println(bufferString);
-
-		String retStr = "";
-
-		String restCommArr[] = uriTxt.split("/");
-
+		
 		byte responseBytes[] = new byte[0];
 
-		if (restCommArr.length == 0) {
+		String bufferString = "";
+		
+		String switchId = getSwitchId(bufferString, uriTxt, inputStream);
+		
+		if (switchId == null) {
 			return responseBytes;
 		}
 
-		switch (restCommArr[0]) {
+		String retStr = "";
+		
+		switch (switchId) {
 
-		case RestParser.CMD_ADDJOB:
+		case RestParser.CMD_JOBADD:
 			try {
 				extractPostInfo(bufferString, (byte) 0x01);
 				retStr = "<message><result>OK</result></message>";
@@ -489,7 +469,7 @@ public class RestParser extends GenericRestParser {
 			//			responseBytes = retStr.getBytes();
 			break;
 
-		case RestParser.CMD_UPDATEJOB:
+		case RestParser.CMD_JOBUPDATE:
 			try {
 				extractPostInfo(bufferString, (byte) 0x02);
 				retStr = "<message><result>OK</result></message>";
@@ -499,7 +479,7 @@ public class RestParser extends GenericRestParser {
 			}
 			break;
 
-		case RestParser.CMD_DELETEJOB:
+		case RestParser.CMD_JOBDELETE:
 			try {
 				extractPostInfo(bufferString, (byte) 0x03);
 				retStr = "<message><result>OK</result></message>";
@@ -519,7 +499,7 @@ public class RestParser extends GenericRestParser {
 			break;
 
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>";
+			retStr = "<result>NOK : " + "Command not found : " + switchId + "</result>";
 
 			break;
 		}

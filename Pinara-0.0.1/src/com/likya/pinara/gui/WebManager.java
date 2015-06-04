@@ -8,6 +8,7 @@ import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.rest.FlexHandler;
 import com.likya.pinara.rest.GraphViewHandler;
 import com.likya.pinara.rest.LogViewHandler;
+import com.likya.pinara.rest.RestUserOps;
 import com.likya.pinara.rest.RestfulHandler;
 import com.likya.pinara.utils.PasswordService;
 import com.sun.net.httpserver.Authenticator;
@@ -22,7 +23,8 @@ public class WebManager {
 	private final String LOGVIEW_CTX = "logview";
 	public final static String GRAPHVIEW_CTX = "graphview";
 	public final static String RESTFUL_CTX = "flex/restsrvc";
-
+	public final static String RESTUSEROPS_CTX = "flex/restsrv/userops";
+	
 	private int httpPort;
 	private String hostName = "localhost";
 
@@ -127,6 +129,8 @@ public class WebManager {
 
 		HttpContext logDetailContext = server.createContext("/" + LOGVIEW_CTX, new LogViewHandler());
 		HttpContext graphViewContext = server.createContext("/" + GRAPHVIEW_CTX, new GraphViewHandler());
+		
+		HttpContext restuseropsContext = server.createContext("/" + RESTUSEROPS_CTX, new RestUserOps());
 
 		MyAuthenticator myAuthenticator = new MyAuthenticator("pinara");
 
@@ -134,6 +138,8 @@ public class WebManager {
 		restfulContext.setAuthenticator(myAuthenticator);
 		logDetailContext.setAuthenticator(myAuthenticator);
 		graphViewContext.setAuthenticator(myAuthenticator);
+		
+		restuseropsContext.setAuthenticator(myAuthenticator);
 
 		server.setExecutor(null); // creates a default executor
 		server.start();

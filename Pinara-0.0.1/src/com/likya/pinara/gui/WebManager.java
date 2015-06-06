@@ -1,7 +1,6 @@
 package com.likya.pinara.gui;
 
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 
 import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraAuthorization;
@@ -31,12 +30,12 @@ public class WebManager {
 	private String sessionUserName;
 	private String sessionPassWord;
 
-	private HashMap<String, PinaraAuthorization> authorizationList;
+	private PinaraAuthorization pinaraAuthorization;
 
 	MyAuthenticator myAuthenticator;
 
 	public WebManager() {
-		this.authorizationList = Pinara.getInstance().getConfigurationManager().getAuthorizationList();
+		this.pinaraAuthorization = Pinara.getInstance().getConfigurationManager().getPinaraAuthorization();
 		httpPort = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getHttpPort();
 		hostName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getServerIpAddress();
 	}
@@ -105,7 +104,7 @@ public class WebManager {
 					e.printStackTrace();
 					return false;
 				}
-				if (username != null && password != null && authorizationList.containsKey(username) && encryptedPassword.equals(authorizationList.get(username).getPassWord())) {
+				if (username != null && password != null && (pinaraAuthorization.readUser(username) != null) && encryptedPassword.equals(pinaraAuthorization.readUser(username).getPassword())) {
 					sessionUserName = username;
 					sessionPassWord = encryptedPassword;
 					return true;

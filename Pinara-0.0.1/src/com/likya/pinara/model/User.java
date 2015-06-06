@@ -2,17 +2,39 @@ package com.likya.pinara.model;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+import com.likya.pinara.utils.PasswordService;
 
+public class User implements Serializable {
+	
 	private static final long serialVersionUID = -5429269806185912759L;
 	
 	private int id;
-	private Role role;
+	private RoleInfo roleInfo;
 	
 	private String username;
 	private String password;
 	
-	private String viewRoleId;
+	// private String viewRoleId;
+
+	public enum RoleInfo {
+
+		ADMIN(10), OPERATION(20), VIEW(20);
+
+		public int value;
+
+		private RoleInfo(int value) {
+			this.value = value;
+		}
+
+	}
+	
+	public User(RoleInfo roleInfo, String username, String password) throws Exception {
+		super();
+		this.roleInfo = roleInfo;
+		this.username = username;
+		this.password = PasswordService.encrypt(password);
+		// this.viewRoleId = viewRoleId;
+	}
 
 	public int getId() {
 		return id;
@@ -22,14 +44,6 @@ public class User implements Serializable {
 		this.id = id;
 	}
 	
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
 	public String getUsername() {
 		return username;
 	}
@@ -42,15 +56,23 @@ public class User implements Serializable {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String password) throws Exception {
+		this.password = PasswordService.encrypt(password);
 	}
 
-	public String getViewRoleId() {
-		return viewRoleId;
+//	public String getViewRoleId() {
+//		return viewRoleId;
+//	}
+//
+//	public void setViewRoleId(String viewRoleId) {
+//		this.viewRoleId = viewRoleId;
+//	}
+
+	public RoleInfo getRoleInfo() {
+		return roleInfo;
 	}
 
-	public void setViewRoleId(String viewRoleId) {
-		this.viewRoleId = viewRoleId;
+	public void setRoleInfo(RoleInfo roleInfo) {
+		this.roleInfo = roleInfo;
 	}
 }

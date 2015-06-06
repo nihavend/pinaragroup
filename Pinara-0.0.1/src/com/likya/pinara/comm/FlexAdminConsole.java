@@ -16,9 +16,9 @@ public class FlexAdminConsole implements FlexAdminConsoleMBean {
 
 	public PinaraData showLogFile(PinaraConnection pinaraConnection, String jobId, Integer command) {
 
-		User user = new User();
-		user.setUsername(pinaraConnection.getMyName());
-		user.setPassword(pinaraConnection.getPassword());
+		// User user = new User();
+		// user.setUsername(pinaraConnection.getMyName());
+		// user.setPassword(pinaraConnection.getPassword());
 
 		PinaraData tlosData = new PinaraData();
 		tlosData.setTlosId(pinaraConnection.getId());
@@ -27,12 +27,12 @@ public class FlexAdminConsole implements FlexAdminConsoleMBean {
 		String viewFile = ""; //$NON-NLS-1$
 		String returnText = ""; //$NON-NLS-1$
 
-		if (authenticate(user)) {
+		//if (authenticate(user)) {
 			tlosData.setAuthenticated(true);
-		} else {
-			tlosData.setAuthenticated(false);
-			return tlosData;
-		}
+		//} else {
+		//	tlosData.setAuthenticated(false);
+		//	return tlosData;
+		// }
 
 		/*
 		 * if (command == PinaraData.POPUP_JOBSCRIPT) {
@@ -329,7 +329,7 @@ public class FlexAdminConsole implements FlexAdminConsoleMBean {
 	}
 
 	public PinaraData init(PinaraConnection pinaraConnection, String command) {
-		User user = new User();
+		// User user = new User();
 		/*
 		user.setUserName(tlosConnection.getUserName());
 		user.setUserPassword(tlosConnection.getTlosPassword());

@@ -23,8 +23,9 @@ import com.likya.pinara.infobus.WelcomeMail;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.LicenseInfo;
 import com.likya.pinara.model.PinaraAuthorization;
+import com.likya.pinara.model.User;
+import com.likya.pinara.model.User.RoleInfo;
 import com.likya.pinara.utils.AuthorizationLoader;
-import com.likya.pinara.utils.PasswordService;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
@@ -61,26 +62,24 @@ public abstract class PinaraBase {
 
 		final String authTxt = "pinara";
 
-		HashMap<String, PinaraAuthorization> authorizationList = null;
+		PinaraAuthorization pinaraAuthorization = null;
 
 		try {
-			authorizationList = AuthorizationLoader.readAuthorizationList();
+			pinaraAuthorization = AuthorizationLoader.readAuthorization();
 		} catch (Exception fnf) {
-			authorizationList = new HashMap<String, PinaraAuthorization>();
 			try {
-				PinaraAuthorization pinaraAuthorization = new PinaraAuthorization(authTxt, PasswordService.encrypt(authTxt));
-				authorizationList.put(authTxt, pinaraAuthorization);
+				pinaraAuthorization = new PinaraAuthorization();
+				pinaraAuthorization.addUser(new User(RoleInfo.ADMIN, authTxt, authTxt));
 			} catch (Exception e) {
 				logger.fatal(Pinara.getMessage("PinaraServer.3") + AuthorizationLoader.fileToPersist + Pinara.getMessage("PinaraServer.2"));
 				logger.fatal(Pinara.getMessage("PinaraServer.7"));
 				e.printStackTrace();
 				System.exit(-1);
 			}
-			AuthorizationLoader.persistAuthorizationList(authorizationList);
+			AuthorizationLoader.persistAuthorization(pinaraAuthorization);
 		}
 
-		configurationManager.setAuthorizationList(authorizationList);
-		configurationManager.setPinaraAuthorization(authorizationList.get("pinara"));
+		configurationManager.setPinaraAuthorization(pinaraAuthorization);
 
 		logger.info(Pinara.getMessage("PinaraServer.9"));
 

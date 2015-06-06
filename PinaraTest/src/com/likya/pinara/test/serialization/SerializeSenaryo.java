@@ -16,7 +16,10 @@ public class SerializeSenaryo {
 	
 	public static void main(String[] args) throws Exception {
 
-		String srcFile = "/Users/serkan/git/pinaragroup/Pinara-0.0.1/1.xml";
+		// String srcFile = "/Users/serkan/git/pinaragroup/Pinara-0.0.1/1.xml";
+		// String srcFile = "/Users/serkan/git/pinaragroup/Pinara-0.0.1/senaryo_win.xml";
+		// String srcFile = "/Users/serkan/git/localgit/TestDataFiles/data_orj/10dep2tree.xml";
+		String srcFile = "/Users/serkan/git/localgit/TestDataFiles/data_orj/3depV.xml";
 
 		StringBuffer xmlString = FileUtils.readFile(srcFile);
 

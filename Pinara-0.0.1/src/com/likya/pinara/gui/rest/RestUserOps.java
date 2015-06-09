@@ -2,7 +2,9 @@ package com.likya.pinara.gui.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
+import com.likya.pinara.Pinara;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
@@ -10,6 +12,7 @@ import com.likya.pinara.utils.xml.mappers.UserMapper;
 
 public class RestUserOps extends PinaraRestHandler {
 
+	public static final String CMD_USERLIST = "userlist";
 	public static final String CMD_USERREAD = "userread";
 	public static final String CMD_USERADD = "useradd";
 	public static final String CMD_USERUPDATE = "userupdate";
@@ -45,37 +48,51 @@ public class RestUserOps extends PinaraRestHandler {
 		if (switchId == null) {
 			return responseBytes;
 		}
+		
+		PinaraAuthorization pinaraAuthorization = Pinara.getInstance().getConfigurationManager().getPinaraAuthorization();
 
 		String retStr = "";
 		
 		switch (switchId) {
 		
+		case CMD_USERLIST:
+
+			ArrayList<User> userList = pinaraAuthorization.getUserList();
+			
+			if (userList.size() == 0) {
+				retStr = "<result>NOK : " + "No user in list, it is abnormal !</result>";
+			} else {
+				retStr = UserMapper.getMapped(userList);
+			}
+			
+			break;
+			
 		case CMD_USERREAD:
 
-//			if (restCommArr.length != 2 || !isInteger(restCommArr[1])) {
-//				// retStr = "Job id not defined or invalid : " + uriTxt;
-//				retStr = "<result>NOK : " + "Job id not defined or invalid : " + uriTxt + "</result>";
-//				//				responseBytes = retStr.getBytes();
-//				break;
-//			}
-//
-//			int jobId = Integer.parseInt(restCommArr[1]);
-//			// System.err.println("Job Id : " + jobId);
-//			// retStr = FileUtils.readFile(xmlPath + "jobDetail.xml").toString();
-//
-//			try {
-//				retStr = JobDetailMapper.getMapped(PinaraAppManagerImpl.getInstance().getJob("" + jobId).getAbstractJobType());
-//			} catch (PinaraAuthenticationException e1) {
-//				e1.printStackTrace();
-//			}
-			//			responseBytes = retStr.getBytes();
+			responseBytes = retStr.getBytes();
 			
-			int userId = Integer.parseInt(paramBuff.toString().split("=")[1]);
+			String paramName = paramBuff.toString().split("=")[0];
+			String paramValue = paramBuff.toString().split("=")[1];
 			
-			User user = new PinaraAuthorization().readUser(userId);
+			User user = null;
+			
+			switch (paramName) {
+			
+			case "id":
+				int userId = Integer.parseInt(paramValue);
+				user = pinaraAuthorization.readUser(userId);
+				break;
+
+			case "username":
+				String userName = paramValue;
+				user = pinaraAuthorization.readUser(userName);
+				break;
+			default:
+				break;
+			}
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "User id not defined or invalid : " + userId + "</result>";
+				retStr = "<result>NOK : " + "User " + paramName + " not defined or invalid : " + paramValue + "</result>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -83,37 +100,43 @@ public class RestUserOps extends PinaraRestHandler {
 			break;
 			
 		case CMD_USERADD:
-//			try {
-//				extractPostInfo(bufferString, (byte) 0x01);
-//				retStr = "<message><result>OK</result></message>";
-//			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
-//				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
-//				e.printStackTrace();
-//			}
-			//			responseBytes = retStr.getBytes();
 			
-			// UserOperations..addUser(abstractJobType, persist);
+			user = UserMapper.parseUser(paramBuff.toString());
+			user = pinaraAuthorization.addUser(user);
+			
+			if (user == null) {
+				retStr = "<result>NOK : " + "UserInfo not well formed or invalid : " + paramBuff + "</result>";
+			} else {
+				retStr = UserMapper.getMapped(user);
+			}
+			
 			break;
 
 		case CMD_USERUPDATE:
-//			try {
-//				extractPostInfo(bufferString, (byte) 0x02);
-//				retStr = "<message><result>OK</result></message>";
-//			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
-//				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
-//				e.printStackTrace();
-//			}
-			// UserOperations.updateUser(abstractJobType, persist);
+			
+			user = UserMapper.parseUser(paramBuff.toString());
+			user = pinaraAuthorization.updateUser(user);
+			
+			if (user == null) {
+				retStr = "<result>NOK : " + "UserInfo not well formed or invalid : " + paramBuff + "</result>";
+			} else {
+				retStr = UserMapper.getMapped(user);
+			}
+			
 			break;
 
 		case CMD_USERDELETE:
-//			try {
-//				extractPostInfo(bufferString, (byte) 0x03);
-//				retStr = "<message><result>OK</result></message>";
-//			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
-//				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
-//				e.printStackTrace();
-//			}
+			
+			paramValue = paramBuff.toString().split("=")[1];
+			int userId = Integer.parseInt(paramValue);
+			user = pinaraAuthorization.deleteUser(userId);
+			
+			if (user == null) {
+				retStr = "<result>NOK : " + "User id not defined or invalid : " + paramValue + "</result>";
+			} else {
+				retStr = UserMapper.getMapped(user);
+			}
+			
 			break;
 			
 		default:

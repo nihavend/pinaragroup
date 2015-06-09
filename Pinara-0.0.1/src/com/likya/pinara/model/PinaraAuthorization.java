@@ -1,32 +1,108 @@
 package com.likya.pinara.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+
+import com.likya.commons.utils.SortUtils;
+import com.likya.pinara.utils.AuthorizationLoader;
 
 public class PinaraAuthorization implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String userName;
-	private String passWord;
+	private HashMap<String, User> userMap = new HashMap<String, User>();
+	
+	/**
+	 * @param userName
+	 * @return user, null on error
+	 */
+	public synchronized User readUser(String userName) {
+		
+		for(User user : userMap.values()) {
+			if(user.getUsername().equals(userName)) {
+				return user;
+			}
+		}
+		
+		return null;
+	}
 
-	public PinaraAuthorization(String userName, String passWord) {
-		this.userName = userName;
-		this.passWord = passWord;
+	/**
+	 * @param id
+	 * @return user, null on error
+	 */
+	public synchronized User readUser(int id) {
+		
+		String idStr = "" + id;
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		return userMap.get(idStr);
 	}
 	
-	public String getUserName() {
-		return userName;
-	}
+	/**
+	 * @param user
+	 * @return added user, null on error
+	 */
+	public synchronized User addUser(User user) {
+		
+		if(userMap.containsKey(user.getId())) {
+			return null;
+		}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+		int maxId = 1;
+		if(userMap.size() > 0) {
+			String [] idArray = SortUtils.sortKeys(userMap.keySet());
+			maxId = Integer.parseInt(idArray[idArray.length - 1]);
+		}
+		
+		user.setId(maxId + 1);
+		
+		userMap.put("" + user.getId(), user);
+		
+		AuthorizationLoader.persistAuthorization(this);
+		
+		return user;
 	}
-
-	public String getPassWord() {
-		return passWord;
+	
+	/**
+	 * @param user
+	 * @return updated user, null on error
+	 */
+	public synchronized User updateUser(User user) {
+		
+		String idStr = "" + user.getId();
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		userMap.put(idStr, user);
+		
+		AuthorizationLoader.persistAuthorization(this);
+		
+		return user;
 	}
-
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	
+	/**
+	 * @param user
+	 * @return deleted user, null on error
+	 */
+	public synchronized User deleteUser(User user) {
+		
+		String idStr = "" + user.getId();
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		userMap.remove(idStr);
+		
+		AuthorizationLoader.persistAuthorization(this);
+		
+		return user;
 	}
+	
 }

@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 
 import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraAuthorization;
@@ -15,24 +14,23 @@ public class AuthorizationLoader {
 
 	public static String fileToPersist = Pinara.DATA_PATH + File.separator + "Pinara.authorization";
 
-	@SuppressWarnings("unchecked")
-	public static HashMap<String, PinaraAuthorization> readAuthorizationList() throws Exception {
+	public static PinaraAuthorization readAuthorization() throws Exception {
 
 		FileInputStream fis = null;
 		ObjectInputStream in = null;
-		HashMap<String, PinaraAuthorization> pinaraAuthorizationList;
+		PinaraAuthorization pinaraAuthorization;
 
 		fis = new FileInputStream(fileToPersist);
 		in = new ObjectInputStream(fis);
 		Object input = in.readObject();
 
-		pinaraAuthorizationList = (HashMap<String, PinaraAuthorization>) input;
+		pinaraAuthorization = (PinaraAuthorization) input;
 		in.close();
 
-		return pinaraAuthorizationList;
+		return pinaraAuthorization;
 	}
 
-	public static boolean persistAuthorizationList(HashMap<String, PinaraAuthorization> pinaraAuthorizationList) {
+	public static boolean persistAuthorization(PinaraAuthorization pinaraAuthorization) {
 
 		FileOutputStream fos = null;
 		ObjectOutputStream out = null;
@@ -40,7 +38,7 @@ public class AuthorizationLoader {
 		try {
 			fos = new FileOutputStream(fileToPersist);
 			out = new ObjectOutputStream(fos);
-			out.writeObject(pinaraAuthorizationList);
+			out.writeObject(pinaraAuthorization);
 			out.close();
 
 		} catch (IOException ex) {

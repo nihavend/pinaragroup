@@ -2,7 +2,7 @@ package com.likya.pinara.utils.xml.mappers;
 
 import java.util.ArrayList;
 
-import com.likya.pinara.rest.FileViewHandler.FileTypeInfo;
+import com.likya.pinara.gui.rest.FileViewHandler.FileTypeInfo;
 
 public class LogViewResponseMapper {
 

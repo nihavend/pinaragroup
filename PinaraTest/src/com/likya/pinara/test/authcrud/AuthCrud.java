@@ -10,7 +10,7 @@ import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
 
 
-public class AuthCrud extends TestCase {
+public class AuthCrud extends TestCase implements AuthCrudInterface {
 	
 	private PinaraAuthorization pinaraAuthorization;
 	private User sampleUser;

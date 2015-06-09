@@ -1,6 +1,7 @@
 package com.likya.pinara.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.likya.commons.utils.SortUtils;
@@ -11,6 +12,31 @@ public class PinaraAuthorization implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private HashMap<String, User> userMap = new HashMap<String, User>();
+	
+	/**
+	 * @return user list
+	 */
+	public synchronized ArrayList<User> getUserList() {
+		
+		ArrayList<User> userList = new ArrayList<User>(userMap.values());
+		
+		return userList;
+	}
+	
+	/**
+	 * @param id
+	 * @return user, null on error
+	 */
+	public synchronized User readUser(int id) {
+		
+		String idStr = "" + id;
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		return userMap.get(idStr);
+	}
 	
 	/**
 	 * @param userName
@@ -25,21 +51,6 @@ public class PinaraAuthorization implements Serializable {
 		}
 		
 		return null;
-	}
-
-	/**
-	 * @param id
-	 * @return user, null on error
-	 */
-	public synchronized User readUser(int id) {
-		
-		String idStr = "" + id;
-		
-		if(!userMap.containsKey(idStr)) {
-			return null;
-		}
-		
-		return userMap.get(idStr);
 	}
 	
 	/**
@@ -99,6 +110,25 @@ public class PinaraAuthorization implements Serializable {
 		}
 		
 		userMap.remove(idStr);
+		
+		AuthorizationLoader.persistAuthorization(this);
+		
+		return user;
+	}
+	
+	/**
+	 * @param id
+	 * @return deleted user, null on error
+	 */
+	public synchronized User deleteUser(int id) {
+		
+		String idStr = "" + id;
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		User user = userMap.remove(idStr);
 		
 		AuthorizationLoader.persistAuthorization(this);
 		

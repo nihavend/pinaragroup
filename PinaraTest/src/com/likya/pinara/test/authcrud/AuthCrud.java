@@ -1,5 +1,7 @@
 package com.likya.pinara.test.authcrud;
 
+import java.util.ArrayList;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -39,6 +41,12 @@ public class AuthCrud extends TestCase {
 		
 	}
 
+	public void testSimpleGetUserList() {
+		ArrayList<User> userList = pinaraAuthorization.getUserList();
+		
+		Assert.assertTrue(userList.size() > 0);
+	}
+	
 	public void testSimpleReadWithId() {
 		User tmpUser = pinaraAuthorization.readUser(recordId);
 		Assert.assertNotNull(tmpUser);
@@ -56,6 +64,11 @@ public class AuthCrud extends TestCase {
 	
 	public void testSimpleDelete() {
 		User tmpUser = pinaraAuthorization.deleteUser(sampleUser);
+		Assert.assertNotNull(tmpUser);
+	}
+	
+	public void testSimpleDeleteWithId() {
+		User tmpUser = pinaraAuthorization.deleteUser(recordId);
 		Assert.assertNotNull(tmpUser);
 	}
 }

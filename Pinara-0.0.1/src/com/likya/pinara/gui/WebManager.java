@@ -3,12 +3,12 @@ package com.likya.pinara.gui;
 import java.net.InetSocketAddress;
 
 import com.likya.pinara.Pinara;
+import com.likya.pinara.gui.rest.FlexHandler;
+import com.likya.pinara.gui.rest.GraphViewHandler;
+import com.likya.pinara.gui.rest.LogViewHandler;
+import com.likya.pinara.gui.rest.RestUserOps;
+import com.likya.pinara.gui.rest.RestfulHandler;
 import com.likya.pinara.model.PinaraAuthorization;
-import com.likya.pinara.rest.FlexHandler;
-import com.likya.pinara.rest.GraphViewHandler;
-import com.likya.pinara.rest.LogViewHandler;
-import com.likya.pinara.rest.RestUserOps;
-import com.likya.pinara.rest.RestfulHandler;
 import com.likya.pinara.utils.PasswordService;
 import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.BasicAuthenticator;

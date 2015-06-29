@@ -188,7 +188,6 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation.method = "GET";
          argsArray = new Array("jobId");
          operation.argumentNames = argsArray;         
-		 operation.serializationFilter = serializer0;
          operation.properties = new Object();
          operation.properties["urlParamNames"] = ["jobId"];
          operation.resultType = Object;
@@ -199,7 +198,6 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation.method = "GET";
          argsArray = new Array("grpId");
          operation.argumentNames = argsArray;         
-		 operation.serializationFilter = serializer0;
          operation.properties = new Object();
          operation.properties["urlParamNames"] = ["grpId"];
          operation.resultType = Object;
@@ -210,7 +208,6 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation.method = "GET";
          argsArray = new Array("jobId");
          operation.argumentNames = argsArray;         
-		 operation.serializationFilter = serializer0;
          operation.properties = new Object();
          operation.properties["urlParamNames"] = ["jobId"];
          operation.resultType = Object;

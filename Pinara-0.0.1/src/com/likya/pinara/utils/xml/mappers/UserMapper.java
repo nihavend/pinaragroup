@@ -109,4 +109,40 @@ public class UserMapper {
 		return testUser;
 		
 	}
+	
+	public static String [] parsePassChangeDataWithId(String xmlData) {
+		
+		String passData = xmlData.split("<xmldata>")[1].split("</xmldata>")[0];
+		
+		String id = passData.split("<id>")[1].split("</id>")[0];
+		String oldpass = passData.split("<oldpass>")[1].split("</oldpass>")[0];
+		String newpass = passData.split("<newpass>")[1].split("</newpass>")[0];
+
+		String retArray [] = new String[3];
+		
+		retArray[0] = id;
+		retArray[1] = oldpass;
+		retArray[2] = newpass;
+		
+		return retArray;
+		
+	}
+	
+	public static String [] parsePassChangeDataWithUsername(String xmlData) {
+		
+		String passData = xmlData.split("<xmldata>")[1].split("</xmldata>")[0];
+		
+		String id = passData.split("<username>")[1].split("</username>")[0];
+		String oldpass = passData.split("<oldpass>")[1].split("</oldpass>")[0];
+		String newpass = passData.split("<newpass>")[1].split("</newpass>")[0];
+
+		String retArray [] = new String[3];
+		
+		retArray[0] = id;
+		retArray[1] = oldpass;
+		retArray[2] = newpass;
+		
+		return retArray;
+		
+	}
 }

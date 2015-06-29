@@ -71,4 +71,15 @@ public class AuthCrud extends TestCase implements AuthCrudInterface {
 		User tmpUser = pinaraAuthorization.deleteUser(recordId);
 		Assert.assertNotNull(tmpUser);
 	}
+
+	public void testChangePasswordWithId() {
+		User tmpUser = pinaraAuthorization.changePassword(recordId, "pinara", "dummy");
+		Assert.assertNotNull(tmpUser);
+	}
+	
+	public void testChangePasswordWithUsername() {
+		User tmpUser = pinaraAuthorization.changePassword(sampleUser.getUsername(), "pinara", "dummy");
+		Assert.assertNotNull(tmpUser);
+	}
+
 }

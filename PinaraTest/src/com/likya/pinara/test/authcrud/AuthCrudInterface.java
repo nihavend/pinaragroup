@@ -16,4 +16,9 @@ public interface AuthCrudInterface {
 	public void testSimpleDelete();
 	
 	public void testSimpleDeleteWithId();
+	
+	public void testChangePasswordWithId();
+	
+	public void testChangePasswordWithUsername();
+	
 }

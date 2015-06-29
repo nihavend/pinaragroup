@@ -17,6 +17,7 @@ public class RestUserOps extends PinaraRestHandler {
 	public static final String CMD_USERADD = "useradd";
 	public static final String CMD_USERUPDATE = "userupdate";
 	public static final String CMD_USERDELETE = "userdelete";
+	public static final String CMD_CHANGEPASS = "changepass";
 	
 	public byte[] doWork(boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
 
@@ -133,6 +134,20 @@ public class RestUserOps extends PinaraRestHandler {
 			
 			if (user == null) {
 				retStr = "<result>NOK : " + "User id not defined or invalid : " + paramValue + "</result>";
+			} else {
+				retStr = UserMapper.getMapped(user);
+			}
+			
+			break;
+			
+		case CMD_CHANGEPASS:
+			
+			String [] dataArray = UserMapper.parsePassChangeDataWithUsername(paramBuff.toString());
+			
+			user = pinaraAuthorization.changePassword(dataArray[0], dataArray[1], dataArray[2]);
+			
+			if (user == null) {
+				retStr = "<result>NOK : " + "password change is unsuccessful : " + paramBuff + "</result>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}

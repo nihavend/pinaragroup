@@ -8,13 +8,15 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.comps.crud.user.ChangePass;
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.main.PinaraUI;
+			import com.likya.pinara.model.UserInfo;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
-			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.controls.menuClasses.MenuBarItem;
 			import mx.core.FlexGlobals;
@@ -160,7 +162,36 @@
 					showCloneJob();
 				} else if(event.label == resourceManager.getString("messages", "deleteJob")) {
 					Alert.show(resourceManager.getString("messages", "confirmDelete"), warningStr, Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+				} else if(event.label == resourceManager.getString("messages", "changePassword")) {
+					showChangePass();
+				} else if(event.label == resourceManager.getString("messages", "addUser")) {
+					// showAddUser();
+				} else if(event.label == resourceManager.getString("messages", "editUser")) {
+					// showEditUser();
+				} else if(event.label == resourceManager.getString("messages", "cloneUser")) {
+					// showCloneUser();
+				} else if(event.label == resourceManager.getString("messages", "deleteUser")) {
+					// Alert.show(resourceManager.getString("messages", "confirmDelete"), warningStr, Alert.OK|Alert.CANCEL, this, checkConfirmDelete, null, Alert.CANCEL);
 				}
+			}
+
+			private function showChangePass():void {
+				
+				var changePassWindow:ChangePass = PopUpManager.createPopUp(this, ChangePass, true) as ChangePass;
+				
+				changePassWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
+				
+				changePassWindow.title =  resourceManager.getString('messages', 'windowTitle');
+				
+				changePassWindow.userNameLbl = resourceManager.getString('messages', 'userName');
+				changePassWindow.oldPassLbl = resourceManager.getString('messages', 'oldPassword');
+				changePassWindow.newPassLbl = resourceManager.getString('messages', 'newPassword');
+				changePassWindow.confNewPassLbl = resourceManager.getString('messages', 'confirmNewPassword');
+				changePassWindow.okBtnLbl = resourceManager.getString('messages', 'change');
+				changePassWindow.cnclBtnLbl = resourceManager.getString('messages', 'cancel');
+				
+				PopUpManager.centerPopUp(changePassWindow);
+				changePassWindow.setFocus();
 			}
 			
 			private function showAddJob():void {
@@ -336,7 +367,7 @@
 	<fx:Declarations>
 		
 		<fx:XMLList id="menuDataXMLList">
-			<menuitem label="Ana Sayfa" id="anasayfa"/>
+			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/>
 			<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
 			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.VIEW}">			
 				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
@@ -346,7 +377,7 @@
 				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
 				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>
 			</menuitem>
-			<menuitem label="{resourceManager.getString('messages', 'admin')}" id="admin" role="{UserRole.ADMIN}">
+			<menuitem label="{resourceManager.getString('messages', 'management')}" id="admin" role="{UserRole.ADMIN}">
 				<menuitem label="{resourceManager.getString('messages', 'suspendApp')}" id="suspendApp"/>
 				<!--menuitem label="{resourceManager.getString('messages', 'resumeApp')}" id="resumeApp"/-->
 				<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
@@ -361,6 +392,13 @@
 				<menuitem label="{resourceManager.getString('messages', 'editJob')}" id="editJob" enabled="false"/>			
 				<menuitem label="{resourceManager.getString('messages', 'deleteJob')}" id="deleteJob" enabled="false"/>
 				<menuitem label="{resourceManager.getString('messages', 'cloneJob')}" id="cloneJob" enabled="false"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'manageUsers')}" id="jobOps" role="{UserRole.ADMIN}">			
+				<menuitem label="{resourceManager.getString('messages', 'changePassword')}" id="changePassword" />			
+				<menuitem label="{resourceManager.getString('messages', 'addUser')}" id="addUser" enabled="false"/>			
+				<menuitem label="{resourceManager.getString('messages', 'editUser')}" id="editUser" enabled="false"/>
+				<menuitem label="{resourceManager.getString('messages', 'deleteUser')}" id="deleteUser" enabled="false"/>
+				<menuitem label="{resourceManager.getString('messages', 'cloneUser')}" id="cloneUser" enabled="false"/>
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'help')}" id="help" role="{UserRole.VIEW}">			
 				<menuitem label="{resourceManager.getString('messages', 'userGuide')}"/>			

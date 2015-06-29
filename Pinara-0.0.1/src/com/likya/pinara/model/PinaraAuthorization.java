@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.likya.commons.utils.SortUtils;
 import com.likya.pinara.utils.AuthorizationLoader;
+import com.likya.pinara.utils.PasswordService;
 
 public class PinaraAuthorization implements Serializable {
 
@@ -134,5 +135,51 @@ public class PinaraAuthorization implements Serializable {
 		
 		return user;
 	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param oldPass
+	 * @param newPass
+	 * @return
+	 */
+	
+	public synchronized User changePassword(int id, String oldPass, String newPass) {
+
+		String idStr = "" + id;
+
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		User user = userMap.get(idStr);
+		
+		try {
+			if(user.getPassword().equals(PasswordService.encrypt(oldPass))) {
+				user.setPassword(newPass);
+				updateUser(user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return user; 
+	}
+	
+	/**
+	 * 
+	 * @param userName
+	 * @param oldPass
+	 * @param newPass
+	 * @return
+	 */
+	public synchronized User changePassword(String userName, String oldPass, String newPass) {
+		
+		User user = readUser(userName);
+	
+		return changePassword(user.getId(), oldPass, newPass);
+	}
+
 	
 }

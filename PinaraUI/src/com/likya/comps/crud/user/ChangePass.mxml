@@ -4,13 +4,12 @@
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   close="handleCloseEvent()"
 			   keyDown="titleWindow_keyDown(event);"
-			   width="400" height="300" xmlns:userops="com.likya.pinara.services.userops.*">
+			   width="320" height="200" xmlns:userops="com.likya.pinara.services.userops.*">
 	
 	
 	<fx:Script>
 		<![CDATA[
-			import com.likya.pinara.main.PinaraUI;
-			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.controls.Alert;
@@ -20,7 +19,7 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.Validator;
-
+			
 			[Bindable]
 			public var currentUser:String;
 			[Bindable]
@@ -47,7 +46,6 @@
 			}
 			
 			private function validateChangePassword():Boolean {
-				userNameValidator.source = userName;
 				oldPasswordValidator.source = oldPassword;
 				newPasswordValidator.source = newPassword;
 				confirmNewPasswordValidator.source = confirmNewPassword;
@@ -61,12 +59,11 @@
 			
 			private function passwordValidationError():int {
 				var totalError:int = 0;
-				var userNameValidationArray:Array = Validator.validateAll([userNameValidator]);
 				var oldPasswordValidationArray:Array = Validator.validateAll([oldPasswordValidator]);
 				var newPasswordValidationArray:Array = Validator.validateAll([newPasswordValidator]);
 				var confirmNewPasswordValidatorionArray:Array = Validator.validateAll([confirmNewPasswordValidator]);
 				
-				totalError = userNameValidationArray.length + oldPasswordValidationArray.length + newPasswordValidationArray.length + confirmNewPasswordValidatorionArray.length;
+				totalError = oldPasswordValidationArray.length + newPasswordValidationArray.length + confirmNewPasswordValidatorionArray.length;
 				
 				return totalError;
 			}
@@ -103,7 +100,7 @@
 				var packedResponse:XML = XML("<xmldata><username>" + currentUser + "</username><oldpass>" + oldPassword.text + "</oldpass><newpass>" + newPassword.text + "</newpass></xmldata>");
 				
 				BasicAuthenticationHandler.authAndCall(userOpsService, "changepass", packedResponse);
-
+				
 				// refreshAfter();
 			}
 			
@@ -119,8 +116,8 @@
 			
 			protected function userOpsService_resultHandler(event:ResultEvent):void
 			{
-				// TODO Auto-generated method stub
-				
+				handleCloseEvent();
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 			}
 			
 			protected function userOpsService_faultHandler(event:FaultEvent):void
@@ -134,15 +131,6 @@
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
-		
-		
-		<mx:StringValidator id="userNameValidator"
-							source="{userName}"
-							property="text"  
-							required="true"
-							maxLength="10" 
-							tooLongError="{resourceManager.getString('messages', 'tlosUserNameValidatorMessage')}" 
-							requiredFieldError="{resourceManager.getString('messages', 'requiredMessage')}"/>
 		
 		<mx:StringValidator id="oldPasswordValidator" 
 							source="{oldPassword}" 
@@ -167,31 +155,37 @@
 							maxLength="10" 
 							tooLongError="{resourceManager.getString('messages', 'passwordValidatorMessage')}"
 							requiredFieldError="{resourceManager.getString('messages', 'requiredMessage')}"/>
-
+		
 		
 		<userops:UserOps id="userOpsService" result="userOpsService_resultHandler(event)" fault="userOpsService_faultHandler(event)" />
 		<s:CallResponder id="changePass"/>
 		
 	</fx:Declarations>
 	
-		<s:Group id="currentView" width="100%" height="100%">
-			
-			<s:Label x="27" y="21" text="{userNameLbl}"/>
-			<s:TextInput id="userName" x="170" y="15"/>
-			
-			<s:Label x="27" y="51" text="{oldPassLbl}"/>
-			<s:TextInput id="oldPassword" x="170" y="45" displayAsPassword="true" />
-			
-			<s:Label x="27" y="81" text="{newPassLbl}"/>			
-			<s:TextInput id="newPassword" x="170" y="75" displayAsPassword="true" />
-			
-			<s:Label x="27" y="111" text="{confNewPassLbl}"/>			
-			<s:TextInput id="confirmNewPassword" x="170" y="105" displayAsPassword="true" />
-			
-			<s:Button x="170" y="141" label="{okBtnLbl}" click="changePassword_clickHandler(event)"/>
-			
-			<s:Button x="270" y="141" label="{cnclBtnLbl}" click="handleCloseEvent()"/>
-			
-		</s:Group>
+	<s:Group id="currentView" width="100%" height="100%">
 		
+		<s:Label x="27" y="21" text="{oldPassLbl}"/>
+		<s:TextInput id="oldPassword" x="170" y="15" displayAsPassword="true" />
+		
+		<s:Label x="27" y="51" text="{newPassLbl}"/>			
+		<s:TextInput id="newPassword" x="170" y="45" displayAsPassword="true" />
+		
+		<s:Label x="27" y="81" text="{confNewPassLbl}"/>			
+		<s:TextInput id="confirmNewPassword" x="170" y="75" displayAsPassword="true" />
+		
+		<!--			<s:Button x="100" y="121" label="{okBtnLbl}" click="changePassword_clickHandler(event)"/>
+		
+		<s:Button x="200" y="121" label="{cnclBtnLbl}" click="handleCloseEvent()"/>
+		-->
+	</s:Group>
+	
+	<s:BorderContainer y="135" width="100%" height="20%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="gray">
+		<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="90">
+			<s:Button label="{okBtnLbl}"
+					  click="changePassword_clickHandler(event);" /> 
+			<s:Button label="{cnclBtnLbl}"
+					  click="handleCloseEvent();"/> 
+		</s:HGroup>
+	</s:BorderContainer>
+	
 </s:TitleWindow>

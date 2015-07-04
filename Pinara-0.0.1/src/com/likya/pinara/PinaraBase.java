@@ -25,6 +25,7 @@ import com.likya.pinara.model.LicenseInfo;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.AuthorizationLoader;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
@@ -69,7 +70,7 @@ public abstract class PinaraBase {
 		} catch (Exception fnf) {
 			try {
 				pinaraAuthorization = new PinaraAuthorization();
-				pinaraAuthorization.addUser(new User(RoleInfo.ADMIN, authTxt, authTxt));
+				pinaraAuthorization.addUser(new User(RoleInfo.ADMIN, StatuInfo.ACTIVE, authTxt, authTxt));
 			} catch (Exception e) {
 				logger.fatal(Pinara.getMessage("PinaraServer.3") + AuthorizationLoader.fileToPersist + Pinara.getMessage("PinaraServer.2"));
 				logger.fatal(Pinara.getMessage("PinaraServer.7"));

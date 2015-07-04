@@ -28,8 +28,10 @@
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
+			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
@@ -39,6 +41,7 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.Base64Encoder;
+			
 			
 			
 			[Bindable]
@@ -396,6 +399,24 @@
 					returnTxt = String(event.result)
 				}
 				
+			}
+			
+			private function adminRoleFilter(item:XML):Boolean {
+				return true;
+			}
+			
+			private function operationRoleFilter(item:XML):Boolean {
+				var operationStr:String = UserRole.OPERATION;
+				var viewStr:String = UserRole.VIEW;
+				var itemRole:String = item.@role;
+				
+				return itemRole == operationStr || itemRole == viewStr;
+			}
+			
+			private function viewRoleFilter(item:XML):Boolean {
+				var viewStr:String = UserRole.VIEW;
+				
+				return item.@role == viewStr;
 			}
 			
 		]]>

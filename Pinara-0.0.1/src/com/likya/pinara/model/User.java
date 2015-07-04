@@ -10,15 +10,14 @@ public class User implements Serializable {
 	
 	private int id;
 	private RoleInfo roleInfo;
+	private StatuInfo statuInfo;
 	
 	private String username;
 	private String password;
 	
-	// private String viewRoleId;
-
 	public enum RoleInfo {
 
-		ADMIN(10), OPERATION(20), VIEW(20);
+		ADMIN(10), OPERATION(20), VIEW(30);
 
 		public int value;
 
@@ -27,13 +26,25 @@ public class User implements Serializable {
 		}
 
 	}
+
+	public enum StatuInfo {
+
+		ACTIVE(10), DEACTIVE(20);
+
+		public int value;
+
+		private StatuInfo(int value) {
+			this.value = value;
+		}
+
+	}
 	
-	public User(RoleInfo roleInfo, String username, String password) throws Exception {
+	public User(RoleInfo roleInfo, StatuInfo statuInfo, String username, String password) throws Exception {
 		super();
 		this.roleInfo = roleInfo;
+		this.statuInfo = statuInfo;
 		this.username = username;
 		this.password = PasswordService.encrypt(password);
-		// this.viewRoleId = viewRoleId;
 	}
 
 	public int getId() {
@@ -60,19 +71,19 @@ public class User implements Serializable {
 		this.password = PasswordService.encrypt(password);
 	}
 
-//	public String getViewRoleId() {
-//		return viewRoleId;
-//	}
-//
-//	public void setViewRoleId(String viewRoleId) {
-//		this.viewRoleId = viewRoleId;
-//	}
-
 	public RoleInfo getRoleInfo() {
 		return roleInfo;
 	}
 
 	public void setRoleInfo(RoleInfo roleInfo) {
 		this.roleInfo = roleInfo;
+	}
+
+	public StatuInfo getStatuInfo() {
+		return statuInfo;
+	}
+
+	public void setStatuInfo(StatuInfo statuInfo) {
+		this.statuInfo = statuInfo;
 	}
 }

@@ -10,7 +10,7 @@ package com.likya.pinara.utils
 	{
 		public static function showDummyWindow(refObject:DisplayObject, xmlText:String):void {
 			var dummyWindow:DummyForm = PopUpManager.createPopUp(refObject, DummyForm, true) as DummyForm;
-			dummyWindow.title="Content of the error message..."
+			dummyWindow.title="ERROR : Content of the error message..."
 			dummyWindow.htmlTextAsHTML = xmlText;
 			PopUpManager.centerPopUp(dummyWindow);
 			dummyWindow.setFocus();

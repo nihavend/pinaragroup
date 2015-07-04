@@ -60,7 +60,7 @@ public class PinaraAuthorization implements Serializable {
 	 */
 	public synchronized User addUser(User user) {
 		
-		if(userMap.containsKey(user.getId())) {
+		if(userMap.containsKey(user.getId()) || readUser(user.getUsername()) != null) {
 			return null;
 		}
 

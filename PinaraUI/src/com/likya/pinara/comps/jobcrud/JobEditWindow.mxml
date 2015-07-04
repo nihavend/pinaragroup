@@ -130,7 +130,7 @@
 			
 			protected function jobManagerService_resultHandler(event:ResultEvent):void {
 				
-				var returnXml:XML;
+/*				var returnXml:XML;
 				var returnTxt:String = null;
 				
 				// Alert.show("Result : " + event.message.body);
@@ -151,7 +151,8 @@
 				
 				// Alert.show("Result : " + event.message.body);
 				// trace(returnXml);
-				
+*/				
+				BasicAuthenticationHandler.service_resultHandler(this, event);
 			}
 			
 		]]>

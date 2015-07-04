@@ -12,7 +12,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.comps.crud.user.ChangePass;
-			import com.likya.comps.crud.user.UserEditWindow;
+			import com.likya.comps.crud.user.UserAddWindow;
 			import com.likya.comps.crud.user.UserListWindow;
 			import com.likya.pinara.utils.UserUtils;
 			
@@ -30,7 +30,7 @@
 
 			protected function button2_clickHandler(event:MouseEvent):void {
 				
-				var userEditWindow:UserEditWindow = PopUpManager.createPopUp(this, UserEditWindow, true) as UserEditWindow;
+				var userEditWindow:UserAddWindow = PopUpManager.createPopUp(this, UserAddWindow, true) as UserAddWindow;
 				
 				userEditWindow.title = resourceManager.getString('messages', 'ucauWindowTitle');
 				

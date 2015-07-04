@@ -48,6 +48,8 @@ public abstract class PinaraBase {
 
 	private ConfigurationManager configurationManager;
 
+	public final static String authTxt = "pinara";
+	
 	public PinaraBase() {
 		super();
 	}
@@ -60,8 +62,6 @@ public abstract class PinaraBase {
 	protected void loadAuthenticationInfo() {
 
 		logger.info(Pinara.getMessage("PinaraServer.1"));
-
-		final String authTxt = "pinara";
 
 		PinaraAuthorization pinaraAuthorization = null;
 

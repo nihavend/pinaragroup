@@ -50,18 +50,6 @@
 				
 			}
 			
-			protected function enableAllBtn_clickHandler(event:MouseEvent):void
-			{
-				BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);				
-				
-			}
-			
-			protected function disableAllBtn_clickHandler(event:MouseEvent):void
-			{
-				BasicAuthenticationHandler.authAndCall(grpMngService, "disablegrp", selectedGroupId);
-				
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -72,12 +60,6 @@
 	<s:layout>
 		<s:VerticalLayout />
 	</s:layout>
-	
-	<s:HGroup>
-		<jobdetail:GridStatuFilter data="{userListXmlCollection}" width="100%" height="20"/>
-		<s:Button id="enableAllBtn" label="Enable All Jobs" visible="false" click="enableAllBtn_clickHandler(event)" />
-		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" click="disableAllBtn_clickHandler(event)" />
-	</s:HGroup>
 	
 	<s:DataGrid id="pinaraUserList" width="490" height="330" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{userListXmlCollection}" > 
 		<s:columns>

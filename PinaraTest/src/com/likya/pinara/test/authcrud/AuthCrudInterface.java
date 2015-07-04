@@ -21,4 +21,9 @@ public interface AuthCrudInterface {
 	
 	public void testChangePasswordWithUsername();
 	
+	public void testChangePasswordAdmWithId();
+	
+	public void testChangePasswordAdmWithUsername();
+
+	
 }

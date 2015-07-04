@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.model.User.StatuInfo;
 
 
 public class AuthCrud extends TestCase implements AuthCrudInterface {
@@ -20,7 +21,7 @@ public class AuthCrud extends TestCase implements AuthCrudInterface {
 	protected void setUp() {
 		try {
 			pinaraAuthorization = new PinaraAuthorization();
-			sampleUser = new User(RoleInfo.ADMIN, "pinara", "pinara");
+			sampleUser = new User(RoleInfo.ADMIN, StatuInfo.ACTIVE, "pinara", "pinara");
 			sampleUser = pinaraAuthorization.addUser(sampleUser);
 			recordId = sampleUser.getId();
 			
@@ -32,7 +33,7 @@ public class AuthCrud extends TestCase implements AuthCrudInterface {
 	public void testSimpleAdd() {
 		User testUser = null;
 		try {
-			testUser = new User(RoleInfo.ADMIN, "serkan", "serkan");
+			testUser = new User(RoleInfo.ADMIN, StatuInfo.ACTIVE, "serkan", "serkan");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,5 +82,16 @@ public class AuthCrud extends TestCase implements AuthCrudInterface {
 		User tmpUser = pinaraAuthorization.changePassword(sampleUser.getUsername(), "pinara", "dummy");
 		Assert.assertNotNull(tmpUser);
 	}
+	
+	public void testChangePasswordAdmWithId() {
+		User tmpUser = pinaraAuthorization.changePasswordAdm(recordId, "pinara");
+		Assert.assertNotNull(tmpUser);
+	}
+	
+	public void testChangePasswordAdmWithUsername() {
+		User tmpUser = pinaraAuthorization.changePasswordAdm(sampleUser.getUsername(), "pinara");
+		Assert.assertNotNull(tmpUser);
+	}
+
 
 }

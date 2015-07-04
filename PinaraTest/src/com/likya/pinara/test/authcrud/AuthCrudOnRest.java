@@ -5,6 +5,7 @@ import org.junit.Assert;
 import com.likya.pinara.gui.rest.RestUserOps;
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.model.User.StatuInfo;
 
 public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterface {
 
@@ -15,7 +16,7 @@ public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterfac
 
 	protected void setUp() {
 		try {
-			sampleUser = new User(RoleInfo.ADMIN, "pinara", "pinara");
+			sampleUser = new User(RoleInfo.ADMIN, StatuInfo.ACTIVE, "pinara", "pinara");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +49,7 @@ public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterfac
 
 	public void testSimpleAdd() {
 
-		String xmlUser = "<userInfo><username>serkan</username><password>serkan</password><roleinfo>" + RoleInfo.ADMIN + "</roleinfo></userInfo>";
+		String xmlUser = "<userInfo><username>serkan</username><password>serkan</password><roleinfo>" + RoleInfo.ADMIN + "</roleinfo><statuinfo>" + StatuInfo.ACTIVE + "</statuinfo></userInfo>";
 
 		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_USERADD, xmlUser);
 
@@ -60,7 +61,7 @@ public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterfac
 
 		recordId = 3;
 
-		String xmlUser = "<userInfo><id>" + recordId + "</id><username>serkan</username><password>serkan</password><roleinfo>" + RoleInfo.OPERATION + "</roleinfo></userInfo>";
+		String xmlUser = "<userInfo><id>" + recordId + "</id><username>serkan</username><roleinfo>" + RoleInfo.OPERATION + "</roleinfo><statuinfo>" + StatuInfo.DEACTIVE + "</statuinfo></userInfo>";
 
 		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_USERUPDATE, xmlUser);
 
@@ -69,7 +70,7 @@ public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterfac
 
 	public void testSimpleDeleteWithId() {
 
-		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_USERDELETE, "id=" + recordId);
+		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_USERDELETE, "" + recordId);
 
 		Assert.assertNotNull(retString);
 	}
@@ -99,4 +100,27 @@ public class AuthCrudOnRest extends RestTestCaseBase implements AuthCrudInterfac
 
 		Assert.assertNotNull(retString);
 	}
+	
+	public void testChangePasswordAdmWithId() {
+
+		recordId = 3;
+
+		String xmlData = "<xmldata><id>" + recordId + "</id><newpass>serkan1973</newpass></xmldata>";
+
+		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_CHANGEPASSADM, xmlData);
+
+		Assert.assertNotNull(retString);
+
+	}
+	
+	public void testChangePasswordAdmWithUsername() {
+
+		String xmlData = "<xmldata><username>" + sampleUser.getUsername() + "</username><newpass>serkan1973</newpass></xmldata>";
+
+		String retString = httpPost(RESTUSEROPS_CTX + RestUserOps.CMD_CHANGEPASSADM, xmlData);
+
+		Assert.assertNotNull(retString);
+
+	}
+
 }

@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.xml.mappers.UserMapper;
 
 
@@ -14,7 +15,7 @@ public class UserXmlCreate extends TestCase {
 	
 	protected void setUp() {
 		try {
-			sampleUser = new User(RoleInfo.ADMIN, "pinara", "pinara");
+			sampleUser = new User(RoleInfo.ADMIN, StatuInfo.ACTIVE, "pinara", "pinara");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

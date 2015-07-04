@@ -501,7 +501,7 @@ public class RestParser extends GenericRestParser {
 			break;
 
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + switchId + "</result>";
+			retStr = "<message><result>NOK : " + "Command not found : " + switchId + "</result></message>";
 
 			break;
 		}

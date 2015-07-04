@@ -11,6 +11,7 @@
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.CloseAllPopUp;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -20,6 +21,8 @@
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.Validator;
 			
+			[Bindable]
+			public var forceLogout:Boolean = true;
 			[Bindable]
 			public var currentUser:String;
 			[Bindable]
@@ -96,10 +99,14 @@
 				// Alert.show(myraGenericJob);
 				
 				// var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + myraGenericJob + "</datamess></data>");
-				
-				var packedResponse:XML = XML("<xmldata><username>" + currentUser + "</username><oldpass>" + oldPassword.text + "</oldpass><newpass>" + newPassword.text + "</newpass></xmldata>");
-				
-				BasicAuthenticationHandler.authAndCall(userOpsService, "changepass", packedResponse);
+				var packedResponse:XML;
+				if(forceLogout) {
+					packedResponse = XML("<xmldata><username>" + currentUser + "</username><oldpass>" + oldPassword.text + "</oldpass><newpass>" + newPassword.text + "</newpass></xmldata>");
+					BasicAuthenticationHandler.authAndCall(userOpsService, "changepass", packedResponse);
+				} else {
+					packedResponse = XML("<xmldata><username>" + currentUser + "</username><newpass>" + newPassword.text + "</newpass></xmldata>");
+					BasicAuthenticationHandler.authAndCall(userOpsService, "changepassadm", packedResponse);
+				}
 				
 				// refreshAfter();
 			}
@@ -116,13 +123,17 @@
 			
 			protected function userOpsService_resultHandler(event:ResultEvent):void
 			{
+				BasicAuthenticationHandler.service_resultHandler(this, event);
 				handleCloseEvent();
-				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+				if(forceLogout) {
+					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+					CloseAllPopUp.closeAllPopups(FlexGlobals.topLevelApplication);
+				}
 			}
 			
 			protected function userOpsService_faultHandler(event:FaultEvent):void
 			{
-				// TODO Auto-generated method stub
+				BasicAuthenticationHandler.service_faultHandler(event);
 				
 			}
 			
@@ -163,7 +174,7 @@
 	
 	<s:Group id="currentView" width="100%" height="100%">
 		
-		<s:Label x="27" y="21" text="{oldPassLbl}"/>
+		<s:Label id="oldPassLblId" x="27" y="21" text="{oldPassLbl}"/>
 		<s:TextInput id="oldPassword" x="170" y="15" displayAsPassword="true" />
 		
 		<s:Label x="27" y="51" text="{newPassLbl}"/>			

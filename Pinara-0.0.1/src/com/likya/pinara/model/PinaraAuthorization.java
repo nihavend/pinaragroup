@@ -91,6 +91,30 @@ public class PinaraAuthorization implements Serializable {
 			return null;
 		}
 		
+		User existingUser = userMap.get(idStr);
+		
+		try {
+			// only user info except password is updated
+			user.setPassword(existingUser.getPassword());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		userMap.put(idStr, user);
+		
+		AuthorizationLoader.persistAuthorization(this);
+		
+		return user;
+	}
+	
+	public synchronized User updateUserWithPass(User user) {
+		
+		String idStr = "" + user.getId();
+		
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
 		userMap.put(idStr, user);
 		
 		AuthorizationLoader.persistAuthorization(this);
@@ -157,7 +181,9 @@ public class PinaraAuthorization implements Serializable {
 		try {
 			if(user.getPassword().equals(PasswordService.encrypt(oldPass))) {
 				user.setPassword(newPass);
-				updateUser(user);
+				updateUserWithPass(user);
+			} else {
+				user = null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -181,5 +207,46 @@ public class PinaraAuthorization implements Serializable {
 		return changePassword(user.getId(), oldPass, newPass);
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param oldPass
+	 * @param newPass
+	 * @return
+	 */
 	
+	public synchronized User changePasswordAdm(int id, String newPass) {
+
+		String idStr = "" + id;
+
+		if(!userMap.containsKey(idStr)) {
+			return null;
+		}
+		
+		User user = userMap.get(idStr);
+		
+		try {
+			user.setPassword(newPass);
+			updateUserWithPass(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return user; 
+	}
+	
+	/**
+	 * 
+	 * @param userName
+	 * @param oldPass
+	 * @param newPass
+	 * @return
+	 */
+	public synchronized User changePasswordAdm(String userName, String newPass) {
+		
+		User user = readUser(userName);
+	
+		return changePasswordAdm(user.getId(), newPass);
+	}
 }

@@ -61,7 +61,7 @@ public class RestUserOps extends PinaraRestHandler {
 			ArrayList<User> userList = pinaraAuthorization.getUserList();
 			
 			if (userList.size() == 0) {
-				retStr = "<result>NOK : " + "No user in list, it is abnormal !</result>";
+				retStr = "<message><result>NOK</result><desc>" + "No user in list, it is abnormal !</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(userList);
 			}
@@ -93,7 +93,7 @@ public class RestUserOps extends PinaraRestHandler {
 			}
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "User " + paramName + " not defined or invalid : " + paramValue + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + "User " + paramName + " not defined or invalid : " + paramValue + "</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -106,7 +106,7 @@ public class RestUserOps extends PinaraRestHandler {
 			user = pinaraAuthorization.addUser(user);
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "UserInfo not well formed or invalid : " + paramBuff + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + "UserInfo not well formed or invalid : " + paramBuff + "</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -119,7 +119,7 @@ public class RestUserOps extends PinaraRestHandler {
 			user = pinaraAuthorization.updateUser(user);
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "UserInfo not well formed or invalid : " + paramBuff + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + "UserInfo not well formed or invalid : " + paramBuff + "</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -133,7 +133,7 @@ public class RestUserOps extends PinaraRestHandler {
 			user = pinaraAuthorization.deleteUser(userId);
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "User id not defined or invalid : " + paramValue + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + "User id not defined or invalid : " + paramValue + "</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -147,7 +147,7 @@ public class RestUserOps extends PinaraRestHandler {
 			user = pinaraAuthorization.changePassword(dataArray[0], dataArray[1], dataArray[2]);
 			
 			if (user == null) {
-				retStr = "<result>NOK : " + "password change is unsuccessful : " + paramBuff + "</result>";
+				retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : " + paramBuff + "</desc></message>";
 			} else {
 				retStr = UserMapper.getMapped(user);
 			}
@@ -155,7 +155,7 @@ public class RestUserOps extends PinaraRestHandler {
 			break;
 			
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + switchId + "</result>";
+			retStr = "<message><result>NOK</result><desc>" + "Command not found : " + switchId + "</desc></message>";
 
 			break;
 		}

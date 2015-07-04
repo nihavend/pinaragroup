@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.likya.pinara.Pinara;
+import com.likya.pinara.PinaraBase;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
@@ -18,6 +19,7 @@ public class RestUserOps extends PinaraRestHandler {
 	public static final String CMD_USERUPDATE = "userupdate";
 	public static final String CMD_USERDELETE = "userdelete";
 	public static final String CMD_CHANGEPASS = "changepass";
+	public static final String CMD_CHANGEPASSADM = "changepassadm";
 	
 	public byte[] doWork(boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
 
@@ -32,6 +34,10 @@ public class RestUserOps extends PinaraRestHandler {
 
 		return responseBytes;
 	}
+	
+//	private static boolean isAdmin(User user) {
+//		return user.getRoleInfo().equals(RoleInfo.ADMIN) ? true : false; 
+//	}
 	
 	@Override
 	public String removeBaseUrl(String uriTxt) throws IOException {
@@ -116,6 +122,12 @@ public class RestUserOps extends PinaraRestHandler {
 		case CMD_USERUPDATE:
 			
 			user = UserMapper.parseUser(paramBuff.toString());
+			
+			if(PinaraBase.authTxt.equals(user.getUsername())) {
+				retStr = "<message><result>NOK</result><desc>main user modification is not allowed</desc></message>";
+				break;
+			}
+			
 			user = pinaraAuthorization.updateUser(user);
 			
 			if (user == null) {
@@ -128,8 +140,16 @@ public class RestUserOps extends PinaraRestHandler {
 
 		case CMD_USERDELETE:
 			
-			paramValue = paramBuff.toString().split("=")[1];
+			paramValue = paramBuff.toString(); // paramBuff.toString().split("=")[1];
+
 			int userId = Integer.parseInt(paramValue);
+
+			user = pinaraAuthorization.readUser(userId);
+			if(PinaraBase.authTxt.equals(user.getUsername())) {
+				retStr = "<message><result>NOK</result><desc>main user modification is not allowed</desc></message>";
+				break;
+			}
+
 			user = pinaraAuthorization.deleteUser(userId);
 			
 			if (user == null) {
@@ -152,6 +172,33 @@ public class RestUserOps extends PinaraRestHandler {
 				retStr = UserMapper.getMapped(user);
 			}
 			
+			break;
+
+		case CMD_CHANGEPASSADM:
+
+			// TODO 
+			// if(isAdmin(sessionuser)) {
+
+			dataArray = UserMapper.parsePassChangeDataWithUsername(paramBuff.toString());
+			
+			user = pinaraAuthorization.readUser(dataArray[0]);
+			if(PinaraBase.authTxt.equals(user.getUsername())) {
+				retStr = "<message><result>NOK</result><desc>main user modification is not allowed</desc></message>";
+				break;
+			}
+			
+			user = pinaraAuthorization.changePasswordAdm(dataArray[0], dataArray[1]);
+			
+			if (user == null) {
+				retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : " + paramBuff + "</desc></message>";
+			} else {
+				retStr = UserMapper.getMapped(user);
+			}
+
+			// } else {
+			// 	retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : Only " + RoleInfo.ADMIN + " can use this service + </desc></message>";
+			// }
+
 			break;
 			
 		default:

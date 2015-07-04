@@ -5,7 +5,7 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   width="520" height="450" borderAlpha="1"
 			   close="removeMe();" keyDown="titleWindow_keyDown(event);"
-			   creationComplete="titlewindow1_creationCompleteHandler(event)" xmlns:user="com.likya.comps.crud.user.*" xmlns:userops="com.likya.pinara.services.userops.*">
+			   creationComplete="titlewindow1_creationCompleteHandler(event)" xmlns:user="com.likya.comps.crud.user.*" xmlns:userops="com.likya.pinara.services.userops.*" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -38,9 +38,11 @@
 			private function rowSelectionChangedHandler(event:ResourceEvent):void {
 				if(userListGrid.pinaraUserList.selectedIndex != -1) {
 					uculEditUser.enabled = true;
+					uculChangePassUser.enabled = true;
 					uculDeleteUser.enabled = true;
 				} else {
 					uculEditUser.enabled = false;
+					uculChangePassUser.enabled = false;
 					uculDeleteUser.enabled = false;
 				}
 				currentDataItem = XML(event.object);
@@ -74,9 +76,9 @@
 			
 			protected function uculAddUser_clickHandler(event:MouseEvent):void
 			{
-				var userAddWindow:UserEditWindow = PopUpManager.createPopUp(this, UserEditWindow, true) as UserEditWindow;
+				var userAddWindow:UserAddWindow = PopUpManager.createPopUp(this, UserAddWindow, true) as UserAddWindow;
 				userAddWindow.parentRef = this;
-				userAddWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
+				//userAddWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
 				userAddWindow = UserUtils.initUserAddWindow(userAddWindow);
 				PopUpManager.centerPopUp(userAddWindow);
 				userAddWindow.setFocus();
@@ -85,16 +87,48 @@
 			protected function uculEditUser_clickHandler(event:MouseEvent):void
 			{
 				var userEditWindow:UserEditWindow = PopUpManager.createPopUp(this, UserEditWindow, true) as UserEditWindow;
-				userEditWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
+				// userEditWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
+				// userEditWindow.currentUser = currentDataItem.username;
+				userEditWindow.parentRef = this;
 				userEditWindow = UserUtils.initUserEditWindow(resourceManager, userEditWindow);
 				userEditWindow.userDetailXml = currentDataItem;
 				PopUpManager.centerPopUp(userEditWindow);
 			}
 			
+			protected function uculChangePassUser_clickHandler(event:MouseEvent):void
+			{
+				var changePassWindow:ChangePass = PopUpManager.createPopUp(this, ChangePass, true) as ChangePass;
+				if((FlexGlobals.topLevelApplication as PinaraUI).currentUser.username != currentDataItem.username) {
+					changePassWindow.forceLogout = false;	
+					changePassWindow.oldPassword.visible = false;
+					changePassWindow.oldPassLblId.visible = false;
+					changePassWindow.oldPasswordValidator.enabled = false;
+					changePassWindow.currentUser = currentDataItem.username;
+				} else {
+					changePassWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;					
+				}
+				changePassWindow = UserUtils.initChangePassWindow(changePassWindow);
+				PopUpManager.centerPopUp(changePassWindow);
+				changePassWindow.setFocus();
+			
+			}
+			
 			protected function uculDeleteUser_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
+				var errorStr:String = resourceManager.getString("messages", "error");
+				Alert.okLabel = resourceManager.getString("messages", "okLabel");
+				var confMsg:String = resourceManager.getString("messages", "deleteUserConfirm");
+				Alert.show(confMsg, resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, deleteUser, null, Alert.CANCEL);
+			}
+			
+			private function deleteUser(eventObj:CloseEvent):void {
 				
+				var packedResponse:XML;
+				// packedResponse = XML("<userInfo><id>" + currentDataItem.id + "</id><username>"  + currentDataItem.text + "</username><roleinfo>" + currentDataItem.roleinfo + "</roleinfo><statuinfo>" + currentDataItem.statusinfo + "</statuinfo></userInfo>");
+				packedResponse =XML(currentDataItem.id); 
+				BasicAuthenticationHandler.authAndCall(userOpsService, "userdelete", packedResponse);
+
+				refreshList();
 			}
 			
 			protected function userOpsService_resultHandler(event:ResultEvent):void
@@ -119,6 +153,25 @@
 				// TODO Auto-generated method stub
 				
 			}
+			
+			protected function enableAllBtn_clickHandler(event:MouseEvent):void
+			{
+				// BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);				
+				
+			}
+			
+			protected function disableAllBtn_clickHandler(event:MouseEvent):void
+			{
+				// BasicAuthenticationHandler.authAndCall(grpMngService, "disablegrp", selectedGroupId);
+				
+			}
+			
+			protected function refreshBtn_clickHandler(event:MouseEvent):void
+			{
+				refreshList();
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -127,12 +180,22 @@
 	</fx:Declarations>
 	
 	<s:VGroup paddingLeft="10" paddingTop="10">
+		
+		<s:HGroup>
+			<jobdetail:GridStatuFilter data="{userListGrid.userListXmlCollection}" width="100%" height="20"/>
+			<s:Button id="refreshBtn" label="Refresh" click="refreshBtn_clickHandler(event)" />
+			<s:Button id="enableAllBtn" label="Enable All Jobs" visible="false" click="enableAllBtn_clickHandler(event)" />
+			<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" click="disableAllBtn_clickHandler(event)" />
+		</s:HGroup>
+
+		
 		<user:UserListGrid id="userListGrid" creationComplete="pinaraJobListGrid_creationCompleteHandler(event)"/>
 		
 		<s:BorderContainer y="135" width="100%" height="20%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="gray">
-			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="90">
+			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="50">
 				<s:Button id="uculAddUser" label="{resourceManager.getString('messages', 'uculAddUser')}" click="uculAddUser_clickHandler(event)" /> 
 				<s:Button id="uculEditUser" label="{resourceManager.getString('messages', 'uculEditUser')}" click="uculEditUser_clickHandler(event)" enabled="false" /> 
+				<s:Button id="uculChangePassUser" label="{resourceManager.getString('messages', 'changePassword')}" click="uculChangePassUser_clickHandler(event)"  enabled="false" />
 				<s:Button id="uculDeleteUser" label="{resourceManager.getString('messages', 'uculDeleteUser')}" click="uculDeleteUser_clickHandler(event)" enabled="false" /> 
 				<s:Button label="{resourceManager.getString('messages', 'uculClose')}" click="handleCloseEvent();"/> 
 			</s:HGroup>

@@ -8,6 +8,7 @@ import org.apache.xmlbeans.XmlOptions;
 
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.model.User.StatuInfo;
 
 public class UserMapper {
 
@@ -80,6 +81,13 @@ public class UserMapper {
 		xmlCursor.insertChars("" + user.getRoleInfo());
 		xmlCursor.toNextToken();
 
+		xmlCursor.beginElement("statuinfo");
+		xmlCursor.insertChars("" + user.getStatuInfo());
+		xmlCursor.toNextToken();
+
+		// end of userInfo
+		xmlCursor.toNextToken();
+
 	}
 	
 	public static User parseUser(String userXml) {
@@ -87,15 +95,20 @@ public class UserMapper {
 		String myraGenericJob = userXml.split("<userInfo>")[1].split("</userInfo>")[0];
 		
 		String username = myraGenericJob.split("<username>")[1].split("</username>")[0];
+		
 		String password = "";
+		
 		if(myraGenericJob.contains("<password>")) {
 			password =  myraGenericJob.split("<password>")[1].split("</password>")[0];
 		}
+		
 		String roleinfo = myraGenericJob.split("<roleinfo>")[1].split("</roleinfo>")[0];
+		
+		String statuinfo = myraGenericJob.split("<statuinfo>")[1].split("</statuinfo>")[0];
 		
 		User testUser = null;
 		try {
-			testUser = new User(RoleInfo.valueOf(roleinfo), username, password);
+			testUser = new User(RoleInfo.valueOf(roleinfo), StatuInfo.valueOf(statuinfo), username, password);
 			String id = "";
 			if(myraGenericJob.contains("<id>")) {
 				id =  myraGenericJob.split("<id>")[1].split("</id>")[0];

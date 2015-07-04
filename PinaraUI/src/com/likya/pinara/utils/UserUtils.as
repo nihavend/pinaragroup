@@ -1,6 +1,7 @@
 package com.likya.pinara.utils
 {
 	import com.likya.comps.crud.user.ChangePass;
+	import com.likya.comps.crud.user.UserAddWindow;
 	import com.likya.comps.crud.user.UserEditWindow;
 	
 	import mx.resources.IResourceManager;
@@ -29,7 +30,7 @@ package com.likya.pinara.utils
 			
 		}
 
-		public static function initUserAddWindow(userAddWindow:UserEditWindow):UserEditWindow {
+		public static function initUserAddWindow(userAddWindow:UserAddWindow):UserAddWindow {
 			
 			var resourceManager:IResourceManager = ResourceManager.getInstance();
 			
@@ -53,11 +54,10 @@ package com.likya.pinara.utils
 			
 			userEditWindow.userNameLbl = resourceManager.getString('messages', 'userName');
 			userEditWindow.roleInfoLbl = resourceManager.getString('messages', 'ucRoleInfo');
+			userEditWindow.statuInfoLbl = resourceManager.getString('messages', 'ucStatuInfo');
 			
 			userEditWindow.okBtnLbl = resourceManager.getString('messages', 'ucSave');
 			userEditWindow.cnclBtnLbl = resourceManager.getString('messages', 'cancel');
-
-			userEditWindow.isMode = 1;
 
 			return userEditWindow;
 		}

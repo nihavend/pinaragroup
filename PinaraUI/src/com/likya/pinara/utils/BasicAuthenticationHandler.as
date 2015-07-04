@@ -9,6 +9,7 @@ package com.likya.pinara.utils
 	
 	import mx.controls.Alert;
 	import mx.core.FlexGlobals;
+	import mx.core.IFlexDisplayObject;
 	import mx.managers.PopUpManager;
 	import mx.rpc.AsyncToken;
 	import mx.rpc.events.FaultEvent;
@@ -88,7 +89,7 @@ package com.likya.pinara.utils
 		
 		public static function service_resultHandler(refObject:DisplayObject, event:ResultEvent):ResultEvent {
 			
-			var returnXml:XML;
+	/*		var returnXml:XML;
 			var returnTxt:String = null;
 			
 			try {
@@ -98,6 +99,30 @@ package com.likya.pinara.utils
 					WindowUtils.showDummyWindow(refObject, returnTxt.substr(6));
 				} 
 				
+			} catch(err:Error) {
+				Alert.show("Result : " + err.message);
+				returnTxt = String(event.result)
+			}
+			
+			// Alert.show("Result : " + event.message.body);
+			// trace(returnXml);
+			
+			 */
+			
+			var returnXml:XML;
+			var returnTxt:String = null;
+			
+			// Alert.show("Result : " + event.message.body);
+			
+			try {
+				// returnXml = XML(event.result);
+				returnXml = XML(event.message.body);
+				// Alert.show("Result : " + returnXml.toString());
+				if(returnXml.result == "NOK") {
+					WindowUtils.showDummyWindow(refObject, returnXml.desc.toString());
+				} else {
+					PopUpManager.removePopUp(refObject as IFlexDisplayObject);
+				}
 			} catch(err:Error) {
 				Alert.show("Result : " + err.message);
 				returnTxt = String(event.result)

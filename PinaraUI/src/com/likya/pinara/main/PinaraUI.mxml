@@ -7,7 +7,7 @@
 			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
 			   currentState="loggedOutState" 
 			   preloader="com.likya.pinara.utils.DownloadProgressBarSubClassMin"
-			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
+			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" xmlns:userops="com.likya.pinara.services.userops.*">
 	
 	<fx:Metadata>
 		[ResourceBundle("messages")]
@@ -27,31 +27,34 @@
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
-			import com.likya.pinara.model.UserInfo;
-			import com.likya.pinara.model.UserRole;
+			import com.likya.pinara.model.ModelLocator;
+			import com.likya.pinara.model.User;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
-			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.CursorManager;
+			import mx.managers.CursorManagerPriority;
 			import mx.managers.PopUpManager;
 			import mx.resources.ResourceBundle;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.skins.halo.BusyCursor;
 			import mx.utils.Base64Encoder;
 			
 			
 			
 			[Bindable]
+			private static var modelLocator:ModelLocator = ModelLocator.getInstance();
+			
+			[Bindable]
 			private var httpServiceUrl:String = "/flex/restsrvc/joblistxml/";
 			
 			[Bindable]
-			public var currentUser:UserInfo;
-			
-			[Bindable]
 			public var currentListNodeId:String;
+			
+			private var recoverParameter:String;
 			
 			private var selectedTreeNode:Object;
 			
@@ -90,13 +93,14 @@
 				
 				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
 				
-				currentUser = new UserInfo();
+				ModelLocator.getInstance().currentUser = new User();
 				
 				// currentState = "anaSayfaState";
 				currentState = "loggedOutState";
 				// currentState = "loggedInState";
 				
-				
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+
 			}
 			
 			private function refreshContent(event:ResourceEvent):void {
@@ -198,9 +202,22 @@
 			}
 				
 			private function getLoginDataResultHandler(event:Event):void {
+				
 				// Alert.show("event.result : " + event.toString());
-				var resultStr:String = XML(event.target.data).result;
-				if(resultStr == "RECOVER_CONFIRM") {
+				recoverParameter = XML(event.target.data).result;
+				
+				var packedResponse:XML;
+				// packedResponse = XML("<userInfo><id>" + currentDataItem.id + "</id><username>"  + currentDataItem.text + "</username><roleinfo>" + currentDataItem.roleinfo + "</roleinfo><statuinfo>" + currentDataItem.statusinfo + "</statuinfo></userInfo>");
+				packedResponse = XML("username=" + ModelLocator.getInstance().currentUser.username); 
+				BasicAuthenticationHandler.authAndCall(userOpsService, "userread", packedResponse);
+				
+			}
+
+			private function checkIfRecover():void {
+				
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+				
+				if(recoverParameter == "RECOVER_CONFIRM") {
 					var warningStr:String = resourceManager.getString("messages", "warning");
 					var okLabel:String = Alert.okLabel;
 					var cancelLabel:String = Alert.cancelLabel;
@@ -214,7 +231,7 @@
 					Alert.cancelLabel = cancelLabel;
 					Alert.buttonWidth = width;
 				} else {
-					setAnaSayfaState();
+					setAnaSayfaState(); 
 				}
 				/*
 				Alert.show("event.result : " + event.result);
@@ -231,6 +248,9 @@
 				}
 				}
 				*/
+				if(menuBar != null) {
+					menuBar.applyFilters();
+				}
 			}
 			
 			private function resultFailed(event:FaultEvent):void {
@@ -245,14 +265,13 @@
 			private function httpResult(event:HTTPStatusEvent):void {
 				
 				// Alert.show(event.toString());
-				
 				if(event.status == 200) {
 					// currentState = "loggedInState";
 					// currentState = "anaSayfaState"
 					// Alert.show("Giriş başarılı :)");
 				} else if (event.status == 400) {
 					Alert.show("Kullacını adı ya da şifre hatalı !");
-					currentUser.username = "";
+					ModelLocator.getInstance().currentUser.username = "";
 				} else {
 					Alert.show("Unexpected Event : " + event.toString());
 				}
@@ -271,26 +290,27 @@
 			private function checkLogin(event:ResourceEvent):void {
 				// Alert.show("Burada authentacion yapılacak !", "Hata", Alert.OK, this, null, null);
 				// authAndSend(UserInfo(event.object));
-				doWork(UserInfo(event.object), false);
+				doWork(User(event.object), false);
 			}
 			
 			private function logout(event:ResourceEvent):void {
 				
-				currentUser.username = "";
-				currentUser.password = "";
+				var tmpUser:User = new User();
+				tmpUser.username = "";
+				tmpUser.password = "";
 				currentState = 'loggedOutState';
-				doWork(currentUser, true);
-				currentUser = null;
+				doWork(tmpUser, true);
+				ModelLocator.getInstance().currentUser = null;
 				loginForm.password.text = "";
 				application_creationCompleteHandler();
+			
 			}
 			
-			private function doWork(userInfo:UserInfo, islogout:Boolean):void {
+			private function doWork(userInfo:User, islogout:Boolean):void {
 				
 				try {
 					
-					currentUser.username = userInfo.username;
-					currentUser.password = userInfo.password;
+					ModelLocator.getInstance().currentUser = userInfo;
 					
 					var req:URLRequest = new URLRequest("/flex/restsrvc/authanticate/");
 					req.method = URLRequestMethod.POST;
@@ -314,6 +334,10 @@
 						loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
 					}
 					
+					// CursorManager.setBusyCursor();
+					
+					ModelLocator.getInstance().currentBusyCursorId = CursorManager.setCursor(styleManager.getStyleDeclaration("mx.managers.CursorManager").getStyle("busyCursor"), CursorManagerPriority.HIGH);
+					
 					loader.load(req);
 					
 				} catch (e:Error){
@@ -329,7 +353,8 @@
 			}
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);	
+				//Alert.show("Fault : " + event.message);	
+				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 			protected function norecover_resultHandler(event:ResultEvent):void {
@@ -401,24 +426,28 @@
 				
 			}
 			
-			private function adminRoleFilter(item:XML):Boolean {
-				return true;
-			}
-			
-			private function operationRoleFilter(item:XML):Boolean {
-				var operationStr:String = UserRole.OPERATION;
-				var viewStr:String = UserRole.VIEW;
-				var itemRole:String = item.@role;
+			protected function userOpsService_resultHandler(event:ResultEvent):void
+			{
+				var userXML:XML;
 				
-				return itemRole == operationStr || itemRole == viewStr;
-			}
-			
-			private function viewRoleFilter(item:XML):Boolean {
-				var viewStr:String = UserRole.VIEW;
+				try {
+					userXML = XML(event.message.body);
+				} catch(err:Error) {
+					Alert.show("Result : " + err.message);
+				}
+
 				
-				return item.@role == viewStr;
+				ModelLocator.getInstance().currentUser.username = userXML.username;
+				ModelLocator.getInstance().currentUser.roleinfo = userXML.roleinfo;
+				ModelLocator.getInstance().currentUser.statuinfo = userXML.statuinfo;
+				
+				checkIfRecover();
 			}
 			
+			protected function userOpsService_faultHandler(event:FaultEvent):void
+			{
+				BasicAuthenticationHandler.service_faultHandler(event);				
+			}
 		]]>
 	</fx:Script>
 	
@@ -441,7 +470,10 @@
 		<s:CallResponder id="getappstate" result="getappstate_resultHandler(event)" />
 <!--		<s:CallResponder id="recover" result="suspendAppResult_resultHandler(event)"/>
 		<s:CallResponder id="norecover" result="resumeAppResult_resultHandler(event)"/>
--->	</fx:Declarations>
+-->	
+		<userops:UserOps id="userOpsService" result="userOpsService_resultHandler(event)" fault="userOpsService_faultHandler(event)" />
+
+	</fx:Declarations>
 	
 	<s:layout>
 		<s:VerticalLayout gap="10" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="20" />
@@ -453,7 +485,7 @@
 	
 	
 	
-	<comps:Header userInfo="{currentUser}" excludeFrom="loggedOutState, dummyState"/>
+	<comps:Header excludeFrom="loggedOutState, dummyState"/>
 	
 	<s:Group id="mainApp" width="100%" height="100%" excludeFrom="loggedOutState, dummyState">
 		

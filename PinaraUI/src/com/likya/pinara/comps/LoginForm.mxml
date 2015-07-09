@@ -13,7 +13,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
-			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.model.User;
 			
 			import mx.controls.Alert;
 			import mx.rpc.events.FaultEvent;
@@ -39,7 +39,7 @@
 					
 					// Alert.show("user : " + userName.text + " pass : " + password.text, "Hata", Alert.OK, this, null, null);
 					
-					var userInfo:UserInfo = new UserInfo();
+					var userInfo:User = new User();
 					
 					userInfo.username = userName.text;
 					userInfo.password = password.text;

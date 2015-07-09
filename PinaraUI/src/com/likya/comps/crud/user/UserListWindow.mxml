@@ -14,6 +14,7 @@
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.main.PinaraUI;
+			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.UserUtils;
 			
@@ -98,14 +99,22 @@
 			protected function uculChangePassUser_clickHandler(event:MouseEvent):void
 			{
 				var changePassWindow:ChangePass = PopUpManager.createPopUp(this, ChangePass, true) as ChangePass;
-				if((FlexGlobals.topLevelApplication as PinaraUI).currentUser.username != currentDataItem.username) {
+				if(ModelLocator.getInstance().currentUser.username != currentDataItem.username) {
+					changePassWindow.baseY1 = 0;
+					changePassWindow.baseY2 = 0;
+					
 					changePassWindow.forceLogout = false;	
+
 					changePassWindow.oldPassword.visible = false;
+					changePassWindow.oldPassword.includeInLayout = false;
+					
 					changePassWindow.oldPassLblId.visible = false;
+					changePassWindow.oldPassLblId.includeInLayout = false;
+					
 					changePassWindow.oldPasswordValidator.enabled = false;
 					changePassWindow.currentUser = currentDataItem.username;
 				} else {
-					changePassWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;					
+					changePassWindow.currentUser = ModelLocator.getInstance().currentUser.username;					
 				}
 				changePassWindow = UserUtils.initChangePassWindow(changePassWindow);
 				PopUpManager.centerPopUp(changePassWindow);
@@ -123,12 +132,17 @@
 			
 			private function deleteUser(eventObj:CloseEvent):void {
 				
-				var packedResponse:XML;
-				// packedResponse = XML("<userInfo><id>" + currentDataItem.id + "</id><username>"  + currentDataItem.text + "</username><roleinfo>" + currentDataItem.roleinfo + "</roleinfo><statuinfo>" + currentDataItem.statusinfo + "</statuinfo></userInfo>");
-				packedResponse =XML(currentDataItem.id); 
-				BasicAuthenticationHandler.authAndCall(userOpsService, "userdelete", packedResponse);
+				if(eventObj.detail == Alert.OK) {
+					var packedResponse:XML;
+					// packedResponse = XML("<userInfo><id>" + currentDataItem.id + "</id><username>"  + currentDataItem.text + "</username><roleinfo>" + currentDataItem.roleinfo + "</roleinfo><statuinfo>" + currentDataItem.statusinfo + "</statuinfo></userInfo>");
+					packedResponse = XML(currentDataItem.id); 
+					BasicAuthenticationHandler.authAndCall(userOpsService, "userdelete", packedResponse);
+				} 
 
+				userListGrid.pinaraUserList.selectedItem = null;
+				
 				refreshList();
+				dispatchEvent(new ResourceEvent(ResourceEvent.ROW_SELECTION_CHANGED));
 			}
 			
 			protected function userOpsService_resultHandler(event:ResultEvent):void

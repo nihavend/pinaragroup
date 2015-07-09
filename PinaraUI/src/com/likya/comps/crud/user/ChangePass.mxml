@@ -20,6 +20,11 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.validators.Validator;
+
+			[Bindable]
+			public var baseY1:Number = 21;
+			[Bindable]
+			public var baseY2:Number = 15;
 			
 			[Bindable]
 			public var forceLogout:Boolean = true;
@@ -174,14 +179,14 @@
 	
 	<s:Group id="currentView" width="100%" height="100%">
 		
-		<s:Label id="oldPassLblId" x="27" y="21" text="{oldPassLbl}"/>
-		<s:TextInput id="oldPassword" x="170" y="15" displayAsPassword="true" />
+		<s:Label id="oldPassLblId" x="27" y="{baseY1}" text="{oldPassLbl}"/>
+		<s:TextInput id="oldPassword" x="170" y="{baseY2}" displayAsPassword="true" />
 		
-		<s:Label x="27" y="51" text="{newPassLbl}"/>			
-		<s:TextInput id="newPassword" x="170" y="45" displayAsPassword="true" />
+		<s:Label x="27" y="{baseY1 + 30}" text="{newPassLbl}"/>			
+		<s:TextInput id="newPassword" x="170" y="{baseY2 + 30}" displayAsPassword="true" />
 		
-		<s:Label x="27" y="81" text="{confNewPassLbl}"/>			
-		<s:TextInput id="confirmNewPassword" x="170" y="75" displayAsPassword="true" />
+		<s:Label x="27" y="{baseY1 + 60}" text="{confNewPassLbl}"/>			
+		<s:TextInput id="confirmNewPassword" x="170" y="{baseY2 + 60}" displayAsPassword="true" />
 		
 	</s:Group>
 	
@@ -195,3 +200,13 @@
 	</s:BorderContainer>
 	
 </s:TitleWindow>
+
+<!--<s:Label id="oldPassLblId" x="27" y="21" text="{oldPassLbl}"/>
+<s:TextInput id="oldPassword" x="170" y="15" displayAsPassword="true" />
+
+<s:Label x="27" y="51" text="{newPassLbl}"/>			
+<s:TextInput id="newPassword" x="170" y="45" displayAsPassword="true" />
+
+<s:Label x="27" y="81" text="{confNewPassLbl}"/>			
+<s:TextInput id="confirmNewPassword" x="170" y="75" displayAsPassword="true" />
+-->

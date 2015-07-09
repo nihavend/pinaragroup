@@ -39,21 +39,9 @@
 				return item.runtimeParams.realizedDuration;
 			}
 			
-			protected function grpMngService_resultHandler(event:ResultEvent):void
-			{
-				BasicAuthenticationHandler.service_resultHandler(this, event);
-			}
-			
-			protected function grpMngService_faultHandler(event:FaultEvent):void
-			{
-				BasicAuthenticationHandler.service_faultHandler(event);
-				
-			}
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<jobmanager:JobManager id="grpMngService" result="grpMngService_resultHandler(event)" fault="grpMngService_faultHandler(event)"/>
 	</fx:Declarations>
 		<!-- Define a Button control to open the menu -->
 	

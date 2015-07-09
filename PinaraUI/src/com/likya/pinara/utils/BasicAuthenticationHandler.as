@@ -1,14 +1,13 @@
 package com.likya.pinara.utils
 {
 	import com.adobe.fiber.services.wrapper.HTTPServiceWrapper;
-	import com.likya.pinara.main.PinaraUI;
-	import com.likya.pinara.model.UserInfo;
+	import com.likya.pinara.model.ModelLocator;
+	import com.likya.pinara.model.User;
 	
 	import flash.display.DisplayObject;
 	import flash.net.URLVariables;
 	
 	import mx.controls.Alert;
-	import mx.core.FlexGlobals;
 	import mx.core.IFlexDisplayObject;
 	import mx.managers.PopUpManager;
 	import mx.rpc.AsyncToken;
@@ -26,7 +25,7 @@ package com.likya.pinara.utils
 		public static function authAndSend(service:HTTPService):void {
 			var encoder:Base64Encoder = new Base64Encoder();
 			encoder.insertNewLines = false; // see below for why you need to do this
-			var tmpUserInfo:UserInfo = (FlexGlobals.topLevelApplication as PinaraUI).currentUser;
+			var tmpUserInfo:User = ModelLocator.getInstance().currentUser;
 			// encoder.encode("pinara:pinara");
 			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
 			
@@ -55,7 +54,7 @@ package com.likya.pinara.utils
 			var encoder:Base64Encoder = new Base64Encoder();
 			encoder.insertNewLines = false;
 			//encoder.encode("pinara:pinara");
-			var tmpUserInfo:UserInfo = (FlexGlobals.topLevelApplication as PinaraUI).currentUser;
+			var tmpUserInfo:User = ModelLocator.getInstance().currentUser;
 			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
 			
 			service.operations[operationName].headers["Authorization"] = "Basic " + encoder.toString();

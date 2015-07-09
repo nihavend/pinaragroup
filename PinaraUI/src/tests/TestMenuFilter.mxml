@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:comps="com.likya.pinara.comps.*">
+	
+	<fx:Metadata>
+		[ResourceBundle("messages")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.DummyForm;
+			import com.likya.pinara.model.ModelLocator;
+			import com.likya.pinara.model.User;
+			import com.likya.pinara.model.UserRole;
+			import com.likya.pinara.utils.MenuOperations;
+			
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.resources.ResourceBundle;
+			
+	
+			[Bindable]
+			public var menuBarData:XMLListCollection = new XMLListCollection();
+			
+			
+			public function applyFilters():void {
+				
+				var roleInfo:String = ModelLocator.getInstance().currentUser.roleinfo;
+				
+				if (roleInfo == UserRole.ADMIN) {
+					//permissionList = userRole.adminPermissions;
+					menuBarData.filterFunction = adminRoleFilter;
+					
+				} else if (roleInfo == UserRole.OPERATION) {
+					//permissionList = userRole.operationPermissions;
+					menuBarData.filterFunction = operationRoleFilter;
+					
+				} else if (roleInfo == UserRole.VIEW) {
+					//permissionList = userRole.viewPermissions;
+					menuBarData.filterFunction = viewRoleFilter;
+				} else {
+					menuBarData.filterFunction = noRoleFilter;
+				}
+				
+				menuBarData.refresh();
+				
+			}
+			
+			private function adminRoleFilter(item:XML):Boolean {
+				return true;
+			}
+			
+			private function operationRoleFilter(item:XML):Boolean {
+				var operationStr:String = UserRole.OPERATION;
+				var viewStr:String = UserRole.VIEW;
+				var itemRole:String = item.@role;
+				
+				return itemRole == operationStr || itemRole == viewStr;
+			}
+			
+			private function viewRoleFilter(item:XML):Boolean {
+				var viewStr:String = UserRole.VIEW;
+				trace("item : " + item.@label);
+				trace("role : " + item.@role);
+				if(item.@role == viewStr) {
+					trace("keeping item ");
+				}
+				return item.@role == viewStr || !item.hasOwnProperty("@role");
+			}
+			
+			private function noRoleFilter(item:XML):Boolean {
+				return false;
+			}
+			
+			private function locales():void {
+				
+				var myResources:ResourceBundle = new ResourceBundle("en_US","locale\messages");
+				myResources.content['TITLE'] = "Pinara Test - English Version";
+				resourceManager.addResourceBundle(myResources);
+				
+				
+				myResources = new ResourceBundle("tr_TR","locale\messages");
+				myResources.content['TITLE'] = "Pınara Test - Türkçe Sürümü";
+				resourceManager.addResourceBundle(myResources);
+				
+				resourceManager.update();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				
+				locales();
+
+				menuBarData.source = menuDataXMLList;
+
+				ModelLocator.getInstance().currentUser = new User();
+
+				//ModelLocator.getInstance().currentUser.roleinfo = "ADMIN";
+				//applyFilters();
+				// trace(ObjectUtil.toString(menuBarData.list));
+				/*
+				ModelLocator.getInstance().currentUser.roleinfo = UserRole.ADMIN;
+				applyFilters();
+				trace(ObjectUtil.toString(menuBarData.source));*/
+				
+			}
+			
+			protected function adminfilterButton_clickHandler(event:MouseEvent):void
+			{
+				ModelLocator.getInstance().currentUser.roleinfo = "ADMIN";
+				applyFilters();
+			}
+			
+			protected function rolefilterButton_clickHandler(event:MouseEvent):void
+			{
+				ModelLocator.getInstance().currentUser.roleinfo = "";
+				applyFilters();
+			}
+			
+			protected function opfilterButton_clickHandler(event:MouseEvent):void
+			{
+				ModelLocator.getInstance().currentUser.roleinfo = "OPERATION";
+				applyFilters();
+			}
+			
+			protected function viewfilterButton_clickHandler(event:MouseEvent):void
+			{
+				ModelLocator.getInstance().currentUser.roleinfo = "VIEW";
+				applyFilters();
+			}
+
+			protected function showXMLButton_clickHandler(event:MouseEvent):void {
+
+				// MenuOperations.deleteRoledMenuItems(menuBarData, "VIEW");
+				
+				var dummyWindow:DummyForm = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
+				dummyWindow.title="Hata Mesaj İçeriği";
+				dummyWindow.htmlTextAsHTML = menuDataXMLList.(@role == "VIEW").children(); //menuDataXMLList;
+				PopUpManager.centerPopUp(dummyWindow);
+				dummyWindow.setFocus();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+
+		<fx:XMLList id="menuDataXMLList">
+			
+
+			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.ADMIN}">			
+				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties" role="{UserRole.VIEW}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
+				<menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile" role="{UserRole.OPERATION}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraLog')}" id="myraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.VIEW}">			
+				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.OPERATION}">			
+				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
+				<menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile" role="{UserRole.VIEW}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraLog')}" id="myraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="admin" role="{UserRole.ADMIN}"/>
+			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="operation" role="{UserRole.OPERATION}"/>
+			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="view" role="{UserRole.VIEW}"/>
+			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="non" />	
+			
+			<!--menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/>
+			<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
+			<menuitem label="{resourceManager.getString('messages', 'management')}" id="admin" role="{UserRole.OPERATION}">
+				<menuitem label="{resourceManager.getString('messages', 'suspendApp')}" id="suspendApp"/>
+				<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
+				<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'jobOps')}" id="jobOps" role="{UserRole.OPERATION}">			
+				<menuitem label="{resourceManager.getString('messages', 'addJob')}" id="addJob" />			
+				<menuitem label="{resourceManager.getString('messages', 'editJob')}" id="editJob" enabled="false"/>			
+				<menuitem label="{resourceManager.getString('messages', 'deleteJob')}" id="deleteJob" enabled="false"/>
+				<menuitem label="{resourceManager.getString('messages', 'cloneJob')}" id="cloneJob" enabled="false"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'manageUsers')}" id="userOps">			
+				<menuitem label="{resourceManager.getString('messages', 'changePassword')}" id="changePassword" />			
+				<menuitem label="{resourceManager.getString('messages', 'uculWindowTitle')}" id="listUser" role="{UserRole.ADMIN}"/>			
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'help')}" id="help" role="{UserRole.VIEW}">			
+				<menuitem label="{resourceManager.getString('messages', 'userGuide')}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'aboutTlos')}"/>			
+			</menuitem-->
+			
+		</fx:XMLList>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<s:HGroup width="100%">
+		<s:Button id="adminfilterButton" label="Show Admin Menu" click="adminfilterButton_clickHandler(event)"/>
+		<s:Button id="opfilterButton" label="Show Op Menu" click="opfilterButton_clickHandler(event)"/>
+		<s:Button id="viewfilterButton" label="Show View Menu" click="viewfilterButton_clickHandler(event)"/>
+		<s:Button id="rolefilterButton" label="Hide All" click="rolefilterButton_clickHandler(event)"/>
+		
+		<s:Button id="showXMLButton" label="Show Xml" click="showXMLButton_clickHandler(event)"/>
+		
+	</s:HGroup>
+	
+	<s:List dataProvider="{menuBarData}" labelField="@id" />
+	
+</s:Application>

@@ -7,12 +7,12 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.event.ResourceEvent;
-			import com.likya.pinara.model.UserInfo;
+			import com.likya.pinara.model.ModelLocator;
+			import com.likya.pinara.model.User;
 			
 			import mx.formatters.DateFormatter;
 
-			[Bindable]
-			public var userInfo:UserInfo = new UserInfo();
+			private var userInfo:User = ModelLocator.getInstance().currentUser;
 			
 			[Bindable] 
 			private var time:String; 

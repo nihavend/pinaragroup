@@ -35,7 +35,9 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="tests/TestMenuFilter.mxml"/>
     <application path="com/likya/pinara/main/PinaraUI.mxml"/>
+    <application path="com/likya/pinara/utils/MenuOperations.as"/>
     <application path="tests/TestUserCrudWindows.mxml"/>
   </applications>
   <modules>

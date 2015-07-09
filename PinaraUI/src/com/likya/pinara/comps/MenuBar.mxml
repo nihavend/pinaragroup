@@ -13,11 +13,13 @@
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
-			import com.likya.pinara.main.PinaraUI;
+			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.MenuOperations;
 			import com.likya.pinara.utils.UserUtils;
 			
+			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.controls.menuClasses.MenuBarItem;
 			import mx.core.FlexGlobals;
@@ -31,7 +33,8 @@
 			
 			import spark.components.TitleWindow;
 			
-			
+			[Bindable]
+			public var menuBarData:XMLListCollection = new XMLListCollection();
 			
 			private var currentDataItem:XML;
 			
@@ -44,6 +47,9 @@
 			}
 			
 			public function onCreationComplete(event:FlexEvent):void {
+				
+				// menuBarData.source = menuDataXMLList;
+				
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChanged);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelected);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelected);
@@ -174,7 +180,7 @@
 
 			private function showChangePass():void {
 				var changePassWindow:ChangePass = PopUpManager.createPopUp(this, ChangePass, true) as ChangePass;
-				changePassWindow.currentUser = (FlexGlobals.topLevelApplication as PinaraUI).currentUser.username;
+				changePassWindow.currentUser = ModelLocator.getInstance().currentUser.username;
 				changePassWindow = UserUtils.initChangePassWindow(changePassWindow);
 				PopUpManager.centerPopUp(changePassWindow);
 				changePassWindow.setFocus();
@@ -349,9 +355,67 @@
 			
 			protected function pinaraMenuBar_creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO Auto-generated method stub
+				applyFilters();
 				pinaraMenuBar.callLater(registerClickEvent);
 				// registerClickEvent();
+			}
+			
+			public function applyFilters():void {
+
+				var roleInfo:String = ModelLocator.getInstance().currentUser.roleinfo;
+
+				/*
+				if (roleInfo == UserRole.ADMIN) {
+					//permissionList = userRole.adminPermissions;
+					menuBarData.filterFunction = adminRoleFilter;
+					
+				} else if (roleInfo == UserRole.OPERATION) {
+					//permissionList = userRole.operationPermissions;
+					menuBarData.filterFunction = operationRoleFilter;
+					
+				} else if (roleInfo == UserRole.VIEW) {
+					//permissionList = userRole.viewPermissions;
+					menuBarData.filterFunction = viewRoleFilter;
+				} else {
+					menuBarData.filterFunction = noRoleFilter;
+				}
+				*/
+				
+				var tmpXmlList:XMLListCollection = new XMLListCollection();
+				tmpXmlList.source = menuDataXMLList;
+				
+				tmpXmlList = MenuOperations.deleteRoledMenuItems(tmpXmlList, roleInfo);
+				
+				menuBarData.source = tmpXmlList.source.copy();
+				
+				menuBarData.refresh();
+				
+			}
+			
+			private function adminRoleFilter(item:XML):Boolean {
+				return true;
+			}
+			
+			private function operationRoleFilter(item:XML):Boolean {
+				var operationStr:String = UserRole.OPERATION;
+				var viewStr:String = UserRole.VIEW;
+				var itemRole:String = item.@role;
+				
+				return itemRole == operationStr || itemRole == viewStr;
+			}
+			
+			private function viewRoleFilter(item:XML):Boolean {
+				var viewStr:String = UserRole.VIEW;
+				trace("item : " + item.@label);
+				trace("role : " + item.@role);
+				if(item.@role == viewStr) {
+					trace("keeping item ");
+				}
+				return item.@role == viewStr || !item.hasOwnProperty("@role");;
+			}
+			
+			private function noRoleFilter(item:XML):Boolean {
+				return false;
 			}
 			
 		]]>
@@ -362,7 +426,7 @@
 		<fx:XMLList id="menuDataXMLList">
 			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/>
 			<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
-			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.VIEW}">			
+			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
 				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
 				<menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile"/>			
@@ -370,17 +434,12 @@
 				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
 				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>
 			</menuitem>
-			<menuitem label="{resourceManager.getString('messages', 'management')}" id="admin" role="{UserRole.ADMIN}">
+			<menuitem label="{resourceManager.getString('messages', 'management')}" id="admin" role="{UserRole.OPERATION}">
 				<menuitem label="{resourceManager.getString('messages', 'suspendApp')}" id="suspendApp"/>
-				<!--menuitem label="{resourceManager.getString('messages', 'resumeApp')}" id="resumeApp"/-->
 				<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
 				<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>
-				<!--menuitem label="{resourceManager.getString('messages', 'addNewTlos')}" id="addNewTlos" />	
-				<menuitem label="{resourceManager.getString('messages', 'manageTloses')}" id="manageTloses" />
-				<menuitem label="{resourceManager.getString('messages', 'addNewUser')}" id="addNewUser" />
-				<menuitem label="{resourceManager.getString('messages', 'manageUsers')}" id="manageUsers" /-->
 			</menuitem>
-			<menuitem label="{resourceManager.getString('messages', 'jobOps')}" id="jobOps" role="{UserRole.ADMIN}">			
+			<menuitem label="{resourceManager.getString('messages', 'jobOps')}" id="jobOps" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'addJob')}" id="addJob" />			
 				<menuitem label="{resourceManager.getString('messages', 'editJob')}" id="editJob" enabled="false"/>			
 				<menuitem label="{resourceManager.getString('messages', 'deleteJob')}" id="deleteJob" enabled="false"/>
@@ -388,47 +447,48 @@
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'manageUsers')}" id="userOps">			
 				<menuitem label="{resourceManager.getString('messages', 'changePassword')}" id="changePassword" />			
-				<menuitem label="{resourceManager.getString('messages', 'uculWindowTitle')}" id="addUser" role="{UserRole.ADMIN}"/>			
+				<menuitem label="{resourceManager.getString('messages', 'uculWindowTitle')}" id="listUser" role="{UserRole.ADMIN}"/>			
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'help')}" id="help" role="{UserRole.VIEW}">			
 				<menuitem label="{resourceManager.getString('messages', 'userGuide')}"/>			
 				<menuitem label="{resourceManager.getString('messages', 'aboutTlos')}"/>			
 			</menuitem>
 			
-			<!--menuitem label="{resourceManager.getString('messages', 'userSettings')}" id="userSettings" role="{UserRole.VIEW}" >			
-			<menuitem label="{resourceManager.getString('messages', 'changeUserPassword')}" />
-			</menuitem-->
-			<!--menuitem label="{resourceManager.getString('messages', 'management')}" id="management" role="{UserRole.OPERATION}">			
-			<menuitem label="{resourceManager.getString('messages', 'suspendTlos')}" id="suspend"/>
-			<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
-			<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>				
-			</menuitem-->		
-			<!--menuitem label="{resourceManager.getString('messages', 'tlosSettings')}" id="security" role="{UserRole.ADMIN}">			
-			<menuitem label="{resourceManager.getString('messages', 'changeTlosPassword')}" id="changeTlosPassword"/>			
-			</menuitem-->	
-			<!--menuitem label="{resourceManager.getString('messages', 'view')}" id="view" role="{UserRole.VIEW}">
-			<menuitem label="{resourceManager.getString('messages', 'graph')}" id="graph"/>
-			<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
-			<menuitem label="{resourceManager.getString('messages', 'allJobsView')}" id="allJobsView"/>
-			<menuitem label="{resourceManager.getString('messages', 'groupedView')}" id="groupedView"/>
-			</menuitem-->
-			<!--menuitem label="{resourceManager.getString('messages', 'statusFilter')}" id="statusFilter" role="{UserRole.VIEW}">
-			<menuitem label="{resourceManager.getString('messages', 'listAll')}"/>			
-			<menuitem label="{resourceManager.getString('messages', 'readyFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'waitingFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'workingFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'successfulFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'failedFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'timeoutFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'skippedFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'stoppedFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'pausedFilter')}"/>
-			<menuitem label="{resourceManager.getString('messages', 'disabledFilter')}"/>
-			</menuitem-->
-			<!--menuitem label="{resourceManager.getString('messages', 'saveJobList')}" id="save" role="{UserRole.VIEW}">			
-			<menuitem label="{resourceManager.getString('messages', 'saveJobListAsExcel')}"/>
-			</menuitem-->
 		</fx:XMLList>
+
+		<!--menuitem label="{resourceManager.getString('messages', 'userSettings')}" id="userSettings" role="{UserRole.VIEW}" >			
+		<menuitem label="{resourceManager.getString('messages', 'changeUserPassword')}" />
+		</menuitem-->
+		<!--menuitem label="{resourceManager.getString('messages', 'management')}" id="management" role="{UserRole.OPERATION}">			
+		<menuitem label="{resourceManager.getString('messages', 'suspendTlos')}" id="suspend"/>
+		<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
+		<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>				
+		</menuitem-->		
+		<!--menuitem label="{resourceManager.getString('messages', 'tlosSettings')}" id="security" role="{UserRole.ADMIN}">			
+		<menuitem label="{resourceManager.getString('messages', 'changeTlosPassword')}" id="changeTlosPassword"/>			
+		</menuitem-->	
+		<!--menuitem label="{resourceManager.getString('messages', 'view')}" id="view" role="{UserRole.VIEW}">
+		<menuitem label="{resourceManager.getString('messages', 'graph')}" id="graph"/>
+		<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
+		<menuitem label="{resourceManager.getString('messages', 'allJobsView')}" id="allJobsView"/>
+		<menuitem label="{resourceManager.getString('messages', 'groupedView')}" id="groupedView"/>
+		</menuitem-->
+		<!--menuitem label="{resourceManager.getString('messages', 'statusFilter')}" id="statusFilter" role="{UserRole.VIEW}">
+		<menuitem label="{resourceManager.getString('messages', 'listAll')}"/>			
+		<menuitem label="{resourceManager.getString('messages', 'readyFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'waitingFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'workingFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'successfulFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'failedFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'timeoutFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'skippedFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'stoppedFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'pausedFilter')}"/>
+		<menuitem label="{resourceManager.getString('messages', 'disabledFilter')}"/>
+		</menuitem-->
+		<!--menuitem label="{resourceManager.getString('messages', 'saveJobList')}" id="save" role="{UserRole.VIEW}">			
+		<menuitem label="{resourceManager.getString('messages', 'saveJobListAsExcel')}"/>
+		</menuitem-->
 		
 		<jobmanager:JobManager id="jobManagerService" result="jobManagerService_resultHandler(event)" fault="jobManagerService_faultHandler(event)"/>
 		<s:CallResponder id="suspendAppResult" result="suspendAppResult_resultHandler(event)"/>
@@ -449,7 +509,7 @@
 	
 	
 	<mx:MenuBar id="pinaraMenuBar" width="100%" chromeColor="#B4CBE1" color="#0D173C" 
-				dataProvider="{menuDataXMLList}" fontFamily="Arial" fontWeight="bold" horizontalCenter="0"
+				dataProvider="{menuBarData}" fontFamily="Arial" fontWeight="bold" horizontalCenter="0"
 				itemClick="tlosMenuBar_itemClickHandler(event)" 
 				labelField="@label" selectionColor="#A8C6EE"
 				symbolColor="#F7F4F4"

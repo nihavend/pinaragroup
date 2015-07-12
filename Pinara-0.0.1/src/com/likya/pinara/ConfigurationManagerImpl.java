@@ -6,7 +6,6 @@ import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.mng.PinaraAppManager;
 import com.likya.pinara.model.PinaraAuthorization;
-import com.likya.pinara.model.User;
 import com.likya.xsd.pinara.model.config.PinaraConfigDocument.PinaraConfig;
 
 
@@ -26,7 +25,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 	
 	private TcpManagementConsole tcpManagementConsole;
 	
-	private User sessionUser;
+	// private User sessionUser;
 
 	public PinaraConfig getPinaraConfig() {
 		return pinaraConfig;
@@ -76,13 +75,13 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 		this.pinaraOutputManager = pinaraOutputManager;
 	}
 
-	public User getSessionUser() {
-		return sessionUser;
-	}
-
-	public void setSessionUser(User sessionUser) {
-		this.sessionUser = sessionUser;
-	}
+//	public User getSessionUser() {
+//		return sessionUser;
+//	}
+//
+//	public void setSessionUser(User sessionUser) {
+//		this.sessionUser = sessionUser;
+//	}
 
 	public PinaraAuthorization getPinaraAuthorization() {
 		return pinaraAuthorization;

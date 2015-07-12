@@ -16,7 +16,7 @@
 			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
-			import com.likya.pinara.utils.MenuOperations;
+			import com.likya.pinara.utils.RoleFilters;
 			import com.likya.pinara.utils.UserUtils;
 			
 			import mx.collections.XMLListCollection;
@@ -384,7 +384,7 @@
 				var tmpXmlList:XMLListCollection = new XMLListCollection();
 				tmpXmlList.source = menuDataXMLList;
 				
-				tmpXmlList = MenuOperations.deleteRoledMenuItems(tmpXmlList, roleInfo);
+				tmpXmlList = RoleFilters.deleteRoledMenuItems(tmpXmlList, roleInfo);
 				
 				menuBarData.source = tmpXmlList.source.copy();
 				

@@ -14,7 +14,7 @@
 			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.User;
 			import com.likya.pinara.model.UserRole;
-			import com.likya.pinara.utils.MenuOperations;
+			import com.likya.pinara.utils.RoleFilters;
 			
 			import mx.collections.XMLListCollection;
 			import mx.events.FlexEvent;

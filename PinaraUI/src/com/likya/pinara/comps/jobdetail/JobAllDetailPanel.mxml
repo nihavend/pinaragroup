@@ -9,6 +9,7 @@
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.RoleFilters;
 			import com.likya.pinara.utils.Transformer;
 			import com.likya.pinara.utils.WindowUtils;
 			
@@ -183,6 +184,15 @@
 				
 			}
 			
+			protected function allDetailPanel1_addedToStageHandler(event:Event):void
+			{
+				var value:Boolean = RoleFilters.hasOperRole();
+				manageButtonGroup.visible = value;
+				manageButtonGroupLbl.visible = value;
+				manageButtonGroup.includeInLayout = value;
+				manageButtonGroupLbl.includeInLayout = value;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -196,7 +206,7 @@
 					   />
 	</fx:Declarations>
 	
-	<s:Panel id="allDetailPanel1" title="Job All Detail Form" height="100%" width="100%">
+	<s:Panel id="allDetailPanel1" title="Job All Detail Form" height="100%" width="100%" addedToStage="allDetailPanel1_addedToStageHandler(event)">
 		<s:Scroller width="100%" height="100%">
 			<s:Group width="100%" height="100%">
 				<s:BorderContainer> 
@@ -222,9 +232,9 @@
 								<s:TextInput id="jobCommandType" top="5" editable="false"/>
 								<s:Label text="Group Id :" width="105" paddingLeft="20" />
 								<s:TextInput id="groupId" top="5" editable="false"/>
-								<s:Label text="Manage :" width="105" paddingLeft="20" />
+								<s:Label id="manageButtonGroupLbl" text="Manage :" width="105" paddingLeft="20" />
 								<!--<s:TextInput id="manage" top="5" editable="false"/>-->
-								<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}"/>
+								<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}" />
 							</s:HGroup>
 							<s:HGroup verticalAlign="baseline" paddingTop="15">
 								<s:Label text="Son ÇZ :" width="105" paddingLeft="10" />

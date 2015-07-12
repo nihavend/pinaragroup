@@ -63,6 +63,11 @@
 				
 			}
 			
+			protected function pinaraJobList_addedToStageHandler(event:Event):void
+			{
+				mngColumn.visible = RoleFilters.hasOperRole();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -80,7 +85,7 @@
 		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" click="disableAllBtn_clickHandler(event)" />
 	</s:HGroup>
 	
-	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}" > 
+	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}" addedToStage="pinaraJobList_addedToStageHandler(event)"> 
 		<s:columns>
 			<s:ArrayList>
 				<s:GridColumn headerText="{resourceManager.getString('messages', 'stateGrid')}" width="{this.pinaraJobList.width * 0.10}">
@@ -126,7 +131,7 @@
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="150" maxWidth="250" visible="{RoleFilters.hasOperRole()}">
+				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="150" maxWidth="250" id="mngColumn">
 					<s:itemRenderer>
 						<fx:Component>
 							<jobdetail:PinaraJobListGridManageColumn selectedGroupId="{outerDocument.selectedGroupId}" />

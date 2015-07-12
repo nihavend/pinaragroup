@@ -4,19 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.likya.pinara.gui.WebManager;
+import com.likya.pinara.model.User;
 
 public class RestfulHandler extends PinaraRestHandler {
 
 	// public static final String CONTENT_ROOT = "/flexroot";
 	
-	public byte [] doWork(boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
+	public byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
 
 		byte responseBytes[];
 		
 		if (isPost) {
-			responseBytes = RestParser.parsePost(uriTxt, inputStream /*httpExchange.getRequestBody()*/);
+			responseBytes = RestParser.parsePost(reqUserInfo, uriTxt, inputStream /*httpExchange.getRequestBody()*/);
 		} else {
-			responseBytes = RestParser.parse(uriTxt);
+			responseBytes = RestParser.parse(reqUserInfo, uriTxt);
 		}
 		
 		return responseBytes;

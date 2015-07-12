@@ -194,6 +194,7 @@ public class Pinara extends PinaraBase {
 			synchronized (suspendFlag) {
 				getLogger().warn("Waiting user to decide what to do recover or go ahead !");
 				suspendFlag.wait();
+				suspendFlag = "unlocked";
 			}
 		}
 

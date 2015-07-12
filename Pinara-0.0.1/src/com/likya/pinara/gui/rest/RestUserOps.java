@@ -9,6 +9,7 @@ import com.likya.pinara.PinaraBase;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
+import com.likya.pinara.model.User.RoleInfo;
 import com.likya.pinara.utils.xml.mappers.UserMapper;
 
 public class RestUserOps extends PinaraRestHandler {
@@ -21,12 +22,12 @@ public class RestUserOps extends PinaraRestHandler {
 	public static final String CMD_CHANGEPASS = "changepass";
 	public static final String CMD_CHANGEPASSADM = "changepassadm";
 	
-	public byte[] doWork(boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
+	public byte[] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
 
 		byte responseBytes[];
 
 		if (isPost) {
-			responseBytes = parsePost(uriTxt, inputStream);
+			responseBytes = parsePost(reqUserInfo, uriTxt, inputStream);
 		} else {
 			// responseBytes = parse(uriTxt);
 			responseBytes = "NA".getBytes();
@@ -35,16 +36,16 @@ public class RestUserOps extends PinaraRestHandler {
 		return responseBytes;
 	}
 	
-//	private static boolean isAdmin(User user) {
-//		return user.getRoleInfo().equals(RoleInfo.ADMIN) ? true : false; 
-//	}
+	private static boolean isAdmin(User user) {
+		return user.getRoleInfo().equals(RoleInfo.ADMIN) ? true : false; 
+	}
 	
 	@Override
 	public String removeBaseUrl(String uriTxt) throws IOException {
 		return uriTxt.replace("/" + WebManager.RESTUSEROPS_CTX + "/", "");
 	}
 
-	public static byte[] parsePost(String uriTxt, InputStream inputStream) throws IOException {
+	public static byte[] parsePost(User reqUserInfo, String uriTxt, InputStream inputStream) throws IOException {
 		
 		byte responseBytes[] = new byte[0];
 
@@ -176,28 +177,27 @@ public class RestUserOps extends PinaraRestHandler {
 
 		case CMD_CHANGEPASSADM:
 
-			// TODO 
-			// if(isAdmin(sessionuser)) {
+			if (isAdmin(reqUserInfo)) {
 
-			dataArray = UserMapper.parsePassChangeDataWithUsername(paramBuff.toString());
-			
-			user = pinaraAuthorization.readUser(dataArray[0]);
-			if(PinaraBase.authTxt.equals(user.getUsername())) {
-				retStr = "<message><result>NOK</result><desc>main user modification is not allowed</desc></message>";
-				break;
-			}
-			
-			user = pinaraAuthorization.changePasswordAdm(dataArray[0], dataArray[1]);
-			
-			if (user == null) {
-				retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : " + paramBuff + "</desc></message>";
+				dataArray = UserMapper.parsePassChangeDataWithUsername(paramBuff.toString());
+
+				user = pinaraAuthorization.readUser(dataArray[0]);
+				if (PinaraBase.authTxt.equals(user.getUsername())) {
+					retStr = "<message><result>NOK</result><desc>main user modification is not allowed</desc></message>";
+					break;
+				}
+
+				user = pinaraAuthorization.changePasswordAdm(dataArray[0], dataArray[1]);
+
+				if (user == null) {
+					retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : " + paramBuff + "</desc></message>";
+				} else {
+					retStr = UserMapper.getMapped(user);
+				}
+
 			} else {
-				retStr = UserMapper.getMapped(user);
+				retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : Only " + RoleInfo.ADMIN + " can use this service + </desc></message>";
 			}
-
-			// } else {
-			// 	retStr = "<message><result>NOK</result><desc>" + "password change is unsuccessful : Only " + RoleInfo.ADMIN + " can use this service + </desc></message>";
-			// }
 
 			break;
 			

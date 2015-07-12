@@ -9,6 +9,7 @@ import com.likya.pinara.gui.rest.LogViewHandler;
 import com.likya.pinara.gui.rest.RestUserOps;
 import com.likya.pinara.gui.rest.RestfulHandler;
 import com.likya.pinara.model.PinaraAuthorization;
+import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.PasswordService;
 import com.sun.net.httpserver.Authenticator;
 import com.sun.net.httpserver.BasicAuthenticator;
@@ -27,8 +28,8 @@ public class WebManager {
 	private int httpPort;
 	private String hostName = "localhost";
 
-	private String sessionUserName;
-	private String sessionPassWord;
+//	private String sessionUserName;
+//	private String sessionPassWord;
 
 	private PinaraAuthorization pinaraAuthorization;
 
@@ -104,9 +105,9 @@ public class WebManager {
 					e.printStackTrace();
 					return false;
 				}
-				if (username != null && password != null && (pinaraAuthorization.readUser(username) != null) && encryptedPassword.equals(pinaraAuthorization.readUser(username).getPassword())) {
-					sessionUserName = username;
-					sessionPassWord = encryptedPassword;
+				if (username != null && password != null && (pinaraAuthorization.readUser(username) != null) && pinaraAuthorization.readUser(username).getStatuInfo() == StatuInfo.ACTIVE && encryptedPassword.equals(pinaraAuthorization.readUser(username).getPassword())) {
+//					sessionUserName = username;
+//					sessionPassWord = encryptedPassword;
 					return true;
 				}
 			} catch (Throwable t) {
@@ -153,20 +154,20 @@ public class WebManager {
 		return hostName;
 	}
 
-	public String getSessionUserName() {
-		return sessionUserName;
-	}
-
-	public void setSessionUserName(String sessionUserName) {
-		this.sessionUserName = sessionUserName;
-	}
-
-	public String getSessionPassWord() {
-		return sessionPassWord;
-	}
-
-	public void setSessionPassWord(String sessionPassWord) {
-		this.sessionPassWord = sessionPassWord;
-	}
+//	public String getSessionUserName() {
+//		return sessionUserName;
+//	}
+//
+//	public void setSessionUserName(String sessionUserName) {
+//		this.sessionUserName = sessionUserName;
+//	}
+//
+//	public String getSessionPassWord() {
+//		return sessionPassWord;
+//	}
+//
+//	public void setSessionPassWord(String sessionPassWord) {
+//		this.sessionPassWord = sessionPassWord;
+//	}
 
 }

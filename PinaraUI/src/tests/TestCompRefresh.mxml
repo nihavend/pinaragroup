@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   currentState="show" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.StateChangeEvent;
+			
+			protected function button1_clickHandler(event:MouseEvent):void {
+				currentState = "show";
+				testBtn.validateNow();
+				testBtn.validateProperties();
+				testBtn.invalidateDisplayList();
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void {
+				currentState = "hide";
+			}
+			
+			protected function testBtn_initializeHandler(event:FlexEvent):void
+			{
+				trace("Called : testBtn_initializeHandler");				
+			}
+			
+			protected function testBtn_currentStateChangeHandler(event:StateChangeEvent):void
+			{
+				trace("Called : testBtn_currentStateChangeHandler");	
+			}
+			
+			protected function testBtn_showHandler(event:FlexEvent):void
+			{
+				trace("Called : testBtn_showHandler");
+			}
+			
+			protected function testBtn_stateChangeCompleteHandler(event:FlexEvent):void
+			{
+				trace("Called : testBtn_stateChangeCompleteHandler");
+			}
+			
+			protected function testBtn_updateCompleteHandler(event:FlexEvent):void
+			{
+				// trace("Called : testBtn_updateCompleteHandler");
+				// trace(event.type);
+			}
+			
+			protected function testBtn_addedToStageHandler(event:Event):void
+			{
+				trace("Called : testBtn_addedToStageHandler");
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="show"/>
+		<s:State name="hide"/>
+	</s:states>
+	
+	
+	<s:BorderContainer width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="10" paddingTop="100" paddingLeft="100"/>
+		</s:layout>
+		<s:Button click="button1_clickHandler(event)" label="Show"/> 
+		<s:Button click="button2_clickHandler(event)" label="Hide"/>
+
+		<s:Button label="Test" includeIn="show" id="testBtn" updateComplete="testBtn_updateCompleteHandler(event)" addedToStage="testBtn_addedToStageHandler(event)"/> 
+	</s:BorderContainer>
+	
+</s:Application>

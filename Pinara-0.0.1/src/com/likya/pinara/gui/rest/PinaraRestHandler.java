@@ -9,9 +9,12 @@ import java.util.Collection;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.likya.myra.jef.utils.JobQueueOperations;
+import com.likya.pinara.Pinara;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
+import com.likya.pinara.model.User;
+import com.likya.pinara.utils.BasicAuthenticationInfo;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,13 +22,17 @@ import com.sun.net.httpserver.HttpHandler;
 
 public abstract class PinaraRestHandler implements HttpHandler {
 	
-	public abstract byte [] doWork(boolean isPost, String uriTxt, InputStream inputStream) throws IOException;
+	public abstract byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException;
 	
 	public abstract String removeBaseUrl(String uriTxt) throws IOException;
 
 	final public void handle(HttpExchange httpExchange) throws IOException {
 		
 		OutputStream os;
+		
+		String [] loginInfo = BasicAuthenticationInfo.resolve(httpExchange);
+		
+		User  reqUserInfo = Pinara.getInstance().getConfigurationManager().getPinaraAuthorization().readUser(loginInfo[0]);
 		
 		URI myUri = httpExchange.getRequestURI();
 		
@@ -53,7 +60,7 @@ public abstract class PinaraRestHandler implements HttpHandler {
 			// responseBytes = RestParser.parse(uriTxt);
 		// }
 		
-		responseBytes = doWork(isPost, uriTxt, httpExchange.getRequestBody());
+		responseBytes = doWork(reqUserInfo, isPost, uriTxt, httpExchange.getRequestBody());
 		
 		httpExchange.sendResponseHeaders(200, responseBytes.length);
 		os = httpExchange.getResponseBody();

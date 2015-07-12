@@ -12,7 +12,8 @@
 			
 			import mx.formatters.DateFormatter;
 
-			private var userInfo:User = ModelLocator.getInstance().currentUser;
+			[Bindable] 
+			public var userInfo:User = ModelLocator.getInstance().currentUser;
 			
 			[Bindable] 
 			private var time:String; 

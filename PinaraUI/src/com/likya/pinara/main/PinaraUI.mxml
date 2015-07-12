@@ -40,7 +40,6 @@
 			import mx.resources.ResourceBundle;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.skins.halo.BusyCursor;
 			import mx.utils.Base64Encoder;
 			
 			
@@ -251,6 +250,7 @@
 				if(menuBar != null) {
 					menuBar.applyFilters();
 				}
+				
 			}
 			
 			private function resultFailed(event:FaultEvent):void {
@@ -270,7 +270,7 @@
 					// currentState = "anaSayfaState"
 					// Alert.show("Giriş başarılı :)");
 				} else if (event.status == 400) {
-					Alert.show("Kullacını adı ya da şifre hatalı !");
+					Alert.show("Kullacını adı ya da şifre hatalı veya giriş izniniz yok !");
 					ModelLocator.getInstance().currentUser.username = "";
 				} else {
 					Alert.show("Unexpected Event : " + event.toString());
@@ -279,10 +279,12 @@
 			}
 			
 			private function securityError(event:SecurityErrorEvent):void {
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
 				Alert.show("securityError : " + event.toString());
 			}
 			
 			private function ioErrorHandler(event:IOErrorEvent):void {
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
 				// Alert.show(event.toString());
 				// trace(event.toString());
 			}
@@ -435,13 +437,16 @@
 				} catch(err:Error) {
 					Alert.show("Result : " + err.message);
 				}
-
 				
 				ModelLocator.getInstance().currentUser.username = userXML.username;
 				ModelLocator.getInstance().currentUser.roleinfo = userXML.roleinfo;
 				ModelLocator.getInstance().currentUser.statuinfo = userXML.statuinfo;
-				
+
 				checkIfRecover();
+				
+				if(jobTree.liveTree != null) {
+					jobTree.liveTree.selectedIndex = -1;
+				}
 			}
 			
 			protected function userOpsService_faultHandler(event:FaultEvent):void
@@ -484,8 +489,7 @@
 	</s:Group>
 	
 	
-	
-	<comps:Header excludeFrom="loggedOutState, dummyState"/>
+	<comps:Header excludeFrom="loggedOutState, dummyState" id="header"/>
 	
 	<s:Group id="mainApp" width="100%" height="100%" excludeFrom="loggedOutState, dummyState">
 		

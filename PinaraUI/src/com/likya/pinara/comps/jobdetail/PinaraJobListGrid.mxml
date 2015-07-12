@@ -129,7 +129,7 @@
 				<s:GridColumn headerText="{resourceManager.getString('messages', 'manageGrid')}" width="150" maxWidth="250" visible="{RoleFilters.hasOperRole()}">
 					<s:itemRenderer>
 						<fx:Component>
-							<jobdetail:PinaraJobListGridManageColumnNew selectedGroupId="{outerDocument.selectedGroupId}" />
+							<jobdetail:PinaraJobListGridManageColumn selectedGroupId="{outerDocument.selectedGroupId}" />
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>

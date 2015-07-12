@@ -14,6 +14,7 @@ import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
+import com.likya.pinara.model.User;
 import com.likya.pinara.utils.xml.mappers.GroupTreeMapper;
 import com.likya.pinara.utils.xml.mappers.JobDetailMapper;
 import com.likya.pinara.utils.xml.mappers.JobGridListMapper;
@@ -61,7 +62,7 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_GRPENABLE = "enablegrp";
 	public static final String CMD_GRPDISABLE = "disablegrp";
 	
-	public static byte[] parse(String uriTxt) {
+	public static byte[] parse(User reqUserInfo, String uriTxt) {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
 
@@ -441,7 +442,7 @@ public class RestParser extends GenericRestParser {
 
 	}
 
-	public static byte[] parsePost(String uriTxt, InputStream inputStream) throws IOException {
+	public static byte[] parsePost(User  reqUserInfo, String uriTxt, InputStream inputStream) throws IOException {
 
 		
 		byte responseBytes[] = new byte[0];

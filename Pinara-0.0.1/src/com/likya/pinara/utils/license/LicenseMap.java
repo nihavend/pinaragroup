@@ -1,8 +1,12 @@
 package com.likya.pinara.utils.license;
 
+import java.io.Serializable;
 import java.security.Key;
 
-public class LicenseMap {
+public class LicenseMap implements Serializable {
+
+	private static final long serialVersionUID = 8574481443624165592L;
+
 	private Key key;
 	private byte[] licenseData;
 

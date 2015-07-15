@@ -18,6 +18,7 @@ import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
 import com.likya.pinara.utils.PersistApi;
 import com.likya.pinara.utils.RecoveryHelper;
+import com.likya.pinara.utils.license.LicenseClientUtil;
 import com.likya.pinara.utils.license.LicenseManager;
 import com.likya.pinara.utils.license.ValidateLicense;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
@@ -30,8 +31,13 @@ public class Pinara extends PinaraBase {
 	
 	public static final String DATA_PATH = "data";
 	
-	public static String suspendFlag = "unlocked";
+	public static String suspendFlag = "locked";
 	public static boolean forceToRecover = false;
+	
+	public static final String ulicense = "unlicensed";
+	public static final String license = "licensed";
+	
+	public static String licenseFlag = ulicense;
 	
 	private Pinara() {
 		super();
@@ -189,6 +195,20 @@ public class Pinara extends PinaraBase {
 
 	private boolean initMyra() throws Throwable {
 
+		if (LicenseClientUtil.deserialize() == null) {
+			licenseFlag = ulicense;
+			synchronized (licenseFlag) {
+				licenseFlag.wait();
+				if(!isLicensed()) {
+					System.err.println("Your license expired, contact to your vendor !");
+					System.exit(-1);
+				}
+				licenseFlag = license;
+			}
+		} else {
+			licenseFlag = license;
+		}
+		
 		if(RecoveryHelper.isInRecoveryState()) {
 			suspendFlag = "locked";
 			synchronized (suspendFlag) {

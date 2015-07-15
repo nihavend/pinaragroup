@@ -296,8 +296,7 @@
 					var isDepGraph:Boolean = false;
 					
 					if(selectedNetTreeId > 0) {
-						// Graph disabled because not working yet !
-						// isDepGraph = true;
+						isDepGraph = true;
 					}
 					
 					if(!isDepGraph && myViewStack.getChildByName("depGraph") != null) {
@@ -309,6 +308,7 @@
 						depGraphModuleInfo = ModuleManager.getModule("ViewDepGraph.swf");
 						depGraphModuleInfo.addEventListener(ModuleEvent.READY, renderDepGraphTabModule);
 						depGraphModuleInfo.addEventListener(ModuleEvent.ERROR, handleError);
+						addEventListener(ResourceEvent.REFRESH, renderDepGraphTabModule);
 						try {
 							depGraphModuleInfo.load(null, null, null, moduleFactory);
 						} catch(err:Error) {
@@ -342,29 +342,21 @@
 				myViewStack.addElement(depGraphTab);
 				depGraphTab.addElement(depGraphElement);
 				
+				callService();
+			}
+			
+			public function callService():void {
 				// depGraphService.getdepgraph(selectedNetTreeId);
 				BasicAuthenticationHandler.authAndCall(depGraphService, "getdepgraph", selectedNetTreeId);
 			}
 			
-			
 			protected function graphLayerService_resultHandler(event:ResultEvent):void {
 				
-				var returnXml:XML;
-				var returnTxt:String = null;
+				var retValue:Boolean = BasicAuthenticationHandler.service_customHandler(this, event);
 				
-				try {
-					// returnXml = XML(event.result);
-					returnXml = XML(event.message.body);
-				} catch(err:Error) {
-					Alert.show("Result : " + err.message);
-					returnTxt = String(event.result)
-				}
-				
-				// Alert.show("Result : " + event.message.body);
-				
-				// trace(returnXml);
+				if(!retValue) return;
 					
-				(depGraphModule as IModuleInterface).setDataXml(returnXml);
+				(depGraphModule as IModuleInterface).setDataXml(XML(event.message.body));
 			}
 			
 			protected function graphLayerService_faultHandler(event:FaultEvent):void {

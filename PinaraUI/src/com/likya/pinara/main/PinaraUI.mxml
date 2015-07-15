@@ -316,10 +316,14 @@
 					
 					var req:URLRequest = new URLRequest("/flex/restsrvc/authanticate/");
 					req.method = URLRequestMethod.POST;
-					req.data = new URLVariables("name=John+Doe");
-					
-					
+
 					var encoder:Base64Encoder = new Base64Encoder();        
+
+					encoder.encode("expdate:01092015");
+					var str:String = "name=John+Doe" + "[" + encoder.toString() + "]";
+					
+					req.data = new URLVariables(str);
+					
 					// encoder.encode("tlos:tlos");
 					encoder.encode(userInfo.username + ":" + userInfo.password);
 					
@@ -367,7 +371,7 @@
 					returnXml = XML(event.result);
 					//Alert.show(returnXml);
 					returnXml = XML(event.message.body);
-					if(returnXml != "OK") {
+					if(returnXml.result != "OK") {
 						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
 					} else {
 						setAnaSayfaState();
@@ -413,7 +417,7 @@
 				
 				try {
 					returnXml = XML(event.message.body);
-					if(returnXml == "STATE_RECOVER") {
+					if(returnXml.result == "STATE_RECOVER") {
 						trace("Still recovering... !");
 						myTimer.start();
 					} else {
@@ -444,7 +448,7 @@
 
 				checkIfRecover();
 				
-				if(jobTree.liveTree != null) {
+				if(jobTree != null && jobTree.liveTree != null) {
 					jobTree.liveTree.selectedIndex = -1;
 				}
 			}

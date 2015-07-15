@@ -90,7 +90,7 @@
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {
 				
-				var returnXml:XML;
+				/*var returnXml:XML;
 				var returnTxt:String = null;
 				
 				try {
@@ -104,7 +104,11 @@
 				} catch(err:Error) {
 					Alert.show("Result : " + err.message);
 					returnTxt = String(event.result)
-				}
+				}*/
+				
+				var retValue:Boolean = BasicAuthenticationHandler.service_customHandler(this, event);
+				
+				if(!retValue) return;
 				
 				jobDetailXml = XML(event.result);
 				

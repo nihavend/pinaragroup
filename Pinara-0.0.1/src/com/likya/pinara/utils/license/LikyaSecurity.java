@@ -34,7 +34,7 @@ public class LikyaSecurity {
 
 		byte[] inputBytes = input.getBytes(encoding);
 
-		System.out.println(new String(inputBytes, encoding));
+		// System.out.println(new String(inputBytes, encoding));
 
 		LicenseMap licenseMap = new LicenseMap();
 		licenseMap.setKey(key);
@@ -45,10 +45,10 @@ public class LikyaSecurity {
 
 	public static String decrypt(byte[] encryptionBytes, Key key) throws Exception {
 
-		long startTime = System.currentTimeMillis();
+		// long startTime = System.currentTimeMillis();
 		cipher = Cipher.getInstance(xform);
-		long duration = System.currentTimeMillis() - startTime;
-		System.err.println("Cipher.getInstance(xform)" + " in " + duration + " ms");
+		// long duration = System.currentTimeMillis() - startTime;
+		// System.err.println("Cipher.getInstance(xform)" + " in " + duration + " ms");
 		paramSpec = new IvParameterSpec(iv);
 		cipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 

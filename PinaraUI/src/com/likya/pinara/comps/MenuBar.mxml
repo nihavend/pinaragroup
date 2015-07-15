@@ -285,6 +285,7 @@
 				if(eventObj.detail == Alert.OK) {
 					//shutdownNormalResult.token = jobManagerService.stopapp();
 					shutdownNormalResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "stopapp");
+					dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 				}
 			}
 			
@@ -292,6 +293,7 @@
 				if(eventObj.detail == Alert.OK) {
 					//shutdownForceResult.token = jobManagerService.fstopapp();
 					shutdownForceResult.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "fstopapp");
+					dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 				}
 			}
 
@@ -386,7 +388,9 @@
 				
 				tmpXmlList = RoleFilters.deleteRoledMenuItems(tmpXmlList, roleInfo);
 				
-				menuBarData.source = tmpXmlList.source.copy();
+				menuDataXMLList = tmpXmlList.source.copy();
+				
+				menuBarData.source = menuDataXMLList;
 				
 				menuBarData.refresh();
 				

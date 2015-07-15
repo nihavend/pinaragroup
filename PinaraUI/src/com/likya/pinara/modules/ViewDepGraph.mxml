@@ -18,8 +18,12 @@ width="100%" height="100%"-->
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.jobdetail.JobListWithDetails;
+			import com.likya.pinara.event.ResourceEvent;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.events.ModuleEvent;
 			import mx.graphics.ImageSnapshot;
 			import mx.graphics.codec.PNGEncoder;
 			
@@ -79,14 +83,15 @@ width="100%" height="100%"-->
 			}
 			
 			public function refreshGraphData(graphXML:XML):void {
-				if (vgraph.graph == null) {
+				(parentApplication.jobListDetail as JobListWithDetails).callService();
+				/*if (vgraph.graph == null) {
 					initData(graphXML);
 				} else {
 					if (graphXML == "false") {
 						Alert.show("Can not read xml !");
 					}
 					vgraph.fullVGraphRefresh(graphXML, true);
-				}
+				}*/
 			}
 			
 			private function initData(graphXML:XML):void {

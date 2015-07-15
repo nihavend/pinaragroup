@@ -48,7 +48,7 @@ public class GraphViewRestParser extends GenericRestParser {
 				if(PinaraAppManagerImpl.getInstance().getNetTreeMap().containsKey(netTreeId)) {
 					retStr = NetTreeGmlMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
 				} else {
-					retStr = "<result>NOK : " + "NetTree id is not mapped to a nettree : " + netTreeId + "</result>"; 
+					retStr = "<message><result>NOK</result><desc>" + "NetTree id is not mapped to a nettree : " + netTreeId + "</desc></message>"; 
 				}
 				
 			} catch (PinaraAuthenticationException e1) {
@@ -59,7 +59,7 @@ public class GraphViewRestParser extends GenericRestParser {
 			break;
 
 		default:
-			retStr = "<result>NOK : " + "Command not found : " + restCommArr[0] + "</result>"; 
+			retStr = "<message><result>NOK</result><desc>" + "Command not found : " + restCommArr[0] + "</desc></message>"; 
 			
 			break;
 		}

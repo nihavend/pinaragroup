@@ -133,6 +133,30 @@ package com.likya.pinara.utils
 			return event;
 		}
 		
+		public static function service_customHandler(refObject:DisplayObject, event:ResultEvent, showWin:Boolean = false):Boolean {
+			var returnXml:XML;
+			var returnTxt:String = null;
+			
+			try {
+				returnXml = XML(event.message.body);
+				if(returnXml.result == "NOK") {
+					if(showWin) {
+						WindowUtils.showDummyWindow(refObject, returnXml.desc.toString());
+					}
+					return false;
+				} else {
+					//PopUpManager.removePopUp(this);
+				}
+			} catch(err:Error) {
+				Alert.show("Result : " + err.message);
+				returnTxt = String(event.result)
+					
+				return false;
+			}	
+			
+			return true;
+		}
+		
 		public static function startsWith(haystack:String, needle:String):Boolean {
 			return haystack.indexOf(needle) == 0;
 		}

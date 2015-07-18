@@ -7,33 +7,41 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
+import com.likya.myra.commons.utils.LiveStateInfoUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
+import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
+import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
+import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
 import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
 
 public class NetTreeGmlMapper {
 	
-	private static XmlCursor addNode(XmlCursor xmlCursor, String id, String name, String nodeLabel) {
+	private static XmlCursor addNode(XmlCursor xmlCursor, String id, String name, String nodeLabel, String color) {
 		
 		xmlCursor.beginElement("Node");
 		xmlCursor.insertAttributeWithValue("id", id);
 		xmlCursor.insertAttributeWithValue("name", name);
-		xmlCursor.insertAttributeWithValue("nodeLabel", nodeLabel);
-		xmlCursor.insertAttributeWithValue("nodeColor", "0xFFFFFF");
-		xmlCursor.insertAttributeWithValue("nodeSize", "200");
-		xmlCursor.insertAttributeWithValue("nodeClass", "");
-		xmlCursor.insertAttributeWithValue("nodeIcon", "gri");
+		// xmlCursor.insertAttributeWithValue("nodeLabel", nodeLabel);
+		xmlCursor.insertAttributeWithValue("desc", nodeLabel);
+		xmlCursor.insertAttributeWithValue("nodeColor", color);
+		xmlCursor.insertAttributeWithValue("nodeSize", "3");
+		xmlCursor.insertAttributeWithValue("nodeClass", "leaf");
+		xmlCursor.insertAttributeWithValue("nodeIcon", "5");
+		xmlCursor.insertAttributeWithValue("x", "10");
+		xmlCursor.insertAttributeWithValue("y", "10");
 		
 		xmlCursor.toNextToken(); // exit from Node
 		
 		return xmlCursor;
 	}
 	
-	private static XmlCursor addEdge(XmlCursor xmlCursor, String fromId, String toId) {
+	private static XmlCursor addEdge(XmlCursor xmlCursor, String fromId, String toId, String color) {
 		
 		xmlCursor.beginElement("Edge");
 		xmlCursor.insertAttributeWithValue("fromID", fromId);
 		xmlCursor.insertAttributeWithValue("toID", toId);
-		xmlCursor.insertAttributeWithValue("color", "0x8F8FFF");
+		xmlCursor.insertAttributeWithValue("color", color);
 		xmlCursor.insertAttributeWithValue("flow", "50");
 		
 		xmlCursor.toNextToken(); // exit from Node
@@ -58,6 +66,38 @@ public class NetTreeGmlMapper {
 		return xmlCursor;
 	}
 	
+	private static String resolveColor(AbstractJobType abstractJobType) {
+
+		LiveStateInfo liveStateInfo = abstractJobType.getStateInfos().getLiveStateInfos().getLiveStateInfoArray(0);
+
+		if (LiveStateInfoUtils.equalStates(liveStateInfo, StateName.FINISHED, SubstateName.COMPLETED, StatusName.SUCCESS)) {
+			return "0x088A08";
+		} else if (LiveStateInfoUtils.equalStates(liveStateInfo, StateName.FINISHED, SubstateName.COMPLETED, StatusName.FAILED)) {
+			return "0xFF0040";
+		} else if (LiveStateInfoUtils.equalStates(liveStateInfo, StateName.RUNNING)) {
+			return "0x0101DF";
+		} else {
+			return "0xD8D8D8";
+		}
+
+		/*
+		if (myFlexJob.getState() == Job.READY || myFlexJob.getState() == Job.WAITING || myFlexJob.getState() == Job.PAUSE) {
+			nodeIcon = "mavi";
+			colorIndicator = "0xD8D8D8";
+		} else if (myFlexJob.getState() == Job.WORKING) {
+			nodeIcon = "yesil2";
+			colorIndicator = "0x0101DF";
+		} else if (myFlexJob.getState() == Job.FAIL) {
+			nodeIcon = "kirmizi";
+			colorIndicator = "0xFF0040";
+		} else if (myFlexJob.getState() == Job.SUCCESS) {
+			nodeIcon = "yesil";
+			colorIndicator = "0x088A08";
+		}
+		*/
+
+	}
+	
 	public static String getMapped(Collection<AbstractJobType> abstractJobTypes) {
 		
 		final String rootNodeId = "Vid:0";
@@ -79,9 +119,9 @@ public class NetTreeGmlMapper {
 			if(abstractJobType.getDependencyList() == null || abstractJobType.getDependencyList().sizeOfItemArray() == 0) {
 				rootNodes.add(abstractJobType);
 			} else {
-				xmlCursor = addNode(xmlCursor, abstractJobType.getId(), abstractJobType.getBaseJobInfos().getJsName(), abstractJobType.getBaseJobInfos().getJsName());
+				xmlCursor = addNode(xmlCursor, abstractJobType.getId(), abstractJobType.getBaseJobInfos().getJsName(), abstractJobType.getBaseJobInfos().getJsName(), resolveColor(abstractJobType));
 				for(Item depItem : abstractJobType.getDependencyList().getItemArray()) {
-					xmlCursor = addEdge(xmlCursor, depItem.getJsId(), abstractJobType.getId());
+					xmlCursor = addEdge(xmlCursor, depItem.getJsId(), abstractJobType.getId(), resolveColor(abstractJobType));
 				}
 			}
 		}
@@ -90,15 +130,15 @@ public class NetTreeGmlMapper {
 		
 		if(rootNodes.size() == 1) {
 			addMeta(xmlCursor, rootNodes.get(0).getId());
-			xmlCursor = addNode(xmlCursor, rootNodes.get(0).getId(), "Root Node" + rootNodes.get(0).getBaseJobInfos().getJsName(), rootNodes.get(0).getBaseJobInfos().getJsName());
+			xmlCursor = addNode(xmlCursor, rootNodes.get(0).getId(), "Root Node" + rootNodes.get(0).getBaseJobInfos().getJsName(), rootNodes.get(0).getBaseJobInfos().getJsName(), resolveColor(rootNodes.get(0)));
 		} else {
 			addMeta(xmlCursor, rootNodeId);
 			
-			xmlCursor = addNode(xmlCursor, rootNodeId, "Virtual Root Node", "Virtual Root Node");
+			xmlCursor = addNode(xmlCursor, rootNodeId, "Virtual Root Node", "Virtual Root Node", resolveColor(rootNodes.get(0)));
 			
 			for(AbstractJobType tmpAbstractJobType : rootNodes) {
-				xmlCursor = addNode(xmlCursor, tmpAbstractJobType.getId(), tmpAbstractJobType.getBaseJobInfos().getJsName(), tmpAbstractJobType.getBaseJobInfos().getJsName());
-				xmlCursor = addEdge(xmlCursor, rootNodeId, tmpAbstractJobType.getId());
+				xmlCursor = addNode(xmlCursor, tmpAbstractJobType.getId(), tmpAbstractJobType.getBaseJobInfos().getJsName(), tmpAbstractJobType.getBaseJobInfos().getJsName(), resolveColor(tmpAbstractJobType));
+				xmlCursor = addEdge(xmlCursor, rootNodeId, tmpAbstractJobType.getId(), resolveColor(tmpAbstractJobType));
 			}
 			
 		}

@@ -1,49 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--s:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
-xmlns:mx="library://ns.adobe.com/flex/mx" 
-xmlns:s="library://ns.adobe.com/flex/spark"
-xmlns:visual="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.*" 
-xmlns:code="http://code.google.com/p/flexlib/"
-implements="com.likya.pinara.modules.IModuleInterface"
-creationComplete="creationCompleteHandler(event)"
-width="100%" height="100%"-->
 <s:Module xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" xmlns:local="*" 
-		  xmlns:visual="org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.*"
-		  xmlns:controls="org.un.cava.birdeye.ravis.enhancedGraphLayout.ui.controls.*"
+		  xmlns:ravis="org.un.cava.birdeye.ravis.graphLayout.visual.*"
 		  xmlns:vc="org.un.cava.birdeye.ravis.components.ui.controls.vgraphControls.*"
+		  xmlns:lc="org.un.cava.birdeye.ravis.components.ui.controls.layouterControls.*"
 		  implements="com.likya.pinara.modules.IModuleInterface"
 		  >
 	
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.jobdetail.JobListWithDetails;
-			import com.likya.pinara.event.ResourceEvent;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
-			import mx.events.ModuleEvent;
 			import mx.graphics.ImageSnapshot;
 			import mx.graphics.codec.PNGEncoder;
 			
-			import org.un.cava.birdeye.ravis.enhancedGraphLayout.data.EnhancedGraph;
+			import org.un.cava.birdeye.ravis.components.renderers.nodes.IconNodeRenderer;
 			import org.un.cava.birdeye.ravis.enhancedGraphLayout.event.VGNodeEvent;
-			import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.edgeRenderers.EdgeRenderer;
-			import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers.EnhancedIconNodeRenderer;
-			import org.un.cava.birdeye.ravis.enhancedGraphLayout.visual.nodeRenderers.NodeLabelRenderer;
-			import org.un.cava.birdeye.ravis.graphLayout.data.IGraph;
-			import org.un.cava.birdeye.ravis.graphLayout.data.INode;
+			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
 			import org.un.cava.birdeye.ravis.graphLayout.layout.ILayoutAlgorithm;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IEdgeRenderer;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.IVisualNode;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.VisualGraph;
 			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
-			import org.un.cava.birdeye.ravis.utils.TypeUtil;
 			
 			// graph datastructure object
-			private var graph:IGraph;
+			// private var graph:IGraph;
 			// active layouter
 			private var layouter:ILayoutAlgorithm;
 			// edge renderer
@@ -85,12 +70,12 @@ width="100%" height="100%"-->
 			public function refreshGraphData(graphXML:XML):void {
 				(parentApplication.jobListDetail as JobListWithDetails).callService();
 				/*if (vgraph.graph == null) {
-					initData(graphXML);
+				initData(graphXML);
 				} else {
-					if (graphXML == "false") {
-						Alert.show("Can not read xml !");
-					}
-					vgraph.fullVGraphRefresh(graphXML, true);
+				if (graphXML == "false") {
+				Alert.show("Can not read xml !");
+				}
+				vgraph.fullVGraphRefresh(graphXML, true);
 				}*/
 			}
 			
@@ -108,27 +93,30 @@ width="100%" height="100%"-->
 				// trace(graphXML);
 				
 				/**
-				<graphInfo>
-					<Meta>
-					  <rootnodeid>1</rootnodeid>
-					</Meta>
-					<Graph>
-					  <Node id="1" name="Root NodeMy name is" nodeLabel="My name is" nodeColor="0xFFFFFF" nodeSize="200" nodeClass="" nodeIcon="gri"/>
-					  <Edge fromID="3" toID="1" color="0x8F8FFF" flow="50"/>
-					</Graph>
-				  </graphInfo>				
-				*/
+				 <graphInfo>
+				 <Meta>
+				 <rootnodeid>1</rootnodeid>
+				 </Meta>
+				 <Graph>
+				 <Node id="1" name="Root NodeMy name is" nodeLabel="My name is" nodeColor="0xFFFFFF" nodeSize="200" nodeClass="" nodeIcon="gri"/>
+				 <Edge fromID="3" toID="1" color="0x8F8FFF" flow="50"/>
+				 </Graph>
+				 </graphInfo>				
+				 */
+				
 				
 				/* create and init a graph object with the XML data */
 				
-				graph = new EnhancedGraph("XMLAsDocsGraph", true);
-				var vo:Object = TypeUtil.deserializeXMLString(graphXML);
-				EnhancedGraph(graph).initFromVO(vo); 
+				// graph = new EnhancedGraph("XMLAsDocsGraph", true);
+				vgraph.graph = new Graph("XMLAsDocsGraph", false, graphXML);
+
+				// var vo:Object = TypeUtil.deserializeXMLString(graphXML);
+				// EnhancedGraph(graph).initFromVO(vo); 
 				
 				/* set the graph in the VGraph object, this automatically
 				* initializes the VGraph items; 
 				* note: vgraph is the id of the mxml specified VisualGraph component */
-				vgraph.graph = graph;
+				// vgraph.graph = graph;
 				
 				layouter = new HierarchicalLayouter(vgraph);
 				HierarchicalLayouter(layouter).orientation = HierarchicalLayouter.ORIENT_TOP_DOWN;
@@ -141,12 +129,12 @@ width="100%" height="100%"-->
 				layouter.disableAnimation = true;
 				
 				vgraph.displayEdgeLabels = true;
-				vgraph.displayNodeLabels = true;
+				// vgraph.displayNodeLabels = true;
 				
-				vgraph.nodeLabelRenderer = new ClassFactory(NodeLabelRenderer);
+				// vgraph.nodeLabelRenderer = new ClassFactory(NodeLabelRenderer);
 				
-				vgraph.itemRenderer = new ClassFactory(EnhancedIconNodeRenderer);
-				vgraph.edgeLabelRenderer = new ClassFactory(EdgeRenderer);
+				vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
+				// vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
 				vgraph.edgeRendererFactory = new ClassFactory(DirectedArrowEdgeRenderer);
 				
 				/* set the visibility limit options, default 2 
@@ -156,27 +144,29 @@ width="100%" height="100%"-->
 				* Note: Id 1 is referring to node id in the XML file */
 				// Serkan
 				// startRoot = graph.nodeByStringId("Job_List").vnode;
-				startRoot = graph.nodeByStringId(rootNodeId).vnode;
+				startRoot = vgraph.graph.nodeByStringId(rootNodeId).vnode;
 				/* the following kicks it off .... */
 				vgraph.currentRootVNode = startRoot;
 				
 				addEventListeners();
 				initDone = true;
 				
+				vgraph.scale = 0.9;
+				
 				vgraph.draw();
 			}
 			
 			private function addEventListeners():void {
-				vgraph.addEventListener(VGNodeEvent.VG_NODE_DOUBLE_CLICK, nodeEventHandler);
+				// vgraph.addEventListener(VGNodeEvent.VG_NODE_DOUBLE_CLICK, nodeEventHandler);
 			}
 			
 			private function nodeEventHandler(event:VGNodeEvent):void {
-				if (vgraph.enableDefaultDoubleClick == false) {
+				/*if (vgraph.enableDefaultDoubleClick == false) {
 					var node:INode = event.node;
 					vgraph.setVisibleNodeWithRelated(node.vnode);
-				}
+				}*/
 			}
-						
+			
 			protected function refreshGraph(event:Event):void {
 				// dispatchEvent(new TlosEvent(TlosEvent.REFRESH));
 			}
@@ -188,7 +178,7 @@ width="100%" height="100%"-->
 			protected function refresh_clickHandler(event:MouseEvent):void {
 				refreshGraphData(defaultXml);
 			}
-						
+			
 		]]>
 	</fx:Script>
 	
@@ -201,8 +191,70 @@ width="100%" height="100%"-->
 	</fx:Metadata>
 	
 	
-	
 	<s:Panel id="graphPanel"
+			 title="{resourceManager.getString('messages', 'scenarioTree')}"
+			 right="0" height="100%" width="100%"
+			 chromeColor="#E2E5E7" 
+			 color="#0D173C"  
+			 fontFamily="Arial" 
+			 enabled="true" 
+			 minWidth="600" 
+			 dropShadowVisible="true">
+		
+		
+		<s:layout>
+			<s:VerticalLayout />
+		</s:layout>
+		
+		<s:SkinnableContainer id="scenarioTree" name="'scenarioTree'" top="0" width="100%" height="100%" chromeColor="#E2E5E7" fontWeight="bold">
+			<mx:HBox paddingBottom="0" horizontalGap="5" width="100%" height="100%" borderAlpha="1" borderStyle="solid">
+				
+				<mx:VBox width="275" height="100%" horizontalAlign="center" verticalAlign="top" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="0" contentBackgroundColor="#FDFBFB" backgroundColor="#8DA7BF">
+<!--					<controls:ToggleDragSubTree vgraph="{vgraph}" width="90%" fontWeight="bold"/>
+					<controls:ToggleNodeDoubleClick vgraph="{vgraph}" width="90%" fontWeight="bold"/>
+-->					<mx:VBox
+						width="255"
+						minHeight="200" 
+						horizontalAlign="center"
+						paddingLeft="5"
+						paddingRight="5"
+						paddingBottom="5"
+						paddingTop="5"
+						borderColor="#666666"
+						cornerRadius="5"
+						borderStyle="solid"
+						backgroundColor="#CFD0DB"
+						backgroundAlpha=".2"  x="13">
+						<!--<vc:DegreesOfSeparation id="myDegreeOS" vgraph="{vgraph}"/>-->
+						<vc:ScaleControls id="mySCs" vgraph="{vgraph}"  width="240" height="150" x="14"/>
+						<!--<vc:DrawButton id="myDB" vgraph="{vgraph}" />-->
+						<s:HGroup width="235" horizontalAlign="center">
+							<s:Button label="Refresh" click="refresh_clickHandler(event)" />
+							<s:Button label="Save" click="saveGraphImage(event)"/>
+							<!--<s:Button label="Demo" click="test_clickHandler(event)" y="-30"/>-->
+						</s:HGroup>
+					</mx:VBox>
+				</mx:VBox>
+				
+				<!--<lc:HierLayoutControls id="myHierLC" vgraph="{vgraph}" visible="false"/>
+				<lc:CommonLayoutControls id="myCommonLC" vgraph="{vgraph}" visible="false"/>-->
+				
+				<mx:Canvas id="graphCnvs" width="100%" height="100%" verticalScrollPolicy="on">		
+					<ravis:VisualGraph id="vgraph" width="100%" height="100%" 
+									   left="0" right="0" top="0" bottom="5" backgroundColor="#FFFFFF" alpha="1"
+									   resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
+									   visibilityLimitActive="true"
+									   >
+					</ravis:VisualGraph>
+					<mx:Label text="{resourceManager.getString('messages', 'traverseGraph')}" bottom="0" right="5" />
+				</mx:Canvas>
+			</mx:HBox>
+			
+		</s:SkinnableContainer>
+		
+		
+	</s:Panel>
+	<!--s:Panel id="graphPanel"
 			 title="{resourceManager.getString('messages', 'scenarioTree')}"
 			 right="0" height="100%" width="100%"
 			 chromeColor="#E2E5E7" 
@@ -218,7 +270,7 @@ width="100%" height="100%"-->
 		
 		<s:SkinnableContainer id="scenarioTree" name="'scenarioTree'" top="0" width="100%" height="100%" chromeColor="#E2E5E7" fontWeight="bold">
 			<mx:HBox paddingBottom="0" horizontalGap="5" width="100%" height="100%" borderAlpha="1" borderStyle="solid">
-
+				
 				<mx:VBox width="275" height="100%" horizontalAlign="center" verticalAlign="top" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="0" contentBackgroundColor="#FDFBFB" backgroundColor="#8DA7BF">
 					<controls:ToggleDragSubTree vgraph="{vgraph}" width="90%" fontWeight="bold"/>
 					<controls:ToggleNodeDoubleClick vgraph="{vgraph}" width="90%" fontWeight="bold"/>
@@ -245,22 +297,19 @@ width="100%" height="100%"-->
 						</s:HGroup>
 					</mx:VBox>
 				</mx:VBox>
-
+				
 				<mx:Canvas id="graphCnvs" width="100%" height="100%" verticalScrollPolicy="on">		
-					<visual:EnhancedVisualGraph id="vgraph" width="100%" height="100%" 
-												name="serkan"
-												left="0" right="0" top="0" bottom="5"
-												backgroundColor="#FFFFFF" alpha="1"
-												resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
-												visibilityLimitActive="true"
-												enableDefaultDoubleClick="false"
-												maxVisibleDistance="100" >
-					</visual:EnhancedVisualGraph>
+					<ravis:VisualGraph id="vgraph" width="100%" height="100%" 
+									   left="0" right="0" top="0" bottom="5" backgroundColor="#FFFFFF" alpha="1"
+									   resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
+									   visibilityLimitActive="true"
+									   >
+					</ravis:VisualGraph>
 					<mx:Label text="{resourceManager.getString('messages', 'traverseGraph')}" bottom="0" right="5" />
 				</mx:Canvas>
 			</mx:HBox>
 			
 		</s:SkinnableContainer>
 		
-	</s:Panel>
+	</s:Panel-->
 </s:Module>

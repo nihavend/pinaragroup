@@ -232,13 +232,15 @@
 				}
 				if(selectedNetTreeId == '-1') {
 					pinaraJobListGrid.enableAllBtn.visible = false;
+					pinaraJobListGrid.enableAllBtn.includeInLayout = false;
 					return;
 				}
 				
 				var found:Boolean = false;
 				
 				for each (var item:Object in jobListXmlCollection) {
-					if(item.visualParams.commandabilityParams.isEnablable) {
+					var test:String = "" + item.visualParams.commandabilityParams.isEnablable;
+					if(test == "true") {
 						found = true;
 						break;
 					}
@@ -246,10 +248,12 @@
 				
 				if(found) {
 					pinaraJobListGrid.enableAllBtn.visible = true;
+					pinaraJobListGrid.enableAllBtn.includeInLayout = true;
 				} 
 				
 				if(isAllDisableable()) {
 					pinaraJobListGrid.disableAllBtn.visible = true;
+					pinaraJobListGrid.disableAllBtn.includeInLayout = true;
 				} 
 				
 			}
@@ -274,7 +278,7 @@
 					detailPanel.visible = false;
 					detailPanel.includeInLayout = false;
 				}
-				
+				permitEnableAllBtn();
 			}
 			
 			public function testMe(data:Object):int {
@@ -366,7 +370,7 @@
 			protected function pinaraJobListGrid_creationCompleteHandler(event:FlexEvent):void
 			{
 				pinaraJobListGrid.jobListXmlCollection = jobListXmlCollection;
-				permitEnableAllBtn();
+				// permitEnableAllBtn();
 			}
 			
 		]]>

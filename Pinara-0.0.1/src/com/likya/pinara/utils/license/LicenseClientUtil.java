@@ -77,11 +77,15 @@ public class LicenseClientUtil {
 	}
 
 	private static boolean validateDate(String value, boolean serialize) throws Exception {
+
 		DateFormat format = new SimpleDateFormat("ddMMyyyy");
 		Date date;
+
+		// System.out.println("Expire Date : " + value);
+		// System.out.println("Current Date : " + format.format(Calendar.getInstance().getTime()));
+
 		try {
 			date = format.parse(value);
-			// System.out.println(date);
 			
 			if(DateUtils.dateDiffWithNow(date) < 0) {
 				if(serialize) {

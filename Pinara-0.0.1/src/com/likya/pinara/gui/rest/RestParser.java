@@ -496,8 +496,8 @@ public class RestParser extends GenericRestParser {
 		case RestParser.CMD_AUTH:
 			
 			try {
-				if(Pinara.licenseFlag.equals(Pinara.ulicense) && LicenseClientUtil.deserialize() == null && !LicenseClientUtil.validate(bufferString)) {
-					Pinara.setLicensed(false);
+				if(!Pinara.licenseFlag.equals(Pinara.ulicense) || LicenseClientUtil.deserialize() != null || LicenseClientUtil.validate(bufferString)) {
+					Pinara.setLicensed(true);
 				} 
 				if (Pinara.licenseFlag.equals(Pinara.ulicense)) {
 					synchronized (Pinara.licenseFlag) {

@@ -273,7 +273,7 @@
 					Alert.show("Kullacını adı ya da şifre hatalı veya giriş izniniz yok !");
 					ModelLocator.getInstance().currentUser.username = "";
 				} else {
-					Alert.show("Unexpected Event : " + event.toString());
+					Alert.show("Unexpected [Code : + " + event.status + "] Event : " + event.toString());
 				}
 				
 			}

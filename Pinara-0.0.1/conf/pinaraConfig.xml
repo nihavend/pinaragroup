@@ -19,7 +19,7 @@
 		</myra:stateInfos>
 		<useEncryption>false</useEncryption>
 		<userName>myra@likyateknoloji.com</userName>
-		<lik:userPassword>dddddd</lik:userPassword>
+		<lik:userPassword></lik:userPassword>
 		<smtpServerHostName>mail.likyateknoloji.com</smtpServerHostName>
 		<port>587</port>
 	</mailInfo>

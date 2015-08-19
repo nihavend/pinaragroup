@@ -15,7 +15,6 @@ public class UserOps extends _Super_UserOps
      */
     protected override function preInitializeService():void
     {
-		_serviceControl.baseURL = null;
         super.preInitializeService();
         // Initialization customization goes here
     }

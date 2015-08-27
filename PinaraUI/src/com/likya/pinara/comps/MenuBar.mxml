@@ -155,7 +155,7 @@
 				} else if (event.label == resourceManager.getString("messages", "pinaraEkran")) {
 					showPinaraEkranLogPopup();
 				} else if (event.label == resourceManager.getString("messages", "suspendApp")) {
-					Alert.show("suspendApp : " + currentDataItem);
+					// Alert.show("suspendApp : " + currentDataItem);
 					Alert.show("Uygulama beklemeye alınacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, suspendApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "resumeApp")) {
 					Alert.show("Uygulama beklemeden çıkarılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, resumeApp, null, Alert.CANCEL);

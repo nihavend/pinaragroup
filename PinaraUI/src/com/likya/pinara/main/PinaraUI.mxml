@@ -319,7 +319,7 @@
 
 					var encoder:Base64Encoder = new Base64Encoder();        
 
-					encoder.encode("expdate:01092015");
+					encoder.encode("expdate:01042016");
 					var str:String = "name=John+Doe" + "[" + encoder.toString() + "]";
 					
 					req.data = new URLVariables(str);

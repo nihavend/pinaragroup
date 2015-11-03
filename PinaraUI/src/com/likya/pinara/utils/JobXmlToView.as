@@ -113,9 +113,12 @@ package com.likya.pinara.utils {
 				managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
 				
 				var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
-				managementInfoForm.bhour.text = pairs[0];
-				managementInfoForm.bminute.text = pairs[1];
-				managementInfoForm.bsecond.text = pairs[2];
+				// managementInfoForm.bhour.text = pairs[0];
+				managementInfoForm.bhour.value = pairs[0];
+				// managementInfoForm.bminute.text = pairs[1];
+				managementInfoForm.bminute.value = pairs[1];
+				// managementInfoForm.bsecond.text = pairs[2];
+				managementInfoForm.bsecond.value = pairs[2];
 				
 				// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
 				

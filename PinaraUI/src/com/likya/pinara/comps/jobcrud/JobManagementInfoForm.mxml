@@ -38,10 +38,11 @@
 					return false;
 				}	
 */				
-				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
+/*				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
 					Alert.show("Begin time is not defined !");
 					return false;
-				}	
+				}	*/
+
 				
 /*				if(edate.text == "") {
 					Alert.show("End date is not defined !");
@@ -124,6 +125,13 @@
 				}
 			}
 			
+			public static function leadingZero(value:Number):String	{
+				if(value < 10){
+					return "0" + value;
+				}
+				return value.toString();    
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -145,23 +153,27 @@
 		<s:FormItem label="Başlama Tarih ve Saati : " top="20">
 			<s:HGroup>
 				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
-				<s:TextInput  id="bhour"
+				<!--s:TextInput  id="bhour"
 							  text="00"
 							  restrict="0-23"
 							  widthInChars="3"
-							  maxChars="2" />
+							  maxChars="2" /-->
+				<s:NumericStepper id="bhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+				
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<s:TextInput  id="bminute"
+				<!--<s:TextInput  id="bminute"
 							  text="00"
 							  restrict="0-59"
 							  widthInChars="3"
-							  maxChars="2" />	
+							  maxChars="2" />-->
+				<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
 				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<s:TextInput  id="bsecond"
+				<!--<s:TextInput  id="bsecond"
 							  text="00"
 							  restrict="0-59"
 							  widthInChars="3"
-							  maxChars="2" />
+							  maxChars="2" />-->
+				<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
 			</s:HGroup>
 			<s:helpContent>
 				<s:Label text="DD/MM/YYYY hh:mm:ss"/>

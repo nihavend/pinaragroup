@@ -281,7 +281,8 @@ package com.likya.pinara.utils {
 				currentDF.formatString = "YYYY-MM-DD"
 				var dateString:String = currentDF.format(sDate);
 				
-				dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
+				// dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
+				dateString = dateString + "T" + j.managementInfoForm.bhour.value + ":" + j.managementInfoForm.bminute.value + ":" + j.managementInfoForm.bsecond.value + ".000+02:00";
 				
 				managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
 				managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;

@@ -38,7 +38,13 @@
 			
 			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
 			{
+				
 				if(jobDetailXml != null) {
+					if(isMode == 1) {
+						title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
+					} else if(isMode == 2) {
+						jobDetailXml.@Id = "";
+					}
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm, jobDetailXml);
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
@@ -49,11 +55,6 @@
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
 				}
 
-				if(isMode == 1) {
-					title = "Job Modification Window for JobId :  " + jobDetailXml.@Id;
-				} else if(isMode == 2) {
-					jobDetailXml.@Id = "";
-				}
 			}
 			// Handle the close button and Cancel button.
 			private function handleCloseEvent():void {

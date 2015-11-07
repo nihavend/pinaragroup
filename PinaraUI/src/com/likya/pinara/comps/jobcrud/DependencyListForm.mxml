@@ -60,11 +60,11 @@
 				var jobInfoTmp:String = stateName.selectedItem;
 				
 				if(substateName.selectedItem != null) {
-					jobInfoTmp += ":" + substateName.selectedItem.value;
+					jobInfoTmp += ":" + substateName.selectedItem; //.value;
 				}
 				
 				if(statusName.selectedItem != null) {
-					jobInfoTmp += ":" + statusName.selectedItem.value;
+					jobInfoTmp += ":" + statusName.selectedItem; //.value;
 				}
 				
 				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {

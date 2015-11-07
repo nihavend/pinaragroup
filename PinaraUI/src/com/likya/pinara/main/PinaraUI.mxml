@@ -177,8 +177,17 @@
 					jobListDetail.updateData();
 				} else if(event.type == ResourceEvent.JOBNODE_SELECTED) {
 					currentState = "jobDetailState";
-					allJobDetail.selectedJobId = XML(event.object).@id;
-					currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
+					// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
+					// bu durumda id attribute olmadan direk skalar olarak geliyor
+					if (!XML(event.object).hasOwnProperty("@id")) {
+						allJobDetail.selectedJobId = XML(event.object);
+						// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+						var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
+						currentListNodeId = jobTree.liveTree.getParentItem(tmpItem).@id; 
+					} else {
+						allJobDetail.selectedJobId = XML(event.object).@id;
+						currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
+					}
 					allJobDetail.updateData();
 				} else if(event.type == ResourceEvent.ANASAYFA) {
 					// currentState = "loggedInState";

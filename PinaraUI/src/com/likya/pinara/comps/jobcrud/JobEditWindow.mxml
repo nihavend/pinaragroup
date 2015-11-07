@@ -53,6 +53,8 @@
 					JobXmlToView.prepare_managementInfoForm(managementInfoForm, jobDetailXml);
 					JobXmlToView.prepare_logAnalysisForm(logAnalysisForm, jobDetailXml);
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
+				} else {
+					dependencyListForm.updateData();
 				}
 
 			}

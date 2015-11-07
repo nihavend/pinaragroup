@@ -244,11 +244,13 @@ package com.likya.pinara.utils {
 				scheduleInfoForm.specificSchedule.selected = true;
 				scheduleInfoForm.handleDecoration("specificSchedule");
 				
-				if(jobDetailXml.scheduleInfo.daysOfMonth.firstDayOfMonth != null) {
+				// if(jobDetailXml.scheduleInfo.daysOfMonth.firstDayOfMonth != null) {
+				if(jobDetailXml.scheduleInfo.daysOfMonth.hasOwnProperty("firstDayOfMonth")) {
 					scheduleInfoForm.fdom.selected = true;
 				}
 				
-				if(jobDetailXml.scheduleInfo.daysOfMonth.lastDayOfMonth != null) {
+				// if(jobDetailXml.scheduleInfo.daysOfMonth.lastDayOfMonth != null) {
+				if(jobDetailXml.scheduleInfo.daysOfMonth.hasOwnProperty("lastDayOfMonth")) {
 					scheduleInfoForm.ldom.selected = true;
 				}
 				

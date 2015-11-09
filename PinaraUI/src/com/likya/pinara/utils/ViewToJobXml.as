@@ -565,6 +565,8 @@ package com.likya.pinara.utils {
 					
 					var specDays:String = j.scheduleInfoForm.specDays.text;
 					
+					daysOfMonthXML.appendChild(<myra-jobprops:daysTextRep xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"> {specDays} </myra-jobprops:daysTextRep>);
+					
 					if(specDays.indexOf(',') > 0) {
 						var results:Array = specDays.split(',');
 						for each (var item:String in results) {
@@ -573,11 +575,20 @@ package com.likya.pinara.utils {
 								var dashList:Array = item.split('-');
 								if(dashList.length == 1) {
 									daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[0]}</myra-jobprops:days>);
-								} else if(dashList.length > 1) {
-									var counter:int = 0;								
-									for each (var dashitem:String in dashList) {
-										daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{dashList[counter ++]}</myra-jobprops:days>);
+								} else if(dashList.length == 2) {
+									
+									var minNum:Number = Number(dashList[0]);
+									var maxNum:Number = Number(dashList[1]);
+									
+									if(!isNaN(minNum) && !isNaN(maxNum) && minNum > 0 && maxNum < 31 && minNum < maxNum) {
+										var counter:int = 0;
+										for (counter = minNum; counter <= maxNum; counter++)
+										{
+											//trace(counter);
+											daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{counter}</myra-jobprops:days>);
+										}
 									}
+				
 								}
 							} else {
 								daysOfMonthXML.appendChild(<myra-jobprops:days xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops">{item}</myra-jobprops:days>);
@@ -697,6 +708,51 @@ package com.likya.pinara.utils {
 			var dateTimeString:String = dateString + "T" + timeString + ".000+02:00";	
 			
 			return dateTimeString;
+		}
+		
+		public static function isValidSpecDays(str:String):Boolean {
+			var pattern:RegExp = /^(?!([ \d]*-){2})\d+(?: *[-,] *\d+)*$/;
+			
+			var result:Object = str.match(pattern);
+			if(result == null || !isInRange(str)) {
+				return false;
+			}
+			return true;
+		}
+		
+		public static function isInRange(specDays:String):Boolean {
+			
+			if(specDays.indexOf(',') > 0) {
+				var results:Array = specDays.split(',');
+				for each (var item:String in results) {
+					if(item.indexOf('-') > 0) {
+						var dashList:Array = item.split('-');
+						if(dashList.length == 1) {
+							var dayNum:Number = Number(dashList[0]);
+							if(isNaN(dayNum) || dayNum == 0 || dayNum > 30) {
+								return false;
+							}
+						} else if(dashList.length == 2) {
+							
+							var minNum:Number = Number(dashList[0]);
+							var maxNum:Number = Number(dashList[1]);
+							
+							if(isNaN(minNum) || isNaN(maxNum) || minNum < 0 || maxNum > 30 || minNum > maxNum) {
+								return false;
+							}
+							
+						}
+					} else {
+						var dayNum2:Number = Number(item);
+						if(isNaN(dayNum2) || dayNum2 <= 0 || dayNum2 > 30) {
+							return false;
+						}
+					}
+				}
+			}
+			
+			return true;
+			
 		}
 	}
 }

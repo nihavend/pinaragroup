@@ -7,8 +7,21 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.utils.ViewToJobXml;
+			
 			import mx.controls.Alert;
 			import mx.events.ItemClickEvent;
+			
+			public function validateForm():Boolean
+			{
+				var regexVal:Boolean = ViewToJobXml.isValidSpecDays(specDays.text);
+				if(specDays.text.length > 0 && !regexVal) {
+					Alert.show("spec days not valid !");
+					return false;
+				}
+				
+				return true;
+			}
 			
 			private function handleCard(event:ItemClickEvent):void {
 				handleDecoration(event.currentTarget.selectedValue);

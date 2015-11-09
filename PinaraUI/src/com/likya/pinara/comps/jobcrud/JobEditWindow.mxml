@@ -72,7 +72,7 @@
 				formsValid = formsValid && dependencyListForm.validateForm();
 				formsValid = formsValid && managementInfoForm.validateForm();
 				formsValid = formsValid && logAnalysisForm.validateForm();
-				// formsValid = formsValid && scheduleInfoForm.validateForm();
+				formsValid = formsValid && scheduleInfoForm.validateForm();
 				
 				return formsValid;
 			}

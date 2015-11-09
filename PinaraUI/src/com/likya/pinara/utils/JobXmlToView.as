@@ -254,12 +254,18 @@ package com.likya.pinara.utils {
 					scheduleInfoForm.ldom.selected = true;
 				}
 				
+				/*
 				for each (var item:Object in jobDetailXml.scheduleInfo.daysOfMonth.days) {
 					scheduleInfoForm.specDays.text += item + ",";
 				}
 				
 				if(scheduleInfoForm.specDays.text.lastIndexOf(",") == scheduleInfoForm.specDays.text.length - 1) {
 					scheduleInfoForm.specDays.text = scheduleInfoForm.specDays.text.substr(0, scheduleInfoForm.specDays.text.length - 1);
+				}
+				*/
+				
+				if(jobDetailXml.scheduleInfo.daysOfMonth.hasOwnProperty("daysTextRep")) {
+					scheduleInfoForm.specDays.text = jobDetailXml.scheduleInfo.daysOfMonth.daysTextRep + "";
 				}
 				
 				for each (var weekdayitem:Object in jobDetailXml.scheduleInfo.daysOfWeekIntType) {

@@ -57,14 +57,14 @@
 					return;
 				}
 				
-				var jobInfoTmp:String = stateName.selectedItem;
+				var jobInfoTmp:String = stateName.selectedItem.value;
 				
 				if(substateName.selectedItem != null) {
-					jobInfoTmp += ":" + substateName.selectedItem; //.value;
+					jobInfoTmp += ":" + substateName.selectedItem.value;
 				}
 				
 				if(statusName.selectedItem != null) {
-					jobInfoTmp += ":" + statusName.selectedItem; //.value;
+					jobInfoTmp += ":" + statusName.selectedItem.value;
 				}
 				
 				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {
@@ -145,7 +145,9 @@
 					
 					var sssTmp:SSS = new SSS(dependencyListGrid.selectedItem.stateinfo);
 					
-					stateName.selectedItem = sssTmp.state;
+					stateName.selectedIndex = JobXmlToView.indexOf(sssTmp.state, stateName.dataProvider.toArray());
+					
+					//stateName.selectedItem = sssTmp.state;
 					
 					stateName_changeHandler(null);
 					if(substateName.dataProvider != null) {
@@ -238,7 +240,7 @@
 			{
 				var data:ArrayCollection = new ArrayCollection();
 				
-				if(stateName.selectedItem == "PENDING") {
+				if(stateName.selectedItem.value == "PENDING") {
 					//substateName.dataProvider = [{"CREATED", "VALIDATED", "IDLED", "DEACTIVATED", "READY", "PAUSED"}];
 					
 					data = new ArrayCollection(
@@ -253,7 +255,7 @@
 					);
 					substateName.enabled = true;
 					resetList(statusName);
-				} else if(stateName.selectedItem == "RUNNING") {
+				} else if(stateName.selectedItem.value == "RUNNING") {
 					data = new ArrayCollection(
 						[   
 							{value:"STAGE-IN"},
@@ -265,15 +267,15 @@
 					);
 					substateName.enabled = true;
 					resetList(statusName);
-				} else if(stateName.selectedItem == "CANCELLED") {
+				} else if(stateName.selectedItem.value == "CANCELLED") {
 					data = null;
 					substateName.enabled = false;
 					resetList(statusName);
-				} else if(stateName.selectedItem == "FAILED") {
+				} else if(stateName.selectedItem.value == "FAILED") {
 					data = null;
 					substateName.enabled = false;
 					resetList(statusName);
-				} else if(stateName.selectedItem == "FINISHED") {
+				} else if(stateName.selectedItem.value == "FINISHED") {
 					data = new ArrayCollection(
 						[   
 							{value:"STOPPED"},
@@ -375,6 +377,11 @@
 				statusName.dataProvider = data;
 			}
 			
+			/*protected function testCombos_clickHandler(event:MouseEvent):void
+			{
+				Alert.show("Value : " + stateName.selectedItem.value + " " + substateName.selectedItem.value + " " + statusName.selectedItem.value);
+			}*/
+			
 		]]>
 	</fx:Script>
 	
@@ -444,14 +451,19 @@
 					<s:VGroup>
 						<s:HGroup>				
 							<s:FormItem label="State" width="140">
-								<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4"> 
+								<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4" labelField="value" > 
 									<s:dataProvider>
 										<mx:ArrayList>
-											<fx:String>PENDING</fx:String>
+											<!--<fx:String>PENDING</fx:String>
 											<fx:String>RUNNING</fx:String>
 											<fx:String>CANCELLED</fx:String>
 											<fx:String>FAILED</fx:String>
-											<fx:String>FINISHED</fx:String>
+											<fx:String>FINISHED</fx:String>-->
+											<fx:Object value="PENDING"/>
+											<fx:Object value="RUNNING"/>
+											<fx:Object value="CANCELLED"/>
+											<fx:Object value="FAILED"/>
+											<fx:Object value="FINISHED"/>
 										</mx:ArrayList>
 									</s:dataProvider>
 								</s:DropDownList>
@@ -472,9 +484,15 @@
 											<fx:String>MIGRATING</fx:String>
 											<fx:String>HELD</fx:String>
 											<fx:String>ON-RESOURCE</fx:String-->
-											<fx:String>COMPLETED</fx:String>
+											
+											
+											<!--<fx:String>COMPLETED</fx:String>
 											<fx:String>STOPPED</fx:String>
-											<fx:String>SKIPPED</fx:String>
+											<fx:String>SKIPPED</fx:String>-->
+											
+											<fx:Object value="COMPLETED"/>
+											<fx:Object value="STOPPED"/>
+											<fx:Object value="SKIPPED"/>
 
 										</mx:ArrayList>
 									</s:dataProvider>
@@ -484,9 +502,16 @@
 								<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="0"> 
 									<s:dataProvider>
 										<mx:ArrayList>
-											<fx:String>SUCCESS</fx:String>
+											
+											<fx:Object value="SUCCESS"/>
+											<fx:Object value="WARNING"/>
+											<fx:Object value="FAILED"/>
+											
+											<!--<fx:String>SUCCESS</fx:String>
 											<fx:String>WARNING</fx:String>
-											<fx:String>FAILED</fx:String>
+											<fx:String>FAILED</fx:String>-->
+											
+											
 											<!--fx:String>LOOKFOR-RESOURCE</fx:String>
 											<fx:String>WAITING</fx:String>
 											<fx:String>TRANSFERING</fx:String>
@@ -509,6 +534,7 @@
 						<s:VGroup>
 							<s:Label text="Comment" fontSize="14" fontWeight="bold"/>
 							<s:TextInput id="comment" width="400" />
+							<!--<s:Button label="Test" id="testCombos" click="testCombos_clickHandler(event)" enabled="true"/>-->
 						</s:VGroup>	
 					</s:VGroup>
 				</s:HGroup>

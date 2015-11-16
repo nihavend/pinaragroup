@@ -1,9 +1,12 @@
 package com.likya.pinara.test.jobcrud;
 
 
+import java.util.HashMap;
+
 import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlOptions;
 
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.pinara.gui.rest.RestParser;
@@ -51,7 +54,29 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 					throw new Exception("JobList.xml is null or damaged !");
 				}
 
-				xmlJob = jobListDocument.toString();
+				/******/
+				/**
+				 * /Myra-0.0.1-Test/src/com/likya/myra/test/helpers/SimplePropsGenerator.java dan örneklendi
+				 */
+				
+				XmlOptions xmlOptions = new XmlOptions();
+				//xmlOptions.setUseDefaultNamespace();
+				
+				HashMap<String, String> ns = new HashMap<>(); 
+				ns.put("http://www.likyateknoloji.com/myra-jobprops", "myra-jobprops");
+				ns.put("http://www.likyateknoloji.com/myra-stateinfo", "myra-stateinfo");
+				
+				xmlOptions.setSaveSuggestedPrefixes(ns);
+					
+				xmlOptions.setSaveAggressiveNamespaces();
+				xmlOptions.setSavePrettyPrint();
+				
+				// JobListDocument jobListDocumentNew = JobListDocument.Factory.parse(jobListDocument.toString());
+				JobListDocument jobListDocumentNew = JobListDocument.Factory.parse(jobListDocument.xmlText(xmlOptions));
+				
+				/*****/
+				
+				xmlJob = jobListDocumentNew.toString();
 				
 				xmlJob = "<data><serialize>true</serialize><datamess>" + xmlJob + "</datamess></data>";
 				String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBADD, xmlJob);

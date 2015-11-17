@@ -29,7 +29,7 @@ public class RestParser extends GenericRestParser {
 	private static final String NETTREE_XML_CMD = "nettreexml";
 	private static final String GROUPTREE_XML_CMD = "grouptreexml";
 	private static final String JOBLIST_XML_CMD = "joblistxml";
-	private static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
+	public static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
 
 	public static final String CMD_JOBLIST = "jobList";

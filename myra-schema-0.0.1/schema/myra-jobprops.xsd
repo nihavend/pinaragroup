@@ -183,6 +183,7 @@
 			<xs:sequence>
 				<xs:element name="firstDayOfMonth" type="xs:string" minOccurs="0" maxOccurs="1" />
 				<xs:element name="lastDayOfMonth" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="daysTextRep" type="xs:string" minOccurs="0" maxOccurs="1" />
 				<xs:element name="days" default="1" minOccurs="0" maxOccurs="unbounded">
 					<xs:simpleType>
 						<xs:restriction base="xs:integer">

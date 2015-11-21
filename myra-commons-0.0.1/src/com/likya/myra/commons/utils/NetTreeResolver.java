@@ -3,6 +3,7 @@ package com.likya.myra.commons.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.xmlbeans.XmlObject;
 
@@ -22,9 +23,11 @@ public class NetTreeResolver {
 		protected String virtualId;
 		protected ArrayList<String> members = new ArrayList<String>();
 
-		public NetTree() {
+		public NetTree(Set <String> vIds) {
 			super();
-			virtualId = generateVirtualId();
+			do {
+				virtualId = generateVirtualId();
+			} while(vIds.contains(virtualId));
 		}
 
 		
@@ -71,13 +74,15 @@ public class NetTreeResolver {
 				continue;
 			}
 
-			NetTree netTree = new NetTree();
+			NetTree netTree = new NetTree(netTreeMap.keySet());
+			// System.err.println("Genereated new tree with id : " + netTree.virtualId);
 
 			started = System.currentTimeMillis();
 			scan(idKey, netTree, jobMap, netTreeMap, freeJobs);
 			ended = System.currentTimeMillis();
 			outputStr.append("mainScan total duration for [" + idKey + "] >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
-
+			// System.out.println("Adding tree to map id : " + netTree.virtualId);
+			netTreeMap.put(netTree.virtualId, netTree);
 		}
 		
 		return outputStr;
@@ -153,8 +158,8 @@ public class NetTreeResolver {
 			// This job is one of the last jobs of branch
 			abstractJobType.getGraphInfo().setLastNodeOfBranch(true);
 		}
-
-		netTreeMap.put(netTree.virtualId, netTree);
+		//System.out.println("Adding tree to map id : " + netTree.virtualId);
+		//netTreeMap.put(netTree.virtualId, netTree);
 	}
 
 	private static void upScan(AbstractJobType abstractJobType, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {

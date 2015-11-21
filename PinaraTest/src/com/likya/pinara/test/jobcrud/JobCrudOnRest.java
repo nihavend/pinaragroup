@@ -20,22 +20,38 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 	public final static String RESTJOBROPS_CTX = pinaraUrl + "/flex/restsrvc/";
 	
 	protected void setUp() {
-
+		httpGet(RESTJOBROPS_CTX + RestParser.CMD_NORECOVER, "");
     }
 
-	public void testSimpleAdd() {
-
+	public void testCreateDependencedRecords() {
+		
 		String xmlJob;
 		
 		try {
 			
-			int testCount = 1;
+			int testCount = 10;
+			int depAmount = 20;
+			int depCount = 0;
 		
+			long startTime;
+			
 			for (int c = 0; c < testCount; c++) {
+				
+				startTime = System.currentTimeMillis();
 				
 				int maxId = latestJobId();
 				
-				AbstractJobType abstractJobType = generate(maxId == 0 ? false:true);
+				AbstractJobType abstractJobType;
+				
+				if(++ depCount > depAmount) {
+					depCount = 1;
+					abstractJobType = generate(false);
+				} else {
+					abstractJobType = generate(maxId == 0 ? false:true);
+					if(maxId > 1) {
+						abstractJobType.getDependencyList().getItemArray(0).setJsId("" + maxId);
+					}
+				}
 				
 				JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
 				JobList jobList = jobListDocument.addNewJobList();
@@ -43,7 +59,92 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 				
 				abstractJobType = jobListDocument.getJobList().getGenericJobArray(0);
 				
-				abstractJobType.getBaseJobInfos().setJsName("job" + (++maxId));
+				abstractJobType.getBaseJobInfos().setJsName("job" + (maxId + 1));
+				abstractJobType.getBaseJobInfos().getJobTypeDetails().setJobCommand(abstractJobType.getBaseJobInfos().getJsName() + ".bat");
+				
+				if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+					throw new Exception("JobList.xml is null or damaged !");
+				}
+
+				/******/
+				/**
+				 * /Myra-0.0.1-Test/src/com/likya/myra/test/helpers/SimplePropsGenerator.java dan örneklendi
+				 */
+				
+				XmlOptions xmlOptions = new XmlOptions();
+				//xmlOptions.setUseDefaultNamespace();
+				
+				HashMap<String, String> ns = new HashMap<>(); 
+				ns.put("http://www.likyateknoloji.com/myra-jobprops", "myra-jobprops");
+				ns.put("http://www.likyateknoloji.com/myra-stateinfo", "myra-stateinfo");
+				
+				xmlOptions.setSaveSuggestedPrefixes(ns);
+					
+				xmlOptions.setSaveAggressiveNamespaces();
+				xmlOptions.setSavePrettyPrint();
+				
+				// JobListDocument jobListDocumentNew = JobListDocument.Factory.parse(jobListDocument.toString());
+				JobListDocument jobListDocumentNew = JobListDocument.Factory.parse(jobListDocument.xmlText(xmlOptions));
+				
+				/*****/
+				
+				xmlJob = jobListDocumentNew.toString();
+				
+				xmlJob = "<data><serialize>true</serialize><datamess>" + xmlJob + "</datamess></data>";
+				String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBADD, xmlJob);
+
+				long duration = System.currentTimeMillis() - startTime;
+				System.err.println("added record in  " + duration + " ms");
+				
+				Assert.assertNotNull(retString);
+			
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void atestCreateGroupedRecords() {
+
+		String xmlJob;
+		
+		try {
+			
+			int testCount = 30;
+			int groupAmount = 3;
+			int groupId = 1;
+			int groupCount = 0;
+		
+			long startTime;
+			
+			System.out.println(">> Group Id : " + groupId);
+			
+			for (int c = 0; c < testCount; c++) {
+				
+				startTime = System.currentTimeMillis();
+				
+				int maxId = latestJobId();
+				
+				AbstractJobType abstractJobType = generate(maxId == 0 ? false:true);
+				
+				if(++ groupCount > groupAmount) {
+					groupCount = 1;
+					++ groupId;
+					System.out.println(">> Group Id : " + groupId);
+				}
+				
+				System.out.println("\t>> Group Count : " + groupCount);
+				
+				abstractJobType.setGroupId("grp_" + groupId);
+				
+				JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
+				JobList jobList = jobListDocument.addNewJobList();
+				jobList.addNewGenericJob().set(abstractJobType);
+				
+				abstractJobType = jobListDocument.getJobList().getGenericJobArray(0);
+				
+				abstractJobType.getBaseJobInfos().setJsName("job" + (maxId + 1));
 				abstractJobType.getBaseJobInfos().getJobTypeDetails().setJobCommand(abstractJobType.getBaseJobInfos().getJsName() + ".bat");
 				
 				if(maxId > 1) {
@@ -81,6 +182,9 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 				xmlJob = "<data><serialize>true</serialize><datamess>" + xmlJob + "</datamess></data>";
 				String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBADD, xmlJob);
 
+				long duration = System.currentTimeMillis() - startTime;
+				System.err.println("added record in  " + duration + " ms");
+				
 				Assert.assertNotNull(retString);
 			
 			}
@@ -101,7 +205,7 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 		
 		String jobList = retString.split("<joblist>")[1];
 		if(jobList.split("</joblist>").length > 0) {
-			jobList = jobList.split("</joblist>")[1];
+			jobList = jobList.split("</joblist>")[0];
 			for(String jobdetails : jobList.split("<job>")) {
 				if(jobdetails.equals("")) continue;
 				String jobIdTag = jobdetails.split("</job>")[0].split("<jobid>")[1].split("</jobid>")[0];

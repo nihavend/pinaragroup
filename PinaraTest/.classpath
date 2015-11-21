@@ -8,5 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Pinara-0.0.1"/>
 	<classpathentry kind="lib" path="/SharedLibs/junit/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="/SharedLibs/apache/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="/myra-commons-0.0.1/target/myra-commons-0.0.1.jar"/>
+	<classpathentry kind="lib" path="/SharedLibs/log4j/log4j-1.2.15.jar" sourcepath="/Users/serkan/.m2/repository/log4j/log4j/1.2.15/log4j-1.2.15-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

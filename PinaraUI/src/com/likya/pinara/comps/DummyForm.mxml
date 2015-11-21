@@ -36,11 +36,18 @@
 				PopUpManager.removePopUp(this);
 			}
 			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var fileReference:FileReference = new FileReference();
+				fileReference.save(myText.text, "pinaraexport.xml");
+			}
+			
 		]]>
 	</fx:Script>
 
 	<s:VGroup paddingLeft="10" paddingTop="10">
-		<s:TextArea id="myText" width="500" height="400" textAlign="justify" fontFamily="Arial" fontSize="12" editable="false" />
+		<s:Button label="Save" click="button1_clickHandler(event)" visible="true" includeInLayout="true"/>
+		<s:TextArea id="myText" width="500" height="360" textAlign="justify" fontFamily="Arial" fontSize="12" editable="false" />
 	</s:VGroup>
 	
 </s:TitleWindow> 

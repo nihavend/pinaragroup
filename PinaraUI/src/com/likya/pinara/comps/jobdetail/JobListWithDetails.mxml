@@ -112,10 +112,6 @@
 				detailPanel.includeInLayout = true;
 			}
 			
-			protected function button1_clickHandler(event:MouseEvent):void {
-				Alert.show("length : " + jobListXmlCollection.children().toXMLString());
-			}
-
 			public static function getNodeByName(xml:XML, nodeName:Object):XMLList {
 				return xml.descendants(nodeName);
 			}
@@ -407,8 +403,6 @@
 				<s:layout> 
 					<s:VerticalLayout/> 
 				</s:layout> 
-				
-				<s:Button label="show xml" click="button1_clickHandler(event)" visible="false" includeInLayout="false"/>
 				
 				<jobdetail:PinaraJobListGrid selectedGroupId="{selectedNetTreeId}" id="pinaraJobListGrid" creationComplete="pinaraJobListGrid_creationCompleteHandler(event)"/>
 				

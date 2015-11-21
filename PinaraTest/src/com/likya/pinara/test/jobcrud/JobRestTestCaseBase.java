@@ -57,8 +57,8 @@ public abstract class JobRestTestCaseBase extends RestTestCaseBase {
 
 		simpleProperties.setHandlerURI("com.likya.myra.jef.jobs.ExecuteInShell");
 
-		simpleProperties.setGroupId("123245");
-		simpleProperties.setId("123245");
+		simpleProperties.setGroupId("grp_1");
+		simpleProperties.setId("0");
 		simpleProperties.setAgentId(1);
 
 		ScheduleInfo scheduleInfo = simpleProperties.addNewScheduleInfo();
@@ -164,8 +164,8 @@ public abstract class JobRestTestCaseBase extends RestTestCaseBase {
 		
 		liveStateInfo.setLSIDateTime(MyraDateUtils.getServerW3CDateTime());
 		liveStateInfo.setStateName(StateName.PENDING);
-		liveStateInfo.setSubstateName(SubstateName.READY);
-		liveStateInfo.setStatusName(StatusName.BYTIME);
+		liveStateInfo.setSubstateName(SubstateName.DEACTIVATED);
+		// liveStateInfo.setStatusName(StatusName.BYTIME);
 
 		
 		

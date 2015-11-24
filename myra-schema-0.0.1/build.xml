@@ -17,6 +17,25 @@
 			<pathelement location="${home.dir}/${sharedlib.dir}/antlib/ant-contrib-1.0b3.jar" />
 		</classpath>
 	</taskdef>
+	
+	<condition property="isMac">
+		<os family="mac" />
+	</condition>
+
+	<condition property="isWindows">
+		<os family="windows" />
+	</condition>
+	
+	<target name="doMac" if="isMac">
+		<echo message="Came into the Mac target" />
+		<!-- do whatever you want to do here for Mac systems -->
+		<property name="xmlbeans.lib" value="/Users/serkan/programlar/dev/workspace/SharedLibs/xmlbeans-2.5.0" />
+	</target>
+
+	<target name="doWindows" if="isWindows">
+		<echo message="Came into the Windows target" />
+		<property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" />
+	</target>
 
 	<target name="init" depends="init2" unless="minor.number">
 		<property name="minor.number" value="" />
@@ -53,9 +72,7 @@
 		</delete>
 	</target>
 
-	<target name="initxmlbeans" depends="cleanUp">
-		<!--property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" /-->
-		<property name="xmlbeans.lib" value="/Users/serkan/programlar/dev/workspace/SharedLibs/xmlbeans-2.5.0" />
+	<target name="initxmlbeans" depends="cleanUp, doMac, doWindows">
 		
 		<!-- check for xbean.jar from binary distribution -->
 		<available property="xmlbeans.lib" value="${xmlbeans.home}/lib" file="${xmlbeans.home}/lib/xbean.jar" />

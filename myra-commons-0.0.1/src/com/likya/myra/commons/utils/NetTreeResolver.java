@@ -81,8 +81,6 @@ public class NetTreeResolver {
 			scan(idKey, netTree, jobMap, netTreeMap, freeJobs);
 			ended = System.currentTimeMillis();
 			outputStr.append("mainScan total duration for [" + idKey + "] >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
-			// System.out.println("Adding tree to map id : " + netTree.virtualId);
-			netTreeMap.put(netTree.virtualId, netTree);
 		}
 		
 		return outputStr;
@@ -158,8 +156,8 @@ public class NetTreeResolver {
 			// This job is one of the last jobs of branch
 			abstractJobType.getGraphInfo().setLastNodeOfBranch(true);
 		}
-		//System.out.println("Adding tree to map id : " + netTree.virtualId);
-		//netTreeMap.put(netTree.virtualId, netTree);
+		// System.out.println("Adding tree to map id : " + netTree.virtualId);
+		netTreeMap.put(netTree.virtualId, netTree);
 	}
 
 	private static void upScan(AbstractJobType abstractJobType, NetTree netTree, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap, HashMap<String, String> freeJobs) {

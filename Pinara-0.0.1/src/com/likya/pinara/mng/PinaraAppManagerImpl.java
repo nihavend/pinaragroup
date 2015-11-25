@@ -116,7 +116,10 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 
 	
 	public void resumeJob(String jobName) throws PinaraAuthenticationException {
-		// TODO Auto-generated method stub
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		jobOperations.resumeJob(jobName);
 
 	}
 

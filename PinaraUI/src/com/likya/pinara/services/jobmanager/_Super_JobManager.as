@@ -27,17 +27,6 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          var operation:mx.rpc.http.Operation;
          var argsArray:Array;
 
-		 operation = new mx.rpc.http.Operation(null, "stop");
-		 operation.url = "/flex/restsrvc/stopjob/{jobId}";
-		 operation.method = "GET";
-		 argsArray = new Array("jobId");
-		 operation.argumentNames = argsArray;     
-		 operation.serializationFilter = serializer0;
-		 operation.properties = new Object();
-		 operation.properties["urlParamNames"] = ["jobId"];
-		 operation.resultType = Object;
-		 operations.push(operation);
-		 
          operation = new mx.rpc.http.Operation(null, "start");
          operation.url = "/flex/restsrvc/startjob/{jobId}";
          operation.method = "GET";
@@ -84,7 +73,7 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
 
          operation = new mx.rpc.http.Operation(null, "resume");
          operation.url = "/flex/restsrvc/resumejob/{jobId}";
-         operation.method = "POST";
+         operation.method = "GET";
          argsArray = new Array("jobId");
          operation.argumentNames = argsArray;         
          operation.serializationFilter = serializer0;
@@ -96,7 +85,7 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
 
          operation = new mx.rpc.http.Operation(null, "retry");
          operation.url = "/flex/restsrvc/retryjob/{jobId}";
-         operation.method = "POST";
+         operation.method = "GET";
          argsArray = new Array("jobId");
          operation.argumentNames = argsArray;         
          operation.serializationFilter = serializer0;
@@ -105,50 +94,6 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation.contentType = "application/x-www-form-urlencoded";
          operation.resultType = Object;
          operations.push(operation);
-		 
-		 operation = new mx.rpc.http.Operation(null, "enablegrp");
-		 operation.url = "/flex/restsrvc/enablegrp/{grpId}";
-		 operation.method = "GET";
-		 argsArray = new Array("grpId");
-		 operation.argumentNames = argsArray;         
-		 operation.serializationFilter = serializer0;
-		 operation.properties = new Object();
-		 operation.properties["urlParamNames"] = ["grpId"];
-		 operation.resultType = Object;
-		 operations.push(operation);
-		 
-		 operation = new mx.rpc.http.Operation(null, "enable");
-		 operation.url = "/flex/restsrvc/enablejob/{jobId}";
-		 operation.method = "GET";
-		 argsArray = new Array("jobId");
-		 operation.argumentNames = argsArray;        
-		 operation.serializationFilter = serializer0;
-		 operation.properties = new Object();
-		 operation.properties["urlParamNames"] = ["jobId"];
-		 operation.resultType = Object;
-		 operations.push(operation);
-		 
-		 operation = new mx.rpc.http.Operation(null, "disablegrp");
-		 operation.url = "/flex/restsrvc/disablegrp/{grpId}";
-		 operation.method = "GET";
-		 argsArray = new Array("grpId");
-		 operation.argumentNames = argsArray;   
-		 operation.serializationFilter = serializer0;
-		 operation.properties = new Object();
-		 operation.properties["urlParamNames"] = ["grpId"];
-		 operation.resultType = Object;
-		 operations.push(operation);
-		 
-		 operation = new mx.rpc.http.Operation(null, "disable");
-		 operation.url = "/flex/restsrvc/disablejob/{jobId}";
-		 operation.method = "GET";
-		 argsArray = new Array("jobId");
-		 operation.argumentNames = argsArray;   
-		 operation.serializationFilter = serializer0;
-		 operation.properties = new Object();
-		 operation.properties["urlParamNames"] = ["jobId"];
-		 operation.resultType = Object;
-		 operations.push(operation);
 
          operation = new mx.rpc.http.Operation(null, "stopapp");
          operation.url = "/flex/restsrvc/stopapp";
@@ -217,6 +162,61 @@ internal class _Super_JobManager extends com.adobe.fiber.services.wrapper.HTTPSe
          operation = new mx.rpc.http.Operation(null, "getappstate");
          operation.url = "/flex/restsrvc/appstate";
          operation.method = "GET";
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "enablegrp");
+         operation.url = "/flex/restsrvc/enablegrp/{grpId}";
+         operation.method = "GET";
+         argsArray = new Array("grpId");
+         operation.argumentNames = argsArray;         
+         operation.serializationFilter = serializer0;
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["grpId"];
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "enable");
+         operation.url = "/flex/restsrvc/enablejob/{jobId}";
+         operation.method = "GET";
+         argsArray = new Array("jobId");
+         operation.argumentNames = argsArray;         
+         operation.serializationFilter = serializer0;
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["jobId"];
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "disablegrp");
+         operation.url = "/flex/restsrvc/disablegrp/{grpId}";
+         operation.method = "GET";
+         argsArray = new Array("grpId");
+         operation.argumentNames = argsArray;
+		 operation.serializationFilter = serializer0;
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["grpId"];
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "disable");
+         operation.url = "/flex/restsrvc/disablejob/{jobId}";
+         operation.method = "GET";
+         argsArray = new Array("jobId");
+         operation.argumentNames = argsArray;
+		 operation.serializationFilter = serializer0;
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["jobId"];
+         operation.resultType = Object;
+         operations.push(operation);
+
+         operation = new mx.rpc.http.Operation(null, "stop");
+         operation.url = "/flex/restsrvc/stopjob/{jobId}";
+         operation.method = "GET";
+         argsArray = new Array("jobId");
+         operation.argumentNames = argsArray;
+		 operation.serializationFilter = serializer0;
+         operation.properties = new Object();
+         operation.properties["urlParamNames"] = ["jobId"];
          operation.resultType = Object;
          operations.push(operation);
 

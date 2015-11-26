@@ -1,0 +1,55 @@
+<xs:schema xmlns="http://www.likyateknoloji.com/odi-ext" xmlns:likya-gen="http://www.likyateknoloji.com/likya-gen"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:myra-joblist="http://www.likyateknoloji.com/myra-joblist" targetNamespace="http://www.likyateknoloji.com/odi-ext"
+	elementFormDefault="qualified">
+
+	<xs:complexType name="odiExtProperties">
+		<xs:complexContent>
+			<xs:extension base="myra-joblist:abstractJobType">
+				<xs:sequence>
+					<xs:element ref="odiExtParams" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="odiExtParams">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="pJdbcUrl" type="xs:string" />
+				<xs:element name="pJdbcDriver" type="xs:string" />
+				<xs:element name="pJdbcUsername" type="xs:string" />
+				<xs:element name="pJdbcPassword" type="xs:string" />
+				
+				<xs:element name="pWorkName" type="xs:string" />
+				
+				<xs:element name="pUsername" type="xs:string" />
+				<xs:element name="pPassword" type="xs:string" />
+				
+				<xs:element name="pAgentUrl" type="xs:string" />
+
+				<xs:element name="pScenName" type="xs:string" />
+				<xs:element name="pScenVersion" type="xs:string" />
+				<xs:element name="pKeywords" type="xs:string" />
+				<xs:element name="pContextCode" type="xs:string" />
+				<xs:element name="pLogLevel" type="xs:integer" />
+				<xs:element name="pSessionName" type="xs:string" />
+				<xs:element name="pSynchronous" type="xs:boolean" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
+
+<!-- 
+		String Url = "jdbc:oracle:thin:@192.168.1.75:1521:orcl";
+		String Driver = "oracle.jdbc.OracleDriver";
+		String Master_User = "DEV_ODI_REPO";
+		String Master_Pass = "ad0215";
+		String WorkRep = "WORKREP";
+		String Odi_User = "SUPERVISOR";
+		String Odi_Pass = "SUNOPSIS";
+		
+		
+		String scenarioName = "LKYA_ODI_INTERFACE2"; /* Scenario Name */
+-->

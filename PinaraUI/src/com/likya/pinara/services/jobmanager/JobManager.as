@@ -7,7 +7,7 @@
 
 package com.likya.pinara.services.jobmanager
 {
-	import mx.utils.ObjectUtil;
+	
 	
 	public class JobManager extends _Super_JobManager
 	{
@@ -21,7 +21,7 @@ package com.likya.pinara.services.jobmanager
         super.preInitializeService();
         // Initialization customization goes here
 		
-		trace(ObjectUtil.toString(_serviceControl.operationList));
+		//trace(ObjectUtil.toString(_serviceControl.operationList));
     }
                
 }

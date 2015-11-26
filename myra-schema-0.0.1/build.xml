@@ -3,7 +3,7 @@
 	<property name="appname" value="myra-schema" />
 	
 	<property file="build.properties" />
-	<property name="home.dir" value="${basedir}/../.././" />
+	<property name="home.dir" value="${basedir}/../../../" />
 
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="build.dir" value="${basedir}/build/classes" />

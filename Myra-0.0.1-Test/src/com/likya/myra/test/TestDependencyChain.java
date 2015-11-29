@@ -1,6 +1,9 @@
 package com.likya.myra.test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Properties;
 
 import junit.framework.TestCase;
 
@@ -11,15 +14,18 @@ import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public class TestDependencyChain extends TestCase {
 
+	private String dataPath = "";
+	
 	HashMap<String, NetTreeResolver.NetTree> netTreeMap;
 	
-	protected void setUp() {
+	protected void setUp() throws IOException {
+		getPropValues();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void test3depA() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/3depA.xml";
+		String fileName = dataPath + "3depA.xml";
 		Object[] retValue = evaluate(fileName);
 
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
@@ -35,7 +41,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test3depV() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/3depV.xml";
+		String fileName = dataPath + "3depV.xml";
 		Object[] retValue = evaluate(fileName);
 
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
@@ -51,7 +57,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test3dep1tree() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/3dep1tree.xml";
+		String fileName = dataPath + "3dep1tree.xml";
 		Object[] retValue = evaluate(fileName);
 
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
@@ -67,7 +73,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test2dep1tree() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/2dep1tree.xml";
+		String fileName = dataPath + "2dep1tree.xml";
 		Object[] retValue = evaluate(fileName);
 
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
@@ -83,7 +89,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test10dep1tree() throws Exception {
 		
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/10dep.xml";
+		String fileName = dataPath + "10dep.xml";
 		Object[] retValue = evaluate(fileName);
 		
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>)retValue[0];
@@ -98,7 +104,7 @@ public class TestDependencyChain extends TestCase {
 	
 	public void test4dep2tree() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/4dep2tree.xml";
+		String fileName = dataPath + "4dep2tree.xml";
 		
 		for(int i = 0; i < 1; i ++) {
 			
@@ -121,7 +127,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test10dep2tree() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/10dep2tree.xml";
+		String fileName = dataPath + "10dep2tree.xml";
 		Object[] retValue = evaluate(fileName);
 		
 		
@@ -138,7 +144,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test6pinara() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/6pinara.xml";
+		String fileName = dataPath + "6pinara.xml";
 
 		for(int i = 0; i < 1; i ++) {
 		
@@ -158,8 +164,8 @@ public class TestDependencyChain extends TestCase {
 	//		
 	//		long started = System.currentTimeMillis();
 	//		
-	//		// StringBuffer xmlString = TestMyra.getData("/Users/serkan/git/localgit/TestDataFiles/data_orj/3depV.xml");
-	//		StringBuffer xmlString = TestMyra.getData("/Users/serkan/git/localgit/TestDataFiles/data_orj/10dep2tree.xml");
+	//		// StringBuffer xmlString = TestMyra.getData(dataPath + "3depV.xml");
+	//		StringBuffer xmlString = TestMyra.getData(dataPath + "10dep2tree.xml");
 	//		
 	//
 	//		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
@@ -222,6 +228,40 @@ public class TestDependencyChain extends TestCase {
 		
 		return retValue;
 				
+	}
+	
+	public String getPropValues() throws IOException {
+
+		String result = "";
+		FileInputStream fileInputStream = null;
+
+		try {
+			Properties prop = new Properties();
+			String propFileName = "testconfig.properties";
+
+			fileInputStream = new FileInputStream(propFileName);
+			
+			prop.load(fileInputStream);
+
+			// Date time = new Date(System.currentTimeMillis());
+
+			// get the property value and print it out
+			// String user = prop.getProperty("user");
+			// String company1 = prop.getProperty("company1");
+			// String company2 = prop.getProperty("company2");
+			// String company3 = prop.getProperty("company3");
+
+			// result = "Company List = " + company1 + ", " + company2 + ", " + company3;
+			// System.out.println(result + "\nProgram Ran on " + time + " by user=" + user);
+			
+			dataPath = prop.getProperty("data.path");
+			
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		} finally {
+			fileInputStream.close();
+		}
+		return result;
 	}
 
 }

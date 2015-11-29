@@ -49,19 +49,21 @@ public class ZipUtil extends TestBase {
 	public static void compressXml() throws Exception {
 
 		String pathName = "/Users/serkan/git/localgit/TL-2.0.0-Test/src/com/likya/myra/test/deps/";
+		pathName = "/Users/serkan/git/localgit/TestDataFiles/xmlss/";
 
 		String fileNames[] = { "5.xml", "10.xml", "50.xml", "100.xml", "200.xml", "400.xml", "500.xml", "800.xml", "1600.xml", "3200.xml", "5000.xml" };
 
 		int idx = 9;
 
-		JobListDocument jobListDocument = getJobList(pathName, fileNames[idx]);
+		JobListDocument jobListDocument = getJobList(pathName, fileNames[idx], false);
 
 		File file = new File(pathName + fileNames[idx] + ".bin");
 		
+		System.err.print("	>> serializing...");
 		long startTime = System.currentTimeMillis();
 		byte[] data = jobListDocument.toString().getBytes("utf-8");
 		long duration = System.currentTimeMillis() - startTime;
-		System.err.println(file.getName() + "	>> to byte[] in " + duration + " ms");
+		System.err.println(file.getName() + "	>> serialized to byte[] in " + duration + " ms");
 		
 		startTime = System.currentTimeMillis();
 		OutputStream outputStream = new FileOutputStream(file);

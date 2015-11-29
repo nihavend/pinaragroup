@@ -110,9 +110,8 @@ public class OdiExtPropsGenerator {
 		baseJobInfos.setJsIsActive(true);
 		
 		JobTypeDetails jobTypeDetails = baseJobInfos.addNewJobTypeDetails();
-		jobTypeDetails.setJobCommand("uzaktan_calisan_job.sh");
+		jobTypeDetails.setJobCommand("/home/likya/kursat/uzaktan_calisan_job.sh");
 		jobTypeDetails.setJobCommandType(JobCommandType.REMOTE_SHELL);
-		jobTypeDetails.setJobPath("/home/likya/kursat");
 
 		management.setTrigger(Trigger.TIME);
 		

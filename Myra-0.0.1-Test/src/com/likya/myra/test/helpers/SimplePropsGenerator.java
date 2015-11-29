@@ -20,7 +20,6 @@ import com.likya.xsd.myra.model.jobprops.BaseJobInfosDocument.BaseJobInfos;
 import com.likya.xsd.myra.model.jobprops.DaysOfMonthDocument.DaysOfMonth;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
 import com.likya.xsd.myra.model.jobprops.ManagementDocument.Management;
-import com.likya.xsd.myra.model.jobprops.PeriodInfoDocument.PeriodInfo;
 import com.likya.xsd.myra.model.jobprops.ScheduleInfoDocument.ScheduleInfo;
 import com.likya.xsd.myra.model.stateinfo.JobStatusListDocument.JobStatusList;
 import com.likya.xsd.myra.model.stateinfo.JsDependencyRuleDocument.JsDependencyRule;
@@ -112,9 +111,8 @@ public class SimplePropsGenerator {
 		baseJobInfos.setJsIsActive(true);
 
 		JobTypeDetails jobTypeDetails = baseJobInfos.addNewJobTypeDetails();
-		jobTypeDetails.setJobCommand("job2.sh");
+		jobTypeDetails.setJobCommand("/Users/serkan/Desktop/tlos2.0.0/job2.sh");
 		jobTypeDetails.setJobCommandType(JobCommandType.BATCH_PROCESS);
-		jobTypeDetails.setJobPath("/Users/serkan/Desktop/tlos2.0.0");
 		
 		management.setTrigger(Trigger.TIME);
 		

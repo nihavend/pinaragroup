@@ -67,7 +67,7 @@ public class TestDependencyChain extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void test2dep1tree() throws Exception {
 
-		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/10dep.xml";
+		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/2dep1tree.xml";
 		Object[] retValue = evaluate(fileName);
 
 		netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
@@ -99,16 +99,20 @@ public class TestDependencyChain extends TestCase {
 	public void test4dep2tree() throws Exception {
 
 		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/4dep2tree.xml";
-		Object[] retValue = evaluate(fileName);
 		
-		
-		@SuppressWarnings("unchecked")
-		HashMap<String, NetTreeResolver.NetTree> netTreeMap = (HashMap<String, NetTreeResolver.NetTree>)retValue[0];
-
-		assertEquals("Expected size of map is 2 but the actual value is " + netTreeMap.size(), true, netTreeMap.size() == 2);
-		
-		for (NetTreeResolver.NetTree netTree : netTreeMap.values()) {
-			assertEquals("Expected size of netTree.getMembers() is 2 but the actual value is " + netTree.getMembers().size(), true, netTree.getMembers().size() == 2);
+		for(int i = 0; i < 1; i ++) {
+			
+			System.err.println("Count : + " + i);
+			Object[] retValue = evaluate(fileName);
+				
+			@SuppressWarnings("unchecked")
+			HashMap<String, NetTreeResolver.NetTree> netTreeMap = (HashMap<String, NetTreeResolver.NetTree>)retValue[0];
+	
+			assertEquals("Expected size of map is 2 but the actual value is " + netTreeMap.size(), true, netTreeMap.size() == 2);
+			
+			for (NetTreeResolver.NetTree netTree : netTreeMap.values()) {
+				assertEquals("Expected size of netTree.getMembers() is 2 but the actual value is " + netTree.getMembers().size(), true, netTree.getMembers().size() == 2);
+			}
 		}
 
 	}
@@ -131,6 +135,23 @@ public class TestDependencyChain extends TestCase {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public void test6pinara() throws Exception {
+
+		String fileName = "/Users/serkan/git/localgit/TestDataFiles/data_orj/6pinara.xml";
+
+		for(int i = 0; i < 1; i ++) {
+		
+			System.err.println("Count : + " + i);
+			Object[] retValue = evaluate(fileName);
+			
+			netTreeMap = (HashMap<String, NetTreeResolver.NetTree>) retValue[0];
+	
+			assertEquals("Expected size of map is 2 but the actual value is " + netTreeMap.size(), true, netTreeMap.size() == 2);
+		}
+		
+	}
+	
 	//	public static void main(String[] args) throws Exception {
 	//		
 	//		HashMap<String, String> freeJobs = new HashMap<String, String>();
@@ -192,8 +213,9 @@ public class TestDependencyChain extends TestCase {
 		jobListDocument.getJobList().sizeOfGenericJobArray();
 		XmlObject[] objectArray = jobListDocument.getJobList().getGenericJobArray();
 		
-		StringBuilder str = NetTreeResolver.runAlgorythm(objectArray, netTreeMap, freeJobs);
-		System.err.println(str.toString());
+		// StringBuilder str = 
+		NetTreeResolver.runAlgorythm(objectArray, netTreeMap, freeJobs);
+		// System.err.println(str.toString());
 		
 		retValue[0] = netTreeMap;
 		retValue[1] = freeJobs;

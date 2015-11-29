@@ -148,8 +148,8 @@ public class GenerateTestData {
 
 		simpleProperties.setHandlerURI("com.likya.myra.jef.jobs.ExecuteInShell");
 
-		simpleProperties.setGroupId("123245");
-		simpleProperties.setId("123245");
+		simpleProperties.setGroupId("1");
+		simpleProperties.setId("1");
 		simpleProperties.setAgentId(1);
 
 		ScheduleInfo scheduleInfo = simpleProperties.addNewScheduleInfo();

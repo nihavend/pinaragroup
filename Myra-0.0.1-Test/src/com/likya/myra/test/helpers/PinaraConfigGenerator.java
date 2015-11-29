@@ -28,7 +28,6 @@ public class PinaraConfigGenerator {
 		// Elements
 		
 		pinaraConfig.setSenaryoDosyasi("/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/1.xml");
-		pinaraConfig.setMyraConfigFile("/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/myraConfig.xml");
 		// pinaraConfig.setServerIpAddress("127.0.0.1");
 		pinaraConfig.setServerHostName("localhost");
 		

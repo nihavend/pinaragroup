@@ -30,7 +30,7 @@ public class TestJobListEdit extends TestBase {
 
 		try {
 
-			JobListDocument jobListDocument = getJobList(pathName, fileNames[idx]);
+			JobListDocument jobListDocument = getJobList(pathName, fileNames[idx], true);
 
 			File file = new File(pathName + "XB_" + fileNames[idx]);
 			long startTime = System.currentTimeMillis();
@@ -65,7 +65,7 @@ public class TestJobListEdit extends TestBase {
 		// generated type.
 		// PhoneType[] phones = (PhoneType[])empDoc.selectPath(queryExpression);
 
-		JobListDocument jobListDocument = getJobList(pathName, fileNames[idx]);
+		JobListDocument jobListDocument = getJobList(pathName, fileNames[idx], true);
 
 		AbstractJobType abstractJobType[] = (AbstractJobType[]) jobListDocument.selectPath(queryExpression);
 

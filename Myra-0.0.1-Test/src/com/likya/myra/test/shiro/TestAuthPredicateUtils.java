@@ -38,7 +38,7 @@ public class TestAuthPredicateUtils extends TestBase {
 
 			for (String fileName : fileNames) {
 
-				JobListDocument jobListDocument = getJobList(pathName, fileName);
+				JobListDocument jobListDocument = getJobList(pathName, fileName, true);
 
 				//				System.out.println(">> Checking" + fileName + "...");
 				//				long startTime = System.currentTimeMillis();

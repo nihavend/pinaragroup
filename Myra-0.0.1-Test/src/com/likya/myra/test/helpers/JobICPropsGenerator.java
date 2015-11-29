@@ -91,9 +91,8 @@ public class JobICPropsGenerator {
 		baseJobInfos.setJsIsActive(true);
 		
 		JobTypeDetails jobTypeDetails = baseJobInfos.addNewJobTypeDetails();
-		jobTypeDetails.setJobCommand("job2.sh");
+		jobTypeDetails.setJobCommand("/Users/serkan/Desktop/tlos2.0.0/job2.sh");
 		jobTypeDetails.setJobCommandType(JobCommandType.BATCH_PROCESS);
-		jobTypeDetails.setJobPath("/Users/serkan/Desktop/tlos2.0.0");
 		
 		management.setTrigger(Trigger.TIME);
 		

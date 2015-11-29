@@ -12,24 +12,30 @@ import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public abstract class TestBase {
 
-	public static JobListDocument getJobList(String path, String fName) throws Exception {
+	public static JobListDocument getJobList(String path, String fName, boolean validate) throws Exception {
 
 		StringBuffer xmlString;
 
-		System.err.print(fName + "	>> is;");
+		System.err.print(fName + " loading...");
 
 		long startTime = System.currentTimeMillis();
 		xmlString = FileUtils.readFile(path + fName);
 		long duration = System.currentTimeMillis() - startTime;
-		System.err.print("	>> is loaded in " + duration + " ms");
+		System.err.print("	>> is loaded in " + duration + " ms	>> parsing...");
 
 		startTime = System.currentTimeMillis();
 		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
 		duration = System.currentTimeMillis() - startTime;
 		System.err.print("	>> is parsed in " + duration + " ms");
 
-		validator(jobListDocument);
-
+		if(validate) {
+			System.err.print("	>> validating...");
+			startTime = System.currentTimeMillis();
+			validator(jobListDocument);
+			duration = System.currentTimeMillis() - startTime;
+			System.err.print("	>> is validated in " + duration + " ms");
+		}
+		
 		return jobListDocument;
 	}
 

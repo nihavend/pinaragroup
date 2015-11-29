@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 import org.apache.commons.collections.iterators.ArrayIterator;
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 
 import com.likya.commons.utils.FileUtils;
@@ -25,6 +24,7 @@ import com.likya.myra.jef.InputStrategy;
 import com.likya.myra.jef.InputStrategyImpl;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.ManagementOperations;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.core.MonitoringOperations;
 import com.likya.myra.jef.jobs.JobHelper;
 import com.likya.myra.jef.jobs.JobImpl;
@@ -33,7 +33,6 @@ import com.likya.myra.jef.model.JobRuntimeInterface;
 import com.likya.myra.jef.model.JobRuntimeProperties;
 import com.likya.myra.jef.model.OutputData;
 import com.likya.myra.test.helpers.TestOutput;
-import com.likya.xsd.myra.model.config.MyraConfigDocument;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
@@ -147,7 +146,7 @@ public class TestMyra {
 						break;
 
 					case "6":
-						CoreStateInfo coreStateInfo = coreFactory.getManagementOperations().getExecutionState();
+						CoreStateInfo coreStateInfo = ManagementOperationsImpl.getExecutionState();
 						System.out.println(coreStateInfo.toString());
 						break;
 
@@ -285,10 +284,10 @@ public class TestMyra {
 
 					case "41":
 						
-						Collection<AbstractJobType> jobList = coreFactory.getNetTreeManagerInterface().getFreeJobs().values();
+						Collection<String> jobList = coreFactory.getNetTreeManagerInterface().getFreeJobs().values();
 						System.err.println(">> Serbest İşler");
-						for(AbstractJobType abstractJobType : jobList) {
-							JobImpl jobImpl = coreFactory.getMonitoringOperations().getJobQueue().get(abstractJobType.getId());
+						for(String tmpJobId : jobList) {
+							JobImpl jobImpl = coreFactory.getMonitoringOperations().getJobQueue().get(tmpJobId);
 							System.out.println("	>> " + (JobImpl) jobImpl);
 						}
 						
@@ -297,9 +296,9 @@ public class TestMyra {
 						System.err.println(">> Bağımlılık Grupları");
 						for(NetTree netTree : netTreeList) {
 							System.err.println("	>> Grup : " + netTree.getVirtualId());
-							ArrayList<AbstractJobType> abstractJobTypeList = netTree.getMembers();
-							for(AbstractJobType abstractJobType : abstractJobTypeList) {
-								JobImpl jobImpl = coreFactory.getMonitoringOperations().getJobQueue().get(abstractJobType.getId());
+							ArrayList<String> tmpJobIdList = netTree.getMembers();
+							for(String abstractJobType : tmpJobIdList) {
+								JobImpl jobImpl = coreFactory.getMonitoringOperations().getJobQueue().get(abstractJobType);
 								System.out.println("		>> " + (JobImpl) jobImpl);
 							}
 						}
@@ -431,15 +430,7 @@ public class TestMyra {
 
 		ConfigurationManager configurationManager;
 
-		MyraConfigDocument myraConfigDocument = null;
-
-		try {
-			myraConfigDocument = MyraConfigDocument.Factory.parse(xmlString.toString());
-			configurationManager = new ConfigurationManagerImpl(myraConfigDocument);
-		} catch (XmlException e) {
-			e.printStackTrace();
-			return;
-		}
+		configurationManager = new ConfigurationManagerImpl();
 
 		inputStrategy.setConfigurationManager(configurationManager);
 		inputStrategy.setJobListDocument(jobListDocument);

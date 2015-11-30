@@ -9,7 +9,7 @@ package com.likya.pinara.services.jobmanager
 {
 	
 	
-	public class JobManager extends _Super_JobManager
+	public class JobManager extends Super_JobManager
 	{
 		
 		/**

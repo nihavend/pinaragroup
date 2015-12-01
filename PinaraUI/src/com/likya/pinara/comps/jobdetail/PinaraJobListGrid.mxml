@@ -57,13 +57,15 @@
 			protected function enableAllBtn_clickHandler(event:MouseEvent):void
 			{
 				BasicAuthenticationHandler.authAndCall(grpMngService, "enablegrp", selectedGroupId);				
-				
+				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
+				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedGroupId));
 			}
 			
 			protected function disableAllBtn_clickHandler(event:MouseEvent):void
 			{
 				BasicAuthenticationHandler.authAndCall(grpMngService, "disablegrp", selectedGroupId);
-				
+				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
+				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedGroupId));
 			}
 			
 			protected function pinaraJobList_addedToStageHandler(event:Event):void

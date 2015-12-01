@@ -203,10 +203,11 @@
 				
 				BasicAuthenticationHandler.authAndSend(jobListDS);
 				
-				permitEnableAllBtn();
+				// permitEnableAllBtn();
 				
 			}
 			
+			/*
 			protected function isAllDisableable():Boolean
 			{
 				var disableable:Boolean = true;
@@ -253,7 +254,29 @@
 				} 
 				
 			}
+			*/
 			
+			protected function permitEnableAllBtn(netTreeEnablable:Boolean, netTreeDisablable:Boolean):void
+			{
+				
+				if(netTreeEnablable) {
+					pinaraJobListGrid.enableAllBtn.visible = true;
+					pinaraJobListGrid.enableAllBtn.includeInLayout = true;
+				}  else {
+					pinaraJobListGrid.enableAllBtn.visible = false;
+					pinaraJobListGrid.enableAllBtn.includeInLayout = false;
+				}
+				
+				if(netTreeDisablable && !netTreeEnablable) {
+					pinaraJobListGrid.disableAllBtn.visible = true;
+					pinaraJobListGrid.disableAllBtn.includeInLayout = true;
+				} else {
+					pinaraJobListGrid.disableAllBtn.visible = false;
+					pinaraJobListGrid.disableAllBtn.includeInLayout = false;
+				}
+				
+			}
+
 			protected function xmlService_faultHandler(event:FaultEvent):void {
 				BasicAuthenticationHandler.service_faultHandler(event);
 			}
@@ -274,7 +297,22 @@
 					detailPanel.visible = false;
 					detailPanel.includeInLayout = false;
 				}
-				permitEnableAllBtn();
+				
+				
+				var isNetTreeEnablable:Boolean = false;
+				var isNetTreeDisablable:Boolean = false;
+				
+				var test:String = "" + jobListXml.@netTreeEnablable;
+				if(test == "true") {
+					isNetTreeEnablable = true;
+				}
+				test = "" + jobListXml.@netTreeDisablable;
+				if(test == "true") {
+					isNetTreeDisablable = true;
+				}
+				
+				permitEnableAllBtn(isNetTreeEnablable, isNetTreeDisablable);
+				
 			}
 			
 			public function testMe(data:Object):int {

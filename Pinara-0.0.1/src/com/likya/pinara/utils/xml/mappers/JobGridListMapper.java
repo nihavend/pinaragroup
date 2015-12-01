@@ -21,14 +21,16 @@ import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
 
 public class JobGridListMapper {
 
-	public static String getMapped(Collection<AbstractJobType> abstractJobTypes) {
+	public static String getMapped(String netTreeId, Collection<AbstractJobType> abstractJobTypes) {
 
 		String retValue = ""; //"<list title=\"ana liste\" id=\"0\">";
 
 		JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
 
 		JobList jobList = jobListDocument.addNewJobList();
-
+		
+		addNetTreeParams(netTreeId, jobList.newCursor());
+		
 		for (AbstractJobType abstractJobType : abstractJobTypes) {
 
 			XmlObject xmlObject = abstractJobType.copy();
@@ -102,6 +104,22 @@ public class JobGridListMapper {
 		
 	}
 	
+	protected static void addNetTreeParams(String netTreeId, XmlCursor xmlCursorNetTree) {
+	
+		boolean isNetTreeEnablable = false;
+		boolean isNetTreeDisablable = false;
+		
+		if(netTreeId != null && !netTreeId.equals("-1")) {
+			isNetTreeEnablable = Commandability.isNetTreeEnablable(netTreeId);
+			isNetTreeDisablable = Commandability.isNetTreeDisablable(netTreeId);
+		}
+		
+		xmlCursorNetTree.toEndToken();
+		xmlCursorNetTree.insertAttributeWithValue("netTreeEnablable", isNetTreeEnablable + "");
+		xmlCursorNetTree.insertAttributeWithValue("netTreeDisablable", isNetTreeDisablable + "");
+		
+	}
+	
 	protected static void addVisualParams(XmlCursor xmlCursor, AbstractJobType abstractJobType) {
 		
 		// We could use the convenient xobj.selectPath() or cur.selectPath()
@@ -159,11 +177,11 @@ public class JobGridListMapper {
 		xmlCursor.toNextToken();
 		
 		xmlCursor.beginElement("isDisablable");
-		xmlCursor.insertChars("" + Commandability.isDisablable(abstractJobType));
+		xmlCursor.insertChars("" + Commandability.isDisablableForFree(abstractJobType));
 		xmlCursor.toNextToken();
 		
 		xmlCursor.beginElement("isEnablable");
-		xmlCursor.insertChars("" + Commandability.isEnablable(abstractJobType));
+		xmlCursor.insertChars("" + Commandability.isEnablableForFree(abstractJobType));
 		xmlCursor.toNextToken();
 	}
 

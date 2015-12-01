@@ -20,6 +20,8 @@ public class NetTreeResolver {
 
 	public static class NetTree {
 		
+		private boolean isActive = false;
+		
 		protected String virtualId;
 		protected ArrayList<String> members = new ArrayList<String>();
 
@@ -36,6 +38,16 @@ public class NetTreeResolver {
 		}
 		public ArrayList<String> getMembers() {
 			return members;
+		}
+
+
+		public boolean isActive() {
+			return isActive;
+		}
+
+
+		public void setActive(boolean isActive) {
+			this.isActive = isActive;
 		}
 	}
 

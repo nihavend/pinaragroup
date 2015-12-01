@@ -128,9 +128,9 @@ public class RestParser extends GenericRestParser {
 				try {
 
 					if (netTreeId.equals("-1")) {
-						retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getFreeJobs(), filterStates));
+						retStr = JobGridListMapper.getMapped(netTreeId, JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getFreeJobs(), filterStates));
 					} else if (PinaraAppManagerImpl.getInstance().getNetTreeMap().containsKey(netTreeId)) {
-						retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
+						retStr = JobGridListMapper.getMapped(netTreeId, JobQueueOperations.getJobList(PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeId).getMembers(), filterStates));
 					} else {
 						retStr = "<message><result>NOK</result><desc>" + "NetTree id is not mapped to a nettree : " + netTreeId + "</desc></message>";
 					}
@@ -143,7 +143,7 @@ public class RestParser extends GenericRestParser {
 
 				String groupId = restCommArr[1];
 				if(GroupTreeMapper.resolveGroups().containsKey(groupId)) {
-					retStr = JobGridListMapper.getMapped(JobQueueOperations.getJobList(GroupTreeMapper.resolveGroups().get(groupId), filterStates));
+					retStr = JobGridListMapper.getMapped(null, JobQueueOperations.getJobList(GroupTreeMapper.resolveGroups().get(groupId), filterStates));
 				} else {
 					retStr = "<message><result>NOK</result><desc>" + "Group id is not mapped to a group : " + groupId + "</desc></message>";
 				}

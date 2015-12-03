@@ -9,6 +9,7 @@ import org.apache.xmlbeans.XmlObject;
 import com.likya.commons.utils.LocaleMessages;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.model.JobRuntimeInterface;
 import com.likya.myra.jef.model.JobRuntimeProperties;
 import com.likya.pinara.comm.JmxManagementConsole;
@@ -169,7 +170,7 @@ public abstract class PinaraBase {
 		return pinaraSMSHandler;
 	}
 
-	protected void startCommServer() {
+	protected void startCommServer() throws InstanceNotFoundException {
 
 		TcpInfo tcpInfo = getConfigurationManager().getPinaraConfig().getTcpInfo();
 

@@ -9,6 +9,7 @@ import com.likya.myra.commons.utils.IdFilter;
 import com.likya.myra.commons.utils.SSSFilter;
 import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
@@ -63,7 +64,7 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_GRPENABLE = "enablegrp";
 	public static final String CMD_GRPDISABLE = "disablegrp";
 	
-	public static byte[] parse(User reqUserInfo, String uriTxt) {
+	public static byte[] parse(User reqUserInfo, String uriTxt) throws InstanceNotFoundException {
 
 		// String xmlPath = "/Users/serkan/programlar/dev/workspace/Pinara-0.0.1/xmls/";
 
@@ -85,11 +86,13 @@ public class RestParser extends GenericRestParser {
 			CoreStateInfo coreStateInfo;
 			try {
 				System.out.print("Checking if application is ready...");
-				while (PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
-					Thread.sleep(1000);
+				//while (PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+				//Thread.sleep(1000);
+				//}
+				if (PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+					retStr = "<message><result>NOK</result><desc>Server state is not ready, " + CoreStateInfo.STATE_STARTING + "</desc></message>";
 				}
-			} catch (PinaraAuthenticationException | InterruptedException e2) {
-				// TODO Auto-generated catch block
+			} catch (PinaraAuthenticationException /*| InterruptedException*/ e2) {
 				e2.printStackTrace();
 			}
 
@@ -443,7 +446,7 @@ public class RestParser extends GenericRestParser {
 
 	}
 
-	public static byte[] parsePost(User  reqUserInfo, String uriTxt, InputStream inputStream) throws IOException {
+	public static byte[] parsePost(User  reqUserInfo, String uriTxt, InputStream inputStream) throws IOException, InstanceNotFoundException {
 
 		
 		byte responseBytes[] = new byte[0];
@@ -528,7 +531,7 @@ public class RestParser extends GenericRestParser {
 
 	}
 
-	private static void extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException {
+	private static void extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException, InstanceNotFoundException {
 
 		//<data><serialize></serialize><datamess>" + myraGenericJob + "</datamess></data>
 		String myraGenericJob = bufferString.split("<datamess>")[1].split("</datamess>")[0];

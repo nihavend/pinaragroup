@@ -22,6 +22,7 @@ import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.core.MonitoringOperations;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.comm.TcpManagementConsole;
 import com.likya.pinara.infobus.PinaraMailServer;
@@ -48,12 +49,16 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 	private static MonitoringOperations monitoringOperations;
 	private static JobOperations jobOperations;
 
-	public static PinaraAppManager initialize() {
+	public static PinaraAppManager initialize() throws InstanceNotFoundException {
 		return getInstance();
 	}
 	
-	public static PinaraAppManager getInstance() {
+	public static PinaraAppManager getInstance() throws InstanceNotFoundException {
 		if (pinaraManager == null) {
+			if(CoreFactory.getInstance() == null) {
+				throw new InstanceNotFoundException();
+			}
+				
 			pinaraManager = new PinaraAppManagerImpl();
 			monitoringOperations = CoreFactory.getInstance().getMonitoringOperations();
 			jobOperations = CoreFactory.getInstance().getJobOperations();

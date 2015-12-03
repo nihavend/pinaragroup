@@ -11,6 +11,7 @@ import org.apache.xmlbeans.XmlOptions;
 import com.likya.myra.commons.utils.DependencyOperations;
 import com.likya.myra.jef.core.Commandability;
 import com.likya.myra.jef.jobs.JobImpl;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
@@ -21,7 +22,7 @@ import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
 
 public class JobGridListMapper {
 
-	public static String getMapped(String netTreeId, Collection<AbstractJobType> abstractJobTypes) {
+	public static String getMapped(String netTreeId, Collection<AbstractJobType> abstractJobTypes) throws InstanceNotFoundException {
 
 		String retValue = ""; //"<list title=\"ana liste\" id=\"0\">";
 
@@ -58,7 +59,7 @@ public class JobGridListMapper {
 		return retValue;
 	}
 	
-	protected static void addRuntimeParams(XmlCursor xmlCursor, AbstractJobType abstractJobType) {
+	protected static void addRuntimeParams(XmlCursor xmlCursor, AbstractJobType abstractJobType) throws InstanceNotFoundException {
 
 		HashMap<String, JobImpl> jobQueue;
 		JobImpl jobImpl = null;

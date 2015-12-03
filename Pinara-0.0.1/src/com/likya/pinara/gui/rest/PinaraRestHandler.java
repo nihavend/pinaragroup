@@ -8,6 +8,9 @@ import java.util.Collection;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
+import com.likya.myra.jef.model.CoreStateInfo;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.gui.WebManager;
@@ -22,7 +25,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 public abstract class PinaraRestHandler implements HttpHandler {
 	
-	public abstract byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException;
+	public abstract byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException, InstanceNotFoundException;
 	
 	public abstract String removeBaseUrl(String uriTxt) throws IOException;
 
@@ -39,6 +42,17 @@ public abstract class PinaraRestHandler implements HttpHandler {
 		// String uriTxt = myUri.toString();
 		String uriTxt = myUri.getPath();
 		
+		if(ManagementOperationsImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+			if(!uriTxt.contains(RestParser.CMD_AUTH) && !uriTxt.contains(RestParser.CMD_RECOVER) && !uriTxt.contains(RestParser.CMD_NORECOVER) && !uriTxt.contains(RestUserOps.CMD_USERREAD)) {
+				String retTxt = "<message><result>NOK</result><desc>" + "Server state is not ready, " + CoreStateInfo.STATE_STARTING + "</desc></message>";
+				httpExchange.sendResponseHeaders(200, retTxt.getBytes().length);
+				os = httpExchange.getResponseBody();
+				os.write(retTxt.getBytes());
+				os.close();
+				return;
+			}
+		}
+		
 		String query = myUri.getQuery();
 		boolean hiddenGet = false;
 		if (query != null && query.split("=").length > 1 && query.split("=")[1].equals("GET")) {
@@ -49,7 +63,7 @@ public abstract class PinaraRestHandler implements HttpHandler {
 		
 		uriTxt = removeBaseUrl(uriTxt);
 
-		byte responseBytes[];
+		byte responseBytes[] = null;
 
 		boolean isPost = false;
 		
@@ -60,7 +74,12 @@ public abstract class PinaraRestHandler implements HttpHandler {
 			// responseBytes = RestParser.parse(uriTxt);
 		// }
 		
-		responseBytes = doWork(reqUserInfo, isPost, uriTxt, httpExchange.getRequestBody());
+		try {
+			responseBytes = doWork(reqUserInfo, isPost, uriTxt, httpExchange.getRequestBody());
+		} catch (InstanceNotFoundException e) {
+			// e.printStackTrace();
+			responseBytes = "<message><result>NOK</result><desc>InstanceNotFoundException</desc></message>".getBytes();
+		}
 		
 		httpExchange.sendResponseHeaders(200, responseBytes.length);
 		os = httpExchange.getResponseBody();
@@ -69,7 +88,7 @@ public abstract class PinaraRestHandler implements HttpHandler {
 		
 	}
 	
-	public void handleJson(HttpExchange httpExchange) throws IOException {
+	public void handleJson(HttpExchange httpExchange) throws IOException, InstanceNotFoundException {
 
 		OutputStream os;
 		String response = null;
@@ -97,7 +116,7 @@ public abstract class PinaraRestHandler implements HttpHandler {
 		os.close();
 	}
 
-	private String evaluateAction(String command) throws PinaraAuthenticationException {
+	private String evaluateAction(String command) throws PinaraAuthenticationException, InstanceNotFoundException {
 
 		String respMsg ="Bad command or file name :)";
 		boolean respBool = false;

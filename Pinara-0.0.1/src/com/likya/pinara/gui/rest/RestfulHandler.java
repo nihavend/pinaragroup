@@ -3,6 +3,7 @@ package com.likya.pinara.gui.rest;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.model.User;
 
@@ -10,7 +11,7 @@ public class RestfulHandler extends PinaraRestHandler {
 
 	// public static final String CONTENT_ROOT = "/flexroot";
 	
-	public byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException {
+	public byte [] doWork(User reqUserInfo, boolean isPost, String uriTxt, InputStream inputStream) throws IOException, InstanceNotFoundException {
 
 		byte responseBytes[];
 		

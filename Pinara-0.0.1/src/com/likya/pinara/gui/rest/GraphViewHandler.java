@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.pinara.gui.WebManager;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -21,7 +22,12 @@ public class GraphViewHandler implements HttpHandler {
 		
 		uriTxt = uriTxt.replace("/" + WebManager.GRAPHVIEW_CTX + "/", "");
 		
-		byte responseBytes[] = GraphViewRestParser.parse(uriTxt);
+		byte responseBytes[] = null;
+		try {
+			responseBytes = GraphViewRestParser.parse(uriTxt);
+		} catch (InstanceNotFoundException e) {
+			responseBytes = "<message><result>NOK</result><desc>InstanceNotFoundException</desc></message>".getBytes();
+		}
 		
 		httpExchange.sendResponseHeaders(200, responseBytes.length);
 		os = httpExchange.getResponseBody();

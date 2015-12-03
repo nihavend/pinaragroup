@@ -10,6 +10,7 @@ import org.apache.xmlbeans.XmlOptions;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -44,7 +45,7 @@ public class NetTreeMapper {
 		return xmlCursor;
 	}
 	
-	public static String getMapped() throws PinaraAuthenticationException {
+	public static String getMapped() throws PinaraAuthenticationException, InstanceNotFoundException {
 		
 		String retValue = "";
 		

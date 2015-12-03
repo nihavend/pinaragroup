@@ -1,5 +1,6 @@
 package com.likya.pinara.gui.rest;
 
+import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
@@ -11,7 +12,7 @@ public class GraphViewRestParser extends GenericRestParser {
 
 	private static final String NETTREE_GML_CMD = "nettreegml";
 	
-	public static byte[] parse(String uriTxt) {
+	public static byte[] parse(String uriTxt) throws InstanceNotFoundException {
 
 		StateName.Enum filterStates[] = { StateName.RUNNING, StateName.CANCELLED, StateName.FAILED, StateName.FINISHED, StateName.PENDING};
 		

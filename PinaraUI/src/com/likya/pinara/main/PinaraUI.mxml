@@ -384,6 +384,7 @@
 						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
 					} else {
 						setAnaSayfaState();
+						refreshTreeAfterRelogin();
 					}
 				} catch(err:Error) {
 					returnTxt = String(event.result)
@@ -434,11 +435,18 @@
 						PopUpManager.removePopUp(dummyWindow);
 						setAnaSayfaState();
 						CursorManager.removeBusyCursor();
+						refreshTreeAfterRelogin();
 					}
 				} catch(err:Error) {
 					returnTxt = String(event.result)
 				}
 				
+			}
+			
+			protected function refreshTreeAfterRelogin():void {
+				if(jobTree != null) {
+					jobTree.refreshTree();
+				}
 			}
 			
 			protected function userOpsService_resultHandler(event:ResultEvent):void

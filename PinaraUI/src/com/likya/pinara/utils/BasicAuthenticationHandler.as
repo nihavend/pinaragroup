@@ -77,12 +77,19 @@ package com.likya.pinara.utils
 		public static function service_faultHandler(event:FaultEvent):void {
 			// Alert.show("xmlService_faultHandler : " + event.toString());
 			//outputText.text += "\nxmlService_faultHandler " + event;
-			Alert.show(event.fault.faultString);
+			// Alert.show(event.fault.faultString);
 			if(event.statusCode == 200) {
 			} else if (event.statusCode == 400) {
 				Alert.show("Kullacını adı ya da şifre hatalı !");
+			/*} else if (event.statusCode == 499) {
+				Alert.show("Server state is not available, please relogin !");
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));*/
 			} else {
-				Alert.show("Unexpected Event : " + event.toString());
+				trace("Unexpected Event : " + event.toString());
+				// Alert.show("Unexpected Event : " + event.toString());
+				// Alert.show("Server state is not available, please relogin !");
+				// FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 			}
 		}
 		

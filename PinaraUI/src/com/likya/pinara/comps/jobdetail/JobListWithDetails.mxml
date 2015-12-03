@@ -14,12 +14,16 @@
 			import com.likya.pinara.modules.IModuleInterface;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
+			import com.likya.pinara.utils.WindowUtils;
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
 			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
 			import mx.events.ModuleEvent;
+			import mx.managers.PopUpManager;
 			import mx.modules.IModuleInfo;
 			import mx.modules.ModuleManager;
 			import mx.rpc.events.FaultEvent;
@@ -283,11 +287,26 @@
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {
 				
+				
+				var returnXml:XML = XML(event.message.body);
+				if(returnXml.result == "NOK") {
+					// WindowUtils.showDummyWindow(this, returnXml.desc.toString());
+					trace(returnXml);
+					/**
+					 * Ekran çalışırken server kapanıp açıldığında her şeyin yenilenmesi lazım,
+					 * buna nettree id ler de dahil. Bunun için zorla login sonrası ağaç güncellemesi
+					 * yapılıyor.
+					 */
+					Alert.show("Server state is not available, please relogin !");
+					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+					return;
+				} 
+				
 				jobListXml = XML(event.result);
 				
-				if(jobListXml.contains("NOK")) {
+				/*if(jobListXml.contains("NOK")) {
 					Alert.show(jobListXml);
-				}
+				}*/
 				// var treeOpenItems:Object;
 				
 				// trace(jobListXml);

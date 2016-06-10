@@ -68,7 +68,7 @@ public class PinaraMailServer implements Runnable {
 			props.put("mail.smtp.host", mailInfo.getSmtpServerHostName());
 		}
 		
-		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.auth", mailInfo.getUseEncryption());
 		props.put("mail.smtp.port", Integer.toString(mailInfo.getPort()));
 		 
 	}

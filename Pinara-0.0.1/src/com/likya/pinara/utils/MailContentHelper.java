@@ -6,6 +6,7 @@ import java.util.Iterator;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
+import com.likya.xsd.myra.model.wlagen.TimeManagementDocument.TimeManagement;
 
 public class MailContentHelper {
 
@@ -25,8 +26,16 @@ public class MailContentHelper {
 			sb.append(Pinara.getMessage("JobQueueOperations.20") + abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobCommand() + "]");
 			sb.append(Pinara.getMessage("JobQueueOperations.22") + abstractJobType.getBaseJobInfos().getJobLogPath() + "]");
 			// TODO sb.append(Pinara.getMessage("JobQueueOperations.24") + abstractJobType.getBaseJobInfos().getPreviousTime());
-			sb.append(Pinara.getMessage("JobQueueOperations.25") + abstractJobType.getManagement().getTimeManagement().getJsPlannedTime());
-			sb.append(Pinara.getMessage("JobQueueOperations.26") + abstractJobType.getManagement().getTimeManagement().getJsRealTime());
+			
+			TimeManagement timeManagement = abstractJobType.getManagement().getTimeManagement();
+			
+			if(timeManagement != null) {
+				sb.append(Pinara.getMessage("JobQueueOperations.25") + timeManagement.getJsPlannedTime());
+				sb.append(Pinara.getMessage("JobQueueOperations.26") + timeManagement.getJsRealTime());
+			} else {
+				sb.append(Pinara.getMessage("JobQueueOperations.25"));
+				sb.append(Pinara.getMessage("JobQueueOperations.26"));
+			}
 			// TODO sb.append(Pinara.getMessage("JobQueueOperations.27") + (jobProperties.getTime() == null ? "-" : DateUtils.getDate(jobProperties.getTime())) + "]");
 			// TODO sb.append(Pinara.getMessage("JobQueueOperations.29") + jobProperties.getWorkDuration());
 			// TODO sb.append(Pinara.getMessage("JobQueueOperations.30") + (jobProperties.getTime() == null ? "-" : DateUtils.getDate(jobProperties.getTime())));
@@ -112,8 +121,17 @@ public class MailContentHelper {
 			stringBuilder.append("				        <td>" + abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobCommand());
 			stringBuilder.append("				        <td>" + abstractJobType.getBaseJobInfos().getJobLogPath());
 			// TODO stringBuilder.append("				        <td>" + jobProperties.getPreviousTime());
-			stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsPlannedTime());
-			stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsRealTime());
+
+			TimeManagement timeManagement = abstractJobType.getManagement().getTimeManagement();
+			
+			if(timeManagement != null) {
+				stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsPlannedTime());
+				stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsRealTime());
+			} else {
+				stringBuilder.append("				        <td>");
+				stringBuilder.append("				        <td>");
+			}
+			
 			// TODO stringBuilder.append("				        <td>" + jobProperties.getWorkDuration());
 			// TODO stringBuilder.append("				        <td>" + (jobProperties.getTime() == null ? "-" : DateUtils.getDate(jobProperties.getTime())));
 			stringBuilder.append("				        <td>" + Pinara.getMessage("JobQueueOperations.111"));

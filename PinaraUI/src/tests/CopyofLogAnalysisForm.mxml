@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		currentState="undefined"
+		width="100%" height="100%" xmlns:comps="com.likya.pinara.comps.*" xmlns:skins="com.likya.pinara.skins.*" xmlns:utils="com.likya.pinara.utils.*">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+	
+	<s:states>
+		<s:State name="defined"/>
+		<s:State name="undefined"/>
+	</s:states>
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace local "*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.toggleSwitch
+		{
+			skinClass:ClassReference("com.likya.pinara.skins.ToggleSwitchSkin");
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ItemClickEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			public function validateForm():Boolean
+			{
+				if(currentState == "undefined" || disableLA.selected) {
+					return true;
+				}
+				
+				if(searchPattern.text == "") {
+					Alert.show("Search Pattern is  not defined !");
+					return false;
+				}
+				
+				if(thenSSS.stateName.selectedIndex == -1) {
+					Alert.show("[Then] State is not selected !");
+					return false;
+				}
+				
+				if(elseActionCheckBox.selected && elseSSS.stateName.selectedIndex == -1) {
+					Alert.show("[Else] State is not selected !");
+					return false;
+				}
+				/*
+				if(jsJobPriority.selectedIndex == -1) {
+				Alert.show("Job Priority is not selected !");
+				return false;
+				}
+				if(jsName.text == "") {
+				Alert.show("Job Name is not defined !");
+				return false;
+				}
+				if(jsCommand.text == "") {
+				Alert.show("Job Command is not defined !");
+				return false;
+				}*/
+				
+				return true;
+			}
+			
+			private function handleCard(event:ItemClickEvent):void {
+				handleDecoration(event.currentTarget.selectedValue);
+			}
+			
+			public function handleDecoration(selectedValue:String):void {
+				if (selectedValue == "false") {
+					findWhat.enabled = false;
+					actionDef.enabled = false;
+				} else if (selectedValue == "true") {
+					findWhat.enabled = true;
+					actionDef.enabled = true;
+				} else {
+					Alert.show("You selected Nothing.");
+				}
+			}
+			
+			protected function patternTypeList_changeHandler (event:IndexChangeEvent):void	{
+				// jsJobTriggerType.selectedIndex.toString();
+				// jsJobTriggerType.selectedItem.value;
+				if(patternType.selectedIndex == 0) {
+					matchCase.enabled = true;
+					matchWholeWordOnly.enabled = true;
+				} else {
+					matchCase.enabled = false;
+					matchWholeWordOnly.enabled = false;
+				}
+			}
+			
+			protected function thenActionCheckBox_clickHandler(event:MouseEvent):void
+			{
+				if(elseActionCheckBox.selected) {
+					elseAction.enabled = true;
+				} else {
+					elseAction.enabled = false;
+				}
+				
+			}
+			
+			protected function laToggle_changeHandler(event:Event):void
+			{
+				var tmpState:String = "undefined";
+				if(laToggle.selected == true) {
+					tmpState = "defined"; 
+				}
+				setCurrentState(tmpState);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="logAnalyseEnable" itemClick="handleCard(event);" />
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+	<s:HGroup>
+		<utils:ToggleSwitch id="laToggle" selected="false" selectedLabel="Defined" deselectedLabel="Undefined" styleName="toggleSwitch" change="laToggle_changeHandler(event)" />
+		
+		<s:HGroup includeIn="defined">
+			<s:RadioButton group="{logAnalyseEnable}" 
+						   id="disableLA"
+						   value="false"
+						   label="Disable Log Analyse"
+						   width="150"/>
+			<s:RadioButton group="{logAnalyseEnable}" 
+						   id="enableLA"
+						   value="true"
+						   selected="true"
+						   label="Enable Log Analyse" 
+						   width="200"/>
+		</s:HGroup>		
+	</s:HGroup>
+	
+	<s:Label visible="false" />
+	
+	
+	<s:BorderContainer id="findWhat" width="100%" height="90" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+		
+		<s:Label left="15" top="10" text="Search Pattern Properties" fontSize="14" fontWeight="bold"/>
+		
+		<s:VGroup top="20" gap="-10">
+			
+			<s:HGroup top="30" gap="-20">
+				<s:FormItem label="Search Direction">
+					<s:DropDownList id="searchDirection" selectedIndex="0"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>Up</fx:String>
+								<fx:String>Down</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:FormItem>
+				
+				<s:FormItem label="Pattern Type">
+					<s:DropDownList id="patternType" selectedIndex="0" change="patternTypeList_changeHandler(event)"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>String</fx:String>
+								<fx:String>Regex</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:FormItem>
+				
+				<s:FormItem label="">
+					<s:CheckBox label="Case Sensitive" id="matchCase"/>
+				</s:FormItem>
+				
+				<s:FormItem label="">
+					<s:CheckBox label="Exact Match" id="matchWholeWordOnly"/>
+				</s:FormItem>
+				
+			</s:HGroup>
+			
+			<s:FormItem label="Search Pattern">
+				<s:TextInput id="searchPattern" width="300"/>
+			</s:FormItem>
+			
+		</s:VGroup>
+		
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="actionDef" width="100%" height="400" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+		
+		<s:VGroup left="10" top="10">
+			
+			<s:BorderContainer id="thenAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
+				
+				<s:Label left="15" top="10" text="[Then] Action Definition" fontSize="14" fontWeight="bold"/>
+				
+				<s:HGroup top="20">
+					<s:FormItem label="Include Back Line : ">
+						<s:HGroup>
+							<s:TextInput  id="thenLogLineNumBack"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+					<s:FormItem label="Include For Line : ">
+						<s:HGroup>
+							<s:TextInput  id="thenLogLineNumForward"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+				</s:HGroup>
+				
+				<s:FormItem label="Predefined Content" top="50">
+					<s:TextInput id="thenActionContent" width="300"/>
+				</s:FormItem>
+				
+				<comps:SSSView paddingTop="90" id="thenSSS"/>
+				
+				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
+					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+					<s:TextInput id="thenRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
+					<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+					<s:TextInput id="thenRetCodeDesc" width="250"/>
+				</s:HGroup>
+				
+			</s:BorderContainer>
+			
+			<s:CheckBox width="150" label="Enable Else Action" id="elseActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
+			
+			<s:BorderContainer id="elseAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
+				
+				<s:Label left="15" top="10" text="[Else] Action Definition" fontSize="14" fontWeight="bold"/>
+				
+				<s:HGroup top="20" gap="-20">
+					<s:FormItem label="Include Back Line : ">
+						<s:HGroup>
+							<s:TextInput  id="elseLogLineNumBack"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+					<s:FormItem label="Include For Line : ">
+						<s:HGroup>
+							<s:TextInput  id="elseLogLineNumForward"
+										  restrict="0-999999"
+										  widthInChars="10"
+										  maxChars="9" />
+						</s:HGroup>
+					</s:FormItem>
+					
+				</s:HGroup>
+				
+				<s:FormItem label="Predefined Content" top="50">
+					<s:TextInput id="elseActionContent" width="300"/>
+				</s:FormItem>
+				
+				<comps:SSSView paddingTop="90" id="elseSSS"/>
+				
+				<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
+					<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+					<s:TextInput id="elseRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
+					<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+					<s:TextInput id="elseRetCodeDesc" width="250"/>
+				</s:HGroup>
+				
+			</s:BorderContainer>
+			
+		</s:VGroup>
+		
+	</s:BorderContainer>
+	
+</s:Form>

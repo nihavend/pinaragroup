@@ -74,6 +74,8 @@ public class NetTreeMapper {
 			
 			xmlCursor = addJobGroup(xmlCursor, netTree.getVirtualId(), "Dep Group");
 			
+			xmlCursor.insertAttributeWithValue("grpState", "" + netTree.isActive());
+			
 			for(String jobId : netTree.getMembers()) {
 				xmlCursor = addJobProperty(xmlCursor, jobId);
 			}

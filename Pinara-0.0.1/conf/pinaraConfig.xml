@@ -7,19 +7,20 @@
 	<persistent>false</persistent>
 	<mailInfo>
 		<lik:EmailList>
-			<lik:email>myra-watchers@likyateknoloji.com</lik:email>
+			<lik:email>serkan.tas@likyateknoloji.com</lik:email>
 		</lik:EmailList>
 		<myra:stateInfos>
 			<myra:LiveStateInfos>
 				<myra:LiveStateInfo LSIDateTime="2013-12-22T18:44:31.130+02:00">
-					<myra:StateName>PENDING</myra:StateName>
-					<myra:SubstateName>IDLED</myra:SubstateName>
+					<myra:StateName>FINISHED</myra:StateName>
+					<myra:SubstateName>COMPLETED</myra:SubstateName>
+					<myra:StatusName>FAILED</myra:StatusName>
 				</myra:LiveStateInfo>
 			</myra:LiveStateInfos>
 		</myra:stateInfos>
-		<useEncryption>false</useEncryption>
-		<userName>myra@likyateknoloji.com</userName>
-		<lik:userPassword></lik:userPassword>
+		<useEncryption>true</useEncryption>
+		<userName>serkan.tas@likyateknoloji.com</userName>
+		<lik:userPassword>genel3nihavend</lik:userPassword>
 		<smtpServerHostName>mail.likyateknoloji.com</smtpServerHostName>
 		<port>587</port>
 	</mailInfo>

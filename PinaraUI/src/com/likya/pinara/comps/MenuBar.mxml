@@ -49,7 +49,7 @@
 			public function onCreationComplete(event:FlexEvent):void {
 				
 				// menuBarData.source = menuDataXMLList;
-				
+				// trace("Menubar Created !");
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChanged);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelected);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelected);
@@ -119,14 +119,14 @@
 			}
 			
 			// Menu items with no child : anasayfa
-			protected function mbiAnaSayfa_click(event:MouseEvent):void {
+			/*protected function mbiAnaSayfa_click(event:MouseEvent):void {
 				dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
-			}
+			}*/
 			
 			// Menu items with no child : refresh
-			protected function mbiRefresh_click(event:MouseEvent):void {
+			/*protected function mbiRefresh_click(event:MouseEvent):void {
 				var ret:Boolean = dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH, null, true));
-			}
+			}*/
 			
 			protected function tlosMenuBar_itemClickHandler(event:MenuEvent):void {
 				var userRole:UserRole = null;
@@ -231,17 +231,17 @@
 				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 			}
 			
-			public function registerClickEvent():void {
+			// public function registerClickEvent():void {
 
-				var mbi:MenuBarItem;
+			//	var mbi:MenuBarItem;
 				//Alert.show("registerClickEvent : pinaraMenuBar.menuBarItems.length" + pinaraMenuBar.menuBarItems.length);
 				
-				mbi = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
-				mbi.addEventListener(MouseEvent.CLICK, mbiAnaSayfa_click);
+				// mbi = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
+				// mbi.addEventListener(MouseEvent.CLICK, mbiAnaSayfa_click);
 
-				mbi = pinaraMenuBar.menuBarItems[1] as MenuBarItem;
-				mbi.addEventListener(MouseEvent.CLICK, mbiRefresh_click);
-			}
+				// mbi = pinaraMenuBar.menuBarItems[1] as MenuBarItem;
+				// mbi.addEventListener(MouseEvent.CLICK, mbiRefresh_click);
+			// }
 			
 			private function showPinaraConfigPopup():void {
 				showGenericPopup("infotag=pinaraConfig");
@@ -357,8 +357,9 @@
 			
 			protected function pinaraMenuBar_creationCompleteHandler(event:FlexEvent):void
 			{
+				// trace("Applying filters...");
 				applyFilters();
-				pinaraMenuBar.callLater(registerClickEvent);
+				// pinaraMenuBar.callLater(registerClickEvent);
 				// registerClickEvent();
 			}
 			
@@ -392,6 +393,7 @@
 				
 				menuBarData.source = menuDataXMLList;
 				
+				// trace("Refreshing menubar...");
 				menuBarData.refresh();
 				
 			}
@@ -428,8 +430,8 @@
 	<fx:Declarations>
 		
 		<fx:XMLList id="menuDataXMLList">
-			<menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/>
-			<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
+			<!--menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/-->
+			<!--menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/-->
 			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
 				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>

@@ -117,7 +117,7 @@ public class MailContentHelper {
 			AbstractJobType abstractJobType = scheduledJob.getAbstractJobType();
 			
 			stringBuilder.append("				        <tr>");
-			stringBuilder.append("				        <td>" + abstractJobType.getId());
+			stringBuilder.append("				        <td>" + abstractJobType.getBaseJobInfos().getJsName());
 			stringBuilder.append("				        <td>" + abstractJobType.getBaseJobInfos().getJobTypeDetails().getJobCommand());
 			stringBuilder.append("				        <td>" + abstractJobType.getBaseJobInfos().getJobLogPath());
 			// TODO stringBuilder.append("				        <td>" + jobProperties.getPreviousTime());

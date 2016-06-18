@@ -237,8 +237,10 @@ package com.likya.pinara.utils {
 			
 			var managementInfoXML:Object = myraJobList.myra::genericJob.myra_jobprops::management;
 			
-			if(j.managementInfoForm.jsJobTriggerType.selectedItem.value == "USER") {
+			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "USER") {
 				managementInfoXML.appendChild(<wla:trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla:trigger>);
+				/** Time Management ****/
+				managementInfoXML = get_TimeManagement(managementInfoXML, j);
 			} else {
 				
 				/** Trigger Info ****/
@@ -247,58 +249,16 @@ package com.likya.pinara.utils {
 				
 				/** Period Info ****/
 				
-				if(j.managementInfoForm.periodInfo.selected) {
+				if(j.managementInfoForm_1.periodInfo.selected) {
 					managementInfoXML.appendChild(<myra-jobprops:periodInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
 					
-					managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm.relativeStart.selectedItem;
-					managementInfoXML.periodInfo.@step = j.managementInfoForm.stepValue.text;
-					managementInfoXML.periodInfo.@maxCount = j.managementInfoForm.maxCountValue.text;
+					managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm_1.relativeStart.selectedItem;
+					managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
+					managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
 				}
 				
 				/** Time Management ****/
-				
-				managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
-				
-				managementInfoXML.wla::timeManagement.appendChild(<wla:bornedPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				
-				managementInfoXML.wla::timeManagement.appendChild(<wla:jsPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				
-				managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
-				managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
-				
-				managementInfoXML.wla::timeManagement.appendChild(<wla:expectedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
-				managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
-				
-				
-				var sDate:Date = j.managementInfoForm.bdate.selectedDate;
-				var currentDF:DateFormatter = new DateFormatter(); 
-				currentDF.formatString = "YYYY-MM-DD"
-				var dateString:String = currentDF.format(sDate);
-				
-				// dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
-				dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.value + "") + ":" + zeroize(j.managementInfoForm.bminute.value + "") + ":" + zeroize(j.managementInfoForm.bsecond.value + "") + ".000+02:00";
-				
-				managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
-				managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
-				
-				
-				// end date olmaycak....zira bunu process belirleyecek
-				// dateString = currentDF.format(sDate);
-				
-				managementInfoXML.timeManagement.bornedPlannedTime.stopTime = dateString;
-				managementInfoXML.timeManagement.jsPlannedTime.stopTime = dateString;
-				
-				managementInfoXML.timeManagement.jsTimeOut.lik::value_integer = j.managementInfoForm.timoutValue.text;
-				managementInfoXML.timeManagement.jsTimeOut.lik::unit = j.managementInfoForm.timeoutUnit.selectedItem;
-				
-				managementInfoXML.timeManagement.expectedTime.lik::value_integer = j.managementInfoForm.expectedValue.text;
-				managementInfoXML.timeManagement.expectedTime.lik::unit = j.managementInfoForm.expectedTimeUnit.selectedItem;
+				managementInfoXML = get_TimeManagement(managementInfoXML, j);
 				
 				/** Cascading Conditions ****/
 				
@@ -307,24 +267,72 @@ package com.likya.pinara.utils {
 				managementInfoXML.cascadingConditions.appendChild(<wla:runEvenIfFailed xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				managementInfoXML.cascadingConditions.appendChild(<wla:jobSafeToRestart xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				
-				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm.runEvenFailed.selectedItem;
-				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm.safeToRestart.selectedItem;
+				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
+				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
 				
-				if(j.managementInfoForm.autoRetry.selectedItem == "true") {
+				if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
 					managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 					managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 					
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm.arStepValue.text;
-					if(j.managementInfoForm.maxCountValueAr.text != "") {
-						managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm.maxCountValueAr.text;
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
+					if(j.managementInfoForm_1.maxCountValueAr.text != "") {
+						managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
 					}
 					
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm.autoRetry.selectedItem;
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 				}
 			
 			}
 			
 			return myraJobList;
+		}
+		
+		private static function get_TimeManagement(managementInfoXML:Object, j:JobEditWindow):Object {
+		
+			managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			
+			managementInfoXML.wla::timeManagement.appendChild(<wla:bornedPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			
+			managementInfoXML.wla::timeManagement.appendChild(<wla:jsPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			
+			managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+			managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+			
+			managementInfoXML.wla::timeManagement.appendChild(<wla:expectedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+			managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+			
+			
+			var sDate:Date = j.managementInfoForm_0.bdate.selectedDate;
+			var currentDF:DateFormatter = new DateFormatter(); 
+			currentDF.formatString = "YYYY-MM-DD"
+			var dateString:String = currentDF.format(sDate);
+			
+			// dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
+			dateString = dateString + "T" + zeroize(j.managementInfoForm_0.bhour.value + "") + ":" + zeroize(j.managementInfoForm_0.bminute.value + "") + ":" + zeroize(j.managementInfoForm_0.bsecond.value + "") + ".000+02:00";
+			
+			managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
+			managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
+			
+			
+			// end date olmaycak....zira bunu process belirleyecek
+			// dateString = currentDF.format(sDate);
+			
+			managementInfoXML.timeManagement.bornedPlannedTime.stopTime = dateString;
+			managementInfoXML.timeManagement.jsPlannedTime.stopTime = dateString;
+			
+			managementInfoXML.timeManagement.jsTimeOut.lik::value_integer = j.managementInfoForm_0.timoutValue.text;
+			managementInfoXML.timeManagement.jsTimeOut.lik::unit = j.managementInfoForm_0.timeoutUnit.selectedItem;
+			
+			managementInfoXML.timeManagement.expectedTime.lik::value_integer = j.managementInfoForm_0.expectedValue.text;
+			managementInfoXML.timeManagement.expectedTime.lik::unit = j.managementInfoForm_0.expectedTimeUnit.selectedItem;
+			
+			return managementInfoXML;
 		}
 		
 		private static function getLogAnalysis(j:JobEditWindow, myraJobList:XML):XML {
@@ -634,7 +642,7 @@ package com.likya.pinara.utils {
 		
 		private static function getBaseJobInfos(j:JobEditWindow, myraJobList:XML):XML {
 			
-			myraJobList.myra::genericJob.@groupId = j.baseInfoForm.jsJobGroup.text;
+			myraJobList.myra::genericJob.@groupId = j.baseInfoForm_0.jsJobGroup.text;
 			
 			myraJobList.myra::genericJob.appendChild(<myra-jobprops:baseJobInfos xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"/>);
 			
@@ -654,24 +662,24 @@ package com.likya.pinara.utils {
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:jobWorkDir xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 			baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:argValues xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
 
-			baseJobInfosXML.wla::jsName = j.baseInfoForm.jsName.text;
-			baseJobInfosXML.wla::jobLogFile = j.baseInfoForm.jsJobLogFile.text;
-			baseJobInfosXML.wla::jobLogPath = j.baseInfoForm.jsJobLogPath.text;
+			baseJobInfosXML.wla::jsName = j.baseInfoForm_0.jsName.text;
+			baseJobInfosXML.wla::jobLogFile = j.baseInfoForm_1.jsJobLogFile.text;
+			baseJobInfosXML.wla::jobLogPath = j.baseInfoForm_1.jsJobLogPath.text;
 			//baseJobInfosXML.wla::oSystem = j.baseInfoForm.jsOsType.selectedItem;
-			baseJobInfosXML.wla::jobPriority = j.baseInfoForm.jsJobPriority.selectedItem;
-			baseJobInfosXML.myra_jobprops::jsIsActive = j.baseInfoForm.jsJobActivity.selectedItem;
+			baseJobInfosXML.wla::jobPriority = j.baseInfoForm_1.jsJobPriority.selectedItem;
+			baseJobInfosXML.myra_jobprops::jsIsActive = j.baseInfoForm_1.jsJobActivity.selectedItem;
 			baseJobInfosXML.lik::userId = "007";
 			
 			
-			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommandType = j.baseInfoForm.jsJobType.selectedItem;
-			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommand = j.baseInfoForm.jsCommand.text;
-			baseJobInfosXML.lik::jobTypeDetails.lik::jobWorkDir = j.baseInfoForm.jsJobWorkDir.text; 
-			baseJobInfosXML.lik::jobTypeDetails.lik::argValues = j.baseInfoForm.jsJobArgs.text; 
+			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommandType = j.baseInfoForm_0.jsJobType.selectedItem;
+			baseJobInfosXML.lik::jobTypeDetails.lik::jobCommand = j.baseInfoForm_0.jsCommand.text;
+			baseJobInfosXML.lik::jobTypeDetails.lik::jobWorkDir = j.baseInfoForm_0.jsJobWorkDir.text; 
+			baseJobInfosXML.lik::jobTypeDetails.lik::argValues = j.baseInfoForm_0.jsJobArgs.text; 
 			
 			
-			if(j.baseInfoForm.envVarList.dataProvider.length > 0) {
+			if(j.baseInfoForm_1.envVarList.dataProvider.length > 0) {
 				baseJobInfosXML.lik::jobTypeDetails.appendChild(<lik:envVariables xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
-				for each (var item:String in j.baseInfoForm.envVarList.dataProvider.toArray()) {
+				for each (var item:String in j.baseInfoForm_1.envVarList.dataProvider.toArray()) {
 					// var xmlText:String = "<entry key=\"" + item + "\">" + item + "</entry>";
 					
 					if(item.indexOf('=') > 0) {

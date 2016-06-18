@@ -10,6 +10,7 @@
 			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.TreeUtils;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -17,6 +18,7 @@
 			import mx.events.ListEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
+			import mx.utils.ObjectUtil;
 			
 			[Bindable]
 			[Embed(source="/images/tlosTree.jpg")]
@@ -27,6 +29,8 @@
 
 			[Bindable] 
 			public static var liveTreeDP:XMLList; 
+			
+			private var selectedTreeNode:Object;
 			
 			/**
 			 * Stores the open/close states of the tree nodes
@@ -84,6 +88,15 @@
 						}
 					}*/
 					return tlosFolderImg //tlosDisconnectedImage;
+				} else if (node.localName() == "jobGroup") {
+					// trace(node.@title);
+					if("Dep Group" == node.@title){
+						// trace(node.@title);
+						if("false" == node.@grpState) {
+							return ImageContainer.disableds;
+						} 
+					}
+					return tlosFolderImg;
 				} else {
 					return tlosFolderImg;
 				}
@@ -91,17 +104,18 @@
 			
 			private function tlosTree_itemClickHandler(e:ListEvent):void {
 				
-				var selectedTreeItem:Object = Tree(e.target).selectedItem;
-				var selectedNode:XML = selectedTreeItem as XML;
+				// var selectedTreeItem:Object = Tree(e.target).selectedItem;
+				selectedTreeNode = Tree(e.target).selectedItem;
+				var selectedNodeXml:XML = selectedTreeNode as XML;
 				
 				// Alert.show("Title : " + selectedNode.@title);
 				// Alert.show("localName : " + selectedNode.localName());
-				if (selectedNode.localName() == "list") {
+				if (selectedNodeXml.localName() == "list") {
 					dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
-				} if (selectedNode.localName() == "jobGroup") {
-					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeItem));
-				} else if (selectedNode.localName() == "jobProperty") {
-					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedTreeItem));
+				} if (selectedNodeXml.localName() == "jobGroup") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode));
+				} else if (selectedNodeXml.localName() == "jobProperty") {
+					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedTreeNode));
 				}
 				
 				/*
@@ -223,6 +237,63 @@
 					Alert.show("Hata Oluştu : " + errorString);
 					trace(err);
 				}
+				
+				setSelectedNode();
+			}
+			
+			protected function setSelectedNode():void {
+			
+				/*
+				
+				if(selectedTreeNode != null && selectedTreeNode.hasOwnProperty("@id")) {
+				var searchResult:XMLList;
+				
+				trace("Aranan: " + ObjectUtil.toString(selectedTreeNode));
+				trace("Hedef : " + (liveTree.dataProvider[0] as XML));
+				searchResult = TreeUtils.findNode((liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
+				
+				trace("Pozisyon : " + searchResult);
+				
+				trace("selectedItem : " + searchResult[0]);
+				
+				if (searchResult[0] != undefined) {
+				TreeUtils.expandNode(liveTree, searchResult[0]);
+				
+				//trace("selectedLocal :" + selectedLocal);
+				liveTree.selectedItem = searchResult[0];
+				}
+				}
+				*/
+				
+				if(selectedTreeNode != null && selectedTreeNode.hasOwnProperty("@id")) {
+					trace("[selectedTreeNode] : " + ObjectUtil.toString(selectedTreeNode));
+					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+					// searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
+					/*
+					var searchResult:XMLList = (liveTree.dataProvider[0] as XML)..jobGroup.(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+					trace("searchResult for jobGroup : 		" + searchResult);
+					
+					searchResult = (liveTree.dataProvider[0] as XML)..jobProperty.(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+					trace("searchResult for jobProperty :		 " + searchResult);
+					*/
+
+					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(@id == selectedTreeNode.@id);
+					// trace("searchResult for descendants : 		" + searchResult);
+					
+					var selectedId:String = selectedTreeNode.@id;
+
+					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(attribute("id") == selectedId);
+					
+					var searchResult:XMLList = TreeUtils.findNode((liveTree.dataProvider[0] as XML), selectedId);
+						
+					if (searchResult[0] != undefined) {
+						TreeUtils.expandNode(liveTree, searchResult[0]);
+						
+						liveTree.selectedItem = searchResult[0];
+					}
+
+				}
+				
 			}
 			
 		]]>

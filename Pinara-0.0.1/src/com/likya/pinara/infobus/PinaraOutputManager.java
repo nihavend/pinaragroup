@@ -1,10 +1,14 @@
 package com.likya.pinara.infobus;
 
+import com.likya.myra.commons.utils.LiveStateInfoUtils;
 import com.likya.myra.jef.model.OutputData;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraOutput;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
+import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
+import com.likya.xsd.pinara.model.config.PinaraConfigDocument.PinaraConfig;
 
 /**
  * @author vista
@@ -52,6 +56,17 @@ public class PinaraOutputManager implements Runnable {
 					
 					// TODO Resolve broadcasting type
 					// email, db, sms, etc
+					
+					PinaraConfig pinaraConfig = Pinara.getInstance().getConfigurationManager().getPinaraConfig();
+					
+					if(pinaraConfig.isSetMailInfo()) {
+						MailInfo mailInfo = pinaraConfig.getMailInfo();
+						LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
+						if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
+							SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job name:" + outputData.getJobId(), "Belirtilen iş şu duruma geçti : " + dump);
+							Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
+						}
+					}
 
 					if (!pinaraOutput.getOutputList().isEmpty()) {
 						pinaraOutput.getOutputList().remove(0);

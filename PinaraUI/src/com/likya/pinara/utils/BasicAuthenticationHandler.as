@@ -78,7 +78,17 @@ package com.likya.pinara.utils
 			// Alert.show("xmlService_faultHandler : " + event.toString());
 			//outputText.text += "\nxmlService_faultHandler " + event;
 			// Alert.show(event.fault.faultString);
+			/**
+			 * Bazı durumlarda, buraya geldiginde her iki tarafta da sorun yok ise
+			 * serverdan gelen xml de istenmeyen bir xml token vardır. 
+			 * ex4 tipi content secildiğinde gelen mesaj parse edilemez ve
+             * ve hata oluşur. Eğer hata olmasa bu metoda girmez. 
+			 * Client da server da hatasız çalışıyor gibi gorunur
+			 * hatayı bulmak cok zor olur. faultString i hafife alma.
+			 */
+			
 			if(event.statusCode == 200) {
+				Alert.show("Url : " + event.target.url + "\nHata Mesajı : " + event.fault.faultString);
 			} else if (event.statusCode == 400) {
 				Alert.show("Kullacını adı ya da şifre hatalı !");
 			/*} else if (event.statusCode == 499) {

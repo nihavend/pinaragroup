@@ -1,7 +1,11 @@
 package com.likya.pinara.utils {
 	import com.likya.pinara.comps.jobcrud.DependencyListForm;
 	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm;
+	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm_0;
+	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm_1;
 	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm;
+	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm_0;
+	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm_1;
 	import com.likya.pinara.comps.jobcrud.LogAnalysisForm;
 	import com.likya.pinara.comps.jobcrud.ScheduleInfoForm;
 	import com.likya.pinara.comps.jobcrud.StateInfosForm;
@@ -30,28 +34,28 @@ package com.likya.pinara.utils {
 			return count;
 		}
 		
-		public static function prepare_baseInfoForm(baseInfoForm:JobBaseTypeInfoForm, jobDetailXml:XML):void {
+		public static function prepare_baseInfoForm(baseInfoForm_0:JobBaseTypeInfoForm_0, baseInfoForm_1:JobBaseTypeInfoForm_1, jobDetailXml:XML):void {
 			
-			baseInfoForm.jsJobGroup.text = jobDetailXml.@groupId;
-			baseInfoForm.jsName.text = jobDetailXml.baseJobInfos.jsName;
-			baseInfoForm.jsCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
-			baseInfoForm.jsJobWorkDir.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobWorkDir;
+			baseInfoForm_0.jsJobGroup.text = jobDetailXml.@groupId;
+			baseInfoForm_0.jsName.text = jobDetailXml.baseJobInfos.jsName;
+			baseInfoForm_0.jsCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
+			baseInfoForm_0.jsJobWorkDir.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobWorkDir;
 			// Alert.show("" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType);
-			baseInfoForm.jsJobType.selectedItem = "" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
+			baseInfoForm_0.jsJobType.selectedItem = "" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
 			// Alert.show(baseInfoForm.jsJobType.selectedItem);
-			baseInfoForm.jsJobArgs.text = jobDetailXml.baseJobInfos.jobTypeDetails.argValues;
+			baseInfoForm_0.jsJobArgs.text = jobDetailXml.baseJobInfos.jobTypeDetails.argValues;
 			
 			for each (var item:Object in jobDetailXml.baseJobInfos.jobTypeDetails.envVariables.entry) {
-				baseInfoForm.envVarList.dataProvider.addItem(item.@key + "=" + item);
+				baseInfoForm_1.envVarList.dataProvider.addItem(item.@key + "=" + item);
 			}
 			
-			baseInfoForm.jsJobLogFile.text = jobDetailXml.baseJobInfos.jobLogFile;
-			baseInfoForm.jsJobLogPath.text = jobDetailXml.baseJobInfos.jobLogPath;
+			baseInfoForm_1.jsJobLogFile.text = jobDetailXml.baseJobInfos.jobLogFile;
+			baseInfoForm_1.jsJobLogPath.text = jobDetailXml.baseJobInfos.jobLogPath;
 			
 			//baseInfoForm.jsOsType.selectedItem = "" + jobDetailXml.baseJobInfos.oSystem;
 			
-			baseInfoForm.jsJobPriority.selectedItem = "" + jobDetailXml.baseJobInfos.jobPriority;
-			baseInfoForm.jsJobActivity.selectedItem = "" + jobDetailXml.baseJobInfos.jsIsActive;
+			baseInfoForm_1.jsJobPriority.selectedItem = "" + jobDetailXml.baseJobInfos.jobPriority;
+			baseInfoForm_1.jsJobActivity.selectedItem = "" + jobDetailXml.baseJobInfos.jsIsActive;
 			
 			/** 
 			 * will be considered after dependecy things  : 
@@ -86,67 +90,77 @@ package com.likya.pinara.utils {
 			dependencyListForm.depExp.text = "" + jobDetailXml.DependencyList.DependencyExpression;
 		}
 		
-		public static function prepare_managementInfoForm(managementInfoForm:JobManagementInfoForm, jobDetailXml:XML):void {
+		public static function prepare_managementInfoForm(managementInfoForm_0:JobManagementInfoForm_0, managementInfoForm_1:JobManagementInfoForm_1, jobDetailXml:XML):void {
 			
 			var mXML:XMLList = jobDetailXml.management;
 			
-			var selectedCombo:Number = JobXmlToView.indexOf(mXML.trigger, managementInfoForm.jsJobTriggerType.dataProvider.toArray());
+			var selectedCombo:Number = JobXmlToView.indexOf(mXML.trigger, managementInfoForm_0.jsJobTriggerType.dataProvider.toArray());
 			
-			managementInfoForm.jsJobTriggerType.selectedIndex = selectedCombo;
+			managementInfoForm_0.jsJobTriggerType.selectedIndex = selectedCombo;
 			
 			if(selectedCombo == 1) {
-				managementInfoForm.handleDecoration(false);
+				managementInfoForm_0.handleDecoration(false);
+				managementInfoForm_1.handleDecoration(false);
+				prepare_timeManagement(managementInfoForm_0, mXML);
 			} else {
-				managementInfoForm.handleDecoration(true);
+				managementInfoForm_0.handleDecoration(true);
+				managementInfoForm_1.handleDecoration(true);
 				if(mXML.hasOwnProperty("periodInfo")) {
-					managementInfoForm.periodInfo.selected = true;
-					managementInfoForm.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
-					managementInfoForm.stepValue.text = mXML.periodInfo.@step;
-					managementInfoForm.maxCountValue.text = mXML.periodInfo.@maxCount;
+					managementInfoForm_1.periodInfo.selected = true;
+					managementInfoForm_1.relativeStart.selectedItem = "" + mXML.periodInfo.@relativeStart;
+					managementInfoForm_1.stepValue.text = mXML.periodInfo.@step;
+					managementInfoForm_1.maxCountValue.text = mXML.periodInfo.@maxCount;
 				} else {
-					managementInfoForm.periodInfo.selected = false;
+					managementInfoForm_1.periodInfo.selected = false;
 				}
 				
-				managementInfoForm.periodInfoDecoration();
+				managementInfoForm_1.periodInfoDecoration();
 				
-				// managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
-				managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
+				prepare_timeManagement(managementInfoForm_0, mXML);
 				
-				var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
-				// managementInfoForm.bhour.text = pairs[0];
-				managementInfoForm.bhour.value = pairs[0];
-				// managementInfoForm.bminute.text = pairs[1];
-				managementInfoForm.bminute.value = pairs[1];
-				// managementInfoForm.bsecond.text = pairs[2];
-				managementInfoForm.bsecond.value = pairs[2];
+				managementInfoForm_1.runEvenFailed.selectedItem = "" + mXML.cascadingConditions.runEvenIfFailed;
+				managementInfoForm_1.safeToRestart.selectedItem = "" + mXML.cascadingConditions.jobSafeToRestart;
 				
-				// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
+				if(mXML.cascadingConditions.hasOwnProperty("jobAutoRetryInfo")) {
+					managementInfoForm_1.autoRetry.selectedItem = "" + mXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry;
+					managementInfoForm_1.arStepValue.text = mXML.cascadingConditions.jobAutoRetryInfo.@step;
+					managementInfoForm_1.maxCountValueAr.text = mXML.cascadingConditions.jobAutoRetryInfo.@maxCount;
+				} else {
+					managementInfoForm_1.autoRetry.selectedItem = "false";
+				}
 				
-				/*
-				end date prosessin belirleyecegi bir durum
-				managementInfoForm.edate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
-				
-				pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
-				managementInfoForm.ehour.text = pairs[0];
-				managementInfoForm.eminute.text = pairs[1];
-				managementInfoForm.esecond.text = pairs[2];
-				*/
-				managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
-				managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
-				
-				managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
-				managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
-				
-				
-				managementInfoForm.runEvenFailed.selectedItem = "" + mXML.cascadingConditions.runEvenIfFailed;
-				managementInfoForm.safeToRestart.selectedItem = "" + mXML.cascadingConditions.jobSafeToRestart;
-				
-				managementInfoForm.autoRetry.selectedItem = "" + mXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry;
-				
-				managementInfoForm.arStepValue.text = mXML.cascadingConditions.jobAutoRetryInfo.@step;
-				managementInfoForm.maxCountValueAr.text = mXML.cascadingConditions.jobAutoRetryInfo.@maxCount;
 			}
 			
+		}
+		
+		public static function prepare_timeManagement(managementInfoForm:JobManagementInfoForm_0, mXML:XMLList):void {
+			// managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
+			managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
+			
+			var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
+			// managementInfoForm.bhour.text = pairs[0];
+			managementInfoForm.bhour.value = pairs[0];
+			// managementInfoForm.bminute.text = pairs[1];
+			managementInfoForm.bminute.value = pairs[1];
+			// managementInfoForm.bsecond.text = pairs[2];
+			managementInfoForm.bsecond.value = pairs[2];
+			
+			// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
+			
+			/*
+			end date prosessin belirleyecegi bir durum
+			managementInfoForm.edate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
+			
+			pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
+			managementInfoForm.ehour.text = pairs[0];
+			managementInfoForm.eminute.text = pairs[1];
+			managementInfoForm.esecond.text = pairs[2];
+			*/
+			managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
+			managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
+			
+			managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
+			managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
 		}
 		
 		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {

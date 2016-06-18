@@ -39,6 +39,163 @@
       <parameter name="nettreeid" type="string"/>
     </function>
   </service>
+  <service name="UserOps">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">com.likya.pinara.services.userops</item>
+      <item name="rootURL">http://127.0.0.1:3000</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">HTTPService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">com.likya.pinara.model</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="changepass" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/changepass</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/changepass</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="useradd" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/useradd</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/useradd</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="userlist" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/x-www-form-urlencoded</item>
+        <item name="requestBodyParameter">false</item>
+        <item name="url">/flex/restsrv/userops/userlist</item>
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userlist</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="userupdate" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/userupdate</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userupdate</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="changepassadm" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/changepassadm</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/changepassadm</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="userdelete" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/userdelete</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userdelete</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+    <function name="userread" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/userread</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userread</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+  </service>
   <service name="JobManager">
     <annotation name="ActionScriptGeneration">
       <item name="ServiceType">HTTPMultiService</item>
@@ -52,22 +209,6 @@
       <item name="DEFAULT_ENTITY_PACKAGE">com.likya.pinara.services.jobmanager.helpers</item>
       <item name="LINKED_FILE"></item>
     </annotation>
-    <function name="stop" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">GET</item>
-        <item name="url">/flex/restsrvc/stopjob/{jobId}</item>
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/stopjob/{jobId}</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-      </annotation>
-    </function>
     <function name="start" return-type="opaque">
       <annotation name="analyze group">
         <item name="analyzed">false</item>
@@ -162,7 +303,7 @@
       </annotation>
       <annotation name="ActionScriptGeneration">
         <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">POST</item>
+        <item name="method">GET</item>
         <item name="url">/flex/restsrvc/resumejob/{jobId}</item>
         <item name="contentType">application/x-www-form-urlencoded</item>
         <item name="requestBodyParameter">false</item>
@@ -186,7 +327,7 @@
       </annotation>
       <annotation name="ActionScriptGeneration">
         <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">POST</item>
+        <item name="method">GET</item>
         <item name="url">/flex/restsrvc/retryjob/{jobId}</item>
         <item name="contentType">application/x-www-form-urlencoded</item>
         <item name="requestBodyParameter">false</item>
@@ -405,6 +546,7 @@
       <annotation name="ActionScriptGeneration">
         <item name="method">GET</item>
         <item name="url">/flex/restsrvc/enablejob/{jobId}</item>
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
       </annotation>
       <annotation name="url group">
         <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/enablejob/{jobId}</item>
@@ -430,13 +572,13 @@
       <annotation name="url group">
         <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablegrp/{grpId}</item>
       </annotation>
-      <annotation name="Properties">
-        <item name="urlParamNames">grpId</item>
-      </annotation>
       <annotation name="original signature">
+        <item name="returnType">opaque</item>
         <item name="inputParamNames">grpId</item>
         <item name="inputParams">string</item>
-        <item name="returnType">opaque</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">grpId</item>
       </annotation>
       <parameter name="grpId" type="string"/>
     </function>
@@ -451,6 +593,27 @@
       <annotation name="url group">
         <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/disablejob/{jobId}</item>
       </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+        <item name="inputParamNames">jobId</item>
+        <item name="inputParams">string</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="urlParamNames">jobId</item>
+      </annotation>
+      <parameter name="jobId" type="string"/>
+    </function>
+    <function name="stop" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">/flex/restsrvc/stopjob/{jobId}</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrvc/stopjob/{jobId}</item>
+      </annotation>
       <annotation name="Properties">
         <item name="urlParamNames">jobId</item>
       </annotation>
@@ -460,163 +623,6 @@
         <item name="returnType">opaque</item>
       </annotation>
       <parameter name="jobId" type="string"/>
-    </function>
-  </service>
-  <service name="UserOps">
-    <annotation name="ActionScriptGeneration">
-      <item name="ServiceType">HTTPMultiService</item>
-      <item name="Package">com.likya.pinara.services.userops</item>
-      <item name="rootURL">http://127.0.0.1:3000</item>
-    </annotation>
-    <annotation name="ServiceTypeGroup">
-      <item name="ServiceBackendType">HTTPService</item>
-    </annotation>
-    <annotation name="ServiceConfig">
-      <item name="DEFAULT_ENTITY_PACKAGE">com.likya.pinara.model</item>
-      <item name="LINKED_FILE"></item>
-    </annotation>
-    <function name="changepass" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/changepass</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/changepass</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="useradd" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/useradd</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/useradd</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="userlist" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">POST</item>
-        <item name="contentType">application/x-www-form-urlencoded</item>
-        <item name="requestBodyParameter">false</item>
-        <item name="url">/flex/restsrv/userops/userlist</item>
-        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userlist</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="userupdate" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/userupdate</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userupdate</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="changepassadm" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/changepassadm</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/changepassadm</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="userdelete" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/userdelete</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userdelete</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="returnType">opaque</item>
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
-    </function>
-    <function name="userread" return-type="opaque">
-      <annotation name="analyze group">
-        <item name="analyzed">false</item>
-      </annotation>
-      <annotation name="ActionScriptGeneration">
-        <item name="method">POST</item>
-        <item name="contentType">application/xml</item>
-        <item name="requestBodyParameter">true</item>
-        <item name="url">/flex/restsrv/userops/userread</item>
-      </annotation>
-      <annotation name="url group">
-        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/userread</item>
-      </annotation>
-      <annotation name="original signature">
-        <item name="inputParamNames">strXml</item>
-        <item name="inputParams">string</item>
-        <item name="returnType">opaque</item>
-      </annotation>
-      <parameter name="strXml" type="string"/>
     </function>
   </service>
 </model>

@@ -266,9 +266,15 @@
 				if(netTreeEnablable) {
 					pinaraJobListGrid.enableAllBtn.visible = true;
 					pinaraJobListGrid.enableAllBtn.includeInLayout = true;
+					
+					pinaraJobListGrid.grpState.visible = true;
+					pinaraJobListGrid.grpState.includeInLayout = true;
 				}  else {
 					pinaraJobListGrid.enableAllBtn.visible = false;
 					pinaraJobListGrid.enableAllBtn.includeInLayout = false;
+
+					pinaraJobListGrid.grpState.visible = false;
+					pinaraJobListGrid.grpState.includeInLayout = false;
 				}
 				
 				if(netTreeDisablable && !netTreeEnablable) {

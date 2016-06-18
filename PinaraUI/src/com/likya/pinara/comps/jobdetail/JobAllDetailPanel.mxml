@@ -7,8 +7,10 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
+			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.RoleFilters;
 			import com.likya.pinara.utils.Transformer;
 			import com.likya.pinara.utils.WindowUtils;
@@ -39,6 +41,15 @@
 				[ {name:"Admin", value:UserRole.ADMIN},
 					{name:"Operation", value:UserRole.OPERATION},
 					{name:"View", value:UserRole.VIEW} ]);
+			
+			[Bindable]
+			public var data:ArrayCollection = new ArrayCollection(
+				[   
+					{value:"TIME", code:"0"},
+					/*{value:"EVENT", code:"1"},*/
+					{value:"USER", code:"2"}		
+				]                
+			);
 			
 			public var role:String = UserRole.ADMIN;
 			// public var role:String = UserRole.OPERATION;
@@ -123,6 +134,9 @@
 					jobId.text = jobDetailXml.@Id;
 					jobName.text = jobDetailXml.baseJobInfos.jsName;
 					
+					var selectedCombo:Number = JobXmlToView.indexOf(jobDetailXml.management.trigger, data.toArray());
+					jsJobTriggerType.selectedIndex = selectedCombo;
+					
 					// jobState.text = jobDetailXml.visualParams.statu;
 					// manage.text = jobDetailXml.visualParams.commandabilityParams;
 					jobCommandType.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
@@ -197,6 +211,10 @@
 				manageButtonGroupLbl.includeInLayout = value;
 			}
 			
+			protected function refresh_button1_clickHandler(event:MouseEvent):void {
+				dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, selectedJobId));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -219,9 +237,15 @@
 					</s:layout>  
 					
 					<s:HGroup width="100%">
-						
 						<s:VGroup paddingLeft="5" gap="-10" width="100%">
-							<s:HGroup verticalAlign="baseline" paddingTop="15">
+							<s:HGroup verticalAlign="middle" paddingTop="5">
+								<s:FormItem label="Job Trigger Type">
+									<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" enabled="false"/> 
+								</s:FormItem>
+								<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
+								<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
+							</s:HGroup>
+							<s:HGroup verticalAlign="middle" paddingTop="15">
 								<s:Label text="Job Id :" width="105" paddingLeft="10" />
 								<s:TextInput id="jobId" top="5" editable="false"/>
 								<s:Label text="Job Name :" width="105" paddingLeft="20" />
@@ -229,9 +253,9 @@
 								<s:Label text="Job State :" width="105" paddingLeft="20"/>
 								<!--<s:TextInput id="jobState" top="5" editable="false" />-->
 								<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
-								<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
+								<!--<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>-->
 							</s:HGroup>
-							<s:HGroup verticalAlign="baseline" paddingTop="15">
+							<s:HGroup verticalAlign="middle" paddingTop="15">
 								<s:Label text="Command Type :" width="105" paddingLeft="10" />
 								<s:TextInput id="jobCommandType" top="5" editable="false"/>
 								<s:Label text="Group Id :" width="105" paddingLeft="20" />

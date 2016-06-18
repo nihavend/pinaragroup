@@ -62,20 +62,21 @@
 					   width="200"/>
 	</s:VGroup>
 	
-	
-	<s:VGroup enabled="false" id="dom">
-		<s:FormItem label="">
-			<s:CheckBox width="150" label="First Day Of Month" id="fdom"/>
-		</s:FormItem>
-		<s:FormItem label="">
-			<s:CheckBox width="150" label="Last Day Of Month" id="ldom"/>
-		</s:FormItem>
-		<s:FormItem label="Day list">
-			<s:TextInput id="specDays" width="100%"/>
-			<s:helpContent>
-				<s:Label text="E.g. 1,5,9-13"/>
-			</s:helpContent>
-		</s:FormItem>
+	<s:HGroup enabled="false" id="dom">
+		<s:VGroup>
+			<s:FormItem label="">
+				<s:CheckBox width="150" label="First Day Of Month" id="fdom"/>
+			</s:FormItem>
+			<s:FormItem label="">
+				<s:CheckBox width="150" label="Last Day Of Month" id="ldom"/>
+			</s:FormItem>
+			<s:FormItem label="Day list">
+				<s:TextInput id="specDays" width="100%"/>
+				<s:helpContent>
+					<s:Label text="E.g. 1,5,9-13"/>
+				</s:helpContent>
+			</s:FormItem>
+		</s:VGroup>
 		<s:FormItem label="Days of Week">
 			<s:CheckBox width="150" label="Monday" id="d1"/>
 			<s:CheckBox width="150" label="Tuesday" id="d2"/>
@@ -85,6 +86,6 @@
 			<s:CheckBox width="150" label="Saturday" id="d6"/>
 			<s:CheckBox width="150" label="Sunday" id="d7"/>
 		</s:FormItem>
-	</s:VGroup>
+	</s:HGroup>
 	
 </s:Form>

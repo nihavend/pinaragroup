@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var data:ArrayCollection = new ArrayCollection(
+				[   
+					{value:"TIME", code:"0"},
+					/*{value:"EVENT", code:"1"},*/
+					{value:"USER", code:"2"}		
+				]                
+			);
+			
+			public function validateForm():Boolean
+			{
+				/*if(stepValue.text == "") {
+				Alert.show("Delay is not defined !");
+				return false;
+				}
+				
+				if(maxCountValue.text == "") {
+				Alert.show("Max Count is not defined !");
+				return false;
+				}*/
+				
+				/*				if(bdate.text == "") {
+				Alert.show("Begin date is not defined !");
+				return false;
+				}	
+				*/				
+				/*				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
+				Alert.show("Begin time is not defined !");
+				return false;
+				}	*/
+				
+				
+				/*				if(edate.text == "") {
+				Alert.show("End date is not defined !");
+				return false;
+				}	
+				
+				if(ehour.text == "" || eminute.text == "" || esecond.text == "") {
+				Alert.show("End time is not defined !");
+				return false;
+				}	
+				*/				
+				
+				if(autoRetry.selectedItem == "true") {
+					
+					if(arStepValue.text == "") {
+						Alert.show("Autoretry step is not defined !");
+						return false;
+					}
+					
+					/*if(maxCountValueAr.text == "") {
+					Alert.show("Autoretry maxcount is not defined !");
+					return false;
+					}*/
+				}
+				
+				return true;
+			}
+			
+			public function handleDecoration(value:Boolean):void {
+				periodBox.enabled = value;
+				// timeBox.enabled = value;
+				cascCondBox.enabled = value;
+			}
+			
+			protected function autoRetry_changeHandler(event:IndexChangeEvent):void
+			{
+				if(autoRetry.selectedItem == "true") {
+					arStepValue.enabled = true;
+					maxCountValueAr.enabled = true;
+				} else {
+					arStepValue.enabled = false;
+					maxCountValueAr.enabled = false;
+				}
+				
+			}
+			
+			protected function periodInfo_clickHandler(event:MouseEvent):void {
+				periodInfoDecoration();
+				
+			}
+			
+			public function periodInfoDecoration():void {
+				if(periodInfo.selected) {
+					relativeStart.enabled = true;
+					stepValue.enabled = true;
+					maxCountValue.enabled = true;
+				} else {
+					relativeStart.enabled = false;
+					stepValue.enabled = false;
+					maxCountValue.enabled = false;
+				}
+			}
+			
+			public static function leadingZero(value:Number):String	{
+				if(value < 10){
+					return "0" + value;
+				}
+				return value.toString();    
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>
+	
+	
+	<s:VGroup id="cascCondBox">
+		
+		<s:Label left="15" top="0" text="Cascading Conditions" fontSize="14" fontWeight="bold"/>
+		
+		<s:HGroup top="15">
+			<s:FormItem label="Run Even Failed" top="20">
+				<s:DropDownList id="runEvenFailed" width="60" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>true</fx:String>
+							<fx:String>false</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Continue Execution On Error"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Safe To Restart" top="50">
+				<s:DropDownList id="safeToRestart" width="60" selectedIndex="0"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>true</fx:String>
+							<fx:String>false</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Safe To Restart Info"/>
+				</s:helpContent>
+			</s:FormItem>
+		</s:HGroup>
+		
+		<s:BorderContainer id="auotRetryBox" left="10" top="60" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			
+			<s:Label left="15" top="10" text="Auto Retry Info" fontSize="14" fontWeight="bold"/>
+			
+			<s:FormItem label="Auto Retry" top="30">
+				<s:DropDownList id="autoRetry" width="120" selectedIndex="0" change="autoRetry_changeHandler(event)"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>false</fx:String>
+							<fx:String>true</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Autor Retry On Error"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Delay between auto retry" top="60">
+				<s:TextInput id="arStepValue" width="100%" enabled="false"/>
+				<s:helpContent>
+					<s:Label text="Define delay, e.g. P1D"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Maximum Count" top="90">
+				<s:TextInput id="maxCountValueAr" width="100%" enabled="false"/>
+				<s:helpContent>
+					<s:Label text="Maximum Count of Execution"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+		</s:BorderContainer>
+		
+		<s:BorderContainer id="periodBox" left="10" top="400" width="90%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+			
+			<!--		<s:Label left="15" top="10" text="Period Info" fontSize="14" fontWeight="bold"/>
+			-->		
+			
+			<s:CheckBox left="15" top="10" width="150" label="Period Info" id="periodInfo" fontSize="14" fontWeight="bold" click="periodInfo_clickHandler(event)"/>
+			
+			<s:FormItem label="Calculate Relatively" top="30">
+				<s:DropDownList id="relativeStart" width="120" selectedIndex="0" enabled="false"> 
+					<s:dataProvider>
+						<mx:ArrayList>
+							<fx:String>true</fx:String>
+							<fx:String>false</fx:String>
+						</mx:ArrayList>
+					</s:dataProvider>
+				</s:DropDownList>
+				<s:helpContent>
+					<s:Label text="Relative Time Calculation"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Delay between periods" top="60">
+				<s:TextInput id="stepValue" width="100%" enabled="false"/>
+				<s:helpContent>
+					<s:Label text="Define delay, e.g. P1D"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Maximum Count" top="90">
+				<s:TextInput id="maxCountValue" width="100%" enabled="false"/>
+				<s:helpContent>
+					<s:Label text="Maximum Count of Execution"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+		</s:BorderContainer>
+		
+	</s:VGroup>
+	
+	
+
+</s:Form>

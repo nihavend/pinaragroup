@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="450" height="150">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+ 						 
+ 
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			import spark.components.NavigatorContent;
+			
+			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
+			public var jsJobWorkDir:TextInput = new TextInput();
+			
+			public function validateForm():Boolean
+			{
+				if(jsName.text == "") {
+					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					return false;
+				}
+				if(jsCommand.text == "") {
+					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					return false;
+				}
+				
+				return true;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+	<s:FormItem label="Name">
+		<s:TextInput id="jsName" width="100%"/>
+		<s:helpContent>
+			<s:Label text="* Enter a name for your Job"/>
+		</s:helpContent>
+	</s:FormItem>
+
+	
+	<s:FormItem label="Command">
+		<s:TextInput id="jsCommand" width="300" />
+		<s:helpContent>
+			<s:Label text="* Enter the command for your Job with full path" left="50"/>
+		</s:helpContent>
+	</s:FormItem>
+
+	<s:FormItem label="Group">
+		<s:TextInput id="jsJobGroup" width="300" />
+		<s:helpContent>
+			<s:Label text="* Enter job group name" left="50"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Type">
+		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="false"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>BATCH PROCESS</fx:String>
+					<!--<fx:String>SHELL SCRIPT</fx:String>
+					<fx:String>REMOTE SHELL</fx:String>
+					<fx:String>ETL TOOL JOBS</fx:String>
+					<fx:String>SAP</fx:String>
+					<fx:String>SAS</fx:String>
+					<fx:String>SYSTEM COMMAND</fx:String>
+					<fx:String>FTP</fx:String>
+					<fx:String>FILE PROCESS</fx:String>
+					<fx:String>FILE LISTENER</fx:String>
+					<fx:String>PROCESS NODE</fx:String>
+					<fx:String>DB JOBS</fx:String>
+					<fx:String>WEB SERVICE</fx:String>-->
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Arguments"> 
+		<s:TextArea id="jsJobArgs" height="25"/>
+	</s:FormItem>
+		
+</s:Form>

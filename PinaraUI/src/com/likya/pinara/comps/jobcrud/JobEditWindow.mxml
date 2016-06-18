@@ -16,7 +16,6 @@
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.ViewToJobXml;
-			import com.likya.pinara.utils.WindowUtils;
 			
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
@@ -46,11 +45,11 @@
 						jobDetailXml.@Id = "";
 					}
 					// Alert.show("This window is created for edit mode !");
-					JobXmlToView.prepare_baseInfoForm(baseInfoForm, jobDetailXml);
+					JobXmlToView.prepare_baseInfoForm(baseInfoForm_0, baseInfoForm_1, jobDetailXml);
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
 					JobXmlToView.prepare_dependencyListForm(dependencyListForm, jobDetailXml);
 					dependencyListForm.updateData();
-					JobXmlToView.prepare_managementInfoForm(managementInfoForm, jobDetailXml);
+					JobXmlToView.prepare_managementInfoForm(managementInfoForm_0, managementInfoForm_1, jobDetailXml);
 					JobXmlToView.prepare_logAnalysisForm(logAnalysisForm, jobDetailXml);
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
 				} else {
@@ -67,10 +66,10 @@
 			{
 				var formsValid:Boolean = true;
 				
-				formsValid = formsValid && baseInfoForm.validateForm();
+				formsValid = formsValid && baseInfoForm_0.validateForm() && baseInfoForm_1.validateForm();
 				formsValid = formsValid && stateInfosForm.validateForm();
 				formsValid = formsValid && dependencyListForm.validateForm();
-				formsValid = formsValid && managementInfoForm.validateForm();
+				formsValid = formsValid && managementInfoForm_0.validateForm() && managementInfoForm_1.validateForm();
 				formsValid = formsValid && logAnalysisForm.validateForm();
 				formsValid = formsValid && scheduleInfoForm.validateForm();
 				
@@ -175,22 +174,52 @@
 		<s:TabBar dataProvider="{vs}" width="750"/>
 		<!-- Define the ViewStack and the three child containers. -->
 		
-		<mx:ViewStack id="vs" width="100%" height="550" left="8" y="23" creationPolicy="all">
+		<mx:ViewStack id="vs" width="100%" height="400" left="8" y="23" creationPolicy="all">
 			
 			<s:NavigatorContent id="baseInfo" label="Base Information of Job">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
-					<jobcrud:JobBaseTypeInfoForm id="baseInfoForm"/>
+					<!--<jobcrud:JobBaseTypeInfoForm id="baseInfoForm" visible="false"/>-->
+					<s:VGroup>
+						<!-- Create a Spark ButtonBar control to navigate 
+						the ViewStack container. -->
+						<s:ButtonBar dataProvider="{myViewStack}"/>
+						<!-- Define the ViewStack and the three child containers. -->
+						<mx:ViewStack id="myViewStack" width="100%">
+							<s:NavigatorContent id="basicParams" label="Basic">
+								<jobcrud:JobBaseTypeInfoForm_0 id="baseInfoForm_0" includeInLayout="false"/>
+							</s:NavigatorContent>
+							<s:NavigatorContent id="extendedParams" label="Extended">
+								<jobcrud:JobBaseTypeInfoForm_1 id="baseInfoForm_1" includeInLayout="false"/>
+							</s:NavigatorContent>
+						</mx:ViewStack>
+					</s:VGroup>
 				</s:BorderContainer>
 			</s:NavigatorContent>
 			<s:NavigatorContent id="stateInfos" label="State Information of Job">
 				<jobcrud:StateInfosForm id="stateInfosForm"/>
 			</s:NavigatorContent>
 			<s:NavigatorContent id="depList" label="Dependency Definitions">
-				<jobcrud:DependencyListForm id="dependencyListForm" visible="true"/>
+				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
+					<jobcrud:DependencyListForm id="dependencyListForm" visible="true"/>
+				</s:BorderContainer>
 			</s:NavigatorContent>
 			<s:NavigatorContent label="Job Management Info"  width="100%" height="100%">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
-					<jobcrud:JobManagementInfoForm id="managementInfoForm"/>
+					<!--<jobcrud:JobManagementInfoForm id="managementInfoForm" visible="false"/>-->
+					<s:VGroup>
+						<!-- Create a Spark ButtonBar control to navigate 
+						the ViewStack container. -->
+						<s:ButtonBar dataProvider="{myViewStack1}"/>
+						<!-- Define the ViewStack and the three child containers. -->
+						<mx:ViewStack id="myViewStack1" width="100%">
+							<s:NavigatorContent id="basicParams1" label="Common">
+								<jobcrud:JobManagementInfoForm_0 id="managementInfoForm_0"/>
+							</s:NavigatorContent>
+							<s:NavigatorContent id="extendedParams1" label="Time Related">
+								<jobcrud:JobManagementInfoForm_1 id="managementInfoForm_1"/>
+							</s:NavigatorContent>
+						</mx:ViewStack>
+					</s:VGroup>
 				</s:BorderContainer>
 			</s:NavigatorContent>
 			<s:NavigatorContent id="logAnalysisTab" label="Log Analysis Action Definitions">

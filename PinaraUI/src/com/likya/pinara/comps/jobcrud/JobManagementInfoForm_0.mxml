@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var data:ArrayCollection = new ArrayCollection(
+				[   
+					{value:"TIME", code:"0"},
+					/*{value:"EVENT", code:"1"},*/
+					{value:"USER", code:"2"}		
+				]                
+			);
+			
+			public function validateForm():Boolean
+			{
+				/*if(stepValue.text == "") {
+				Alert.show("Delay is not defined !");
+				return false;
+				}
+				
+				if(maxCountValue.text == "") {
+				Alert.show("Max Count is not defined !");
+				return false;
+				}*/
+				
+				/*				if(bdate.text == "") {
+				Alert.show("Begin date is not defined !");
+				return false;
+				}	
+				*/				
+				/*				if(bhour.text == "" || bminute.text == "" || bsecond.text == "") {
+				Alert.show("Begin time is not defined !");
+				return false;
+				}	*/
+				
+				
+				/*				if(edate.text == "") {
+				Alert.show("End date is not defined !");
+				return false;
+				}	
+				
+				if(ehour.text == "" || eminute.text == "" || esecond.text == "") {
+				Alert.show("End time is not defined !");
+				return false;
+				}	
+				*/				
+				if(timoutValue.text == "") {
+					Alert.show("Timeout is not defined !");
+					return false;
+				}	
+				
+				if(expectedValue.text == "") {
+					Alert.show("Expected time is not defined !");
+					return false;
+				}	
+				
+				return true;
+			}
+			
+			protected function dropDownList_changeHandler (event:IndexChangeEvent):void	{
+				// jsJobTriggerType.selectedIndex.toString();
+				// jsJobTriggerType.selectedItem.value;
+				if(jsJobTriggerType.selectedItem.code == 0) {
+					handleDecoration(true);
+				} else {
+					handleDecoration(false);
+				}
+			}
+			
+			public function handleDecoration(value:Boolean):void {
+				// timeBox.enabled = value;
+				timeinfo_1.enabled = value;
+			}
+			
+			public static function leadingZero(value:Number):String	{
+				if(value < 10){
+					return "0" + value;
+				}
+				return value.toString();    
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>
+	
+	<s:FormItem label="Job Trigger Type">
+		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
+	</s:FormItem>
+	
+	<s:BorderContainer id="timeBox" width="700" height="160" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
+		
+		<s:VGroup left="15" top="25" gap="-10">
+			<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="timeinfo_1">
+				<s:HGroup>
+					<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
+					<!--s:TextInput  id="bhour"
+					text="00"
+					restrict="0-23"
+					widthInChars="3"
+					maxChars="2" /-->
+					<s:NumericStepper id="bhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+					
+					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+					<!--<s:TextInput  id="bminute"
+					text="00"
+					restrict="0-59"
+					widthInChars="3"
+					maxChars="2" />-->
+					<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+					<!--<s:TextInput  id="bsecond"
+					text="00"
+					restrict="0-59"
+					widthInChars="3"
+					maxChars="2" />-->
+					<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+				</s:HGroup>
+				<s:helpContent>
+					<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+				</s:helpContent>
+			</s:FormItem>
+			
+			<s:FormItem label="Time-out değeri                :">
+				<s:HGroup>
+					<s:TextInput  id="timoutValue"
+								  restrict="0-999999"
+								  text="1"
+								  width="50"
+								  maxChars="5" />
+					<s:DropDownList id="timeoutUnit" width="120" selectedIndex="0"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>HOURS</fx:String>
+								<fx:String>MINUTES</fx:String>
+								<fx:String>SECONDS</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:HGroup>
+			</s:FormItem>
+			
+			<s:FormItem label="Beklenen çalışma süresi :">
+				<s:HGroup>
+					<s:TextInput  id="expectedValue"
+								  restrict="0-999999"
+								  text="1"
+								  width="50"
+								  maxChars="6" />
+					<s:DropDownList id="expectedTimeUnit" width="120" selectedIndex="0"> 
+						<s:dataProvider>
+							<mx:ArrayList>
+								<fx:String>HOURS</fx:String>
+								<fx:String>MINUTES</fx:String>
+								<fx:String>SECONDS</fx:String>
+							</mx:ArrayList>
+						</s:dataProvider>
+					</s:DropDownList>
+				</s:HGroup>
+			</s:FormItem>
+			
+		</s:VGroup>
+		
+	</s:BorderContainer>
+	
+</s:Form>

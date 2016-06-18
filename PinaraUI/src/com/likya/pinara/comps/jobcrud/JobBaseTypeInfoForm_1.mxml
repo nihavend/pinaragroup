@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Form xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:MyComp="*"
+		width="450" height="150">
+	
+	<!--
+	<fx:Declarations>
+	<fx:Model id="tempXML" source="pinara.xml" />
+	<s:XMLListCollection id="pinaraXMLList" source="{tempXML.genericJob}" />
+	</fx:Declarations>
+	-->
+ 						 
+ 
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			import spark.components.NavigatorContent;
+			import spark.events.IndexChangeEvent;
+			import spark.events.TextOperationEvent;
+			
+			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
+			public var jsJobWorkDir:TextInput = new TextInput();
+			
+			public function validateForm():Boolean
+			{
+				/*if(jsOsType.selectedIndex == -1) {
+					Alert.show("Os Type is not selected !");
+					return false;
+				}*/
+				if(jsJobActivity.selectedIndex == -1) {
+					Alert.show("Job Activity is not selected !");
+					return false;
+				}
+				if(jsJobPriority.selectedIndex == -1) {
+					Alert.show("Job Priority is not selected !");
+					return false;
+				}
+				
+				return true;
+			}
+			
+			protected function ekle_clickHandler(event:MouseEvent):void
+			{
+				envVarList.dataProvider.addItem(envVars.text);
+				
+			}
+			
+			protected function cikar_clickHandler(event:MouseEvent):void
+			{
+				if(envVarList.dataProvider.length != 0 && envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+					envVarList.dataProvider.removeItemAt(envVarList.selectedIndex);
+				} else {
+					cikar.enabled = false;
+				}
+				
+			}
+			
+			protected function envVars_changeHandler(event:TextOperationEvent):void
+			{
+				if(event.currentTarget.text.length > 0) {
+					ekle.enabled = true;
+				} else {
+					ekle.enabled = false;
+				}
+				
+			}
+			
+			protected function envVarList_changeHandler(event:IndexChangeEvent):void
+			{
+				if(envVarList.selectedIndex != -1) {
+					cikar.enabled = true;
+				} else {
+					cikar.enabled = false;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:FormLayout gap="-10"/>
+	</s:layout>  
+	
+	<s:FormItem label="Environment Variables"> 
+		<s:HGroup>
+			<s:List id="envVarList" change="envVarList_changeHandler(event)" maxHeight="70" maxWidth="300"> 
+				<mx:ArrayCollection>
+					<!--<fx:String>var1=Dreamweaver</fx:String> 
+					<fx:String>var2=ColdFusion</fx:String> -->
+				</mx:ArrayCollection>
+			</s:List>
+			<s:VGroup>
+				<s:Label text="Key Value Pair" />
+				<s:TextInput id="envVars" width="100%" change="envVars_changeHandler(event)"/>
+				<s:HGroup>
+					<s:Button label="Ekle" id="ekle" click="ekle_clickHandler(event)" enabled="false"/>
+					<s:Button label="Çıkar" id="cikar" click="cikar_clickHandler(event)" enabled="false"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:HGroup>
+	</s:FormItem>
+
+	<s:FormItem label="Job Log Filename">
+		<s:TextInput id="jsJobLogFile" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Log Filename"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Job Log Path">
+		<s:TextInput id="jsJobLogPath" width="100%"/>
+		<s:helpContent>
+			<s:Label text="Enter your Job Log File Physical Path"/>
+		</s:helpContent>
+	</s:FormItem>
+	<!--	
+		Bu kısmı server tarafından otomatik olarak yapmaya karar verdim, 
+		SW den kalma bir bölüm
+	-->	
+	<!--<s:FormItem label="OS Type">
+		<s:DropDownList id="jsOsType" width="160" prompt="Select Operating System" selectedIndex="1"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>Unknown</fx:String>
+					<fx:String>MACOS</fx:String>
+					<fx:String>ATTUNIX</fx:String>
+					<fx:String>DGUX</fx:String>
+					<fx:String>DECNT</fx:String>
+					<fx:String>Tru64_UNIX</fx:String>
+					<fx:String>OpenVMS</fx:String>
+					<fx:String>HPUX</fx:String>
+					<fx:String>AIX</fx:String>
+					<fx:String>MVS</fx:String>
+					<fx:String>OS400</fx:String>
+					<fx:String>OS_2</fx:String>
+					<fx:String>JavaVM</fx:String>
+					<fx:String>MSDOS</fx:String>
+					<fx:String>WIN3x</fx:String>
+					<fx:String>WIN95</fx:String>
+					<fx:String>WIN98</fx:String>
+					<fx:String>WINNT</fx:String>
+					<fx:String>WINCE</fx:String>
+					<fx:String>NCR3000</fx:String>
+					<fx:String>NetWare</fx:String>
+					<fx:String>OSF</fx:String>
+					<fx:String>DC_OS</fx:String>
+					<fx:String>Reliant_UNIX</fx:String>
+					<fx:String>SCO_UnixWare</fx:String>
+					<fx:String>SCO_OpenServer</fx:String>
+					<fx:String>Sequent</fx:String>
+					<fx:String>IRIX</fx:String>
+					<fx:String>Solaris</fx:String>
+					<fx:String>SunOS</fx:String>
+					<fx:String>U6000</fx:String>
+					<fx:String>ASERIES</fx:String>
+					<fx:String>TandemNSK</fx:String>
+					<fx:String>TandemNT</fx:String>
+					<fx:String>BS2000</fx:String>
+					<fx:String>LINUX</fx:String>
+					<fx:String>Lynx</fx:String>
+					<fx:String>XENIX</fx:String>
+					<fx:String>VM</fx:String>
+					<fx:String>Interactive_UNIX</fx:String>
+					<fx:String>BSDUNIX</fx:String>
+					<fx:String>FreeBSD</fx:String>
+					<fx:String>NetBSD</fx:String>
+					<fx:String>GNU_Hurd</fx:String>
+					<fx:String>OS9</fx:String>
+					<fx:String>MACH_Kernel</fx:String>
+					<fx:String>Inferno</fx:String>
+					<fx:String>QNX</fx:String>
+					<fx:String>EPOC</fx:String>
+					<fx:String>IxWorks</fx:String>
+					<fx:String>VxWorks</fx:String>
+					<fx:String>MiNT</fx:String>
+					<fx:String>BeOS</fx:String>
+					<fx:String>HP_MPE</fx:String>
+					<fx:String>NextStep</fx:String>
+					<fx:String>PalmPilot</fx:String>
+					<fx:String>Rhapsody</fx:String>
+					<fx:String>Windows_2000</fx:String>
+					<fx:String>Dedicated</fx:String>
+					<fx:String>OS_390</fx:String>
+					<fx:String>VSE</fx:String>
+					<fx:String>TPF</fx:String>
+					<fx:String>Windows_R_Me</fx:String>
+					<fx:String>Caldera_Open_UNIX</fx:String>
+					<fx:String>OpenBSD</fx:String>
+					<fx:String>Not_Applicable</fx:String>
+					<fx:String>Windows_XP</fx:String>
+					<fx:String>z_OS</fx:String-->
+					<!--<fx:String>Windows</fx:String--><!--== Added for generic name control ==-->
+					<!--<fx:String>Unix</fx:String--> <!--== Added for generic name control ==-->
+					<!--<fx:String>other</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+	</s:FormItem>-->
+
+	<s:FormItem label="Priority">
+		<s:DropDownList id="jsJobPriority" width="120" prompt="Select Priority" selectedIndex="0"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>1</fx:String>
+					<fx:String>2</fx:String>
+					<fx:String>3</fx:String>
+					<fx:String>4</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+		<s:helpContent>
+			<s:Label text="Enter your Job Priority"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+	<s:FormItem label="Enabled">
+		<s:DropDownList id="jsJobActivity" width="120" prompt="Select Job Activity" selectedIndex="0"> 
+			<s:dataProvider>
+				<mx:ArrayList>
+					<fx:String>true</fx:String>
+					<fx:String>false</fx:String>
+				</mx:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+		<s:helpContent>
+			<s:Label text="Enter your Job activity"/>
+		</s:helpContent>
+	</s:FormItem>
+	
+</s:Form>

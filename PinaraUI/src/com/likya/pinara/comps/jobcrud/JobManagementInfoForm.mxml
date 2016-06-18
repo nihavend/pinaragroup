@@ -92,7 +92,8 @@
 			
 			public function handleDecoration(value:Boolean):void {
 				periodBox.enabled = value;
-				timeBox.enabled = value;
+				// timeBox.enabled = value;
+				timeinfo_1.enabled = value;
 				cascCondBox.enabled = value;
 			}
 			
@@ -146,77 +147,81 @@
 		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
 	</s:FormItem>
 	
-	<s:BorderContainer id="timeBox" width="100%" height="125" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+	<s:BorderContainer id="timeBox" width="100%" height="100" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
 		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
 		
-		<s:FormItem label="Başlama Tarih ve Saati : " top="20">
+		<s:VGroup left="15" top="25" gap="-10">
+			<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="timeinfo_1">
+				<s:HGroup>
+					<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
+					<!--s:TextInput  id="bhour"
+					text="00"
+					restrict="0-23"
+					widthInChars="3"
+					maxChars="2" /-->
+					<s:NumericStepper id="bhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+					
+					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+					<!--<s:TextInput  id="bminute"
+					text="00"
+					restrict="0-59"
+					widthInChars="3"
+					maxChars="2" />-->
+					<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+					<!--<s:TextInput  id="bsecond"
+					text="00"
+					restrict="0-59"
+					widthInChars="3"
+					maxChars="2" />-->
+					<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+				</s:HGroup>
+				<s:helpContent>
+					<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+				</s:helpContent>
+			</s:FormItem>
+			
 			<s:HGroup>
-				<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
-				<!--s:TextInput  id="bhour"
-							  text="00"
-							  restrict="0-23"
-							  widthInChars="3"
-							  maxChars="2" /-->
-				<s:NumericStepper id="bhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+				<s:FormItem label="Time-out değeri :">
+					<s:HGroup>
+						<s:TextInput  id="timoutValue"
+									  restrict="0-999999"
+									  text="1"
+									  width="50"
+									  maxChars="5" />
+						<s:DropDownList id="timeoutUnit" width="120" selectedIndex="0"> 
+							<s:dataProvider>
+								<mx:ArrayList>
+									<fx:String>HOURS</fx:String>
+									<fx:String>MINUTES</fx:String>
+									<fx:String>SECONDS</fx:String>
+								</mx:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:HGroup>
+				</s:FormItem>
 				
-				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<!--<s:TextInput  id="bminute"
-							  text="00"
-							  restrict="0-59"
-							  widthInChars="3"
-							  maxChars="2" />-->
-				<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
-				<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-				<!--<s:TextInput  id="bsecond"
-							  text="00"
-							  restrict="0-59"
-							  widthInChars="3"
-							  maxChars="2" />-->
-				<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+				<s:FormItem label="Beklenen çalışma süresi:">
+					<s:HGroup>
+						<s:TextInput  id="expectedValue"
+									  restrict="0-999999"
+									  text="1"
+									  width="50"
+									  maxChars="6" />
+						<s:DropDownList id="expectedTimeUnit" width="120" selectedIndex="0"> 
+							<s:dataProvider>
+								<mx:ArrayList>
+									<fx:String>HOURS</fx:String>
+									<fx:String>MINUTES</fx:String>
+									<fx:String>SECONDS</fx:String>
+								</mx:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:HGroup>
+				</s:FormItem>
 			</s:HGroup>
-			<s:helpContent>
-				<s:Label text="DD/MM/YYYY hh:mm:ss"/>
-			</s:helpContent>
-		</s:FormItem>
-		
-		<s:FormItem label="Time-out değeri               :" top="50">
-			<s:HGroup>
-				<s:TextInput  id="timoutValue"
-							  restrict="0-999999"
-							  text="1"
-							  widthInChars="10"
-							  maxChars="9" />
-				<s:DropDownList id="timeoutUnit" width="120" selectedIndex="0"> 
-					<s:dataProvider>
-						<mx:ArrayList>
-							<fx:String>HOURS</fx:String>
-							<fx:String>MINUTES</fx:String>
-							<fx:String>SECONDS</fx:String>
-						</mx:ArrayList>
-					</s:dataProvider>
-				</s:DropDownList>
-			</s:HGroup>
-		</s:FormItem>
-
-		<s:FormItem label="Beklenen çalışma süresi:" top="80">
-			<s:HGroup>
-				<s:TextInput  id="expectedValue"
-							  restrict="0-999999"
-							  text="1"
-							  widthInChars="10"
-							  maxChars="9" />
-				<s:DropDownList id="expectedTimeUnit" width="120" selectedIndex="0"> 
-					<s:dataProvider>
-						<mx:ArrayList>
-							<fx:String>HOURS</fx:String>
-							<fx:String>MINUTES</fx:String>
-							<fx:String>SECONDS</fx:String>
-						</mx:ArrayList>
-					</s:dataProvider>
-				</s:DropDownList>
-			</s:HGroup>
-		</s:FormItem>
+		</s:VGroup>
 		
 	</s:BorderContainer>
 	

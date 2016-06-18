@@ -30,6 +30,7 @@
 			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.User;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.TreeUtils;
 			
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
@@ -132,25 +133,30 @@
 				jobTree.liveTree.validateNow();
 				// var selectedLocal:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup.(@id == selectedTreeNode.@id)[0];
 				
-				var searchResult:XMLList = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
-				
-				if (searchResult[0] != undefined)
-					expandNode(searchResult[0]);
-				
-				//trace("selectedLocal :" + selectedLocal);
-				jobTree.liveTree.selectedItem = searchResult[0];
-				//jobTree.liveTree.validateNow();
-				//jobTree.liveTree.selectedIndex = selectedTreeNodeIdx;
-				//jobTree.liveTree.scrollToIndex(jobTree.liveTree.selectedIndex);
-				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, null));
-			}
-			
-			private function expandNode(xmlNode:XML):void
-			{
-				while (xmlNode.parent() != null) {
-					xmlNode = xmlNode.parent();
-					jobTree.liveTree.expandItem(xmlNode, true, false);
+				/*
+				 * Aşağıdaki kısım TreePanel.xmlService_resultHandler metoduna taşındı.
+				 *
+				 *
+				var searchResult:XMLList;
+				if(currentListNodeId == null) {
+					// searchResult = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+					searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
+				} else {
+					// searchResult = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(currentListNodeId) > -1);
+					searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), currentListNodeId);
 				}
+
+				if (searchResult[0] != undefined) {
+					TreeUtils.expandNode(jobTree.liveTree, searchResult[0]);
+					
+					//trace("selectedLocal :" + selectedLocal);
+					jobTree.liveTree.selectedItem = searchResult[0];
+					//jobTree.liveTree.validateNow();
+					//jobTree.liveTree.selectedIndex = selectedTreeNodeIdx;
+					//jobTree.liveTree.scrollToIndex(jobTree.liveTree.selectedIndex);
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, null));
+				}
+				*/
 			}
 			
 			private function changeState(event:ResourceEvent):void {
@@ -193,7 +199,7 @@
 					// currentState = "loggedInState";
 					currentState = "anaSayfaState";
 				}
-				menuBar.registerClickEvent();
+				// menuBar.registerClickEvent();
 				// Alert.show("New State : " + currentState);
 			}
 			
@@ -328,7 +334,7 @@
 
 					var encoder:Base64Encoder = new Base64Encoder();        
 
-					encoder.encode("expdate:01042016");
+					encoder.encode("expdate:31122016");
 					var str:String = "name=John+Doe" + "[" + encoder.toString() + "]";
 					
 					req.data = new URLVariables(str);

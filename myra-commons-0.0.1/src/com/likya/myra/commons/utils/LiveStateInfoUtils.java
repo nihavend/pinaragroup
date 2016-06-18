@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 import com.likya.xsd.myra.model.stateinfo.ReturnCodeDocument.ReturnCode;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
@@ -406,5 +407,26 @@ public class LiveStateInfoUtils {
 	public static LiveStateInfo getLastStateInfo(AbstractJobType abstractJobType) {
 		return abstractJobType.getStateInfos().getLiveStateInfos().getLiveStateInfoArray(0);
 	}
-	
+
+	public static boolean containsAny(LiveStateInfosType liveStateInfosType, LiveStateInfo liveStateInfo) {
+		
+		for(LiveStateInfo tmpLiveStateInfo : liveStateInfosType.getLiveStateInfoArray()) {
+			if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() == null && tmpLiveStateInfo.getSubstateName() == null) {
+				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName())) {
+					return true;
+				}
+			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() != null && tmpLiveStateInfo.getSubstateName() == null) {
+				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName()) && tmpLiveStateInfo.getSubstateName().equals(liveStateInfo.getSubstateName())) {
+					return true;
+				}
+			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() != null && tmpLiveStateInfo.getSubstateName() != null) {
+				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName()) && tmpLiveStateInfo.getSubstateName().equals(liveStateInfo.getSubstateName()) && tmpLiveStateInfo.getStatusName().equals(liveStateInfo.getStatusName())) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
 }

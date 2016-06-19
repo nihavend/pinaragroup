@@ -38,7 +38,9 @@
         <copy file="/Users/serkan/.m2/repository/jsch/jsch/0.1.50/jsch-0.1.50.jar" todir="/Users/serkan/Desktop/pinara/pinara-0.0.1_lib"/>
     	
     	<delete file="/Users/serkan/Desktop/pinara/flexroot/PinaraUI.swf"/>
+    	<delete file="/Users/serkan/Desktop/pinara/flexroot/ViewDepGraph.swf"/>
     	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot/PinaraUI.swf" todir="/Users/serkan/Desktop/pinara/flexroot"/>
+    	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/flexroot/ViewDepGraph.swf" todir="/Users/serkan/Desktop/pinara/flexroot"/>
     	
        	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/start-no-tr.bat" todir="/Users/serkan/Desktop/pinara"/>
        	<copy file="/Users/serkan/git/pinaragroup/Pinara-0.0.1/bin/start.bat" todir="/Users/serkan/Desktop/pinara"/>

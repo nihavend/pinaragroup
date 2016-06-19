@@ -213,7 +213,7 @@
 						<!-- Define the ViewStack and the three child containers. -->
 						<mx:ViewStack id="myViewStack1" width="100%">
 							<s:NavigatorContent id="basicParams1" label="Common">
-								<jobcrud:JobManagementInfoForm_0 id="managementInfoForm_0"/>
+								<jobcrud:JobManagementInfoForm_0 id="managementInfoForm_0" parentWin="{this}"/>
 							</s:NavigatorContent>
 							<s:NavigatorContent id="extendedParams1" label="Time Related">
 								<jobcrud:JobManagementInfoForm_1 id="managementInfoForm_1"/>

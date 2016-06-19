@@ -7,19 +7,18 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			
 			import spark.events.IndexChangeEvent;
 			
-			[Bindable]
-			public var data:ArrayCollection = new ArrayCollection(
-				[   
-					{value:"TIME", code:"0"},
-					/*{value:"EVENT", code:"1"},*/
-					{value:"USER", code:"2"}		
-				]                
-			);
+			// [Bindable]
+			// public var data:ArrayCollection = new ArrayCollection(
+			//	[   
+			//		{value:"TIME", code:"0"},
+			//		/*{value:"EVENT", code:"1"},*/
+			//		{value:"USER", code:"2"}		
+			//	]                
+			//);
 			
 			public function validateForm():Boolean
 			{
@@ -130,7 +129,7 @@
 		
 		<s:HGroup top="15">
 			<s:FormItem label="Run Even Failed" top="20">
-				<s:DropDownList id="runEvenFailed" width="60" selectedIndex="0"> 
+				<s:DropDownList id="runEvenFailed" width="70" selectedIndex="1"> 
 					<s:dataProvider>
 						<mx:ArrayList>
 							<fx:String>true</fx:String>

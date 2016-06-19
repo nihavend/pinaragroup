@@ -8,9 +8,14 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.containers.ViewStack;
 			import mx.controls.Alert;
+			import mx.core.UIComponent;
 			
 			import spark.events.IndexChangeEvent;
+			
+			
+			public var parentWin:JobEditWindow;
 			
 			[Bindable]
 			public var data:ArrayCollection = new ArrayCollection(
@@ -79,6 +84,7 @@
 			
 			public function handleDecoration(value:Boolean):void {
 				// timeBox.enabled = value;
+				parentWin["managementInfoForm_1"].cascCondBox.enabled = value;
 				timeinfo_1.enabled = value;
 			}
 			

@@ -29,20 +29,20 @@
 	</fx:Declarations>
 	
 	
-	<s:HGroup verticalAlign="baseline" width="90%">
-		<s:Label text="Bekleyen işler :" width="120" paddingLeft="10" />
-		<s:List id="waitingMeJobs" height="60" width="100%">
+	<s:VGroup verticalAlign="top" width="60%">
+		<s:Label text="Bekleyen işler :" width="60%" paddingLeft="10" />
+		<s:List id="waitingMeJobs" height="60" width="60%">
 			<s:dataProvider>
 				<mx:ArrayCollection />
 			</s:dataProvider>
 		</s:List>
-	</s:HGroup>
-	<s:HGroup verticalAlign="baseline" width="90%">
-		<s:Label text="Beklediğim işler :" width="120" paddingLeft="10" />
-		<s:List id="meToWaitJobs" height="60" width="100%" labelFunction="getDepInfo"> 
+	</s:VGroup>
+	<s:VGroup verticalAlign="top" width="60%">
+		<s:Label text="Beklediğim işler :" width="60%" paddingLeft="10" />
+		<s:List id="meToWaitJobs" height="60" width="60%" labelFunction="getDepInfo"> 
 			<s:dataProvider>
 				<mx:ArrayCollection/>
 			</s:dataProvider>
 		</s:List>
-	</s:HGroup>
+	</s:VGroup>
 </s:Group>

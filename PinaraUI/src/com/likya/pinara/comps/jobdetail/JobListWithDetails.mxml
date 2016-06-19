@@ -477,12 +477,6 @@
 						
 						<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150"/>
 						
-						<jobdetail:DepLists id="depListComp" width="100%">
-							<jobdetail:layout>
-								<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
-							</jobdetail:layout>
-						</jobdetail:DepLists>
-						
 						<s:VGroup paddingLeft="0" paddingTop="10"  width="100%" clipAndEnableScrolling="true">
 							<s:Label text="İş Tarihçesi :" width="120" />
 							<s:DataGrid id="stateHistory" width="95%" height="120" >
@@ -496,6 +490,12 @@
 								</s:columns>
 							</s:DataGrid> 
 						</s:VGroup>
+
+						<jobdetail:DepLists id="depListComp" width="120">
+							<jobdetail:layout>
+								<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
+							</jobdetail:layout>
+						</jobdetail:DepLists>
 						
 					</s:HGroup>
 					

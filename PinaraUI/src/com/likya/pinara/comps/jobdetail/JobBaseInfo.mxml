@@ -201,7 +201,7 @@
 							<s:TextInput id="jobCommand" top="5" editable="false" width="95"/>
 							<s:Image id="showJobContent" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'commandFileTooltip')}" 
 									 buttonMode="true" click="showJobContentPopup()" visible="false" includeInLayout="false" />
-							<s:Image id="dontShowJobContent" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noLogFileTooltip')}"/>
+							<s:Image id="dontShowJobContent" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noCommandFileTooltip')}"/>
 							<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
 							<s:TextInput id="dzGroup" top="5" editable="false"/>
 						</s:HGroup>
@@ -217,7 +217,7 @@
 						<s:HGroup verticalAlign="middle" paddingTop="15">
 							<s:Label text="Previous Duration :" width="105"/>
 							<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
-							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'logFileTooltip')}"
+							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'errBuffTooltip')}"
 									 buttonMode="true" click="showJobBuffPopup()" top="0"/>
 							<s:Label text="Parameter :" width="105" paddingLeft="10" />
 							<s:TextInput id="paramValue" top="5" editable="false"/>
@@ -225,7 +225,7 @@
 						<s:HGroup verticalAlign="baseline" paddingTop="15">
 							<s:Label text="Diff Duration :" width="105"/>
 							<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
-							<s:Label text="Arguments :" width="65"/>
+							<s:Label text="Args :" width="65"/>
 							<s:TextInput id="argValues" top="5" editable="false" width="140"/>
 							<s:Button y="-27" right="290" label="Edit" click="showArgValuePopup()" width="50"/>
 						</s:HGroup>

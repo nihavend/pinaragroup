@@ -378,12 +378,13 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		}
 	}
 
-	public void addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
+	public String addJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 		
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
 			jobOperations.addJob(abstractJobType, persist);
 			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -391,6 +392,8 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 	
 	private AbstractJobType validateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {

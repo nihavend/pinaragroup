@@ -16,6 +16,7 @@
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -89,6 +90,16 @@
 				dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedGroupId));
 			}
 			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				var currentDataItem:XML = XML(pinaraJobList.selectedItem); 
+				if(currentDataItem.hasOwnProperty("@Id")) {
+					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH_SELECT, currentDataItem.@Id));
+				}
+				trace();
+			}
+			
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -108,6 +119,7 @@
 		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" includeInLayout="false" click="disableAllBtn_clickHandler(event)" />
 		<s:Button visible="false"/>
 		<s:Button id="grpState" label="DISABLED GROUP" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
+		<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
 	</s:HGroup>
 	
 	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}" addedToStage="pinaraJobList_addedToStageHandler(event)"> 

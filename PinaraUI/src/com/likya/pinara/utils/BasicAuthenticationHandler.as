@@ -103,7 +103,7 @@ package com.likya.pinara.utils
 			}
 		}
 		
-		public static function service_resultHandler(refObject:DisplayObject, event:ResultEvent):ResultEvent {
+		public static function service_resultHandler(refObject:DisplayObject, event:ResultEvent):Boolean {
 			
 	/*		var returnXml:XML;
 			var returnTxt:String = null;
@@ -125,6 +125,8 @@ package com.likya.pinara.utils
 			
 			 */
 			
+			var retValue:Boolean = false;
+			
 			var returnXml:XML;
 			var returnTxt:String = null;
 			
@@ -138,6 +140,7 @@ package com.likya.pinara.utils
 					WindowUtils.showDummyWindow(refObject, returnXml.desc.toString());
 				} else {
 					PopUpManager.removePopUp(refObject as IFlexDisplayObject);
+					retValue = true;
 				}
 			} catch(err:Error) {
 				Alert.show("Result : " + err.message);
@@ -147,7 +150,7 @@ package com.likya.pinara.utils
 			// Alert.show("Result : " + event.message.body);
 			// trace(returnXml);
 			
-			return event;
+			return retValue;
 		}
 		
 		public static function service_customHandler(refObject:DisplayObject, event:ResultEvent, showWin:Boolean = false):Boolean {

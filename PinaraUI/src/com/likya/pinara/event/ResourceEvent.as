@@ -19,6 +19,8 @@ package com.likya.pinara.event {
 		
 		public static const ROW_SELECTION_CHANGED:String = "rowSelectionChangedEvent";
 		
+		public static const REFRESH_SELECT:String = "refreshselect";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

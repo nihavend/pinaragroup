@@ -467,8 +467,8 @@ public class RestParser extends GenericRestParser {
 
 		case RestParser.CMD_JOBADD:
 			try {
-				extractPostInfo(bufferString, (byte) 0x01);
-				retStr = "<message><result>OK</result></message>";
+				String jobId = extractPostInfo(bufferString, (byte) 0x01);
+				retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId></message>";
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
@@ -531,7 +531,7 @@ public class RestParser extends GenericRestParser {
 
 	}
 
-	private static void extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException, InstanceNotFoundException {
+	private static String extractPostInfo(String bufferString, byte command) throws PinaraAuthenticationException, PinaraXMLValidationException, InstanceNotFoundException {
 
 		//<data><serialize></serialize><datamess>" + myraGenericJob + "</datamess></data>
 		String myraGenericJob = bufferString.split("<datamess>")[1].split("</datamess>")[0];
@@ -540,8 +540,7 @@ public class RestParser extends GenericRestParser {
 		switch (command) {
 
 		case 0x01:
-			PinaraAppManagerImpl.getInstance().addJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
-			break;
+			return PinaraAppManagerImpl.getInstance().addJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 		case 0x02:
 			PinaraAppManagerImpl.getInstance().updateJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 			break;
@@ -557,5 +556,6 @@ public class RestParser extends GenericRestParser {
 			break;
 		}
 
+		return null;
 	}
 }

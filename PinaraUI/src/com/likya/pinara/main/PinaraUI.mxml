@@ -91,6 +91,8 @@
 				addEventListener(ResourceEvent.ANASAYFA, changeState);
 				addEventListener(ResourceEvent.REFRESH, refreshContent);
 				
+				addEventListener(ResourceEvent.REFRESH_SELECT, refreshSelect);
+				
 				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
 				
 				ModelLocator.getInstance().currentUser = new User();
@@ -101,6 +103,24 @@
 				
 				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
 
+			}
+			
+			private function refreshSelect(event:ResourceEvent):void {
+				// Alert.show("event.currentTarget : " + event.currentTarget);	
+				
+				var selectedId:Object;
+				
+				if (!XML(event.object).hasOwnProperty("@id")) {
+					selectedId = XML(event.object);
+				} else {
+					selectedId = XML(event.object).@id;
+				}
+
+				var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedId);
+				if (searchResult[0] != undefined) {
+					TreeUtils.expandNode(jobTree.liveTree, searchResult[0]);
+					jobTree.liveTree.selectedItem = searchResult[0];
+				}
 			}
 			
 			private function refreshContent(event:ResourceEvent):void {

@@ -154,7 +154,21 @@
 				// Alert.show("Result : " + event.message.body);
 				// trace(returnXml);
 */				
-				BasicAuthenticationHandler.service_resultHandler(this, event);
+				if(BasicAuthenticationHandler.service_resultHandler(this, event)) {
+					
+					var returnXml:XML;
+					var returnTxt:String = null;
+					
+					try {
+						returnXml = XML(event.message.body);
+						var selectedJobId:String = returnXml.jobId;
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH_SELECT, selectedJobId));
+					} catch(err:Error) {
+						Alert.show("jobManagerService_resultHandler Result : " + err.message);
+						returnTxt = String(event.result)
+					}
+					
+				}
 			}
 			
 		]]>

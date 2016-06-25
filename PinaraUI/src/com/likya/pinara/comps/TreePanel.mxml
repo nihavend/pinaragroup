@@ -15,6 +15,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.controls.Tree;
+			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -193,7 +194,11 @@
 				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
-			public function refreshTree():void {
+			public function refreshTree(defaultSelectedNode:Object = null):void {
+				if(defaultSelectedNode != null) {
+					selectedTreeNode = defaultSelectedNode;
+				}
+					
 				BasicAuthenticationHandler.authAndSend(liveTreeDataService);
 			}
 			
@@ -290,6 +295,8 @@
 						TreeUtils.expandNode(liveTree, searchResult[0]);
 						
 						liveTree.selectedItem = searchResult[0];
+						
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedId));
 					}
 
 				}

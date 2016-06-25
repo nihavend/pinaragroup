@@ -14,16 +14,13 @@
 			import com.likya.pinara.modules.IModuleInterface;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.Transformer;
-			import com.likya.pinara.utils.WindowUtils;
 			
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
-			import mx.core.IFlexDisplayObject;
 			import mx.core.IVisualElement;
 			import mx.events.FlexEvent;
 			import mx.events.ModuleEvent;
-			import mx.managers.PopUpManager;
 			import mx.modules.IModuleInfo;
 			import mx.modules.ModuleManager;
 			import mx.rpc.events.FaultEvent;
@@ -474,31 +471,36 @@
 					
 					<s:Button id="toggleTree" y="-27" right="10" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
 					
-					<s:HGroup width="100%" paddingLeft="10">
-						
-						<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150" width="500"/>
-						
-						<s:VGroup paddingLeft="0" paddingTop="10" clipAndEnableScrolling="true" width="500">
-							<s:Label text="İş Tarihçesi :" width="120" />
-							<s:DataGrid id="stateHistory" width="500" height="150" >
-								<s:columns>
-									<s:ArrayList>
-										<!-- width="{this.stateHistory.width * 0.35}" birinci kolon icin verince kolon başlık kısmı çizilemiyor. serkan...-->
-										
-										<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
-										<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}" />
-									</s:ArrayList>
-								</s:columns>
-							</s:DataGrid> 
-						</s:VGroup>
+					<s:Scroller width="100%" height="100%">
 
-						<jobdetail:DepLists id="depListComp" width="120">
-							<jobdetail:layout>
-								<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
-							</jobdetail:layout>
-						</jobdetail:DepLists>
-						
-					</s:HGroup>
+						<s:HGroup width="100%" paddingLeft="10">
+							
+							<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150" width="500"/>
+							
+							<s:VGroup paddingLeft="0" paddingTop="10" clipAndEnableScrolling="true" width="500">
+								<s:Label text="İş Tarihçesi :" width="120" />
+								<s:DataGrid id="stateHistory" width="500" height="150" >
+									<s:columns>
+										<s:ArrayList>
+											<!-- width="{this.stateHistory.width * 0.35}" birinci kolon icin verince kolon başlık kısmı çizilemiyor. serkan...-->
+											
+											<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
+											<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}" />
+										</s:ArrayList>
+									</s:columns>
+								</s:DataGrid> 
+							</s:VGroup>
+	
+							<jobdetail:DepLists id="depListComp" width="150">
+								<jobdetail:layout>
+									<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
+								</jobdetail:layout>
+							</jobdetail:DepLists>
+
+							<mx:VRule height="100%"/>
+							
+						</s:HGroup>
+					</s:Scroller>
 					
 				</s:Panel>
 				

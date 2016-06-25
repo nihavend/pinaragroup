@@ -39,7 +39,7 @@ public abstract class PinaraBase {
 
 	private final static Logger logger = Logger.getLogger(Pinara.class);
 
-	private static final String version = "0.0.1";
+	private static final String version = "0.8.9";
 
 	private static LicenseInfo licenseInfo = new LicenseInfo();
 

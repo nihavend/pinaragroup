@@ -88,7 +88,15 @@
 	</mx:Form-->
 	
 		
-	<s:Panel id="loginPanel" width="288" height="179" chromeColor="#E2E5E7" horizontalCenter="0" title="{resourceManager.getString('messages', 'loginTitle')}" verticalCenter="5">
+	<s:Panel
+		horizontalCenter="0"
+		verticalCenter="0"
+		id="loginPanel" 
+		width="288" 
+		height="179" 
+		chromeColor="#E2E5E7"
+		title="{resourceManager.getString('messages', 'loginTitle')}" 
+		>
 		
 		<mx:Button y="-27" right="30" width="20" click="changeLocale('tr_TR')" icon="{trIcon}" toolTip="Türkçe"/>
 		<mx:Button y="-27" right="5" width="20" click="changeLocale('en_US')" icon="{enIcon}" toolTip="English"/>

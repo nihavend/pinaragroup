@@ -113,6 +113,7 @@ public class WelcomeMail extends MultipartMail {
 //			t.printStackTrace();
 //		}
 		
+		
 		mimeBodyPartHtml.setText(mailHtml, "utf-8", "html");
 		
 		// Image part

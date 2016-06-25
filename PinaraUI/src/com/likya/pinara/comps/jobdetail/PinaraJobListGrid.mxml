@@ -94,7 +94,7 @@
 			{
 				var currentDataItem:XML = XML(pinaraJobList.selectedItem); 
 				if(currentDataItem.hasOwnProperty("@Id")) {
-					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH_SELECT, currentDataItem.@Id));
+					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.SELECT_TREENODE, currentDataItem.@Id));
 				}
 				trace();
 			}

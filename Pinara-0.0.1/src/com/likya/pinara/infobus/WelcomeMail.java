@@ -31,7 +31,7 @@ public class WelcomeMail extends MultipartMail {
 		}
 	}
 
-	private Multipart prepareWelcomeMail(HashMap<String, JobImpl> jobQueue) throws MessagingException, URISyntaxException {
+	public Multipart prepareWelcomeMailOld(HashMap<String, JobImpl> jobQueue) throws MessagingException, URISyntaxException {
 
 		// Create an "Alternative" Multipart message
 		Multipart multipart = new MimeMultipart("alternative");
@@ -96,4 +96,41 @@ public class WelcomeMail extends MultipartMail {
 
 	}
 
+	private Multipart prepareWelcomeMail(HashMap<String, JobImpl> jobQueue) throws MessagingException, URISyntaxException {
+		
+		MimeMultipart multipart = new MimeMultipart("related");
+	
+		// HTML part
+		MimeBodyPart mimeBodyPartHtml = new MimeBodyPart();
+		String mailHtml = MailContentHelper.getHTMLFormattedJobProperties(jobQueue);
+		
+//		Test için
+//		try {
+//			FileOutputStream outputStream = new FileOutputStream("serkan.xml");
+//			outputStream.write(mailHtml.getBytes());
+//			outputStream.close();
+//		} catch(Throwable t) {
+//			t.printStackTrace();
+//		}
+		
+		mimeBodyPartHtml.setText(mailHtml, "utf-8", "html");
+		
+		// Image part
+		MimeBodyPart imagePart = new MimeBodyPart();
+		try {
+			imagePart.attachFile("src/com/likya/pinara/resources/likya_mail.jpg");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		imagePart.setHeader("Content-ID", "<likyajpg10976@likyateknoloji.com>");
+		imagePart.setDisposition(MimeBodyPart.INLINE);
+
+		
+		multipart.addBodyPart(mimeBodyPartHtml);
+		multipart.addBodyPart(imagePart);
+		
+		return multipart;
+		
+	}
 }

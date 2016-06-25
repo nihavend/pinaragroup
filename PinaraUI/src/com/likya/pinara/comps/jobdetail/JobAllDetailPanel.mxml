@@ -234,89 +234,108 @@
 					   />
 	</fx:Declarations>
 	
-	<s:Panel id="allDetailPanel1" title="Job All Detail Form" height="100%" width="100%" addedToStage="allDetailPanel1_addedToStageHandler(event)">
+	<!--
+		horizontalCenter="0"
+		verticalCenter="0"
+	width="700"
+	height="700"
+	-->
+
+	
+	<!--
+		UYARI : width ve height' dokununca scrollbar lar bozuluyor. !!!!!
+	-->
+	<s:Panel id="allDetailPanel" visible="true"
+			 title="Job All Detail Form"
+			 left="5"
+			 top="5"
+			 width="90%" 
+			 height="100%"
+			 borderColor="18"
+			 addedToStage="allDetailPanel1_addedToStageHandler(event)">
+
+<!--		<s:Button y="-27" left="200" label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
+		<s:Button y="-27" left="300" visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
+-->
 		<s:Scroller width="100%" height="100%">
+			
 			<s:Group width="100%" height="100%">
-				<s:BorderContainer> 
-					<s:layout> 
-						<s:VerticalLayout gap="5" clipAndEnableScrolling="true"/> 
-					</s:layout>  
+				
+				<s:layout> 
+					<s:VerticalLayout gap="5" clipAndEnableScrolling="true"/> 
+				</s:layout>  
+				<s:HGroup width="100%">
+					<s:VGroup paddingLeft="5" gap="-10" width="100%">
+						<s:HGroup verticalAlign="middle" paddingTop="5">
+							<s:Label text="Job Name :" width="105"/>
+							<s:TextInput id="jobName" top="5" editable="false"/>
+							<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
+							<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
+							<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
+						</s:HGroup>
+						<s:HGroup verticalAlign="middle" paddingTop="15">
+							<!--<s:FormItem label="Job Trigger Type">-->
+							<s:Label text="Job Trigger Type :" width="105"/>
+							<s:DropDownList id="jsJobTriggerType" labelField="value" width="{jobCommandType.width}" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" enabled="false" /> 
+							<!--</s:FormItem>-->
+							<s:Label text="Job Id :" width="75" paddingLeft="10" />
+							<s:TextInput id="jobId" top="5" editable="false" paddingLeft="10"/>
+							<s:Label text="Job State :" width="75" paddingLeft="10"/>
+							<!--<s:TextInput id="jobState" top="5" editable="false" />-->
+							<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
+							<!--<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>-->
+						</s:HGroup>
+						<s:HGroup verticalAlign="middle" paddingTop="15">
+							<s:Label text="Command Type :" width="105"/>
+							<s:TextInput id="jobCommandType" top="5" editable="false"/>
+							<s:Label text="Group Id :" width="75" paddingLeft="10" />
+							<s:TextInput id="groupId" top="5" editable="false" paddingLeft="10"/>
+							<s:Label id="manageButtonGroupLbl" text="Manage :" width="75" paddingLeft="10" />
+							<!--<s:TextInput id="manage" top="5" editable="false"/>-->
+							<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}" />
+						</s:HGroup>
+						<s:HGroup verticalAlign="baseline" paddingTop="15">
+							<s:Label text="Planlanan ÇZ :" width="105"/>
+							<s:TextInput id="planlananCZ" top="5" editable="false"/>
+							<s:Label text="Son ÇZ :" width="75" paddingLeft="10" />
+							<s:TextInput id="lastCs" top="5" editable="false" paddingLeft="10"/>
+							<s:Label text="Son Süre :" width="75" paddingLeft="10" />
+							<s:TextInput id="sonSure" top="5" editable="false"/>
+						</s:HGroup>
+					</s:VGroup>
 					
-					<s:HGroup width="100%">
-						<s:VGroup paddingLeft="5" gap="-10" width="100%">
-							<s:HGroup verticalAlign="middle" paddingTop="5">
-								<s:FormItem label="Job Trigger Type">
-									<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" enabled="false"/> 
-								</s:FormItem>
-								<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
-								<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
-								<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
-							</s:HGroup>
-							<s:HGroup verticalAlign="middle" paddingTop="15">
-								<s:Label text="Job Id :" width="105" paddingLeft="10" />
-								<s:TextInput id="jobId" top="5" editable="false"/>
-								<s:Label text="Job Name :" width="105" paddingLeft="20" />
-								<s:TextInput id="jobName" top="5" editable="false"/>
-								<s:Label text="Job State :" width="105" paddingLeft="20"/>
-								<!--<s:TextInput id="jobState" top="5" editable="false" />-->
-								<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
-								<!--<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>-->
-							</s:HGroup>
-							<s:HGroup verticalAlign="middle" paddingTop="15">
-								<s:Label text="Command Type :" width="105" paddingLeft="10" />
-								<s:TextInput id="jobCommandType" top="5" editable="false"/>
-								<s:Label text="Group Id :" width="105" paddingLeft="20" />
-								<s:TextInput id="groupId" top="5" editable="false"/>
-								<s:Label id="manageButtonGroupLbl" text="Manage :" width="105" paddingLeft="20" />
-								<!--<s:TextInput id="manage" top="5" editable="false"/>-->
-								<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}" />
-							</s:HGroup>
-							<s:HGroup verticalAlign="baseline" paddingTop="15">
-								<s:Label text="Son ÇZ :" width="105" paddingLeft="10" />
-								<s:TextInput id="lastCs" top="5" editable="false"/>
-								<s:Label text="Planlanan ÇZ :" width="105" paddingLeft="20" />
-								<s:TextInput id="planlananCZ" top="5" editable="false"/>
-								<s:Label text="Son Süre :" width="105" paddingLeft="20" />
-								<s:TextInput id="sonSure" top="5" editable="false"/>
-							</s:HGroup>
-						</s:VGroup>
-						
-					</s:HGroup>
-					
-					<mx:HRule width="100%" />
-					
-					<jobdetail:JobBaseInfo id="jobBaseInfoId" height="200" />
-					
-					<mx:HRule width="100%" />
-					
-					<jobdetail:DepLists id="depListComp" width="50%" height="60">
+				</s:HGroup>
+
+				<mx:HRule width="100%" />
+				
+				<s:HGroup width="100%" paddingLeft="10">
+					<jobdetail:JobBaseInfo id="jobBaseInfoId" height="200" width="500"/>
+					<jobdetail:DepLists id="depListComp" width="120">
 						<jobdetail:layout>
-							<s:HorizontalLayout gap="40" />
+							<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
 						</jobdetail:layout>
 					</jobdetail:DepLists>
-					
-					<mx:HRule width="100%" />
-					
-					<s:HGroup width="100%" >
-						
-						<s:VGroup paddingLeft="10" paddingTop="10"  width="100%">
-							<s:Label text="İş Tarihçesi :" width="120" />
-							<s:DataGrid id="stateHistory" width="55%" height="150" >
-								<s:columns>
-									<s:ArrayList>
-										<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" />
-										<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
-									</s:ArrayList>
-								</s:columns>
-							</s:DataGrid> 
-						</s:VGroup>
-						
-					</s:HGroup>
-					
-				</s:BorderContainer> 
+				</s:HGroup>
+				
+				<mx:HRule width="100%" />
+				
+				<s:VGroup paddingLeft="10" paddingTop="10">
+					<s:Label text="İş Tarihçesi :" width="120" />
+					<s:DataGrid id="stateHistory" width="500" height="250" >
+						<s:columns>
+							<s:ArrayList>
+								<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" />
+								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid> 
+				</s:VGroup>
+			
+				<mx:HRule width="100%" />
 				
 			</s:Group>
 		</s:Scroller>
+	
 	</s:Panel>
 	
 </s:Group>

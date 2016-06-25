@@ -18,6 +18,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.formatters.DateFormatter;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
@@ -215,6 +216,11 @@
 				dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, selectedJobId));
 			}
 			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.SELECT_TREENODE, selectedJobId));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -244,6 +250,7 @@
 								</s:FormItem>
 								<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
 								<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
+								<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
 							</s:HGroup>
 							<s:HGroup verticalAlign="middle" paddingTop="15">
 								<s:Label text="Job Id :" width="105" paddingLeft="10" />

@@ -473,13 +473,14 @@
 				<s:Panel id="detailPanel" title="Job Summary Detail Form" height="{detailPanelDefHeight}" width="100%" visible="false" includeInLayout="false">
 					
 					<s:Button id="toggleTree" y="-27" right="10" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
-					<s:HGroup width="100%">
+					
+					<s:HGroup width="100%" paddingLeft="10">
 						
-						<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150"/>
+						<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150" width="500"/>
 						
-						<s:VGroup paddingLeft="0" paddingTop="10"  width="100%" clipAndEnableScrolling="true">
+						<s:VGroup paddingLeft="0" paddingTop="10" clipAndEnableScrolling="true" width="500">
 							<s:Label text="İş Tarihçesi :" width="120" />
-							<s:DataGrid id="stateHistory" width="95%" height="120" >
+							<s:DataGrid id="stateHistory" width="500" height="150" >
 								<s:columns>
 									<s:ArrayList>
 										<!-- width="{this.stateHistory.width * 0.35}" birinci kolon icin verince kolon başlık kısmı çizilemiyor. serkan...-->

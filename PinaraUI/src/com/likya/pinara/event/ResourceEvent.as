@@ -21,6 +21,8 @@ package com.likya.pinara.event {
 		
 		public static const REFRESH_SELECT:String = "refreshselect";
 		
+		public static const SELECT_TREENODE:String = "selecttreenode";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

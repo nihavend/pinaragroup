@@ -91,7 +91,9 @@
 				addEventListener(ResourceEvent.ANASAYFA, changeState);
 				addEventListener(ResourceEvent.REFRESH, refreshContent);
 				
-				addEventListener(ResourceEvent.REFRESH_SELECT, refreshSelect);
+				addEventListener(ResourceEvent.SELECT_TREENODE, selectTreeNodeHandler);
+				
+				addEventListener(ResourceEvent.REFRESH_SELECT, refreshSelectHandler);
 				
 				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
 				
@@ -104,16 +106,33 @@
 				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
 
 			}
+
+			/*********************************************************************************************/
+			private function refreshSelectHandler(event:ResourceEvent):void {
+				refreshSelect(XML(event.object));
+			}
+
+			private function refreshSelect(data:XML):void {
+				var xml:XML = <mydata id="" />
+				xml.@id = data;
+				jobTree.refreshTree(xml);
+			}
+
+			/*********************************************************************************************/
+
+			private function selectTreeNodeHandler(event:ResourceEvent):void {
+				selectTreeNode(XML(event.object));
+x			}
 			
-			private function refreshSelect(event:ResourceEvent):void {
+			private function selectTreeNode(data:XML):void {
 				// Alert.show("event.currentTarget : " + event.currentTarget);	
 				
 				var selectedId:Object;
 				
-				if (!XML(event.object).hasOwnProperty("@id")) {
-					selectedId = XML(event.object);
+				if (!data.hasOwnProperty("@id")) {
+					selectedId = data;
 				} else {
-					selectedId = XML(event.object).@id;
+					selectedId = data.@id;
 				}
 
 				var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedId);

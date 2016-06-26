@@ -23,6 +23,8 @@ package com.likya.pinara.event {
 		
 		public static const SELECT_TREENODE:String = "selecttreenode";
 		
+		public static const DECORATE_MENUBAR:String = "decoratemenubar";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

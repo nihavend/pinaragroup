@@ -17,7 +17,7 @@ public class RecoveryHelper {
 		
 		Path persistFile = Paths.get(ConfigurationManagerImpl.fileToPersist);
 		
-		checkValue = Files.exists(persistFile);
+		checkValue = checkValue && Files.exists(persistFile);
 
 		return checkValue;
 	}

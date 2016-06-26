@@ -7,7 +7,10 @@
 			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
 			   currentState="loggedOutState" 
 			   preloader="com.likya.pinara.utils.DownloadProgressBarSubClassMin"
-			   minWidth="955" minHeight="600" creationComplete="application_creationCompleteHandler()" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" xmlns:userops="com.likya.pinara.services.userops.*">
+			   minWidth="955" minHeight="600" 
+			   creationComplete="application_creationCompleteHandler()"
+			   xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
+			   xmlns:userops="com.likya.pinara.services.userops.*">
 	
 	<fx:Metadata>
 		[ResourceBundle("messages")]
@@ -85,10 +88,10 @@
 				addEventListener(ResourceEvent.LOGOUT, logout);
 				addEventListener(ResourceEvent.CHANGE_LOCALE, changeLocale);
 				
-				addEventListener(ResourceEvent.LISTNODE_SELECTED, changeState);
-				addEventListener(ResourceEvent.JOBNODE_SELECTED, changeState);
+				addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelectedHandler);
+				addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelectedHandler);
 				
-				addEventListener(ResourceEvent.ANASAYFA, changeState);
+				addEventListener(ResourceEvent.ANASAYFA, anasayfaSelectedHandler);
 				addEventListener(ResourceEvent.REFRESH, refreshContent);
 				
 				addEventListener(ResourceEvent.SELECT_TREENODE, selectTreeNodeHandler);
@@ -105,6 +108,54 @@
 				
 				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
 
+			}
+			
+			private function listNodeSelectedHandler(event:ResourceEvent):void {
+				
+				currentState = "jobListState";
+				if(event.object == null) {
+					return;
+					if(currentListNodeId != null) {
+						//jobListDetail.selectedNetTreeId = currentListNodeId;
+					} else {
+						Alert.show("Warning : Code : 3428");
+						currentState = "anaSayfaState";
+					}
+				} else {
+					
+					// bazen id attribute olmadan direk olarak da gelebiliyor.
+					// Bu nedenle kontrol kondu Serkan...j
+					if (!XML(event.object).hasOwnProperty("@id")) {
+						//jobListDetail.selectedNetTreeId = XML(event.object);
+					} else {
+						//jobListDetail.selectedNetTreeId = XML(event.object).@id;
+					}
+					//currentListNodeId = jobListDetail.selectedNetTreeId;
+				}
+				
+				// jobListDetail.updateData();
+				
+			}
+			private function jobNodeSelectedHandler(event:ResourceEvent):void {
+				return;
+				currentState = "jobDetailState";
+				// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
+				// bu durumda id attribute olmadan direk skalar olarak geliyor
+				if (!XML(event.object).hasOwnProperty("@id")) {
+					allJobDetail.selectedJobId = XML(event.object);
+					// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+					var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
+					currentListNodeId = jobTree.liveTree.getParentItem(tmpItem).@id; 
+				} else {
+					allJobDetail.selectedJobId = XML(event.object).@id;
+					currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
+				}
+				
+				allJobDetail.updateData();
+				
+			}
+			private function anasayfaSelectedHandler(event:ResourceEvent):void {
+				currentState = "anaSayfaState";
 			}
 
 			/*********************************************************************************************/
@@ -127,6 +178,7 @@ x			}
 			private function selectTreeNode(data:XML):void {
 				// Alert.show("event.currentTarget : " + event.currentTarget);	
 				
+				trace("selectTreeNode");
 				var selectedId:Object;
 				
 				if (!data.hasOwnProperty("@id")) {
@@ -144,6 +196,7 @@ x			}
 			
 			private function refreshContent(event:ResourceEvent):void {
 				// Alert.show("Refresh Event cought !...");
+				trace("Refresh content");
 				if(currentState == "jobListState") {
 					jobListDetail.updateData();
 				} else if(currentState == "jobDetailState") {
@@ -155,6 +208,7 @@ x			}
 			
 			private function updateTree(event:ResourceEvent):void {
 				
+				trace("Updating tree !");
 				selectedTreeNode = jobTree.liveTree.getParentItem(jobTree.liveTree.selectedItem);
 				//jobTree.liveTree.selectedItem = selectedTreeNode;
 				//selectedTreeNodeIdx = jobTree.liveTree.selectedIndex;
@@ -165,6 +219,7 @@ x			}
 			
 			private function onTreeUpdateComplete(event:FlexEvent):void {
 				
+				trace("Updating tree !");
 				jobTree.liveTree.removeEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
 				//var xNodes:XMLList = jobTree.liveTree..xNodes..jobGroup(@id == "-1");
 				//trace(selectedTreeNode.@id);
@@ -198,10 +253,10 @@ x			}
 				*/
 			}
 			
-			private function changeState(event:ResourceEvent):void {
+			//private function changeState(event:ResourceEvent):void {
 				
-				if(event.type == ResourceEvent.LISTNODE_SELECTED) {
-					currentState = "jobListState";
+				//if(event.type == ResourceEvent.LISTNODE_SELECTED) {
+					/*currentState = "jobListState";
 					if(event.object == null) {
 						if(currentListNodeId != null) {
 							jobListDetail.selectedNetTreeId = currentListNodeId;
@@ -219,9 +274,9 @@ x			}
 						}
 						currentListNodeId = jobListDetail.selectedNetTreeId;
 					}
-					jobListDetail.updateData();
-				} else if(event.type == ResourceEvent.JOBNODE_SELECTED) {
-					currentState = "jobDetailState";
+					jobListDetail.updateData();*/
+				//} else if(event.type == ResourceEvent.JOBNODE_SELECTED) {
+					/*currentState = "jobDetailState";
 					// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
 					// bu durumda id attribute olmadan direk skalar olarak geliyor
 					if (!XML(event.object).hasOwnProperty("@id")) {
@@ -233,14 +288,14 @@ x			}
 						allJobDetail.selectedJobId = XML(event.object).@id;
 						currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
 					}
-					allJobDetail.updateData();
-				} else if(event.type == ResourceEvent.ANASAYFA) {
+					allJobDetail.updateData();*/
+				//} else if(event.type == ResourceEvent.ANASAYFA) {
 					// currentState = "loggedInState";
-					currentState = "anaSayfaState";
-				}
+					/*currentState = "anaSayfaState";*/
+				//}
 				// menuBar.registerClickEvent();
 				// Alert.show("New State : " + currentState);
-			}
+			//}
 			
 			private function doRecoveryOnDemand(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {

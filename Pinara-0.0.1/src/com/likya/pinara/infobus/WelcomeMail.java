@@ -119,7 +119,10 @@ public class WelcomeMail extends MultipartMail {
 		// Image part
 		MimeBodyPart imagePart = new MimeBodyPart();
 		try {
-			imagePart.attachFile("src/com/likya/pinara/resources/likya_mail.jpg");
+			String imgUrl = "/com/likya/pinara/resources/likya_mail.jpg";
+			URL url = this.getClass().getResource(imgUrl);
+			imagePart.setDataHandler(new DataHandler(new ByteArrayDataSource(url.openStream(), "image/jpg")));
+			// imagePart.attachFile("/com/likya/pinara/resources/likya_mail.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

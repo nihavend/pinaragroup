@@ -39,7 +39,8 @@
 			 */
 			
 			public function onUpdateComplete():void {
-				changeStateOfNodes(true);
+				// trace("onUpdateComplete");
+				// changeStateOfNodes(true);
 			}
 			
 			private function changeStateOfNodes(action:Boolean):void {
@@ -79,16 +80,6 @@
 					return ImageContainer.getTreeStatuImage(node.@statu);
 				} else if (node.localName() == "node") {
 					var consData:ArrayCollection = null //tlosConnections;
-					/*
-					for each (var tlosConn:TlosConnection in consData) {
-						if (node.@ip.toString() == tlosConn.ipAddress && node.@port.toString() == tlosConn.port) {
-							if (tlosConn.enable == "N") {
-								return null //tlosDisabledImage;
-							} else if (tlosConn.isConnected) {
-								return null //tlosConnectedImage;
-							}
-						}
-					}*/
 					return tlosFolderImg //tlosDisconnectedImage;
 				} else if (node.localName() == "jobGroup") {
 					// trace(node.@title);
@@ -122,38 +113,6 @@
 					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedTreeNode));
 				}
 				
-				/*
-				if (selectedNode.@ip.toString() == "1") {
-					disablePage();
-					
-					jobListType = ALL_JOBS_VIEW;
-					getAllTlosJobs();
-					selectedNode = null;
-					
-					currentState = 'tlosState';
-				} else if (selectedNode.@enable == "Y") {
-					enableTlosBasedMenu(true);
-					
-					tlosUser.userName = selectedNode.@userName;
-					tlosUser.userPassword = selectedNode.@password;
-					
-					tlosConnection = new TlosConnection();
-					tlosConnection.id = selectedNode.@id;
-					tlosConnection.tlosName = selectedNode.@name;
-					tlosConnection.ipAddress = selectedNode.@ip.toString();
-					tlosConnection.port = selectedNode.@port;
-					tlosConnection.tlosUserName = selectedNode.@userName;
-					tlosConnection.tlosPassword = selectedNode.@password;
-					
-					jmxService.init(tlosConnection, FILTER_ALL, jmxTimeout);
-					
-					disablePage();
-					
-					jobListType = ONE_TLOS_VIEW;
-					currentState = 'oneTlosState';
-				}
-				*/
-				
 			}
 			
 			private function toggleTreeComp():void {
@@ -167,31 +126,6 @@
 					changeStateOfNodes(true);
 				}
 			}
-			
-/*			protected function xmlService_resultHandler(event:ResultEvent):void {
-				// trace("xmlService_resultHandler");
-				// Alert.show(event.result as XML);
-				
-				//jobTree.dataProvider = new XMLListCollection((event.result as XML).jobGroup);
-				// Alert.show("jobTree.openItems" + jobTree.openItems);
-				// Alert.show("Biraz bekleyelim !")
-				// restoreTreeState();
-				// Alert.show("jobTree.openItems" + jobTree.openItems);
-				
-				// var myColl:ArrayCollection = (ArrayCollection (event.result));
-				// var myColl:XMLListCollection = new XMLListCollection();
-				
-				var node:XML = event.result as XML;
-				
-				if (node.children().length() != 0) {
-					// if (tlosTreeData.length == 2) {
-					// 	tlosTreeData.removeItemAt(1);
-					// }
-					// tlosTreeData.addItemAt(node[0], 1);
-					restoreTreeState();
-				} 
-			}*/
-			
 			
 			protected function treePanelService_faultHandler(event:FaultEvent):void {
 				BasicAuthenticationHandler.service_faultHandler(event);
@@ -252,62 +186,29 @@
 			}
 			
 			protected function setSelectedNode():void {
-			
-				/*
-				
-				if(selectedTreeNode != null && selectedTreeNode.hasOwnProperty("@id")) {
-				var searchResult:XMLList;
-				
-				trace("Aranan: " + ObjectUtil.toString(selectedTreeNode));
-				trace("Hedef : " + (liveTree.dataProvider[0] as XML));
-				searchResult = TreeUtils.findNode((liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
-				
-				trace("Pozisyon : " + searchResult);
-				
-				trace("selectedItem : " + searchResult[0]);
-				
-				if (searchResult[0] != undefined) {
-				TreeUtils.expandNode(liveTree, searchResult[0]);
-				
-				//trace("selectedLocal :" + selectedLocal);
-				liveTree.selectedItem = searchResult[0];
-				}
-				}
-				*/
 				
 				if(selectedTreeNode != null && selectedTreeNode.hasOwnProperty("@id")) {
 					trace("[selectedTreeNode] : " + ObjectUtil.toString(selectedTreeNode));
-					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
-					// searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
-					/*
-					var searchResult:XMLList = (liveTree.dataProvider[0] as XML)..jobGroup.(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
-					trace("searchResult for jobGroup : 		" + searchResult);
-					
-					searchResult = (liveTree.dataProvider[0] as XML)..jobProperty.(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
-					trace("searchResult for jobProperty :		 " + searchResult);
-					*/
-
-					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(@id == selectedTreeNode.@id);
-					// trace("searchResult for descendants : 		" + searchResult);
-					
 					var selectedId:String = selectedTreeNode.@id;
-
-					// var searchResult:XMLList = (liveTree.dataProvider[0] as XML).descendants().(attribute("id") == selectedId);
 					
 					var searchResult:XMLList = TreeUtils.findNode((liveTree.dataProvider[0] as XML), selectedId);
-						
+					
 					if (searchResult[0] != undefined) {
-						TreeUtils.expandNode(liveTree, searchResult[0]);
+						
+						// TreeUtils.expandNode(liveTree, searchResult[0]);
 						
 						liveTree.selectedItem = searchResult[0];
 						
-						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedId));
+						if(searchResult[0].name() == "jobGroup") {
+							FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED,  selectedId));
+						} else if(searchResult[0].name() == "jobProperty") {
+							FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedId));
+						}
 					}
-
+					
 				}
-				
 			}
-			
+
 			protected function liveTree_itemOpenHandler(event:TreeEvent):void
 			{
 				trace("liveTree_itemOpenHandler");
@@ -344,10 +245,7 @@
 					   />
 		
 	</fx:Declarations>
-	
-	<!--title="{resourceManager.getString('messages', 'tlosTree')}" 
-	color="#0D173C" fontWeight="bold" chromeColor="#E2E5E7" dropShadowVisible="true"
-	width="240" height="100%"-->
+
 	<containers:CollapsiblePanel id="tlosTreePanel" height="100%" width="100%" title="{resourceManager.getString('messages', 'tlosTree')}" >
 		
 		<!--tlosTreeData-->

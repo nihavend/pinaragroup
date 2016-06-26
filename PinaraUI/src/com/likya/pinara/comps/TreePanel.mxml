@@ -17,6 +17,7 @@
 			import mx.controls.Tree;
 			import mx.core.FlexGlobals;
 			import mx.events.ListEvent;
+			import mx.events.TreeEvent;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.ObjectUtil;
@@ -105,6 +106,8 @@
 			
 			private function tlosTree_itemClickHandler(e:ListEvent):void {
 				
+				trace("Click event received !");
+				
 				// var selectedTreeItem:Object = Tree(e.target).selectedItem;
 				selectedTreeNode = Tree(e.target).selectedItem;
 				var selectedNodeXml:XML = selectedTreeNode as XML;
@@ -190,24 +193,26 @@
 			}*/
 			
 			
-			protected function xmlService_faultHandler(event:FaultEvent):void {
+			protected function treePanelService_faultHandler(event:FaultEvent):void {
 				BasicAuthenticationHandler.service_faultHandler(event);
 			}
 			
 			public function refreshTree(defaultSelectedNode:Object = null):void {
+				trace("Refreshing tree");
 				if(defaultSelectedNode != null) {
 					selectedTreeNode = defaultSelectedNode;
 				}
 					
-				BasicAuthenticationHandler.authAndSend(liveTreeDataService);
+				BasicAuthenticationHandler.authAndSend(treePanelService);
 			}
 			
 			public function changeView():void {
-				if(BasicAuthenticationHandler.startsWith(liveTreeDataService.url, "/flex/restsrvc/nettreexml/")) {
-					liveTreeDataService.url = "/flex/restsrvc/grouptreexml/";
+				trace("Changing View");
+				if(BasicAuthenticationHandler.startsWith(treePanelService.url, "/flex/restsrvc/nettreexml/")) {
+					treePanelService.url = "/flex/restsrvc/grouptreexml/";
 					depGrpButton.label = "D";
 				} else {
-					liveTreeDataService.url = "/flex/restsrvc/nettreexml/";
+					treePanelService.url = "/flex/restsrvc/nettreexml/";
 					depGrpButton.label = "G";
 				}
 				
@@ -218,8 +223,8 @@
 				refreshTree();
 			}
 
-			protected function xmlService_resultHandler(event:ResultEvent):void {
-				
+			protected function treePanelService_resultHandler(event:ResultEvent):void {
+				trace("treePanelService_resultHandler");
 				var treeXml:XML = XML(event.result);
 				var treeOpenItems:Object;
 				
@@ -303,18 +308,39 @@
 				
 			}
 			
+			protected function liveTree_itemOpenHandler(event:TreeEvent):void
+			{
+				trace("liveTree_itemOpenHandler");
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function liveTree_itemCloseHandler(event:TreeEvent):void
+			{
+				trace("liveTree_itemCloseHandler");
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function liveTree_itemDoubleClickHandler(event:ListEvent):void
+			{
+				trace("liveTree_itemCloseHandler");
+				// TODO Auto-generated method stub
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		
-		<s:HTTPService id="liveTreeDataService" 
+		<s:HTTPService id="treePanelService" 
 					   method="POST"
 					   showBusyCursor="true"
 					   resultFormat="e4x"
 					   url="{serviceUrl}"
-					   result="xmlService_resultHandler(event)"
-					   fault="xmlService_faultHandler(event)"
+					   result="treePanelService_resultHandler(event)"
+					   fault="treePanelService_faultHandler(event)"
 					   />
 		
 	</fx:Declarations>
@@ -346,7 +372,11 @@
 				 color="#0D173C"
 				 left="0" top="0" right="0" bottom="0"
 				 openItems="true"
-				 itemClick="tlosTree_itemClickHandler(event)" />
+				 itemOpen="liveTree_itemOpenHandler(event)"
+				 itemClose="liveTree_itemCloseHandler(event)"
+				 itemClick="tlosTree_itemClickHandler(event)"
+				 itemDoubleClick="liveTree_itemDoubleClickHandler(event)"
+				 />
 
 		<s:Button id="depGrpButton" y="-27" right="92" width="30" click="changeView()" toolTip="(D)ep/(G)rp View" label="D"/>
 

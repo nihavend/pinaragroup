@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2009/10/23/displaying-a-popup-spark-titlewindow-container-in-flex-4/ -->
+<s:Application name="Spark_TitleWindow_test"
+			   xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/halo">
+	<s:controlBarContent>
+		<s:Button id="btn"
+				  label="Show TitleWindow"
+				  click="btn_click(event);" />
+		
+		<s:Button id="btn1"
+				  label="Show My Window"
+				  click="btn_click1(event);" />
+	</s:controlBarContent>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.jobcrud.JobListPopup;
+			
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.TitleWindow;
+			import spark.events.PopUpEvent;
+			
+			
+			
+			
+			
+			protected var ttlWndw:TitleWindow;
+			protected var depList:JobListPopup;
+			
+			protected function btn_click1(evt:MouseEvent):void {
+				/*depList = PopUpManager.createPopUp(this, JobListPopup, true) as JobListPopup;
+				PopUpManager.centerPopUp(depList);
+				depList.setFocus();*/
+				
+				// Create an instance of MyAlertPopUp.
+				var alertDB:JobListPopup = new JobListPopup();
+				
+				alertDB.x = btn1.x + 100;
+				alertDB.y = btn1.y + 10;
+				
+				this.width = alertDB.width + 50;
+				this.height = alertDB.height + 50;
+				
+				// Add an event handler for the close event to check for 
+				// any returned data.
+				alertDB.addEventListener('close', alertDB_closeHandler);
+				alertDB.open(this, true);
+			}
+			
+			// Handle the close event from the SkinnablePopUpContainer.
+			protected function alertDB_closeHandler(event:PopUpEvent):void {
+				// If commit is false, do data is returned.
+				if (!event.commit)
+					return;
+				
+				// Write the returned String to the TextArea control.
+				myTA.text = event.data as String;
+			}  
+			
+			protected function btn_click(evt:MouseEvent):void {
+				ttlWndw = new TitleWindow();
+				ttlWndw.title = "Spark TitleWindow title";
+				ttlWndw.width = 300;
+				ttlWndw.height = 200;
+				ttlWndw.addEventListener(CloseEvent.CLOSE, ttlWndw_close);
+				
+				PopUpManager.addPopUp(ttlWndw, this, true);
+				PopUpManager.centerPopUp(ttlWndw);
+			}
+			
+			protected function ttlWndw_close(evt:CloseEvent):void {
+				PopUpManager.removePopUp(evt.currentTarget as IFlexDisplayObject);
+			}
+		]]>
+	</fx:Script>
+	
+	<s:TextArea id="myTA"/>
+
+</s:Application>

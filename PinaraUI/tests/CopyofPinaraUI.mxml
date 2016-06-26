@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:comps="com.likya.pinara.comps.*"
+			   xmlns:containers="com.likya.pinara.containers.*" 
+			   xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*"
+			   currentState="loggedOutState" 
+			   preloader="com.likya.pinara.utils.DownloadProgressBarSubClassMin"
+			   minWidth="955" minHeight="600" 
+			   creationComplete="application_creationCompleteHandler()"
+			   xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
+			   xmlns:userops="com.likya.pinara.services.userops.*">
+	
+	<fx:Metadata>
+		[ResourceBundle("messages")]
+	</fx:Metadata>
+	
+	<s:states>
+		<s:State name="loggedOutState"/>
+		<s:State name="loggedInState"/>
+		<s:State name="jobListState"/>
+		<s:State name="jobDetailState"/>
+		<s:State name="graphState"/>
+		<s:State name="anaSayfaState"/>
+		<s:State name="dummyState"/>
+	</s:states>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.comps.DummyForm;
+			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.model.ModelLocator;
+			import com.likya.pinara.model.User;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.TreeUtils;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.CursorManagerPriority;
+			import mx.managers.PopUpManager;
+			import mx.resources.ResourceBundle;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Encoder;
+			
+			
+			
+			[Bindable]
+			private static var modelLocator:ModelLocator = ModelLocator.getInstance();
+			
+			[Bindable]
+			private var httpServiceUrl:String = "/flex/restsrvc/joblistxml/";
+			
+			[Bindable]
+			public var currentListNodeId:String;
+			
+			private var recoverParameter:String;
+			
+			private var selectedTreeNode:Object;
+			
+			public function disablePage():void {
+				mainApp.enabled = false;
+				mainApp.mouseEnabled = false;
+			}
+			
+			public function enablePage():void {
+				mainApp.enabled = true;
+				mainApp.mouseEnabled = true;
+			}
+			
+			protected function application_creationCompleteHandler():void {
+				
+				var myResources:ResourceBundle = new ResourceBundle("en_US","locale\messages");
+				myResources.content['TITLE'] = "Pinara Workload Management Application - English Version";
+				resourceManager.addResourceBundle(myResources);
+				
+				
+				myResources = new ResourceBundle("tr_TR","locale\messages");
+				myResources.content['TITLE'] = "Pınara İş Yükü Yönetim Uygulaması - Türkçe Sürümü";
+				resourceManager.addResourceBundle(myResources);
+				
+				resourceManager.update();
+				
+				addEventListener(ResourceEvent.LOGIN, checkLogin);
+				addEventListener(ResourceEvent.LOGOUT, logout);
+				addEventListener(ResourceEvent.CHANGE_LOCALE, changeLocale);
+				
+				addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelectedHandler);
+				addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelectedHandler);
+				
+				addEventListener(ResourceEvent.ANASAYFA, anasayfaSelectedHandler);
+				addEventListener(ResourceEvent.REFRESH, refreshContent);
+				
+				addEventListener(ResourceEvent.SELECT_TREENODE, selectTreeNodeHandler);
+				
+				addEventListener(ResourceEvent.REFRESH_SELECT, refreshSelectHandler);
+				
+				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
+				
+				ModelLocator.getInstance().currentUser = new User();
+				
+				// currentState = "anaSayfaState";
+				currentState = "loggedOutState";
+				// currentState = "loggedInState";
+				
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+
+			}
+			
+			private function listNodeSelectedHandler(event:ResourceEvent):void {
+				
+				currentState = "jobListState";
+				if(event.object == null) {
+					return;
+					if(currentListNodeId != null) {
+						//jobListDetail.selectedNetTreeId = currentListNodeId;
+					} else {
+						Alert.show("Warning : Code : 3428");
+						currentState = "anaSayfaState";
+					}
+				} else {
+					
+					// bazen id attribute olmadan direk olarak da gelebiliyor.
+					// Bu nedenle kontrol kondu Serkan...j
+					if (!XML(event.object).hasOwnProperty("@id")) {
+						//jobListDetail.selectedNetTreeId = XML(event.object);
+					} else {
+						//jobListDetail.selectedNetTreeId = XML(event.object).@id;
+					}
+					//currentListNodeId = jobListDetail.selectedNetTreeId;
+				}
+				
+				// jobListDetail.updateData();
+				
+			}
+			private function jobNodeSelectedHandler(event:ResourceEvent):void {
+				return;
+				currentState = "jobDetailState";
+				// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
+				// bu durumda id attribute olmadan direk skalar olarak geliyor
+				if (!XML(event.object).hasOwnProperty("@id")) {
+					allJobDetail.selectedJobId = XML(event.object);
+					// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+					var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
+					currentListNodeId = jobTree.liveTree.getParentItem(tmpItem).@id; 
+				} else {
+					allJobDetail.selectedJobId = XML(event.object).@id;
+					currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
+				}
+				
+				allJobDetail.updateData();
+				
+			}
+			private function anasayfaSelectedHandler(event:ResourceEvent):void {
+				currentState = "anaSayfaState";
+			}
+
+			/*********************************************************************************************/
+			private function refreshSelectHandler(event:ResourceEvent):void {
+				refreshSelect(XML(event.object));
+			}
+
+			private function refreshSelect(data:XML):void {
+				var xml:XML = <mydata id="" />
+				xml.@id = data;
+				jobTree.refreshTree(xml);
+			}
+
+			/*********************************************************************************************/
+
+			private function selectTreeNodeHandler(event:ResourceEvent):void {
+				selectTreeNode(XML(event.object));
+x			}
+			
+			private function selectTreeNode(data:XML):void {
+				// Alert.show("event.currentTarget : " + event.currentTarget);	
+				
+				trace("selectTreeNode");
+				var selectedId:Object;
+				
+				if (!data.hasOwnProperty("@id")) {
+					selectedId = data;
+				} else {
+					selectedId = data.@id;
+				}
+
+				var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedId);
+				if (searchResult[0] != undefined) {
+					TreeUtils.expandNode(jobTree.liveTree, searchResult[0]);
+					jobTree.liveTree.selectedItem = searchResult[0];
+				}
+			}
+			
+			private function refreshContent(event:ResourceEvent):void {
+				// Alert.show("Refresh Event cought !...");
+				trace("Refresh content");
+				if(currentState == "jobListState") {
+					jobListDetail.updateData();
+				} else if(currentState == "jobDetailState") {
+					allJobDetail.updateData();
+				}
+				
+				jobTree.refreshTree();
+			}
+			
+			private function updateTree(event:ResourceEvent):void {
+				
+				trace("Updating tree !");
+				selectedTreeNode = jobTree.liveTree.getParentItem(jobTree.liveTree.selectedItem);
+				//jobTree.liveTree.selectedItem = selectedTreeNode;
+				//selectedTreeNodeIdx = jobTree.liveTree.selectedIndex;
+				
+				jobTree.liveTree.addEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
+				jobTree.refreshTree();
+			}
+			
+			private function onTreeUpdateComplete(event:FlexEvent):void {
+				
+				trace("Updating tree !");
+				jobTree.liveTree.removeEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
+				//var xNodes:XMLList = jobTree.liveTree..xNodes..jobGroup(@id == "-1");
+				//trace(selectedTreeNode.@id);
+				
+				jobTree.liveTree.validateNow();
+				// var selectedLocal:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup.(@id == selectedTreeNode.@id)[0];
+				
+				/*
+				 * Aşağıdaki kısım TreePanel.xmlService_resultHandler metoduna taşındı.
+				 *
+				 *
+				var searchResult:XMLList;
+				if(currentListNodeId == null) {
+					// searchResult = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(selectedTreeNode.@id.toLowerCase()) > -1);
+					searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedTreeNode.@id.toLowerCase());
+				} else {
+					// searchResult = (jobTree.liveTree.dataProvider[0] as XML).descendants().(@id.toLowerCase().search(currentListNodeId) > -1);
+					searchResult = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), currentListNodeId);
+				}
+
+				if (searchResult[0] != undefined) {
+					TreeUtils.expandNode(jobTree.liveTree, searchResult[0]);
+					
+					//trace("selectedLocal :" + selectedLocal);
+					jobTree.liveTree.selectedItem = searchResult[0];
+					//jobTree.liveTree.validateNow();
+					//jobTree.liveTree.selectedIndex = selectedTreeNodeIdx;
+					//jobTree.liveTree.scrollToIndex(jobTree.liveTree.selectedIndex);
+					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, null));
+				}
+				*/
+			}
+			
+			//private function changeState(event:ResourceEvent):void {
+				
+				//if(event.type == ResourceEvent.LISTNODE_SELECTED) {
+					/*currentState = "jobListState";
+					if(event.object == null) {
+						if(currentListNodeId != null) {
+							jobListDetail.selectedNetTreeId = currentListNodeId;
+						} else {
+							Alert.show("Warning : Code : 3428");
+							currentState = "anaSayfaState";
+						}
+					} else {
+						// bazen id attribute olmadan direk olarak da gelebiliyor.
+						// Bu nedenle kontrol kondu Serkan...j
+						if (!XML(event.object).hasOwnProperty("@id")) {
+							jobListDetail.selectedNetTreeId = XML(event.object);
+						} else {
+							jobListDetail.selectedNetTreeId = XML(event.object).@id;
+						}
+						currentListNodeId = jobListDetail.selectedNetTreeId;
+					}
+					jobListDetail.updateData();*/
+				//} else if(event.type == ResourceEvent.JOBNODE_SELECTED) {
+					/*currentState = "jobDetailState";
+					// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
+					// bu durumda id attribute olmadan direk skalar olarak geliyor
+					if (!XML(event.object).hasOwnProperty("@id")) {
+						allJobDetail.selectedJobId = XML(event.object);
+						// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+						var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
+						currentListNodeId = jobTree.liveTree.getParentItem(tmpItem).@id; 
+					} else {
+						allJobDetail.selectedJobId = XML(event.object).@id;
+						currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
+					}
+					allJobDetail.updateData();*/
+				//} else if(event.type == ResourceEvent.ANASAYFA) {
+					// currentState = "loggedInState";
+					/*currentState = "anaSayfaState";*/
+				//}
+				// menuBar.registerClickEvent();
+				// Alert.show("New State : " + currentState);
+			//}
+			
+			private function doRecoveryOnDemand(eventObj:CloseEvent):void {
+				if(eventObj.detail == Alert.OK) {
+					recover.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "recover");
+				} else {
+					norecover.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "norecover");
+				}
+			}
+			
+			private function setAnaSayfaState():void {
+				currentState = "anaSayfaState";
+			}
+				
+			private function getLoginDataResultHandler(event:Event):void {
+				
+				// Alert.show("event.result : " + event.toString());
+				recoverParameter = XML(event.target.data).result;
+				
+				var packedResponse:XML;
+				// packedResponse = XML("<userInfo><id>" + currentDataItem.id + "</id><username>"  + currentDataItem.text + "</username><roleinfo>" + currentDataItem.roleinfo + "</roleinfo><statuinfo>" + currentDataItem.statusinfo + "</statuinfo></userInfo>");
+				packedResponse = XML("username=" + ModelLocator.getInstance().currentUser.username); 
+				BasicAuthenticationHandler.authAndCall(userOpsService, "userread", packedResponse);
+				
+			}
+
+			private function checkIfRecover():void {
+				
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+				
+				if(recoverParameter == "RECOVER_CONFIRM") {
+					var warningStr:String = resourceManager.getString("messages", "warning");
+					var okLabel:String = Alert.okLabel;
+					var cancelLabel:String = Alert.cancelLabel;
+					var width:Number = Alert.buttonWidth;
+					
+					Alert.okLabel = "Recover Etsin";
+					Alert.cancelLabel = "Sıfırdan Başlasın";
+					Alert.buttonWidth = 120;
+					Alert.show("Uygulama nasıl başlasın ?", warningStr, Alert.OK|Alert.CANCEL, this, doRecoveryOnDemand, null, Alert.CANCEL);
+					Alert.okLabel = okLabel;
+					Alert.cancelLabel = cancelLabel;
+					Alert.buttonWidth = width;
+				} else {
+					setAnaSayfaState(); 
+				}
+				/*
+				Alert.show("event.result : " + event.result);
+				currentState = "tlosState";
+				if (event.result != null) {
+				var myColl:ArrayCollection = (ArrayCollection (event.result));
+				
+				var result:String = myColl.toArray().valueOf()[0].toString();
+				
+				if (result == "1") {
+				dispatchEvent(new ResourceEvent(ResourceEvent.LOGIN));
+				} else {
+				Alert.show("Kullacını adı ya da şifre hatalı !");
+				}
+				}
+				*/
+				if(menuBar != null) {
+					menuBar.applyFilters();
+				}
+				
+			}
+			
+			private function resultFailed(event:FaultEvent):void {
+				Alert.show("resultFailed : " + event.message.toString());
+			}
+			
+			private function logoutHttpResult(event:HTTPStatusEvent):void {
+				// Do nothing
+				trace();
+			}
+			
+			private function httpResult(event:HTTPStatusEvent):void {
+				
+				// Alert.show(event.toString());
+				if(event.status == 200) {
+					// currentState = "loggedInState";
+					// currentState = "anaSayfaState"
+					// Alert.show("Giriş başarılı :)");
+				} else if (event.status == 400) {
+					Alert.show("Kullacını adı ya da şifre hatalı veya giriş izniniz yok !");
+					ModelLocator.getInstance().currentUser.username = "";
+				} else {
+					Alert.show("Unexpected [Code : + " + event.status + "] Event : " + event.toString());
+				}
+				
+			}
+			
+			private function securityError(event:SecurityErrorEvent):void {
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+				Alert.show("securityError : " + event.toString());
+			}
+			
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
+				// Alert.show(event.toString());
+				// trace(event.toString());
+			}
+			
+			private function checkLogin(event:ResourceEvent):void {
+				// Alert.show("Burada authentacion yapılacak !", "Hata", Alert.OK, this, null, null);
+				// authAndSend(UserInfo(event.object));
+				doWork(User(event.object), false);
+			}
+			
+			private function logout(event:ResourceEvent):void {
+				
+				var tmpUser:User = new User();
+				tmpUser.username = "";
+				tmpUser.password = "";
+				currentState = 'loggedOutState';
+				doWork(tmpUser, true);
+				ModelLocator.getInstance().currentUser = null;
+				loginForm.password.text = "";
+				application_creationCompleteHandler();
+			
+			}
+			
+			private function doWork(userInfo:User, islogout:Boolean):void {
+				
+				try {
+					
+					ModelLocator.getInstance().currentUser = userInfo;
+					
+					var req:URLRequest = new URLRequest("/flex/restsrvc/authanticate/");
+					req.method = URLRequestMethod.POST;
+
+					var encoder:Base64Encoder = new Base64Encoder();        
+
+					encoder.encode("expdate:31122016");
+					var str:String = "name=John+Doe" + "[" + encoder.toString() + "]";
+					
+					req.data = new URLVariables(str);
+					
+					// encoder.encode("tlos:tlos");
+					encoder.encode(userInfo.username + ":" + userInfo.password);
+					
+					var credsHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + encoder.toString());
+					req.requestHeaders.push(credsHeader);
+					
+					var loader:URLLoader = new URLLoader();
+					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler); 
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityError);
+					loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+					if(islogout) {
+						loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, logoutHttpResult);
+					} else {
+						loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
+					}
+					
+					// CursorManager.setBusyCursor();
+					
+					ModelLocator.getInstance().currentBusyCursorId = CursorManager.setCursor(styleManager.getStyleDeclaration("mx.managers.CursorManager").getStyle("busyCursor"), CursorManagerPriority.HIGH);
+					
+					loader.load(req);
+					
+				} catch (e:Error){
+					Alert.show("doWork : " + e.message);
+				} 
+			}
+			
+			private function changeLocale(event:ResourceEvent):void {
+				var locale:String = String(event.object);
+				if(resourceManager.localeChain[0] != locale.toString()) {
+					resourceManager.localeChain = [locale];
+				}
+			}
+			
+			protected function jobManagerService_faultHandler(event:FaultEvent):void {
+				//Alert.show("Fault : " + event.message);	
+				BasicAuthenticationHandler.service_faultHandler(event);
+			}
+			
+			protected function norecover_resultHandler(event:ResultEvent):void {
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.result);
+					//Alert.show(returnXml);
+					returnXml = XML(event.message.body);
+					if(returnXml.result != "OK") {
+						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+					} else {
+						setAnaSayfaState();
+						refreshTreeAfterRelogin();
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+			}
+			
+			
+			//
+			private var dummyWindow:DummyForm;
+			protected function showDummyWindow(xmlText:String):void {
+				dummyWindow = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
+				dummyWindow.width = 220;
+				dummyWindow.height = 80;
+				dummyWindow.myText.width = 200;
+				dummyWindow.myText.height = 30;
+				dummyWindow.title="Please be patient..."
+				dummyWindow.htmlTextAsHTML = xmlText;
+				PopUpManager.centerPopUp(dummyWindow);
+				dummyWindow.setFocus();
+			}
+			private var myTimer:Timer;
+			protected function recover_resultHandler(event:ResultEvent):void
+			{
+				currentState = "dummyState";
+				showDummyWindow("Waiting for recovery to complete...");
+				CursorManager.setBusyCursor();
+				myTimer = new Timer(1000, 0);
+				myTimer.addEventListener("timer", checkRecoverIsCompleted);
+				myTimer.start();
+			}
+			public function checkRecoverIsCompleted(event:TimerEvent):void {
+				myTimer.stop();
+				getappstate.token = BasicAuthenticationHandler.authAndCall(jobManagerService, "getappstate");
+			} 
+			
+			protected function getappstate_resultHandler(event:ResultEvent):void
+			{
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "STATE_RECOVER") {
+						trace("Still recovering... !");
+						myTimer.start();
+					} else {
+						myTimer.stop();
+						PopUpManager.removePopUp(dummyWindow);
+						setAnaSayfaState();
+						CursorManager.removeBusyCursor();
+						refreshTreeAfterRelogin();
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+				
+			}
+			
+			protected function refreshTreeAfterRelogin():void {
+				if(jobTree != null) {
+					jobTree.refreshTree();
+				}
+			}
+			
+			protected function userOpsService_resultHandler(event:ResultEvent):void
+			{
+				var userXML:XML;
+				
+				try {
+					userXML = XML(event.message.body);
+				} catch(err:Error) {
+					Alert.show("Result : " + err.message);
+				}
+				
+				ModelLocator.getInstance().currentUser.username = userXML.username;
+				ModelLocator.getInstance().currentUser.roleinfo = userXML.roleinfo;
+				ModelLocator.getInstance().currentUser.statuinfo = userXML.statuinfo;
+
+				checkIfRecover();
+				
+				if(jobTree != null && jobTree.liveTree != null) {
+					jobTree.liveTree.selectedIndex = -1;
+				}
+			}
+			
+			protected function userOpsService_faultHandler(event:FaultEvent):void
+			{
+				BasicAuthenticationHandler.service_faultHandler(event);				
+			}
+		]]>
+	</fx:Script>
+	
+		<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/halo";
+		@namespace containers "com.likya.pinara.containers.*";
+		
+		containers|CollapsiblePanel {
+			skin-class: ClassReference('com.likya.pinara.skins.CollapsiblePanelSkin');
+		}
+		
+	</fx:Style>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<jobmanager:JobManager showBusyCursor="true" id="jobManagerService" fault="jobManagerService_faultHandler(event)"/>
+		<s:CallResponder id="recover" result="recover_resultHandler(event)"/>
+		<s:CallResponder id="norecover" result="norecover_resultHandler(event)"/>
+		<s:CallResponder id="getappstate" result="getappstate_resultHandler(event)" />
+<!--		<s:CallResponder id="recover" result="suspendAppResult_resultHandler(event)"/>
+		<s:CallResponder id="norecover" result="resumeAppResult_resultHandler(event)"/>
+-->	
+		<userops:UserOps id="userOpsService" result="userOpsService_resultHandler(event)" fault="userOpsService_faultHandler(event)" />
+
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout gap="10" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="20" />
+	</s:layout>
+	
+	<s:Group width="100%" height="100%" includeIn="loggedOutState" >
+		<comps:LoginForm id="loginForm" left="381" right="380" top="259" bottom="264" horizontalCenter="0" verticalCenter="-3"/>
+	</s:Group>
+	
+	
+	<comps:Header excludeFrom="loggedOutState, dummyState" id="header"/>
+	
+	<s:Group id="mainApp" width="100%" height="100%" excludeFrom="loggedOutState, dummyState">
+		
+		<s:layout>
+			<s:HorizontalLayout clipAndEnableScrolling="true" paddingRight="0" paddingLeft="0" paddingTop="10" paddingBottom="10" />
+		</s:layout>
+		
+		<comps:TreePanel height="100%" id="jobTree" left="0" right="10" top="0" bottom="0" />
+		
+		<s:Group width="100%" height="100%">
+			<s:layout>
+				<s:VerticalLayout clipAndEnableScrolling="true" paddingRight="0" paddingLeft="0" paddingTop="10" paddingBottom="10" />
+			</s:layout>
+			<comps:MenuBar excludeFrom="loggedOutState, dummyState" id="menuBar"/>
+			<s:BitmapImage source="@Embed('/images/likya.jpg')" left="0" right="0" top="0" bottom="0" scaleMode="stretch" includeIn="anaSayfaState" />
+			<!--mx:SWFLoader width="950" height="500" source="http://www.youtube.com/v/ojASzi1Kb8c" includeIn="loggedInState"/--> 
+			<!--comps:MainPanel includeIn="jobListState" height="100%"/-->
+			<jobdetail:JobListWithDetails height="100%" excludeFrom="anaSayfaState, jobDetailState, loggedOutState, dummyState" id="jobListDetail"/>
+			<jobdetail:JobAllDetailPanel includeIn="jobDetailState" id="allJobDetail" height="100%"/>
+		</s:Group>
+		
+	</s:Group>
+	
+	<comps:Footer excludeFrom="loggedOutState, dummyState" />	
+	
+</s:Application>

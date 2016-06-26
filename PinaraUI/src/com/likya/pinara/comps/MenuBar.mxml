@@ -47,12 +47,17 @@
 			}
 			
 			public function onCreationComplete(event:FlexEvent):void {
-				
-				// menuBarData.source = menuDataXMLList;
-				// trace("Menubar Created !");
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChanged);
-				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.JOBNODE_SELECTED, jobNodeSelected);
+				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.DECORATE_MENUBAR, decorateMenubar);
 				FlexGlobals.topLevelApplication.addEventListener(ResourceEvent.LISTNODE_SELECTED, listNodeSelected);
+			}
+			
+			private function decorateMenubar(event:ResourceEvent): void {
+				var allDetailPanel:JobAllDetailPanel = FlexGlobals.topLevelApplication["allJobDetail"] as JobAllDetailPanel;
+				if(allDetailPanel != null && allDetailPanel.jobDetailXml != null) {
+					currentDataItem = allDetailPanel.jobDetailXml;
+					handleEvent();
+				}
 			}
 			
 			private function handleEvent(): void {
@@ -84,49 +89,6 @@
 			public function listNodeSelected(event:ResourceEvent):void {
 				setMenuItems("false");
 			}
-			
-			/**
-			 * 	Serkan Taş
-			 *  Timer for looping until the service returns with result called by allJobDetail form
-			 */
-			private var myTimer:Timer;
-			public function jobNodeSelected(event:ResourceEvent):void {
-				// Alert.show("jobNodeSelected");
-				//var currentDataItem:XML = XML(event.object);
-				// currentDataItem = XML(event.object);
-				
-				//var serviceUrl:String = "/flex/restsrvc/jobdetailxml/";
-				//var selectedJobId:String = String(event.object);
-				
-				//jobListDS.url = serviceUrl + selectedJobId;
-				//jobListDS.send();
-				myTimer = new Timer(1000, 0);
-				myTimer.addEventListener("timer", getDataFromParent);
-				myTimer.start();
-				
-				
-			}
-			
-			private function getDataFromParent(event:TimerEvent): void {
-				var allDetailPanel:JobAllDetailPanel = FlexGlobals.topLevelApplication["allJobDetail"] as JobAllDetailPanel;
-				if(allDetailPanel.jobDetailXml != null) {
-					//myTimer.stop();
-					// Alert.show("In menu bar : " + allDetailPanel.jobDetailXml);
-					currentDataItem = allDetailPanel.jobDetailXml;
-					handleEvent();
-				}
-				myTimer.stop();
-			}
-			
-			// Menu items with no child : anasayfa
-			/*protected function mbiAnaSayfa_click(event:MouseEvent):void {
-				dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
-			}*/
-			
-			// Menu items with no child : refresh
-			/*protected function mbiRefresh_click(event:MouseEvent):void {
-				var ret:Boolean = dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH, null, true));
-			}*/
 			
 			protected function tlosMenuBar_itemClickHandler(event:MenuEvent):void {
 				var userRole:UserRole = null;
@@ -230,18 +192,6 @@
 				BasicAuthenticationHandler.authAndCall(jobManagerService, "deletejob", packedResponse);
 				dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 			}
-			
-			// public function registerClickEvent():void {
-
-			//	var mbi:MenuBarItem;
-				//Alert.show("registerClickEvent : pinaraMenuBar.menuBarItems.length" + pinaraMenuBar.menuBarItems.length);
-				
-				// mbi = pinaraMenuBar.menuBarItems[0] as MenuBarItem;
-				// mbi.addEventListener(MouseEvent.CLICK, mbiAnaSayfa_click);
-
-				// mbi = pinaraMenuBar.menuBarItems[1] as MenuBarItem;
-				// mbi.addEventListener(MouseEvent.CLICK, mbiRefresh_click);
-			// }
 			
 			private function showPinaraConfigPopup():void {
 				showGenericPopup("infotag=pinaraConfig");
@@ -430,8 +380,6 @@
 	<fx:Declarations>
 		
 		<fx:XMLList id="menuDataXMLList">
-			<!--menuitem label="{resourceManager.getString('messages', 'homePage')}" id="anasayfa"/-->
-			<!--menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/-->
 			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
 				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
@@ -461,40 +409,6 @@
 			</menuitem>
 			
 		</fx:XMLList>
-
-		<!--menuitem label="{resourceManager.getString('messages', 'userSettings')}" id="userSettings" role="{UserRole.VIEW}" >			
-		<menuitem label="{resourceManager.getString('messages', 'changeUserPassword')}" />
-		</menuitem-->
-		<!--menuitem label="{resourceManager.getString('messages', 'management')}" id="management" role="{UserRole.OPERATION}">			
-		<menuitem label="{resourceManager.getString('messages', 'suspendTlos')}" id="suspend"/>
-		<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
-		<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>				
-		</menuitem-->		
-		<!--menuitem label="{resourceManager.getString('messages', 'tlosSettings')}" id="security" role="{UserRole.ADMIN}">			
-		<menuitem label="{resourceManager.getString('messages', 'changeTlosPassword')}" id="changeTlosPassword"/>			
-		</menuitem-->	
-		<!--menuitem label="{resourceManager.getString('messages', 'view')}" id="view" role="{UserRole.VIEW}">
-		<menuitem label="{resourceManager.getString('messages', 'graph')}" id="graph"/>
-		<menuitem label="{resourceManager.getString('messages', 'refresh')}" id="refresh"/>
-		<menuitem label="{resourceManager.getString('messages', 'allJobsView')}" id="allJobsView"/>
-		<menuitem label="{resourceManager.getString('messages', 'groupedView')}" id="groupedView"/>
-		</menuitem-->
-		<!--menuitem label="{resourceManager.getString('messages', 'statusFilter')}" id="statusFilter" role="{UserRole.VIEW}">
-		<menuitem label="{resourceManager.getString('messages', 'listAll')}"/>			
-		<menuitem label="{resourceManager.getString('messages', 'readyFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'waitingFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'workingFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'successfulFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'failedFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'timeoutFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'skippedFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'stoppedFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'pausedFilter')}"/>
-		<menuitem label="{resourceManager.getString('messages', 'disabledFilter')}"/>
-		</menuitem-->
-		<!--menuitem label="{resourceManager.getString('messages', 'saveJobList')}" id="save" role="{UserRole.VIEW}">			
-		<menuitem label="{resourceManager.getString('messages', 'saveJobListAsExcel')}"/>
-		</menuitem-->
 		
 		<jobmanager:JobManager id="jobManagerService" result="jobManagerService_resultHandler(event)" fault="jobManagerService_faultHandler(event)"/>
 		<s:CallResponder id="suspendAppResult" result="suspendAppResult_resultHandler(event)"/>

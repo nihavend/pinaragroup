@@ -114,9 +114,8 @@
 				
 				currentState = "jobListState";
 				if(event.object == null) {
-					return;
 					if(currentListNodeId != null) {
-						//jobListDetail.selectedNetTreeId = currentListNodeId;
+						jobListDetail.selectedNetTreeId = currentListNodeId;
 					} else {
 						Alert.show("Warning : Code : 3428");
 						currentState = "anaSayfaState";
@@ -126,18 +125,17 @@
 					// bazen id attribute olmadan direk olarak da gelebiliyor.
 					// Bu nedenle kontrol kondu Serkan...j
 					if (!XML(event.object).hasOwnProperty("@id")) {
-						//jobListDetail.selectedNetTreeId = XML(event.object);
+						jobListDetail.selectedNetTreeId = XML(event.object);
 					} else {
-						//jobListDetail.selectedNetTreeId = XML(event.object).@id;
+						jobListDetail.selectedNetTreeId = XML(event.object).@id;
 					}
-					//currentListNodeId = jobListDetail.selectedNetTreeId;
+					currentListNodeId = jobListDetail.selectedNetTreeId;
 				}
 				
-				// jobListDetail.updateData();
+				jobListDetail.updateData();
 				
 			}
 			private function jobNodeSelectedHandler(event:ResourceEvent):void {
-				return;
 				currentState = "jobDetailState";
 				// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
 				// bu durumda id attribute olmadan direk skalar olarak geliyor

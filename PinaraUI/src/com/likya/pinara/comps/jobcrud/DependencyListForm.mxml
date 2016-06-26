@@ -29,9 +29,14 @@
 			
 			import spark.events.GridSelectionEvent;
 			import spark.events.IndexChangeEvent;
+			import spark.events.PopUpEvent;
+			
+			
 			
 			[Bindable]
 			public var filterId:String;
+			
+			private var jobListForDep:XML;
 			
 			public function validateForm():Boolean
 			{
@@ -52,10 +57,15 @@
 			protected function depEkle_clickHandler(event:MouseEvent):void
 			{
 				
-				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+				if(stateName.selectedIndex == -1 || selectedJobInfo.text == null || selectedJobInfo.text == "") {
 					Alert.show("State or job not selected !");
 					return;
 				}
+				
+/*				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+					Alert.show("State or job not selected !");
+					return;
+				}*/
 				
 				var jobInfoTmp:String = stateName.selectedItem.value;
 				
@@ -70,11 +80,16 @@
 				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {
 					//trace(ObjectUtil.toString(item));
 					
-					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+					if(item.jobinfo == selectedJobInfo.text && item.stateinfo == jobInfoTmp) {
 						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
 						return;
 					}
-				}
+					
+/*					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
+						return;
+					}
+*/				}
 
 				
 				var depIdTmp:String
@@ -88,17 +103,26 @@
 					}
 				}
 				
-				var depArray:Object = {depid:depIdTmp, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };
+/*				var depArray:Object = {depid:depIdTmp, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };
+*/				
+				var depArray:Object = {depid:depIdTmp, jobinfo:selectedJobInfo.text, stateinfo:jobInfoTmp, comment:comment.text };
 								
 				dependencyListGrid.dataProvider.addItem(depArray);
 			}
 			
 			protected function depDegistir_clickHandler(event:MouseEvent):void
 			{
-				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+				if(stateName.selectedIndex == -1 || selectedJobInfo.text == null || selectedJobInfo.text == "") {
 					Alert.show("State or job not selected !");
 					return;
 				}
+				
+				
+/*				if(stateName.selectedIndex == -1 || jobList.selectedIndex == -1) {
+					Alert.show("State or job not selected !");
+					return;
+				}*/
+				
 				
 				var jobInfoTmp:String = stateName.selectedItem;
 				
@@ -113,13 +137,20 @@
 				for each (var item:Object in dependencyListGrid.dataProvider.toArray()) {
 					//trace(ObjectUtil.toString(item));
 					
-					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+/*					if(item.jobinfo == jobList.selectedItem && item.stateinfo == jobInfoTmp) {
+						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
+						return;
+					}*/
+					
+					if(item.jobinfo == selectedJobInfo.text && item.stateinfo == jobInfoTmp) {
 						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
 						return;
 					}
 				}
 				
-				var depArray:Object = {depid:dependencyListGrid.selectedItem.depid, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };
+/*				var depArray:Object = {depid:dependencyListGrid.selectedItem.depid, jobinfo:jobList.selectedItem, stateinfo:jobInfoTmp, comment:comment.text };*/
+				
+				var depArray:Object = {depid:dependencyListGrid.selectedItem.depid, jobinfo:selectedJobInfo.text, stateinfo:jobInfoTmp, comment:comment.text };
 				
 				dependencyListGrid.dataProvider.setItemAt(depArray, dependencyListGrid.selectedIndex);
 			}
@@ -171,9 +202,10 @@
 					
 					comment.text = dependencyListGrid.selectedItem.comment;
 					
-					var itemIdx:int = jobList.dataProvider.getItemIndex(dependencyListGrid.selectedItem.jobinfo);
-					
+/*					var itemIdx:int = jobList.dataProvider.getItemIndex(dependencyListGrid.selectedItem.jobinfo);
 					jobList.selectedIndex = itemIdx;
+*/					
+					selectedJobInfo.text = dependencyListGrid.selectedItem.jobinfo;
 					
 				} else {
 					depCikar.enabled = false;
@@ -212,8 +244,6 @@
 			
 			protected function xmlService_resultHandler(event:ResultEvent):void {
 				
-				var jobListXml:XML = XML(event.result);
-				
 				// var treeOpenItems:Object;
 				
 				// trace(jobListXml);
@@ -224,10 +254,8 @@
 				
 				// Alert.show(jobListXml);
 				// jobList.dataProvider = jobListXml.children();
-				for each (var job:Object in jobListXml.children()) {
-					// trace(job);
-					jobList.dataProvider.addItem(job.jobid + ":" + job.jobname);
-				}
+
+				jobListForDep = XML(event.result);
 				
 			}
 			
@@ -382,6 +410,41 @@
 				Alert.show("Value : " + stateName.selectedItem.value + " " + substateName.selectedItem.value + " " + statusName.selectedItem.value);
 			}*/
 			
+			
+/*			public function constructJobList():void {
+				
+				for each (var job:Object in jobListForDep.children()) {
+					// trace(job);
+					jobList.dataProvider.addItem(job.jobid + ":" + job.jobname);
+				}				
+			}	*/		
+			
+			protected function btn_click1(evt:MouseEvent):void {
+				
+				var selectJobPopup:JobListPopup = new JobListPopup();
+				
+				
+				selectJobPopup.x = evt.stageX + 50;
+				selectJobPopup.y = evt.stageY - 60;
+				
+				this.width = selectJobPopup.width + 50;
+				this.height = selectJobPopup.height + 50;
+
+				selectJobPopup.jobListForDep = jobListForDep;
+				// Add an event handler for the close event to check for 
+				// any returned data.
+				selectJobPopup.addEventListener('close', jobSelection_closeHandler);
+				selectJobPopup.open(this, true);
+			}
+			
+			protected function jobSelection_closeHandler(event:PopUpEvent):void {
+				// If commit is false, do data is returned.
+				if (!event.commit)
+					return;
+				
+				// Write the returned String to the TextArea control.
+				selectedJobInfo.text = event.data as String;
+			} 
 		]]>
 	</fx:Script>
 	
@@ -433,18 +496,18 @@
 				</s:DropDownList>
 			</s:HGroup>
 		</s:FormItem>
+
+<!--		<s:FormItem visible="false"> 
+			<s:VGroup>
+				<s:Label top="10" text="Job List (id:name)" fontSize="12" fontWeight="bold"/>
+				<s:List id="jobList" maxHeight="50"> 
+					<mx:ArrayCollection />
+				</s:List>
+			</s:VGroup>
+		</s:FormItem>-->
 		
 		<s:BorderContainer id="depItemListBox" width="700" height="100" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 			<s:HGroup gap="-20">
-				<s:FormItem> 
-					<s:VGroup>
-						<s:Label top="10" text="Job List (id:name)" fontSize="12" fontWeight="bold"/>
-						<s:List id="jobList" maxHeight="50"> 
-							<mx:ArrayCollection />
-						</s:List>
-					</s:VGroup>
-				</s:FormItem>
-				
 				<s:VGroup>
 					<s:HGroup>				
 						<s:FormItem label="State" width="140">
@@ -533,9 +596,17 @@
 					<s:TextInput id="comment" width="400" />
 					</s:HGroup>	-->
 					<!--<s:Button label="Test" id="testCombos" click="testCombos_clickHandler(event)" enabled="true"/>-->
-					<s:FormItem label="Comment">
-						<s:TextInput id="comment" width="300"/>
-					</s:FormItem>
+					<s:HGroup>
+						<s:FormItem width="100">
+							<s:Button id="btn1" label="Select Job" click="btn_click1(event);" />
+						</s:FormItem>
+						<s:FormItem width="140">
+							<s:TextInput id="selectedJobInfo" editable="false"/>
+						</s:FormItem>
+						<s:FormItem label="Comment">
+							<s:TextInput id="comment" width="300"/>
+						</s:FormItem>
+					</s:HGroup>
 				</s:VGroup>
 			</s:HGroup>
 		</s:BorderContainer>

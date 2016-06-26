@@ -108,6 +108,8 @@ public class PinaraMailServer implements Runnable {
 							postMultiPartMail(emailAddress, ((MultipartMail) pinaraMail).getMailSubject(), ((MultipartMail) pinaraMail).getMultipart());
 							break;
 						}
+						
+						Pinara.getLogger().debug("E-posta gönderdildi !"); 
 					} catch (Exception e) {
 						Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + e.getMessage() + Pinara.getMessage("PinaraMailServer.6")); //$NON-NLS-1$ //$NON-NLS-2$
 						e.printStackTrace();
@@ -156,7 +158,7 @@ public class PinaraMailServer implements Runnable {
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.9"));
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
 		} catch(MessagingException me) {
-			Pinara.getLogger().info(me.getLocalizedMessage());
+			Pinara.getLogger().info(me.toString());
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
 		}
 	}

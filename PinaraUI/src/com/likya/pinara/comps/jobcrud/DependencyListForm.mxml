@@ -124,7 +124,7 @@
 				}*/
 				
 				
-				var jobInfoTmp:String = stateName.selectedItem;
+				var jobInfoTmp:String = stateName.selectedItem.value;
 				
 				if(substateName.selectedItem != null) {
 					jobInfoTmp += ":" + substateName.selectedItem.value;

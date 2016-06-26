@@ -1,6 +1,7 @@
 package com.likya.pinara.utils
 {
 	import com.adobe.fiber.services.wrapper.HTTPServiceWrapper;
+	import com.likya.pinara.event.ResourceEvent;
 	import com.likya.pinara.model.ModelLocator;
 	import com.likya.pinara.model.User;
 	
@@ -8,6 +9,7 @@ package com.likya.pinara.utils
 	import flash.net.URLVariables;
 	
 	import mx.controls.Alert;
+	import mx.core.FlexGlobals;
 	import mx.core.IFlexDisplayObject;
 	import mx.managers.PopUpManager;
 	import mx.rpc.AsyncToken;
@@ -95,11 +97,13 @@ package com.likya.pinara.utils
 				Alert.show("Server state is not available, please relogin !");
 				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));*/
+			} else if (event.statusCode == 0) {
+				Alert.show("Server is not available, check pls !");
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 			} else {
 				trace("Unexpected Event : " + event.toString());
 				// Alert.show("Unexpected Event : " + event.toString());
 				// Alert.show("Server state is not available, please relogin !");
-				// FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 			}
 		}
 		

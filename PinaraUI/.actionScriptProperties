@@ -39,8 +39,8 @@
     <application path="tests/TestMenuFilter.mxml"/>
     <application path="com/likya/pinara/utils/RoleFilters.as"/>
     <application path="com/likya/pinara/main/PinaraUI.mxml"/>
-    <application path="tests/TestUserCrudWindows.mxml"/>
     <application path="tests/JobEditWindowTester.mxml"/>
+    <application path="tests/TestUserCrudWindows.mxml"/>
   </applications>
   <modules>
     <module application="src/com/likya/pinara/main/PinaraUI.mxml" destPath="com/likya/pinara/modules/ViewDepGraph.swf" optimize="true" sourcePath="src/com/likya/pinara/modules/ViewDepGraph.mxml"/>

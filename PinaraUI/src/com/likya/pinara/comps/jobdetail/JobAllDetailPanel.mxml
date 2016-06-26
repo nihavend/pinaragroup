@@ -187,6 +187,8 @@
 					liveTree.validateNow();
 					*/
 					
+					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.DECORATE_MENUBAR,  jobId.text));
+					
 				} catch(err:Error) {
 					Alert.show("Hata Oluştu : " + errorString + " \nSunucu cevabı : " + jobDetailXml);
 					trace(err);

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.google.gson.Gson;
 import com.likya.myra.commons.utils.IdFilter;
 import com.likya.myra.commons.utils.SSSFilter;
@@ -423,9 +425,9 @@ public class RestParser extends GenericRestParser {
 			try {
 				PinaraAppManagerImpl.getInstance().disableGroup(grpId);
 				retStr = "<message><result>OK</result><desc></desc></message>";
-			} catch (PinaraAuthenticationException e) {
-				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
-				e.printStackTrace();
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
 			}
 
 			// retStr = "<message><result>NOK : " + "Service not implemented !" + "</result>";
@@ -480,9 +482,9 @@ public class RestParser extends GenericRestParser {
 			try {
 				extractPostInfo(bufferString, (byte) 0x02);
 				retStr = "<message><result>OK</result></message>";
-			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
-				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
-				e.printStackTrace();
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
 			}
 			break;
 

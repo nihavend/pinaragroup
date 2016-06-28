@@ -51,7 +51,7 @@
 				</s:dataProvider>
 			</s:List>-->
 			
-			<s:List id="jobList" maxHeight="200" maxWidth="150" change="list1_changeHandler(event);"> 
+			<s:List id="jobList" maxHeight="200" maxWidth="250" change="list1_changeHandler(event);"> 
 				<mx:ArrayCollection />
 			</s:List>
 

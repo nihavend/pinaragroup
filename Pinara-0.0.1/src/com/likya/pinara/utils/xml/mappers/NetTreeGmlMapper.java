@@ -114,7 +114,7 @@ public class NetTreeGmlMapper {
 		xmlCursor.beginElement("Graph");
 
 		ArrayList<AbstractJobType> rootNodes = new ArrayList<AbstractJobType>(); 
-		System.out.println(abstractJobTypes);
+		
 		for(AbstractJobType abstractJobType : abstractJobTypes) {
 			if(abstractJobType.getDependencyList() == null || abstractJobType.getDependencyList().sizeOfItemArray() == 0) {
 				rootNodes.add(abstractJobType);

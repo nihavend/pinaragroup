@@ -210,12 +210,13 @@ public class Pinara extends PinaraBase {
 		}
 		
 		if(RecoveryHelper.isInRecoveryState()) {
-			suspendFlag = "locked";
 			synchronized (suspendFlag) {
 				getLogger().warn("Waiting user to decide what to do recover or go ahead !");
 				suspendFlag.wait();
 				suspendFlag = "unlocked";
 			}
+		} else {
+			suspendFlag = "unlocked";
 		}
 
 		PinaraOutput testOutput = PinaraOutput.getInstance();

@@ -73,7 +73,13 @@ public class PeriodCalculations {
 		timeManagement.getJsPlannedTime().setStartTime(newDateTime);
 		// System.err.println("real : " + MyraDateUtils.getDate(newDateTime.getTime()));
 		// System.err.println("after : " + MyraDateUtils.getDate(timeManagement.getJsPlannedTime().getStartTime().getTime()));
-
+		/**
+		 * @author serkan
+		 * 05.11.2016
+		 * TODO Aşağıdaki kısmı kaldırdım, çünkü gerçekten bir işin başlangıç bitiş zamanları ile
+		 * Çalışma aralığı tanımları ayrılmamış ve birbirine girmiş durumda.
+		 */
+		/*
 		if (timeManagement.getBornedPlannedTime().getStopTime() != null) {
 			Calendar stopTime = timeManagement.getBornedPlannedTime().getStopTime();
 			if (stopTime.before(newDateTime)) {
@@ -83,6 +89,7 @@ public class PeriodCalculations {
 				return null;
 			}
 		}
+		*/
 		
 		return newDateTime;
 	}

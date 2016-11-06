@@ -254,7 +254,9 @@ package com.likya.pinara.utils {
 					
 					managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm_1.relativeStart.selectedItem;
 					managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
-					managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
+					if(j.managementInfoForm_1.maxCountValue.text != null && j.managementInfoForm_1.maxCountValue.text.length > 0 && j.managementInfoForm_1.maxCountValue.text != "0") {
+						managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
+					}
 				}
 				
 				/** Time Management ****/
@@ -314,7 +316,7 @@ package com.likya.pinara.utils {
 			var dateString:String = currentDF.format(sDate);
 			
 			// dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
-			dateString = dateString + "T" + zeroize(j.managementInfoForm_0.bhour.value + "") + ":" + zeroize(j.managementInfoForm_0.bminute.value + "") + ":" + zeroize(j.managementInfoForm_0.bsecond.value + "") + ".000+02:00";
+			dateString = dateString + "T" + zeroize(j.managementInfoForm_0.bhour.value + "") + ":" + zeroize(j.managementInfoForm_0.bminute.value + "") + ":" + zeroize(j.managementInfoForm_0.bsecond.value + "") + ".000+03:00";
 			
 			managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
 			managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
@@ -713,7 +715,7 @@ package com.likya.pinara.utils {
 			currentDF.formatString = "LL:NN:SS";
 			var timeString:String = currentDF.format(currentDateTime);
 			
-			var dateTimeString:String = dateString + "T" + timeString + ".000+02:00";	
+			var dateTimeString:String = dateString + "T" + timeString + ".000+03:00";	
 			
 			return dateTimeString;
 		}

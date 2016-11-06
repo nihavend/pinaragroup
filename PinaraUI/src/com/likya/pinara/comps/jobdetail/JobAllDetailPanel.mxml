@@ -62,7 +62,7 @@
 			
 			public function getDate(dateTxt:String):String {
 				var dateFormatter:DateFormatter = new DateFormatter();
-				dateFormatter.formatString = 'HH:NN:SS DD/MM/YYYY';
+				dateFormatter.formatString = 'JJ:NN:SS DD/MM/YYYY';
 				return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
 			}
 			

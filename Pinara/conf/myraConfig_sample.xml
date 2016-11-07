@@ -1,0 +1,13 @@
+<myraConfig xmlns="http://www.likyateknoloji.com/myra-config">
+  <persistent>false</persistent>
+  <normalize>false</normalize>
+  <frequency>1</frequency>
+  <higherThreshold>10</higherThreshold>
+  <lowerThreshold>3</lowerThreshold>
+  <logPath>./</logPath>
+  <usejobnamesforlog>NO</usejobnamesforlog>
+  <logFileExt>.log</logFileExt>
+  <globalLogPath>./</globalLogPath>
+  <logbuffersize>800</logbuffersize>
+  <logpagesize>10</logpagesize>
+</myraConfig>

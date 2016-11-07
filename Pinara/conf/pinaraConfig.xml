@@ -1,0 +1,31 @@
+<pinaraConfig version="0.0.1" instanceName="Pinara Deployment Manager" xmlns="http://www.likyateknoloji.com/pinara-config"
+	xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra="http://www.likyateknoloji.com/myra-stateinfo">
+	<senaryoDosyasi>senaryo</senaryoDosyasi>
+	<serverIpAddress>0.0.0.0</serverIpAddress>
+	<httpPort>3000</httpPort>
+	<httpsPort>3443</httpsPort>
+	<persistent>false</persistent>
+	<mailInfo>
+		<lik:EmailList>
+			<lik:email>serkan.tas@likyateknoloji.com</lik:email>
+		</lik:EmailList>
+		<myra:stateInfos>
+			<myra:LiveStateInfos>
+				<myra:LiveStateInfo LSIDateTime="2013-12-22T18:44:31.130+02:00">
+					<myra:StateName>FINISHED</myra:StateName>
+					<myra:SubstateName>COMPLETED</myra:SubstateName>
+					<myra:StatusName>FAILED</myra:StatusName>
+				</myra:LiveStateInfo>
+			</myra:LiveStateInfos>
+		</myra:stateInfos>
+		<useEncryption>true</useEncryption>
+		<userName>serkan.tas@likyateknoloji.com</userName>
+		<lik:userPassword>genel3nihavend</lik:userPassword>
+		<smtpServerHostName>mail.likyateknoloji.com</smtpServerHostName>
+		<port>587</port>
+	</mailInfo>
+	<mcInfo>
+		<jmxPort>3002</jmxPort>
+	</mcInfo>
+	<logPath>logs</logPath>
+</pinaraConfig>

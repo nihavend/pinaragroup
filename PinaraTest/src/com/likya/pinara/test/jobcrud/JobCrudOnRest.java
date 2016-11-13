@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlOptions;
 
 import com.likya.myra.commons.utils.XMLValidations;
+import com.likya.myra.test.job.crud.SimplePropertiesGenerator;
 import com.likya.pinara.gui.rest.RestParser;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
@@ -29,13 +30,13 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 		
 		try {
 			
-			int testCount = 10;
-			int depAmount = 20;
-			int depCount = 0;
+			int treeCount = 10;
+			int depAmount = 3;
+			
 		
 			long startTime;
-			
-			for (int c = 0; c < testCount; c++) {
+			int depCount = 0;
+			for (int c = 0; c < treeCount * depAmount; c++) {
 				
 				startTime = System.currentTimeMillis();
 				
@@ -45,9 +46,9 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 				
 				if(++ depCount > depAmount) {
 					depCount = 1;
-					abstractJobType = generate(false);
+					abstractJobType = SimplePropertiesGenerator.generate(false);
 				} else {
-					abstractJobType = generate(maxId == 0 ? false:true);
+					abstractJobType = SimplePropertiesGenerator.generate(maxId == 0 ? false:true);
 					if(maxId > 1) {
 						abstractJobType.getDependencyList().getItemArray(0).setJsId("" + maxId);
 					}
@@ -126,7 +127,7 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 				
 				int maxId = latestJobId();
 				
-				AbstractJobType abstractJobType = generate(maxId == 0 ? false:true);
+				AbstractJobType abstractJobType = SimplePropertiesGenerator.generate(maxId == 0 ? false:true);
 				
 				if(++ groupCount > groupAmount) {
 					groupCount = 1;

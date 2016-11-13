@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/likya-commons-0.0.1/target/likya-commons-0.0.1.jar" sourcepath="/likya-commons-0.0.1/src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/myra-schema-0.0.1/myra-schema-0.0.1.jar" sourcepath="/myra-schema-0.0.1/src"/>
 	<classpathentry kind="lib" path="/SharedLibs/xmlbeans-2.6.0/lib/xbean.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Pinara-0.0.1"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Pinara"/>
 	<classpathentry kind="lib" path="/SharedLibs/junit/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="/SharedLibs/apache/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="/myra-commons-0.0.1/target/myra-commons-0.0.1.jar"/>
 	<classpathentry kind="lib" path="/SharedLibs/log4j/log4j-1.2.15.jar" sourcepath="/Users/serkan/.m2/repository/log4j/log4j/1.2.15/log4j-1.2.15-sources.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/Myra-0.0.1-Test"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

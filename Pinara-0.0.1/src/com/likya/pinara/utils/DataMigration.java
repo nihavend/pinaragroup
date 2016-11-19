@@ -37,14 +37,13 @@ public class DataMigration {
 		for (AbstractJobType abstractJobType : jobListDocument.getJobList().getGenericJobArray()) {
 			if (abstractJobType.getLSIDateTime() == null) {
 				abstractJobType.setLSIDateTime(MyraDateUtils.getServerW3CDateTime());
-				// System.out.println(txt);
 			}
 		}
 
 		return jobListDocument;
 	}
 	
-	public static XmlObject removeSelection(XmlObject empDoc, String ns, String xPath) {
+	private static XmlObject removeSelection(XmlObject empDoc, String ns, String xPath) {
 		
 		// Insert a cursor and move it to the first element.
 	    XmlCursor cursor = empDoc.newCursor();
@@ -62,7 +61,7 @@ public class DataMigration {
 	    // each element.
 	    while (cursor.toNextSelection())
 	    {
-	        System.out.println(cursor.getTextValue());
+	        // System.out.println(cursor.getTextValue());
 	        cursor.removeXml();
 	    }
 	    // Pop the saved location off the stack.

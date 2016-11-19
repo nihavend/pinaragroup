@@ -102,6 +102,8 @@
 				
 				addEventListener(ResourceEvent.UPDATE_TREE, updateTree);
 				
+				addEventListener(ResourceEvent.SERVER_UNREADY_LOGOUT, serverUnreadyLogout);
+				
 				ModelLocator.getInstance().currentUser = new User();
 				
 				// currentState = "anaSayfaState";
@@ -535,6 +537,8 @@ x			}
 					if(returnXml.result == "STATE_RECOVER") {
 						trace("Still recovering... !");
 						myTimer.start();
+					} else if(returnXml.result == "STATE_STARTING") {
+						serverUnreadyLogout(null);
 					} else {
 						myTimer.stop();
 						PopUpManager.removePopUp(dummyWindow);
@@ -546,6 +550,14 @@ x			}
 					returnTxt = String(event.result)
 				}
 				
+			}
+			
+			private function serverUnreadyLogout(event:ResourceEvent):void {
+				myTimer.stop();
+				PopUpManager.removePopUp(dummyWindow);
+				CursorManager.removeBusyCursor();
+				logout(null);
+				Alert.show("Pınara Server is not ready, check server logs for detail info !");
 			}
 			
 			protected function refreshTreeAfterRelogin():void {

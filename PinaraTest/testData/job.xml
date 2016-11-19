@@ -1,0 +1,87 @@
+<data>
+	<serialize>true</serialize>
+	<datamess>
+		<myra:jobList xmlns:myra="http://www.likyateknoloji.com/myra-joblist"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"
+			xmlns:wla="http://www.likyateknoloji.com/wla-gen" xmlns:lik="http://www.likyateknoloji.com/likya-gen"
+			xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
+			<myra:genericJob xsi:type="myra:simpleProperties"
+				handlerURI="com.likya.myra.jef.jobs.ExecuteInShell" Id="3" agentId="1"
+				groupId="">
+				<myra-jobprops:baseJobInfos>
+					<wla:jsName>job3</wla:jsName>
+					<lik:jobTypeDetails>
+						<lik:jobCommandType>BATCH PROCESS</lik:jobCommandType>
+						<lik:jobCommand>job3.sh</lik:jobCommand>
+						<lik:jobWorkDir />
+						<lik:argValues />
+					</lik:jobTypeDetails>
+					<wla:jobLogFile />
+					<wla:jobLogPath />
+					<wla:oSystem />
+					<wla:jobPriority>1</wla:jobPriority>
+					<myra-jobprops:jsIsActive>true</myra-jobprops:jsIsActive>
+					<lik:userId>007</lik:userId>
+				</myra-jobprops:baseJobInfos>
+				<myra-jobprops:graphInfo />
+				<myra-stateinfo:stateInfos>
+					<myra-stateinfo:JobStatusList>
+						<myra-stateinfo:JobStatus>
+							<myra-stateinfo:StatusName>SUCCESS</myra-stateinfo:StatusName>
+							<myra-stateinfo:Desc>0</myra-stateinfo:Desc>
+							<myra-stateinfo:ReturnCodeList
+								osType="MACOS">
+								<myra-stateinfo:ReturnCode>
+									<myra-stateinfo:Code>0</myra-stateinfo:Code>
+									<myra-stateinfo:Desc>0</myra-stateinfo:Desc>
+								</myra-stateinfo:ReturnCode>
+							</myra-stateinfo:ReturnCodeList>
+						</myra-stateinfo:JobStatus>
+					</myra-stateinfo:JobStatusList>
+					<myra-stateinfo:LiveStateInfos>
+						<myra-stateinfo:LiveStateInfo
+							LSIDateTime="2016-11-13T01:16:17.000+03:00">
+							<myra-stateinfo:StateName>PENDING</myra-stateinfo:StateName>
+							<myra-stateinfo:SubstateName>DEACTIVATED</myra-stateinfo:SubstateName>
+						</myra-stateinfo:LiveStateInfo>
+					</myra-stateinfo:LiveStateInfos>
+				</myra-stateinfo:stateInfos>
+				<myra-jobprops:management>
+					<wla:trigger>TIME</wla:trigger>
+					<wla:timeManagement>
+						<wla:bornedPlannedTime>
+							<wla:startTime>2016-11-08T00:00:00.000+03:00</wla:startTime>
+							<wla:stopTime>2016-11-08T00:00:00.000+03:00</wla:stopTime>
+						</wla:bornedPlannedTime>
+						<!-- wla:jsPlannedTime>
+							<wla:startTime>2016-11-08T00:00:00.000+03:00</wla:startTime>
+							<wla:stopTime>2016-11-08T00:00:00.000+03:00</wla:stopTime>
+						</wla:jsPlannedTime-->
+						<wla:jsTimeOut>
+							<lik:value_integer>1</lik:value_integer>
+							<lik:unit>HOURS</lik:unit>
+						</wla:jsTimeOut>
+						<wla:expectedTime>
+							<lik:value_integer>1</lik:value_integer>
+							<lik:unit>HOURS</lik:unit>
+						</wla:expectedTime>
+					</wla:timeManagement>
+					<wla:cascadingConditions>
+						<wla:runEvenIfFailed>false</wla:runEvenIfFailed>
+						<wla:jobSafeToRestart>true</wla:jobSafeToRestart>
+					</wla:cascadingConditions>
+				</myra-jobprops:management>
+				<myra-jobprops:scheduleInfo>
+					<myra-jobprops:daysOfWeekIntType>1</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>2</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>3</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>4</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>5</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>6</myra-jobprops:daysOfWeekIntType>
+					<myra-jobprops:daysOfWeekIntType>7</myra-jobprops:daysOfWeekIntType>
+				</myra-jobprops:scheduleInfo>
+			</myra:genericJob>
+		</myra:jobList>
+	</datamess>
+</data>

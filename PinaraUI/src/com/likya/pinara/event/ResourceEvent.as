@@ -25,6 +25,8 @@ package com.likya.pinara.event {
 		
 		public static const DECORATE_MENUBAR:String = "decoratemenubar";
 		
+		public static const SERVER_UNREADY_LOGOUT:String = "serverUnreadyLogoutRequest";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

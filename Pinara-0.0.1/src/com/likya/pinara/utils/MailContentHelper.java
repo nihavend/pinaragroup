@@ -30,8 +30,8 @@ public class MailContentHelper {
 			TimeManagement timeManagement = abstractJobType.getManagement().getTimeManagement();
 			
 			if(timeManagement != null) {
-				sb.append(Pinara.getMessage("JobQueueOperations.25") + timeManagement.getJsPlannedTime());
-				sb.append(Pinara.getMessage("JobQueueOperations.26") + timeManagement.getJsRealTime());
+				sb.append(Pinara.getMessage("JobQueueOperations.25") + timeManagement.getJsActualTime());
+				sb.append(Pinara.getMessage("JobQueueOperations.26") + timeManagement.getJsRecordedTime());
 			} else {
 				sb.append(Pinara.getMessage("JobQueueOperations.25"));
 				sb.append(Pinara.getMessage("JobQueueOperations.26"));
@@ -128,8 +128,8 @@ public class MailContentHelper {
 			TimeManagement timeManagement = abstractJobType.getManagement().getTimeManagement();
 			
 			if(timeManagement != null) {
-				stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsPlannedTime().getStartTime() + "</td>");
-				stringBuilder.append("				        <td>" + (abstractJobType.getManagement().getTimeManagement().getJsRealTime() == null ? "-":abstractJobType.getManagement().getTimeManagement().getJsRealTime()) + "</td>");
+				stringBuilder.append("				        <td>" + abstractJobType.getManagement().getTimeManagement().getJsActualTime().getStartTime() + "</td>");
+				stringBuilder.append("				        <td>" + (abstractJobType.getManagement().getTimeManagement().getJsRecordedTime() == null ? "-":abstractJobType.getManagement().getTimeManagement().getJsRecordedTime()) + "</td>");
 			} else {
 				stringBuilder.append("				        <td>-</td>");
 				stringBuilder.append("				        <td>-</td>");

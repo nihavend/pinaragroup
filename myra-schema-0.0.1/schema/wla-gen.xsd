@@ -84,12 +84,14 @@
 	<xs:element name="oSystem" type="OperatingSystemTypeEnumeration" />
 	
 	<!--========================================================= -->
-	<xs:element name="timeManagement">
+	
+		<xs:element name="timeManagement">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="bornedPlannedTime" minOccurs="1" maxOccurs="1" />
-				<xs:element ref="jsPlannedTime" minOccurs="0" />
-				<xs:element ref="jsRealTime" minOccurs="0" />
+				<xs:element ref="jsExecutionTimeFrame" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="jsScheduledTime" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="jsActualTime" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="jsRecordedTime" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="likya-gen:timeZone" minOccurs="0" />
 				<xs:element ref="likya-gen:typeOfTime" minOccurs="0" />
 				<xs:element ref="jsRelativeTimeOption" minOccurs="0" />
@@ -100,7 +102,64 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	
+	<!-- 
+		executionTimeFrame	: çalışma aralığı
+		scheduledTime		: planlanan çalışma zamanı
+		actualTime			: geçerli çalışma zamanı 
+								planlanan çalışma zamanına göre bu değer belirlenebileceği gibi, 
+								manuel başlatma sırasında bu değer değişebilir. 
+								prosesin kullandığı zaman bu zamandır.
+		recordedTime		: Kaydedilen, gerçekleşen çalışma zamanı, ayrıca tarihsel veriye de eklenen bu bilgi.
+		
+		
+		definition				||	periodic	||	normal		|| startTime	||	stopTime	
+		=====================================================================================
+		jsExecutionTimeFrame	||	opsiyonel	||	opsiyonel	||	opsiyonel	||	opsiyonel
+		=====================================================================================
+		jsScheduledTime			||	zorunlu		||	zorunlu		||	zorunlu		||	yok
+		=====================================================================================
+		jsActualTime			||	zorunlu		||	zorunlu		||	zorunlu		||	yok
+		=====================================================================================
+		jsRecordedTime			||	zorunlu(ac)	||	zorunlu(ac)	||	zorunlu		|| zorunlu
+		=====================================================================================
+		*ac : after creation
+	 -->
 
+	<xs:element name="jsExecutionTimeFrame">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" minOccurs="1" maxOccurs="1" />
+				<xs:element name="stopTime" type="xs:dateTime" minOccurs="1" maxOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="jsScheduledTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="jsActualTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:element name="jsRecordedTime">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="startTime" type="xs:dateTime" />
+				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>	
+		
 	<xs:element name="jsRelativeTimeOption" default="NO">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
@@ -108,33 +167,6 @@
 				<xs:enumeration value="NO" />
 			</xs:restriction>
 		</xs:simpleType>
-	</xs:element>
-
-	<xs:element name="bornedPlannedTime">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="startTime" type="xs:dateTime" />
-				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="jsPlannedTime">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="startTime" type="xs:dateTime" />
-				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:element name="jsRealTime">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="startTime" type="xs:dateTime" />
-				<xs:element name="stopTime" type="xs:dateTime" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
 	</xs:element>
 
 	<xs:element name="jsTimeOut">

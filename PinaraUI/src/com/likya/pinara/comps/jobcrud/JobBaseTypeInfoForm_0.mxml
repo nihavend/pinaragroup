@@ -26,11 +26,13 @@
 			public function validateForm():Boolean
 			{
 				if(jsName.text == "") {
-					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					// Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				if(jsCommand.text == "") {
-					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					// Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				

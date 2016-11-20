@@ -290,16 +290,59 @@ package com.likya.pinara.utils {
 		}
 		
 		private static function get_TimeManagement(managementInfoXML:Object, j:JobEditWindow):Object {
-		
+			
+			var currentDF:DateFormatter = new DateFormatter(); 
+			currentDF.formatString = "YYYY-MM-DD";
+			
 			managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			
-			managementInfoXML.wla::timeManagement.appendChild(<wla:bornedPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-			managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-			managementInfoXML.wla::timeManagement.wla::bornedPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-			
-			managementInfoXML.wla::timeManagement.appendChild(<wla:jsPlannedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-			managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-			managementInfoXML.wla::timeManagement.wla::jsPlannedTime.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "TIME") {
+				
+				var bInfo : Boolean = j.managementInfoForm_0.timeFrameStart.selected;
+				var eInfo : Boolean = j.managementInfoForm_0.timeFrameStop.selected;
+				
+				if(bInfo || eInfo) {
+				
+					managementInfoXML.wla::timeManagement.appendChild(<wla:jsExecutionTimeFrame xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					
+					if(bInfo) {
+						managementInfoXML.wla::timeManagement.wla::jsExecutionTimeFrame.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+						var sDate:Date = j.managementInfoForm_0.tFbdate.selectedDate;
+						var dateString:String = currentDF.format(sDate);
+						dateString = getW3Dt(sDate, j.managementInfoForm_0.tFbhour.value, j.managementInfoForm_0.tFbminute.value, j.managementInfoForm_0.tFbsecond.value);
+						managementInfoXML.timeManagement.jsExecutionTimeFrame.startTime = dateString;
+					}
+					
+					if(eInfo) {
+						managementInfoXML.wla::timeManagement.wla::jsExecutionTimeFrame.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+						sDate = j.managementInfoForm_0.tFedate.selectedDate;
+						dateString = currentDF.format(sDate);
+						dateString = getW3Dt(sDate, j.managementInfoForm_0.tFehour.value, j.managementInfoForm_0.tFeminute.value, j.managementInfoForm_0.tFesecond.value);
+						managementInfoXML.timeManagement.jsExecutionTimeFrame.stopTime = dateString;
+						
+						
+					}
+					
+				}
+				
+				// if(j.managementInfoForm_0.selectStartCond.selected) {
+				
+				managementInfoXML.wla::timeManagement.appendChild(<wla:jsScheduledTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.wla::timeManagement.wla::jsScheduledTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				
+				sDate = j.managementInfoForm_0.bdate.selectedDate;
+				dateString = currentDF.format(sDate);
+				
+				dateString = getW3Dt(sDate, j.managementInfoForm_0.bhour.value, j.managementInfoForm_0.bminute.value, j.managementInfoForm_0.bsecond.value);
+				
+				managementInfoXML.timeManagement.jsScheduledTime.startTime = dateString;
+				
+				managementInfoXML.wla::timeManagement.appendChild(<wla:jsActualTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.wla::timeManagement.wla::jsActualTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.timeManagement.jsActualTime.startTime = dateString;
+				//}
+				
+			}
 			
 			managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
@@ -308,25 +351,6 @@ package com.likya.pinara.utils {
 			managementInfoXML.wla::timeManagement.appendChild(<wla:expectedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
 			managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
-			
-			
-			var sDate:Date = j.managementInfoForm_0.bdate.selectedDate;
-			var currentDF:DateFormatter = new DateFormatter(); 
-			currentDF.formatString = "YYYY-MM-DD"
-			var dateString:String = currentDF.format(sDate);
-			
-			// dateString = dateString + "T" + zeroize(j.managementInfoForm.bhour.text) + ":" + zeroize(j.managementInfoForm.bminute.text) + ":" + zeroize(j.managementInfoForm.bsecond.text) + ".000+02:00";
-			dateString = dateString + "T" + zeroize(j.managementInfoForm_0.bhour.value + "") + ":" + zeroize(j.managementInfoForm_0.bminute.value + "") + ":" + zeroize(j.managementInfoForm_0.bsecond.value + "") + ".000+03:00";
-			
-			managementInfoXML.timeManagement.bornedPlannedTime.startTime = dateString;
-			managementInfoXML.timeManagement.jsPlannedTime.startTime = dateString;
-			
-			
-			// end date olmaycak....zira bunu process belirleyecek
-			// dateString = currentDF.format(sDate);
-			
-			managementInfoXML.timeManagement.bornedPlannedTime.stopTime = dateString;
-			managementInfoXML.timeManagement.jsPlannedTime.stopTime = dateString;
 			
 			managementInfoXML.timeManagement.jsTimeOut.lik::value_integer = j.managementInfoForm_0.timoutValue.text;
 			managementInfoXML.timeManagement.jsTimeOut.lik::unit = j.managementInfoForm_0.timeoutUnit.selectedItem;
@@ -764,6 +788,20 @@ package com.likya.pinara.utils {
 			return true;
 			
 		}
+		
+		private static function getW3Dt(sDate:Date, hour:Number, minute:Number, second:Number):String {
+			
+			var currentDF:DateFormatter = new DateFormatter(); 
+			currentDF.formatString = "YYYY-MM-DD"
+			
+			var dateString:String = currentDF.format(sDate);
+			
+			dateString = dateString + "T" + zeroize(hour + "") + ":" + zeroize(minute + "") + ":" + zeroize(second + "") + ".000+03:00";
+			
+			return dateString;
+		}
+		
 	}
+	
 }
 

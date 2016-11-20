@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Key;
 import java.util.zip.GZIPInputStream;
@@ -175,5 +176,21 @@ public class PersistApi {
 		String licenseDataString = LikyaSecurity.decrypt(data, licenseKey);
 
 		return licenseDataString;
+	}
+	
+	public static String backupScenario() throws Exception {
+		
+		String srcFileName = Pinara.DATA_PATH + File.separator + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
+		
+		if (!FileUtils.checkFile(srcFileName)) {
+			return null;
+		}
+		
+		String target = srcFileName + "_backup";
+		
+		Path path = Files.copy(Paths.get(srcFileName), Paths.get(target), StandardCopyOption.REPLACE_EXISTING);
+		
+		return path.toString();
+		
 	}
 }

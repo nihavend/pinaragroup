@@ -98,8 +98,8 @@ package com.likya.pinara.utils
 				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));*/
 			} else if (event.statusCode == 0) {
-				Alert.show("Server is not available, check pls !");
-				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+				// Alert.show("Server is not available, check pls !");
+				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.SERVER_UNREADY_LOGOUT));
 			} else {
 				trace("Unexpected Event : " + event.toString());
 				// Alert.show("Unexpected Event : " + event.toString());

@@ -2,10 +2,10 @@
 	xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra="http://www.likyateknoloji.com/myra-stateinfo">
 	<senaryoDosyasi>senaryo</senaryoDosyasi>
 	<serverIpAddress>0.0.0.0</serverIpAddress>
-	<httpPort>3000</httpPort>
-	<httpsPort>3443</httpsPort>
+	<httpPort>4000</httpPort>
+	<httpsPort>4443</httpsPort>
 	<persistent>false</persistent>
-	<mailInfo>
+	<!-- mailInfo>
 		<lik:EmailList>
 			<lik:email>serkan.tas@likyateknoloji.com</lik:email>
 		</lik:EmailList>
@@ -23,9 +23,9 @@
 		<lik:userPassword>genel3nihavend</lik:userPassword>
 		<smtpServerHostName>mail.likyateknoloji.com</smtpServerHostName>
 		<port>587</port>
-	</mailInfo>
+	</mailInfo-->
 	<mcInfo>
-		<jmxPort>3002</jmxPort>
+		<jmxPort>4002</jmxPort>
 	</mcInfo>
 	<logPath>logs</logPath>
 </pinaraConfig>

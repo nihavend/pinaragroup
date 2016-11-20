@@ -1,9 +1,7 @@
 package com.likya.pinara.utils {
 	import com.likya.pinara.comps.jobcrud.DependencyListForm;
-	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm;
 	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm_0;
 	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm_1;
-	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm;
 	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm_0;
 	import com.likya.pinara.comps.jobcrud.JobManagementInfoForm_1;
 	import com.likya.pinara.comps.jobcrud.LogAnalysisForm;
@@ -133,34 +131,126 @@ package com.likya.pinara.utils {
 			
 		}
 		
+		public static function getDatePart(pXML:String):Date {
+			return DateField.stringToDate(pXML.split('T')[0], "YYYY-MM-DD");
+		}
+		
+		public static function getTimePart(pXML:String):Array {
+			return pXML.split('T')[1].split(".")[0].split(":");
+		}
+		
 		public static function prepare_timeManagement(managementInfoForm:JobManagementInfoForm_0, mXML:XMLList):void {
-			// managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
-			managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
 			
-			var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
-			// managementInfoForm.bhour.text = pairs[0];
-			managementInfoForm.bhour.value = pairs[0];
-			// managementInfoForm.bminute.text = pairs[1];
-			managementInfoForm.bminute.value = pairs[1];
-			// managementInfoForm.bsecond.text = pairs[2];
-			managementInfoForm.bsecond.value = pairs[2];
+			var tmXML:XMLList = mXML.timeManagement;
+			var pairs:Array;
 			
-			// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);	
-			
+			/**
+			 * Aşağıdaki kısmı disable ettik, çünkü çalşışma aralığı analizi yeterli değil
+			 * Analiz bittiğinde tekrar gözden geçireceğim.
+			 * İsim : Serkan Taş
+			 * Tarih : 20.11.2016
+			 * Hedef : 2.0.0 Sürümü (GUI replacement sonrası)
+			 */
 			/*
-			end date prosessin belirleyecegi bir durum
-			managementInfoForm.edate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
-			
-			pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
-			managementInfoForm.ehour.text = pairs[0];
-			managementInfoForm.eminute.text = pairs[1];
-			managementInfoForm.esecond.text = pairs[2];
+			if(tmXML.hasOwnProperty("jsExecutionTimeFrame")) {
+				var tfXML:XMLList = mXML.timeManagement.jsExecutionTimeFrame;
+				if(tfXML.hasOwnProperty("startTime")) {
+					managementInfoForm.timeFrameStart.selected = true;
+					managementInfoForm.tFbdate.selectedDate = getDatePart(tfXML.startTime);
+					var pairs:Array = getTimePart(tfXML.startTime);
+					managementInfoForm.tFbhour.value = pairs[0];
+					managementInfoForm.tFbminute.value = pairs[1];
+					managementInfoForm.tFbsecond.value = pairs[2];
+					
+					managementInfoForm.tFStartTime.enabled = true; 
+				} else {
+					managementInfoForm.tFStartTime.enabled = false;
+				}
+				
+				if(tfXML.hasOwnProperty("stopTime")) {
+					managementInfoForm.timeFrameStop.selected = true;
+					managementInfoForm.tFedate.selectedDate = getDatePart(tfXML.stopTime);
+					pairs = getTimePart(tfXML.stopTime);
+					managementInfoForm.tFehour.value = pairs[0];
+					managementInfoForm.tFeminute.value = pairs[1];
+					managementInfoForm.tFesecond.value = pairs[2];
+					
+					managementInfoForm.tFStopTime.enabled = true; 
+				} else {
+					managementInfoForm.tFStopTime.enabled = false;
+				}
+			}
 			*/
-			managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
-			managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
 			
-			managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
-			managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
+			if(tmXML.hasOwnProperty("jsScheduledTime")) {
+				tmXML = mXML.timeManagement.jsScheduledTime;
+				if(tmXML.hasOwnProperty("startTime")) {
+					managementInfoForm.bdate.selectedDate = getDatePart(tmXML.startTime);
+					pairs = getTimePart(tmXML.startTime);
+					managementInfoForm.bhour.value = pairs[0];
+					managementInfoForm.bminute.value = pairs[1];
+					managementInfoForm.bsecond.value = pairs[2];
+				}
+			}
+			
+			
+			
+//			if(tmXML.hasOwnProperty("jsPlannedTime")) {
+//				
+//				/**
+//				 * jsPlannedTime : Planlanan Zaman demek, bir işin çalışacağı aralığını tanımı demektir. Bu aralığın başlangıç zamanına
+//				 * jsPlannedTime.startTime, bitiş zamanına ise jsPlannedTime.stopTime denir.
+//				 * 
+//				 * Bu zamanların, işin başladığı ve bittiği zaman ile bir alakası yoktur.
+//				 */
+//				
+//				if(tmXML.jsPlannedTime.hasOwnProperty("startTime")) {
+//			
+//					// jsPlannedTime.startTime
+//					// managementInfoForm.bdate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0]);
+//					managementInfoForm.bdate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.startTime.split('T')[0], "YYYY-MM-DD");
+//					
+//					var pairs:Array = mXML.timeManagement.jsPlannedTime.startTime.split('T')[1].split(".")[0].split(":");
+//					// managementInfoForm.bhour.text = pairs[0];
+//					managementInfoForm.bhour.value = pairs[0];
+//					// managementInfoForm.bminute.text = pairs[1];
+//					managementInfoForm.bminute.value = pairs[1];
+//					// managementInfoForm.bsecond.text = pairs[2];
+//					managementInfoForm.bsecond.value = pairs[2];
+//					
+//					// managementInfoForm.selectStartCond.selected = true;
+//					managementInfoForm.startTime.enabled = true;
+//					
+//				}
+//				
+//				if(tmXML.jsPlannedTime.hasOwnProperty("stopTime")) {
+//				
+//					// jsPlannedTime.stopTime
+//					managementInfoForm.tFedate.selectedDate = DateField.stringToDate(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0], "YYYY-MM-DD");
+//					pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
+//					//managementInfoForm.ehour.value = pairs[0];
+//					//managementInfoForm.eminute.value = pairs[1];
+//					//managementInfoForm.esecond.value = pairs[2];
+//				
+//					/*
+//					// managementInfoForm.edate.text = xmlDateToNormal(mXML.timeManagement.jsPlannedTime.stopTime.split('T')[0]);
+//					pairs = mXML.timeManagement.jsPlannedTime.stopTime.split('T')[1].split(".")[0].split(":");
+//					managementInfoForm.ehour.text = pairs[0];
+//					managementInfoForm.eminute.text = pairs[1];
+//					managementInfoForm.esecond.text = pairs[2];
+//					*/
+//					
+//					//managementInfoForm.selectStopCond.selected = true;
+//					//managementInfoForm.stopTime.enabled = true;
+//				}
+
+//				managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
+//				managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
+//				
+//				managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
+//				managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
+				
+				// }
 		}
 		
 		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {

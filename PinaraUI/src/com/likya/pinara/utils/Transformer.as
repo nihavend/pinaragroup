@@ -36,12 +36,12 @@ package com.likya.pinara.utils {
 			return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
 		}
 		
-		public static function getRealizedDate(item:Object, column:GridColumn):String {
-			return getDate(item.management.timeManagement.jsRealTime.startTime);
+		public static function getRecordedDT(item:Object, column:GridColumn):String {
+			return getDate(item.management.timeManagement.jsRecordedTime.startTime);
 		}
 		
-		public static function getPlannedDate(item:Object, column:GridColumn):String {
-			return getDate(item.management.timeManagement.jsPlannedTime.startTime);
+		public static function getActualDT(item:Object, column:GridColumn):String {
+			return getDate(item.management.timeManagement.jsActualTime.startTime);
 		}
 		
 		public static function getStateChangedDate(item:Object, column:GridColumn):String {

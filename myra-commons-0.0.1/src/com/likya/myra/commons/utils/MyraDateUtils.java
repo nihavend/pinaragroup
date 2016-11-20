@@ -20,7 +20,7 @@ import org.joda.time.format.DateTimeParser;
 import com.likya.commons.utils.DateUtils;
 import com.likya.xsd.myra.model.generics.DatetimeType;
 import com.likya.xsd.myra.model.generics.TypeOfTimeType;
-import com.likya.xsd.myra.model.wlagen.JsRealTimeDocument.JsRealTime;
+import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
 
 public class MyraDateUtils extends DateUtils {
 
@@ -71,9 +71,11 @@ public class MyraDateUtils extends DateUtils {
 		return dateTime.toCalendar(Locale.US);
 
 	}
-
-	// jobin gercek calisma zamani verildiginde string degerini donuyor. gercek calisma zamani icinde tarih olmadigi icin bugunun tarihi set ediliyor
-	public static String jobRealTimeToString(JsRealTime jobRealTime, boolean startTime, boolean transformToLocalTime) {
+	
+	/*
+	// jobın calistığı zaman verildiginde string degerini donuyor. 
+	// gercek calisma zamani icinde tarih olmadigi icin bugunun tarihi set ediliyor
+	public static String jobRecordedTimeToString(JsRecordedTime jsRecordedTime, boolean startTime, boolean transformToLocalTime) {
 		// clienttan alacagimiz degerlerle dolduracagiz
 		int clientZoneOffset = 7200000; // milisecond
 		int clientDSTOffset = 3600000; // milisecond
@@ -81,16 +83,16 @@ public class MyraDateUtils extends DateUtils {
 		Calendar jobCalendar = Calendar.getInstance();
 
 		if (startTime) {
-			jobCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStartTime().get(Calendar.HOUR_OF_DAY));
-			jobCalendar.set(Calendar.MINUTE, jobRealTime.getStartTime().get(Calendar.MINUTE));
-			jobCalendar.set(Calendar.SECOND, jobRealTime.getStartTime().get(Calendar.SECOND));
-			jobCalendar.set(Calendar.ZONE_OFFSET, jobRealTime.getStartTime().get(Calendar.ZONE_OFFSET));
+			jobCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStartTime().get(Calendar.HOUR_OF_DAY));
+			jobCalendar.set(Calendar.MINUTE, jsRecordedTime.getStartTime().get(Calendar.MINUTE));
+			jobCalendar.set(Calendar.SECOND, jsRecordedTime.getStartTime().get(Calendar.SECOND));
+			jobCalendar.set(Calendar.ZONE_OFFSET, jsRecordedTime.getStartTime().get(Calendar.ZONE_OFFSET));
 			jobCalendar.set(Calendar.DST_OFFSET, 0);
 		} else {
-			jobCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStopTime().get(Calendar.HOUR_OF_DAY));
-			jobCalendar.set(Calendar.MINUTE, jobRealTime.getStopTime().get(Calendar.MINUTE));
-			jobCalendar.set(Calendar.SECOND, jobRealTime.getStopTime().get(Calendar.SECOND));
-			jobCalendar.set(Calendar.ZONE_OFFSET, jobRealTime.getStopTime().get(Calendar.ZONE_OFFSET));
+			jobCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStopTime().get(Calendar.HOUR_OF_DAY));
+			jobCalendar.set(Calendar.MINUTE, jsRecordedTime.getStopTime().get(Calendar.MINUTE));
+			jobCalendar.set(Calendar.SECOND, jsRecordedTime.getStopTime().get(Calendar.SECOND));
+			jobCalendar.set(Calendar.ZONE_OFFSET, jsRecordedTime.getStopTime().get(Calendar.ZONE_OFFSET));
 			jobCalendar.set(Calendar.DST_OFFSET, 0);
 		}
 
@@ -126,8 +128,9 @@ public class MyraDateUtils extends DateUtils {
 			return formatter.format(jobCalendar.getTime());
 		}
 	}
-
-	public static String jobRealTimeToStringReport(JsRealTime jobRealTime, boolean startTime, boolean transformToLocalTime) {
+	*/
+	
+	public static String jobRecordedTimeToString(JsRecordedTime jsRecordedTime, boolean startTime, boolean transformToLocalTime) {
 		// clienttan alacagimiz degerlerle dolduracagiz
 		int clientZoneOffset = 7200000; // milisecond
 		int clientDSTOffset = 3600000; // milisecond
@@ -135,22 +138,22 @@ public class MyraDateUtils extends DateUtils {
 		Calendar jobCalendar = Calendar.getInstance();
 
 		if (startTime) {
-			jobCalendar.set(Calendar.YEAR, jobRealTime.getStartTime().get(Calendar.YEAR));
-			jobCalendar.set(Calendar.MONTH, jobRealTime.getStartTime().get(Calendar.MONTH));
-			jobCalendar.set(Calendar.DAY_OF_MONTH, jobRealTime.getStartTime().get(Calendar.DAY_OF_MONTH));
-			jobCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStartTime().get(Calendar.HOUR_OF_DAY));
-			jobCalendar.set(Calendar.MINUTE, jobRealTime.getStartTime().get(Calendar.MINUTE));
-			jobCalendar.set(Calendar.SECOND, jobRealTime.getStartTime().get(Calendar.SECOND));
-			jobCalendar.set(Calendar.ZONE_OFFSET, jobRealTime.getStartTime().get(Calendar.ZONE_OFFSET));
+			jobCalendar.set(Calendar.YEAR, jsRecordedTime.getStartTime().get(Calendar.YEAR));
+			jobCalendar.set(Calendar.MONTH, jsRecordedTime.getStartTime().get(Calendar.MONTH));
+			jobCalendar.set(Calendar.DAY_OF_MONTH, jsRecordedTime.getStartTime().get(Calendar.DAY_OF_MONTH));
+			jobCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStartTime().get(Calendar.HOUR_OF_DAY));
+			jobCalendar.set(Calendar.MINUTE, jsRecordedTime.getStartTime().get(Calendar.MINUTE));
+			jobCalendar.set(Calendar.SECOND, jsRecordedTime.getStartTime().get(Calendar.SECOND));
+			jobCalendar.set(Calendar.ZONE_OFFSET, jsRecordedTime.getStartTime().get(Calendar.ZONE_OFFSET));
 			jobCalendar.set(Calendar.DST_OFFSET, 0);
 		} else {
-			jobCalendar.set(Calendar.YEAR, jobRealTime.getStartTime().get(Calendar.YEAR));
-			jobCalendar.set(Calendar.MONTH, jobRealTime.getStartTime().get(Calendar.MONTH));
-			jobCalendar.set(Calendar.DAY_OF_MONTH, jobRealTime.getStartTime().get(Calendar.DAY_OF_MONTH));
-			jobCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStopTime().get(Calendar.HOUR_OF_DAY));
-			jobCalendar.set(Calendar.MINUTE, jobRealTime.getStopTime().get(Calendar.MINUTE));
-			jobCalendar.set(Calendar.SECOND, jobRealTime.getStopTime().get(Calendar.SECOND));
-			jobCalendar.set(Calendar.ZONE_OFFSET, jobRealTime.getStopTime().get(Calendar.ZONE_OFFSET));
+			jobCalendar.set(Calendar.YEAR, jsRecordedTime.getStartTime().get(Calendar.YEAR));
+			jobCalendar.set(Calendar.MONTH, jsRecordedTime.getStartTime().get(Calendar.MONTH));
+			jobCalendar.set(Calendar.DAY_OF_MONTH, jsRecordedTime.getStartTime().get(Calendar.DAY_OF_MONTH));
+			jobCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStopTime().get(Calendar.HOUR_OF_DAY));
+			jobCalendar.set(Calendar.MINUTE, jsRecordedTime.getStopTime().get(Calendar.MINUTE));
+			jobCalendar.set(Calendar.SECOND, jsRecordedTime.getStopTime().get(Calendar.SECOND));
+			jobCalendar.set(Calendar.ZONE_OFFSET, jsRecordedTime.getStopTime().get(Calendar.ZONE_OFFSET));
 			jobCalendar.set(Calendar.DST_OFFSET, 0);
 		}
 
@@ -188,24 +191,24 @@ public class MyraDateUtils extends DateUtils {
 	}
 
 	// jobin baslangic ve bitis zamanlarindan calisma suresi hesaplaniyor
-	public static String getJobWorkDuration(JsRealTime jobRealTime, boolean pastExecution) {
+	public static String getJobWorkDuration(JsRecordedTime jsRecordedTime, boolean pastExecution) {
 
-		if (jobRealTime == null) {
+		if (jsRecordedTime == null) {
 			return "-";
 		}
 
 		Calendar startCalendar = Calendar.getInstance();
-		startCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStartTime().get(Calendar.HOUR_OF_DAY));
-		startCalendar.set(Calendar.MINUTE, jobRealTime.getStartTime().get(Calendar.MINUTE));
-		startCalendar.set(Calendar.SECOND, jobRealTime.getStartTime().get(Calendar.SECOND));
+		startCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStartTime().get(Calendar.HOUR_OF_DAY));
+		startCalendar.set(Calendar.MINUTE, jsRecordedTime.getStartTime().get(Calendar.MINUTE));
+		startCalendar.set(Calendar.SECOND, jsRecordedTime.getStartTime().get(Calendar.SECOND));
 
 		Calendar stopCalendar = Calendar.getInstance();
 
 		// is bitmisse
-		if (jobRealTime.getStopTime() != null) {
-			stopCalendar.set(Calendar.HOUR_OF_DAY, jobRealTime.getStopTime().get(Calendar.HOUR_OF_DAY));
-			stopCalendar.set(Calendar.MINUTE, jobRealTime.getStopTime().get(Calendar.MINUTE));
-			stopCalendar.set(Calendar.SECOND, jobRealTime.getStopTime().get(Calendar.SECOND));
+		if (jsRecordedTime.getStopTime() != null) {
+			stopCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStopTime().get(Calendar.HOUR_OF_DAY));
+			stopCalendar.set(Calendar.MINUTE, jsRecordedTime.getStopTime().get(Calendar.MINUTE));
+			stopCalendar.set(Calendar.SECOND, jsRecordedTime.getStopTime().get(Calendar.SECOND));
 		} else {
 			if (pastExecution) {
 				return "-";

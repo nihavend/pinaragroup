@@ -85,7 +85,7 @@
 			public function handleDecoration(value:Boolean):void {
 				// timeBox.enabled = value;
 				parentWin["managementInfoForm_1"].cascCondBox.enabled = value;
-				timeinfo_1.enabled = value;
+				scheduleBox.enabled = value;
 			}
 			
 			public static function leadingZero(value:Number):String	{
@@ -95,6 +95,35 @@
 				return value.toString();    
 			}
 			
+/*			protected function selectStartCond_clickHandler(event:MouseEvent):void
+			{
+				if(selectStartCond.selected) {
+					startTime.enabled = true;
+				} else {
+					startTime.enabled = false;
+				}
+			}*/
+			
+			protected function timeFrameStart_clickHandler(event:MouseEvent):void
+			{
+				if(timeFrameStart.selected) {
+					tFStartTime.enabled = true;
+				} else {
+					tFStartTime.enabled = false;
+				}
+				
+			}
+			
+			protected function timeFrameStop_clickHandler(event:MouseEvent):void
+			{
+				if(timeFrameStop.selected) {
+					tFStopTime.enabled = true;
+				} else {
+					tFStopTime.enabled = false;
+				}
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -102,49 +131,19 @@
 	</fx:Declarations>
 	
 	<s:layout>
-		<s:FormLayout gap="1"/>
+		<s:FormLayout gap="5"/>
 	</s:layout>
 	
 	<s:FormItem label="Job Trigger Type">
 		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
 	</s:FormItem>
 	
-	<s:BorderContainer id="timeBox" width="700" height="160" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+	<s:BorderContainer id="timeBox" width="700" height="100" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
-		<s:Label left="15" top="10" text="Time Info" fontSize="14" fontWeight="bold"/>
+		<s:Label left="15" top="10" text="Info" fontSize="14" fontWeight="bold"/>
 		
-		<s:VGroup left="15" top="25" gap="-10">
-			<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="timeinfo_1">
-				<s:HGroup>
-					<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
-					<!--s:TextInput  id="bhour"
-					text="00"
-					restrict="0-23"
-					widthInChars="3"
-					maxChars="2" /-->
-					<s:NumericStepper id="bhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
-					
-					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-					<!--<s:TextInput  id="bminute"
-					text="00"
-					restrict="0-59"
-					widthInChars="3"
-					maxChars="2" />-->
-					<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
-					<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
-					<!--<s:TextInput  id="bsecond"
-					text="00"
-					restrict="0-59"
-					widthInChars="3"
-					maxChars="2" />-->
-					<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
-				</s:HGroup>
-				<s:helpContent>
-					<s:Label text="DD/MM/YYYY hh:mm:ss"/>
-				</s:helpContent>
-			</s:FormItem>
-			
-			<s:FormItem label="Time-out değeri                :">
+		<s:VGroup verticalAlign="middle" top="25" paddingLeft="0" gap="-10">
+			<s:FormItem label="Time-out değeri                :" fontSize="12">
 				<s:HGroup>
 					<s:TextInput  id="timoutValue"
 								  restrict="0-999999"
@@ -163,7 +162,7 @@
 				</s:HGroup>
 			</s:FormItem>
 			
-			<s:FormItem label="Beklenen çalışma süresi :">
+			<s:FormItem label="Beklenen çalışma süresi :" fontSize="12">
 				<s:HGroup>
 					<s:TextInput  id="expectedValue"
 								  restrict="0-999999"
@@ -181,6 +180,87 @@
 					</s:DropDownList>
 				</s:HGroup>
 			</s:FormItem>
+		</s:VGroup>
+	</s:BorderContainer>
+	
+	<s:BorderContainer id="scheduleBox" top="200" width="700" height="190" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
+		
+		<s:Label left="15" top="10" text="Time Data" fontSize="14" fontWeight="bold"/>
+		
+		<s:VGroup left="15" top="45" gap="-5">
+			
+			<s:Label left="15" top="10" text="İlk Çalışma Zamanı" fontSize="12" fontWeight="bold"/>
+			
+			<s:HGroup verticalAlign="middle" paddingLeft="0" top="-10">
+				<!--s:CheckBox id="selectStartCond" click="selectStartCond_clickHandler(event)" /-->
+				<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="startTime" enabled="true">
+					<s:HGroup>
+						<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" />
+						<!--s:TextInput  id="bhour"
+						text="00"
+						restrict="0-23"
+						widthInChars="3"
+						maxChars="2" /-->
+						<s:NumericStepper id="bhour" minimum="0" maximum="23" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}"/>
+						
+						<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold" />
+						<!--<s:TextInput  id="bminute"
+						text="00"
+						restrict="0-59"
+						widthInChars="3"
+						maxChars="2" />-->
+						<s:NumericStepper id="bminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+						<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold" />
+						<!--<s:TextInput  id="bsecond"
+						text="00"
+						restrict="0-59"
+						widthInChars="3"
+						maxChars="2" />-->
+						<s:NumericStepper id="bsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+					</s:HGroup>
+					<s:helpContent>
+						<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+					</s:helpContent>
+				</s:FormItem>
+			</s:HGroup>
+			
+			<s:BorderContainer id="executionTimeFrameInfo" width="670" height="90" borderWeight="1" cornerRadius="3" dropShadowVisible="true" visible="false" enabled="false" includeInLayout="false">
+				<s:Label left="15" top="10" text="Çalışma Aralığı Tanımı" fontSize="12" fontWeight="bold"/>
+				<s:VGroup left="15" gap="-20" top="20">	
+					<s:HGroup verticalAlign="middle" paddingLeft="0" top="20" left="10">
+						<s:CheckBox id="timeFrameStart" click="timeFrameStart_clickHandler(event)" />
+						<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="tFStartTime" enabled="false">
+							<s:HGroup>
+								<mx:DateField id="tFbdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}" />
+								<s:NumericStepper id="tFbhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+								<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold" />
+								<s:NumericStepper id="tFbminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}" />
+								<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold" />
+								<s:NumericStepper id="tFbsecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}" />
+							</s:HGroup>
+							<s:helpContent>
+								<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+							</s:helpContent>
+						</s:FormItem>
+					</s:HGroup>
+					<s:HGroup verticalAlign="middle" paddingLeft="0" top="20" left="10">
+						<s:CheckBox id="timeFrameStop" fontWeight="bold" click="timeFrameStop_clickHandler(event)"/>
+						<s:FormItem label="Bitiş Tarih ve Saati        : " top="20" id="tFStopTime" enabled="false">
+							<s:HGroup>
+								<mx:DateField id="tFedate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
+								<s:NumericStepper id="tFehour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
+								<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+								<s:NumericStepper id="tFeminute" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+								<s:Label text=" : " alignmentBaseline="ideographicBottom" fontSize="14" fontWeight="bold"/>
+								<s:NumericStepper id="tFesecond" minimum="0" maximum="59" valueFormatFunction="{leadingZero}"/>
+							</s:HGroup>
+							<s:helpContent>
+								<s:Label text="DD/MM/YYYY hh:mm:ss"/>
+							</s:helpContent>
+						</s:FormItem>
+					</s:HGroup>
+				</s:VGroup>
+			</s:BorderContainer>
 			
 		</s:VGroup>
 		

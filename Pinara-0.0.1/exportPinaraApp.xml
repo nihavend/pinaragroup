@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_run_jar" name="Create Runnable Jar for Project Pinara with libraries in sub-folder">
 	
-	<property name="version" value="0.9.0" />
+	<property name="version" value="0.9.1" />
 	
 	<property name="m2repo.dir" value="/Users/serkan/.m2/repository" />
 	<property name="dest.dir" value="/Users/serkan/Desktop/pinara_export-${version}" />

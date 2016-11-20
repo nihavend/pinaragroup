@@ -197,8 +197,8 @@
 					</s:itemRenderer>
 				</s:GridColumn>
 				<s:GridColumn dataField="@groupId" headerText="Group Id" width="{this.pinaraJobList.width * 0.10}"/>
-				<s:GridColumn labelFunction="Transformer.getRealizedDate" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
-				<s:GridColumn labelFunction="Transformer.getPlannedDate" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn labelFunction="Transformer.getRecordedDT" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn labelFunction="Transformer.getActualDT" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
 				<s:GridColumn labelFunction="getRealizedDuration" headerText="Son Çalışma Süresi" width="{this.pinaraJobList.width * 0.10}"/>
 			</s:ArrayList>
 		</s:columns>

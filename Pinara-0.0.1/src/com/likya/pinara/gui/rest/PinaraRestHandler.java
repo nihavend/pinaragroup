@@ -44,7 +44,7 @@ public abstract class PinaraRestHandler implements HttpHandler {
 		
 		if(ManagementOperationsImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
 			if(!uriTxt.contains(RestParser.CMD_AUTH) && !uriTxt.contains(RestParser.CMD_RECOVER) && !uriTxt.contains(RestParser.CMD_NORECOVER) && !uriTxt.contains(RestUserOps.CMD_USERREAD)) {
-				String retTxt = "<message><result>NOK</result><desc>" + "Server state is not ready, " + CoreStateInfo.STATE_STARTING + "</desc></message>";
+				String retTxt = "<message><result>" + CoreStateInfo.STATE_STARTING + "</result><desc>" + "Server state is not ready, " + CoreStateInfo.STATE_STARTING + "</desc></message>";
 				httpExchange.sendResponseHeaders(200, retTxt.getBytes().length);
 				os = httpExchange.getResponseBody();
 				os.write(retTxt.getBytes());

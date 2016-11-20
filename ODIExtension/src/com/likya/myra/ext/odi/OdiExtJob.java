@@ -184,7 +184,7 @@ public class OdiExtJob extends GenericInnerJob {
 			
 			Calendar endTime = Calendar.getInstance();
 			
-			JobHelper.setJsRealTimeForStop(odiExtProperties, endTime);
+			JobHelper.setJsRecordedTimeForStop(odiExtProperties, endTime);
 
 			getReportDetails(odiScenario);
 			

@@ -12,6 +12,7 @@ import org.apache.xmlbeans.XmlException;
 import com.likya.myra.commons.model.UnresolvedDependencyException;
 import com.likya.myra.commons.utils.JobDependencyResolver;
 import com.likya.myra.commons.utils.JobListFilter;
+import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.commons.utils.StateFilter;
 import com.likya.myra.commons.utils.XMLValidations;
@@ -370,11 +371,11 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			jobOperations.updateJob(abstractJobType, persist);
 			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
 		} catch (UnknownServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new PinaraXMLValidationException(e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			throw new PinaraXMLValidationException(e);
 		}
 	}
 
@@ -412,6 +413,10 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			
 			jobListDocument = JobListDocument.Factory.parse(jobXml.toString());
 	
+			// version
+			jobListDocument.getJobList().setVersion(Pinara.getVersion());
+			// LSIDateTime
+			jobListDocument.getJobList().getGenericJobArray(0).setLSIDateTime(MyraDateUtils.getServerW3CDateTime());
 			// setting default not important
 			jobListDocument.getJobList().getGenericJobArray(0).getBaseJobInfos().setOSystem(OperatingSystemTypeEnumeration.WINDOWS);
 			

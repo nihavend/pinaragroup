@@ -129,8 +129,8 @@ public class ServerSocketHandler implements Runnable {
 					
 					tlosInfo.setJobStatusHistory(statusList);
 					
-					tlosInfo.setExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsRealTime().getStartTime().getTime());
-					tlosInfo.setNextExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsPlannedTime().getStartTime().getTime());
+					tlosInfo.setExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime().getStartTime().getTime());
+					tlosInfo.setNextExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsActualTime().getStartTime().getTime());
 					tlosInfo.setErrCode(0);
 				} else {
 					tlosInfo.setErrCode(1);

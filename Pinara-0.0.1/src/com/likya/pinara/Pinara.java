@@ -12,10 +12,12 @@ import org.apache.xmlbeans.XmlException;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.ValidPlatforms;
 import com.likya.myra.commons.utils.XMLValidations;
+import com.likya.myra.jef.core.CoreFactoryInterface;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.utils.Starter;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
+import com.likya.pinara.utils.DataMigration;
 import com.likya.pinara.utils.PersistApi;
 import com.likya.pinara.utils.RecoveryHelper;
 import com.likya.pinara.utils.license.LicenseClientUtil;
@@ -194,7 +196,7 @@ public class Pinara extends PinaraBase {
 	}
 
 	private boolean initMyra() throws Throwable {
-
+		
 		if (LicenseClientUtil.deserialize() == null) {
 			licenseFlag = ulicense;
 			synchronized (licenseFlag) {
@@ -222,25 +224,71 @@ public class Pinara extends PinaraBase {
 		PinaraOutput testOutput = PinaraOutput.getInstance();
 		
 		if(forceToRecover) {
-			Starter.startRecover(testOutput);
+			CoreFactoryInterface coreFactoryInterface = Starter.startRecover(testOutput);
+			
+			if(coreFactoryInterface == null) {
+				return false;
+			}
 		} else {
 		
 			JobListDocument jobListDocument = PersistApi.deserialize();
 	
 			if (jobListDocument == null) {
 				jobListDocument = JobListDocument.Factory.newInstance();
-				jobListDocument.addNewJobList();
-	
+				jobListDocument.addNewJobList().setVersion(getVersion());
+				
 				PersistApi.serialize(jobListDocument);
+			} else {
+				String dataFileVersion = jobListDocument.getJobList().getVersion();
+				if(!getVersion().equals(dataFileVersion)) {
+					jobListDocument = migrateDataFile(jobListDocument, dataFileVersion);
+					if(jobListDocument == null) {
+						return false;
+					}
+				}
 			}
 	
-			Starter.start(jobListDocument, testOutput);
+			if(Starter.start(jobListDocument, testOutput) == null) {
+				return false;
+			}
 		}
 
 		return true;
 
 	}
+	
+	private JobListDocument migrateDataFile(JobListDocument jobListDocument, String dataFileVersion) throws Exception {
+		
+		getLogger().warn("Data file belongs to " + dataFileVersion + " version of application, trying to migrate to " + getVersion() + " ...");
+		
+		PersistApi.backupScenario();
 
+		if(dataFileVersion == null) dataFileVersion = "";
+		
+		switch (dataFileVersion) {
+		case "":
+			/** migrate from null to 0.9.1 */
+			String jobListDocumentStr = PersistApi.deserializeAsFlat();
+			jobListDocument = DataMigration.migrate_null_to_0_9_1(jobListDocumentStr);
+			break;
+
+		case DEF_0_9_1:
+			/** migrate from 0.9.1 to xxxx */
+			throw new UnsupportedOperationException("Migrate from 0.9.1 to xxxx");
+
+		default:
+			break;
+		}
+		
+		if (!XMLValidations.validateWithXSDAndLog(getLogger(), jobListDocument)) {
+			getLogger().error("Migration is not successfull due to an internal error, contact to vendor !");
+			return null;
+		}
+		
+		return jobListDocument;
+		
+	}
+	
 	//	public boolean initMyraOld() throws Throwable {
 	//
 	//		StringBuffer xmlString = getMyraData();

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			public var xml:XML = <list title="Grup Listesi" id="0">
+  <jobGroup title="Independents" id="-1">
+	<jobProperty title="jobJ" id="10" statu="4" port="1"/>
+	<jobProperty title="jobF" id="7" statu="9" port="1"/>
+	<jobProperty title="jobE" id="6" statu="9" port="1"/>
+	<jobProperty title="jobH" id="9" statu="9" port="1"/>
+	<jobProperty title="jobG" id="8" statu="9" port="1"/>
+  </jobGroup>
+  <jobGroup title="Dep Group" id="1466249897143" grpState="false">
+	<jobProperty title="jobA" id="1" statu="9" port="1"/>
+	<jobProperty title="jobB" id="3" statu="9" port="1"/>
+	<jobProperty title="jobD" id="5" statu="9" port="1"/>
+	<jobProperty title="jobC" id="4" statu="9" port="1"/>
+  </jobGroup>
+</list>;
+
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				var selected:XMLList = xml.descendants().(attribute("id") == "1");      
+				var first:XML = selected[0];
+				var parent:XML = first.parent();				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Button label="Test Me" click="button1_clickHandler(event)">
+		
+	</s:Button>
+	
+</s:Application>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:ravis="org.un.cava.birdeye.ravis.graphLayout.visual.*"
+			   xmlns:lc="org.un.cava.birdeye.ravis.components.ui.controls.layouterControls.*"
+			   creationComplete="initGraph();"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<!--<fx:XML id="xmldata" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/Ravis/trunk/ravis/RaVisExamples/src/data/levelgraph.xml"/>-->
+		<fx:XML id="xmldata" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/RavisExamples/src/data/pinara.xml"/>
+	</fx:Declarations>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.logging.Log;
+			import mx.logging.LogEventLevel;
+			import mx.logging.targets.TraceTarget;
+			
+			import org.un.cava.birdeye.ravis.components.renderers.edgeLabels.DefaultEdgeLabelRenderer;
+			import org.un.cava.birdeye.ravis.components.renderers.nodes.IconNodeRenderer;
+			import org.un.cava.birdeye.ravis.graphLayout.data.Graph;
+			import org.un.cava.birdeye.ravis.graphLayout.layout.HierarchicalLayouter;
+			import org.un.cava.birdeye.ravis.graphLayout.visual.edgeRenderers.DirectedArrowEdgeRenderer;
+			
+			/* Init function, initiates the HTTP
+			* request. All further initalisation is done
+			* in the event handler for the HTTP Service */
+			private function initGraph():void {
+				initLogging();
+				initData();
+			}
+			
+			/**
+			 * event handler for HTTPService, does all the remaining required
+			 * initialisation */
+			private function initData():void {
+				
+				/* init a graph object with the XML data */
+				vgraph.graph = new Graph("XMLAsDocsGraph", false, xmldata);
+				
+				/* assign start root */
+				vgraph.currentRootVNode = vgraph.graph.nodeByStringId("2").vnode;
+				
+				/* provide the control components with some initial settings */
+				/*                myLayoutSelector.selectedItem = "Hierarchical";
+				myLayoutSelector.changeLayouter();
+				*/
+				vgraph.layouter = new HierarchicalLayouter(vgraph);
+				
+				vgraph.layouter.disableAnimation = true;
+				
+				/*                myNodeRendererSelector.selectedItem = "Icons";
+				myNodeRendererSelector.changeNodeRenderer();
+				*/				
+				vgraph.itemRenderer = new ClassFactory(IconNodeRenderer);
+				
+				/*               myEdgeRendererSelector.selectedItem = "Default";
+				myEdgeRendererSelector.changeEdgeRenderer();
+				*/                
+				vgraph.edgeRendererFactory = new ClassFactory(DirectedArrowEdgeRenderer);
+				
+				/*               myELCs.elselector.selectedItem = "Default";
+				myELCs.elselector.changeEdgeLabelRenderer();
+				*/                
+				
+				
+				// vgraph.edgeLabelRenderer = new ClassFactory(DefaultEdgeLabelRenderer);
+				
+				//  myDegreeOS.updateMaxVisDist();
+				
+				vgraph.maxVisibleDistance = 2;
+				
+				
+				/* the following kicks it off .... */
+				vgraph.draw();
+			}
+			
+			private function initLogging():void {
+				const target:TraceTarget = new TraceTarget();
+				
+				/* can specify a certain subset of categories/classes to log */
+				//target.filters = ["components.*", "graphLayout.*"];
+				
+				/* can specify logging parameters */
+				target.includeDate = false;
+				target.includeTime = false;
+				target.includeCategory = false; // Category = "ravis"
+				target.includeLevel = true;
+				target.level = LogEventLevel.DEBUG;
+				Log.addTarget(target);
+			}
+		]]>
+	</fx:Script>
+			
+	<!-- Graph Panel -->
+	<lc:HierLayoutControls id="myHierLC" vgraph="{vgraph}" />
+	<lc:CommonLayoutControls id="myCommonLC" vgraph="{vgraph}" />
+	<mx:Canvas id="graphCnvs"
+			   borderStyle="solid"
+			   borderColor="#CCCCCC"
+			   backgroundColor="#FFFFFF"
+			   width="100%"
+			   height="100%"
+			   verticalScrollPolicy="off">		
+		
+		<ravis:VisualGraph id="vgraph" width="100%" height="100%" 
+						   left="0" right="0" top="0" bottom="5" backgroundColor="#FFFFFF" alpha="1"
+						   resize="vgraph.draw(VisualGraph.DF_RESET_LL)"
+						   visibilityLimitActive="true"
+						   >
+		</ravis:VisualGraph>
+	</mx:Canvas>
+	<!-- End of Graph Panel -->
+	
+</s:Application>

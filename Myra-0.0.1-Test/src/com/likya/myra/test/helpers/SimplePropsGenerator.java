@@ -32,14 +32,14 @@ import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.Status;
 import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
-import com.likya.xsd.myra.model.wlagen.BornedPlannedTimeDocument.BornedPlannedTime;
 import com.likya.xsd.myra.model.wlagen.CascadingConditionsDocument.CascadingConditions;
 import com.likya.xsd.myra.model.wlagen.ExpectedTimeDocument.ExpectedTime;
 import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
 import com.likya.xsd.myra.model.wlagen.JobAutoRetryInfoDocument.JobAutoRetryInfo;
 import com.likya.xsd.myra.model.wlagen.JobPriorityDocument.JobPriority;
-import com.likya.xsd.myra.model.wlagen.JsPlannedTimeDocument.JsPlannedTime;
-import com.likya.xsd.myra.model.wlagen.JsRealTimeDocument.JsRealTime;
+import com.likya.xsd.myra.model.wlagen.JsActualTimeDocument.JsActualTime;
+import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
+import com.likya.xsd.myra.model.wlagen.JsScheduledTimeDocument.JsScheduledTime;
 import com.likya.xsd.myra.model.wlagen.JsTimeOutDocument.JsTimeOut;
 import com.likya.xsd.myra.model.wlagen.JsTypeDocument.JsType;
 import com.likya.xsd.myra.model.wlagen.TimeManagementDocument.TimeManagement;
@@ -81,21 +81,19 @@ public class SimplePropsGenerator {
 		
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		
-		BornedPlannedTime bornedPlannedTime = timeManagement.addNewBornedPlannedTime();
-		bornedPlannedTime.setStartTime(Calendar.getInstance());
-		bornedPlannedTime.setStopTime(Calendar.getInstance());
+		JsScheduledTime jsScheduledTime = timeManagement.addNewJsScheduledTime();
+		jsScheduledTime.setStartTime(Calendar.getInstance());
 		
-		JsPlannedTime jsPlannedTime = timeManagement.addNewJsPlannedTime();
-		jsPlannedTime.setStartTime(Calendar.getInstance());
-		jsPlannedTime.setStopTime(Calendar.getInstance());
+		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
+		jsActualTime.setStartTime(Calendar.getInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
-		JsRealTime jsRealTime = timeManagement.addNewJsRealTime();
-		jsRealTime.setStartTime(Calendar.getInstance());
-		jsRealTime.setStopTime(Calendar.getInstance());
+		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
+		jsRecordedTime.setStartTime(Calendar.getInstance());
+		jsRecordedTime.setStopTime(Calendar.getInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);

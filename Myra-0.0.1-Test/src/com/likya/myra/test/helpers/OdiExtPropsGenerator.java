@@ -25,14 +25,14 @@ import com.likya.xsd.myra.model.stateinfo.ReturnCodeListDocument.ReturnCodeList.
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
-import com.likya.xsd.myra.model.wlagen.BornedPlannedTimeDocument.BornedPlannedTime;
 import com.likya.xsd.myra.model.wlagen.CascadingConditionsDocument.CascadingConditions;
 import com.likya.xsd.myra.model.wlagen.ExpectedTimeDocument.ExpectedTime;
 import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
 import com.likya.xsd.myra.model.wlagen.JobAutoRetryInfoDocument.JobAutoRetryInfo;
 import com.likya.xsd.myra.model.wlagen.JobPriorityDocument.JobPriority;
-import com.likya.xsd.myra.model.wlagen.JsPlannedTimeDocument.JsPlannedTime;
-import com.likya.xsd.myra.model.wlagen.JsRealTimeDocument.JsRealTime;
+import com.likya.xsd.myra.model.wlagen.JsActualTimeDocument.JsActualTime;
+import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
+import com.likya.xsd.myra.model.wlagen.JsScheduledTimeDocument.JsScheduledTime;
 import com.likya.xsd.myra.model.wlagen.JsTimeOutDocument.JsTimeOut;
 import com.likya.xsd.myra.model.wlagen.JsTypeDocument.JsType;
 import com.likya.xsd.myra.model.wlagen.TimeManagementDocument.TimeManagement;
@@ -48,21 +48,21 @@ public class OdiExtPropsGenerator {
 		AbstractJobType abstractJobType = jobList.addNewGenericJob();
 
 		OdiExtProperties odiExtProperties = (OdiExtProperties) abstractJobType.changeType(OdiExtProperties.type);
-		
+
 		odiExtProperties.setHandlerURI("com.likya.myra.ext.odi.OdiExtJob");
 
 		odiExtProperties.setGroupId("grp-1");
-		
+
 		odiExtProperties.setId("11");
 		odiExtProperties.setAgentId(1);
-		
+
 		OdiExtParams odiExtParams = odiExtProperties.addNewOdiExtParams();
-		
+
 		odiExtParams.setPJdbcUrl("jdbc:oracle:thin:@192.168.1.75:1521:orcl");
 		odiExtParams.setPJdbcDriver("oracle.jdbc.OracleDriver");
 		odiExtParams.setPJdbcUsername("DEV_ODI_REPO");
 		odiExtParams.setPJdbcPassword("ad0215");
-		
+
 		odiExtParams.setPWorkName("WORKREP");
 
 		odiExtParams.setPUsername("SUPERVISOR");
@@ -75,31 +75,29 @@ public class OdiExtPropsGenerator {
 		odiExtParams.setPLogLevel(BigInteger.valueOf(5));
 		odiExtParams.setPSessionName("TLOSSW");
 		odiExtParams.setPSynchronous(true);
-		
+
 		Management management = odiExtProperties.addNewManagement();
-		
+
 		TimeManagement timeManagement = management.addNewTimeManagement();
-		
-		BornedPlannedTime bornedPlannedTime = timeManagement.addNewBornedPlannedTime();
-		bornedPlannedTime.setStartTime(Calendar.getInstance());
-		bornedPlannedTime.setStopTime(Calendar.getInstance());
-		
-		JsPlannedTime jsPlannedTime = timeManagement.addNewJsPlannedTime();
-		jsPlannedTime.setStartTime(Calendar.getInstance());
-		jsPlannedTime.setStopTime(Calendar.getInstance());
+
+		JsScheduledTime jsScheduledTime = timeManagement.addNewJsScheduledTime();
+		jsScheduledTime.setStartTime(Calendar.getInstance());
+
+		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
+		jsActualTime.setStartTime(Calendar.getInstance());
 
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
-		
-		JsRealTime jsRealTime = timeManagement.addNewJsRealTime();
-		jsRealTime.setStartTime(Calendar.getInstance());
-		jsRealTime.setStopTime(Calendar.getInstance());
-		
+
+		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
+		jsRecordedTime.setStartTime(Calendar.getInstance());
+		jsRecordedTime.setStopTime(Calendar.getInstance());
+
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);
 		expectedTime.setValueInteger(BigInteger.valueOf(100));
-		
+
 		BaseJobInfos baseJobInfos = odiExtProperties.addNewBaseJobInfos();
 		baseJobInfos.setUserId(1);
 		baseJobInfos.setJsName("My name is");
@@ -108,25 +106,25 @@ public class OdiExtPropsGenerator {
 		baseJobInfos.setOSystem(OsType.MACOS);
 		baseJobInfos.setJobPriority(JobPriority.X_1);
 		baseJobInfos.setJsIsActive(true);
-		
+
 		JobTypeDetails jobTypeDetails = baseJobInfos.addNewJobTypeDetails();
 		jobTypeDetails.setJobCommand("/home/likya/kursat/uzaktan_calisan_job.sh");
 		jobTypeDetails.setJobCommandType(JobCommandType.REMOTE_SHELL);
 
 		management.setTrigger(Trigger.TIME);
-		
+
 		PeriodInfo periodInfo = management.addNewPeriodInfo();
 		periodInfo.setStep(new GDuration("PT0H30M0S"));
 
 		CascadingConditions cascadingConditions = management.addNewCascadingConditions();
 		cascadingConditions.setRunEvenIfFailed(true);
 		cascadingConditions.setJobSafeToRestart(true);
-		
+
 		JobAutoRetryInfo jobAutoRetryInfo = JobAutoRetryInfo.Factory.newInstance();
 		jobAutoRetryInfo.setJobAutoRetry(true);
 		jobAutoRetryInfo.setStep(new GDuration("PT0H30M0S"));
 		jobAutoRetryInfo.setMaxCount(BigInteger.valueOf(3));
-		
+
 		cascadingConditions.setJobAutoRetryInfo(jobAutoRetryInfo);
 
 		DependencyList dependencyList = odiExtProperties.addNewDependencyList();
@@ -154,7 +152,7 @@ public class OdiExtPropsGenerator {
 		System.err.println(jobListDocumentNew.toString());
 
 		System.err.println("Valid = " + jobListDocumentNew.validate());
-		
+
 		return jobListDocumentNew;
 
 	}

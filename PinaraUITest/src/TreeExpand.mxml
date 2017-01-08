@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="horizontal" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.management.Attribute;
+			import mx.events.ListEvent;
+			
+			import mx.controls.Alert;
+			import mx.collections.XMLListCollection;
+			
+			[Bindable]
+			private var searchResult:XMLList;
+			private var searchResultIndex:uint = 0;
+			
+			private function findByLabel(event:Event):void
+			{
+				var searchStr:String = List(event.currentTarget).selectedItem.@label;
+				tabMain.selectedIndex = 0;
+				tree.openItems = [];
+				//xmlDP.descendants().(@label == List(evt.currentTarget).selectedItem.@label)[0]
+				searchResult = xmlDP.descendants().(@label.toLowerCase().search(searchStr.toLowerCase()) > -1);
+				searchResultIndex = 0;
+				if (searchResult[searchResultIndex] != undefined)
+					expandNode(searchResult[searchResultIndex]);
+			}
+			
+			private function expandNode(xmlNode:XML):void
+			{
+				while (xmlNode.parent() != null) {
+					xmlNode = xmlNode.parent();
+					tree.expandItem(xmlNode, true, false);
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- Sample tree data -->
+	<mx:XML id="xmlDP">
+		<root>
+			<node label="Parent 1">
+				<node label="Child 1"/>
+				<node label="Child 2">
+					<node label="Grandchild 1"/>
+					<node label="Grandchild 2"/>
+				</node>
+				<node label="Child 3"/>
+				<node label="Child 4"/>
+				<node label="Child 5">
+					<node label="Grandchild 1"/>
+					<node label="Grandchild 2"/>
+				</node>
+			</node>
+		</root>
+	</mx:XML>
+	
+	<mx:XMLListCollection id="xmlMenuList" source="{xmlDP.*}"/>
+	
+	
+	<mx:XMLList id="listData">
+		<data>
+			<node label="Parent 1" />
+			<node label="Child 1"/>
+			<node label="Child 2"/>
+			<node label="Grandchild 1"/>
+			<node label="Grandchild 2" />
+			<node label="Child 3"/>
+			<node label="Child 4"/>
+			<node label="Child 5"/>
+			<node label="Grandchild 1"/>
+			<node label="Grandchild 2" />
+		</data>
+	</mx:XMLList>
+	
+	
+	<mx:TabNavigator id="tabMain" creationPolicy="all" width="100%" >
+		<mx:Canvas label="Test Group Tree">
+			<mx:Tree dataProvider="{xmlMenuList}" labelField="@label" iconField="icon" showRoot="false"  
+					 allowMultipleSelection="true" id="tree" doubleClickEnabled="true" width="100%">
+			</mx:Tree>
+		</mx:Canvas>
+		<mx:Canvas label="Search" width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Canvas width="100%">
+				<mx:HRule/>
+				<mx:List dataProvider="{listData.node}"  dragEnabled="false" labelField="@label" id="lstSearch"
+						 width="100%" itemClick="findByLabel(event)">
+				</mx:List>
+			</mx:Canvas>
+		</mx:Canvas>
+	</mx:TabNavigator>
+	
+	
+</mx:Application>

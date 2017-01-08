@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2009/05/01/creating-a-scrolling-spark-panel-container-in-flex-gumbo/ -->
+<s:Application name="Spark_Panel_Scroller_test"
+			   xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/halo" xmlns:mx1="library://ns.adobe.com/flex/mx">
+	
+	<s:Panel id="panel"
+			 title="Spark Panel title"
+			 horizontalCenter="0"
+			 verticalCenter="0"
+			 width="320"
+			 height="240">
+		<s:Scroller width="100%" height="100%">
+			<s:Group width="100%" height="100%">
+				<s:VGroup left="20" right="20" top="20" bottom="20">
+					<s:TextArea text="DateChooser #1:" />
+					<mx1:DateChooser />
+					<s:TextArea text="DateChooser #2:" />
+					<mx1:DateChooser />
+					<s:TextArea text="DateChooser #3:" />
+					<mx1:DateChooser />
+				</s:VGroup>
+			</s:Group>
+		</s:Scroller>
+	</s:Panel>
+	
+</s:Application>

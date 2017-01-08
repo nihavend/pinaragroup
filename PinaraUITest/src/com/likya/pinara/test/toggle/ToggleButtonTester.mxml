@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:local="*"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:s="library://ns.adobe.com/flex/spark" viewSourceURL="http://dl.dropbox.com/u/2131241/Flash/ToggleSwitch/srcview/index.html" xmlns:toggle="com.likya.pinara.test.toggle.*">
+	
+		<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace local "*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.toggleSwitch
+		{
+			skinClass:ClassReference("com.likya.pinara.test.toggle.ToggleSwitchSkin");
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			
+			protected function bir_changeHandler(event:Event):void
+			{
+				Alert.show("" + bir.selected);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup x="20" y="20">
+		<s:Label text="Spark Checkbox with skin"/>
+		<s:CheckBox selected="true" styleName="toggleSwitch" />
+		<s:Spacer height="10" />
+		<s:Label text="ToggleSwitch Custom labels"/>
+		<toggle:ToggleSwitch id="bir" selected="true" selectedLabel="On" deselectedLabel="Off" styleName="toggleSwitch" change="bir_changeHandler(event)"/>
+<!--		<toggle:ToggleSwitch selectedLabel="Optional" deselectedLabel="Mandatory" styleName="toggleSwitch" />
+		<s:Spacer height="10" />
+		<s:Label text="Custom widths"/>
+		<toggle:ToggleSwitch selected="true" selectedLabel="On" deselectedLabel="Off" styleName="toggleSwitch" width="100%" />
+		<toggle:ToggleSwitch selectedLabel="Optional" deselectedLabel="Mandatory" styleName="toggleSwitch" width="100%" />
+-->	</s:VGroup>
+</s:Application>

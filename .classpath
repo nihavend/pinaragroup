@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="likya-commons-0.0.1/src"/>
+	<classpathentry kind="src" path="Myra-0.0.1-Test/src"/>
+	<classpathentry kind="src" path="myra-commons-0.0.1/src"/>
+	<classpathentry kind="src" path="myra-schema-0.0.1/src"/>
+	<classpathentry kind="src" path="Pinara-0.0.1/src"/>
+	<classpathentry kind="lib" path="likya-commons-0.0.1/target/likya-commons-0.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="likya-commons-0.0.1/target/likya-commons-0.0.1.jar"/>
+	<classpathentry kind="lib" path="myra-schema-0.0.1/myra-schema-0.0.1.jar"/>
+	<classpathentry kind="lib" path="myra-schema-0.0.1/myra-schema-src-0.0.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="myra-schema-0.0.1/bin"/>
+</classpath>

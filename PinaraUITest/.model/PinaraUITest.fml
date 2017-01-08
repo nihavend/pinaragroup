@@ -1,0 +1,450 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="TestHtml">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">services.testhtml</item>
+      <item name="rootURL"></item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">HTTPService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="Operation1" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">GET</item>
+        <item name="url">http://help.adobe.com/en_US/flex/using/WS2db454920e96a9e51e63e3d11c0bf69084-7fd5.html</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://help.adobe.com/en_US/flex/using/WS2db454920e96a9e51e63e3d11c0bf69084-7fd5.html</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+  </service>
+  <service name="CleanList">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">services.cleanlist</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">XML</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="getData" return-type="GenericJob[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="SerializationFilter">com.adobe.serializers.xml.XMLSerializationFilter</item>
+        <item name="method">GET</item>
+        <item name="url">/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/cleanList.xml</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="displayUrl">/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/cleanList.xml</item>
+        <item name="completeURL">/Users/serkan/Documents/Adobe Flash Builder 4.7/PinaraUITest/xmls/cleanList.xml</item>
+        <item name="isUrl">false</item>
+      </annotation>
+      <annotation name="Properties">
+        <item name="xPath">/::genericJob</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">opaque</item>
+      </annotation>
+    </function>
+  </service>
+  <entity name="JsPlannedTime">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JsPlannedTime</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="startTime" type="string" required="true"/>
+    <property name="stopTime" type="string" required="true"/>
+  </entity>
+  <entity name="Management">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Management</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="trigger" type="string" required="true"/>
+    <property name="periodInfo" type="PeriodInfo" required="true"/>
+    <property name="timeManagement" type="TimeManagement" required="true"/>
+    <property name="cascadingConditions" type="CascadingConditions" required="true"/>
+  </entity>
+  <entity name="DaysOfMonth">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">DaysOfMonth</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="days" type="string" required="true"/>
+  </entity>
+  <entity name="JsRealTime">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JsRealTime</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="startTime" type="string" required="true"/>
+    <property name="stopTime" type="string" required="true"/>
+  </entity>
+  <entity name="JobAutoRetryInfo">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JobAutoRetryInfo</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="step" type="string" required="true"/>
+    <property name="jobAutoRetry" type="string" required="true"/>
+  </entity>
+  <entity name="GenericJob">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">GenericJob</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList,CleanListDummy</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="type" type="string" required="true"/>
+    <property name="groupId" type="string" required="true"/>
+    <property name="dangerZoneGroupId" type="string" required="true"/>
+    <property name="handlerURI" type="string" required="true"/>
+    <property name="Id" type="string" required="true"/>
+    <property name="agentId" type="string" required="true"/>
+    <property name="baseJobInfos" type="BaseJobInfos" required="true"/>
+    <property name="DependencyList" type="DependencyList_type" required="true"/>
+    <property name="stateInfos" type="StateInfos" required="true"/>
+    <property name="management" type="Management" required="true"/>
+    <property name="scheduleInfo" type="ScheduleInfo" required="true"/>
+  </entity>
+  <entity name="DependencyList_type">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">DependencyList_type</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="Item" type="Item_type" required="true"/>
+    <property name="DependencyExpression" type="string" required="true"/>
+  </entity>
+  <entity name="JsDependencyRule">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JsDependencyRule</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="StateName" type="string" required="true"/>
+    <property name="SubstateName" type="string" required="true"/>
+    <property name="StatusName" type="string" required="true"/>
+  </entity>
+  <entity name="BaseJobInfos">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">BaseJobInfos</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="jsName" type="string" required="true"/>
+    <property name="jobTypeDetails" type="JobTypeDetails" required="true"/>
+    <property name="jobLogFile" type="string" required="true"/>
+    <property name="jobLogPath" type="string" required="true"/>
+    <property name="oSystem" type="string" required="true"/>
+    <property name="jobPriority" type="string" required="true"/>
+    <property name="jsIsActive" type="string" required="true"/>
+    <property name="userId" type="string" required="true"/>
+  </entity>
+  <entity name="LiveStateInfo_type">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">LiveStateInfo_type</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="LSIDateTime" type="string" required="true"/>
+    <property name="StateName" type="string" required="true"/>
+    <property name="SubstateName" type="string" required="true"/>
+    <property name="StatusName" type="string" required="true"/>
+  </entity>
+  <entity name="BornedPlannedTime">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">BornedPlannedTime</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="startTime" type="string" required="true"/>
+    <property name="stopTime" type="string" required="true"/>
+  </entity>
+  <entity name="CascadingConditions">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">CascadingConditions</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="runEvenIfFailed" type="string" required="true"/>
+    <property name="jobSafeToRestart" type="string" required="true"/>
+    <property name="jobAutoRetryInfo" type="JobAutoRetryInfo" required="true"/>
+  </entity>
+  <entity name="JsTimeOut">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JsTimeOut</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="value_integer" type="string" required="true"/>
+    <property name="unit" type="string" required="true"/>
+  </entity>
+  <entity name="LiveStateInfos_type">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">LiveStateInfos_type</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="LiveStateInfo" type="LiveStateInfo_type" required="true"/>
+  </entity>
+  <entity name="JobTypeDetails">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">JobTypeDetails</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="jobCommandType" type="string" required="true"/>
+    <property name="jobCommand" type="string" required="true"/>
+    <property name="jobPath" type="string" required="true"/>
+  </entity>
+  <entity name="TimeManagement">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">TimeManagement</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="bornedPlannedTime" type="BornedPlannedTime" required="true"/>
+    <property name="jsPlannedTime" type="JsPlannedTime" required="true"/>
+    <property name="jsRealTime" type="JsRealTime" required="true"/>
+    <property name="jsTimeOut" type="JsTimeOut" required="true"/>
+    <property name="expectedDuration" type="string" required="true"/>
+    <property name="previousDuration" type="string" required="true"/>
+    <property name="realizedDuration" type="string" required="true"/>
+  </entity>
+  <entity name="ScheduleInfo">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">ScheduleInfo</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="daysOfMonth" type="DaysOfMonth" required="true"/>
+    <property name="daysOfWeekIntType" type="string[]" required="true"/>
+  </entity>
+  <entity name="Item_type">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">Item_type</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="dependencyID" type="string" required="true"/>
+    <property name="jsName" type="string" required="true"/>
+    <property name="jsId" type="string" required="true"/>
+    <property name="jsType" type="string" required="true"/>
+    <property name="comment" type="string" required="true"/>
+    <property name="jsDependencyRule" type="JsDependencyRule" required="true"/>
+  </entity>
+  <entity name="PeriodInfo">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">PeriodInfo</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="step" type="string" required="true"/>
+  </entity>
+  <entity name="StateInfos">
+    <annotation name="EntityProperties">
+      <item name="EntityOriginalName">StateInfos</item>
+    </annotation>
+    <annotation name="service Group">
+      <item name="service">CleanList</item>
+    </annotation>
+    <annotation name="ServerProperties">
+      <item name="IncludeRemoteClass">nonempty</item>
+    </annotation>
+    <annotation name="ActionScriptGeneration">
+      <item name="Package">valueObjects</item>
+    </annotation>
+    <property name="LiveStateInfos" type="LiveStateInfos_type" required="true"/>
+  </entity>
+  <service name="UserOps">
+    <annotation name="ActionScriptGeneration">
+      <item name="ServiceType">HTTPMultiService</item>
+      <item name="Package">com.likya.pinara.services.userops</item>
+      <item name="rootURL">http://127.0.0.1:3000</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">HTTPService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">com.likya.pinara.model</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="changepass" return-type="opaque">
+      <annotation name="analyze group">
+        <item name="analyzed">false</item>
+      </annotation>
+      <annotation name="ActionScriptGeneration">
+        <item name="method">POST</item>
+        <item name="contentType">application/xml</item>
+        <item name="requestBodyParameter">true</item>
+        <item name="url">/flex/restsrv/userops/changepass</item>
+      </annotation>
+      <annotation name="url group">
+        <item name="completeURL">http://127.0.0.1:3000/flex/restsrv/userops/changepass</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParamNames">strXml</item>
+        <item name="inputParams">string</item>
+        <item name="returnType">opaque</item>
+      </annotation>
+      <parameter name="strXml" type="string"/>
+    </function>
+  </service>
+</model>

@@ -6,7 +6,7 @@ import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.jef.core.CoreFactory;
-import com.likya.myra.jef.utils.Scheduler;
+import com.likya.myra.jef.utils.timeschedules.TimeScheduler;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
@@ -67,8 +67,8 @@ public class TestMyraScheduler {
 		
 		AbstractJobType abstractJobType =jobListDocument.getJobList().getGenericJobArray(0);
 		
-		if (Scheduler.scheduleForNextExecution(abstractJobType)) {
-			String startTime = MyraDateUtils.getDate(abstractJobType.getManagement().getTimeManagement().getJsPlannedTime().getStartTime().getTime());
+		if (TimeScheduler.scheduleForNextExecution(abstractJobType)) {
+			String startTime = MyraDateUtils.getDate(abstractJobType.getManagement().getTimeManagement().getJsActualTime().getStartTime().getTime());
 			CoreFactory.getLogger().info("Job [" + abstractJobType.getId() + "] bir sonraki zamana kuruldu : " + startTime);
 		} else {
 			System.err.println("Zaman koşullarını sağlamadığından bir daha çalışmayacak !");

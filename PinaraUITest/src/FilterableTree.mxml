@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="absolute"
+	backgroundGradientColors="undefined"
+	backgroundColor="#FFFFFF" width="450" height="350">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ICollectionView;
+			import mx.collections.XMLListCollection;
+
+			[Bindable]
+			private var treeData:XMLList =
+				<>
+					<node label="Yellow">
+						<node label="Red"/>
+						<node label="Green"/>
+					</node>
+					<node label="Cyan">
+						<node label="Green"/>
+						<node label="Blue"/>
+					</node>
+					<node label="Magenta">
+						<node label="Red"/>
+						<node label="Blue"/>
+					</node>
+				</>;
+			
+			/**
+			 * Called when the tree has been created. It forces all the nodes of the
+			 * tree open, which (hopefully) aids understanding what this example code
+			 * is trying to demonstrate.
+			 */
+			private function expandNodes():void
+			{
+				tree.openItems = [treeData[0],treeData[1],treeData[2]];
+			}
+			
+			/**
+			 * This is the filter function passed to the FilteredTreeDataDescriptor.
+			 * It is responsible for determining which child nodes are displayed in
+			 * the tree.
+			 */
+			private function filterFunc(node:Object):ICollectionView
+			{
+				var redTest:String = red.selected ? "Red" : "-";
+				var greenTest:String = green.selected ? "Green" : "-";
+				var blueTest:String = blue.selected ? "Blue" : "-";
+				return new XMLListCollection(node.node.(@label == redTest || @label == greenTest || @label == blueTest));
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas width="450" height="350" backgroundColor="0">
+	<mx:HBox x="1" y="1" width="448" height="348" backgroundColor="#FFFFFF">
+		<mx:Tree width="50%" height="100%" id="tree" 
+			dataProvider="{treeData}" labelField="@label"
+			dataDescriptor="{new FilteredTreeDataDescriptor(filterFunc)}"
+			creationComplete="expandNodes()"/>
+		<mx:VBox height="100%">
+			<mx:Label text="Tick items to show them in tree"/>
+			<mx:HRule width="100%"/>
+			<mx:CheckBox label="Red" id="red" change="tree.invalidateList()" selected="true"/>
+			<mx:CheckBox label="Green" id="green" change="tree.invalidateList()" selected="true"/>
+			<mx:CheckBox label="Blue" id="blue" change="tree.invalidateList()" selected="true"/>
+		</mx:VBox>
+	</mx:HBox>
+		</mx:Canvas>
+	
+</mx:Application>

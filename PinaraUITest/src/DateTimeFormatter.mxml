@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.utils.DateUtil;
+			
+			import mx.formatters.DateFormatter;
+			
+			
+			/*var isoStr:String = "2009-03-27T16:28:22.540-04:00";
+			
+			var d:Date = isoToDate(isoStr);*/
+			
+			// valuetext.text = d.toString();
+			
+			// valuetext.text = dateFormatter.format(DateFormatter.parseDateString(text.text));
+			
+			/*var dateString:String = "2009-03-27T16:28:22.540-04:00";
+			var d:Date = DateUtil.parseW3CDTF(dateString);
+			trace(d);
+			var s:String = DateUtil.toW3CDTF(d);
+			trace(s);
+			*/
+			
+			/*			private function init():void {
+			var isoStr:String = "2008-01-25T06:14:23Z";
+			d = isoToDate(isoStr);
+			formHeading.label = isoStr;
+			}*/
+			
+			private function isoToDate(value:String):Date {
+				var dateStr:String = value;
+				dateStr = dateStr.replace(/\-/g, "/");
+				dateStr = dateStr.replace("T", " ");
+				dateStr = dateStr.replace("Z", " GMT-0000");
+				return new Date(Date.parse(dateStr));
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				
+				var dateFormatter:DateFormatter = new DateFormatter();
+				dateFormatter.formatString = format.text;
+				//Alert.show(" : " + DateFormatter.parseDateString(item.management.timeManagement.jsPlannedTime.startTime));
+				
+				// Alert.show(dateFormatter.format(DateFormatter.parseDateString(item.management.timeManagement.jsPlannedTime.startTime)));
+				
+				// return item.management.timeManagement.jsPlannedTime.startTime;
+				// var dateTimeFormatter:DateTimeFormatter = new DateTimeFormatter();
+				// dateTimeFormatter.dateTimePattern = 'DD/MM/YYYY HH:mm:ss';
+				// dateTimeFormatter.timeStyle = 'HH:mm:ss';
+				
+				
+				var d:Date = DateUtil.parseW3CDTF(text.text);
+				valuetext.text = dateFormatter.format(DateFormatter.parseDateString(d.toString()));
+				
+				
+			}
+
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<mx:VBox>
+		<s:TextInput id="format" text="JJ:NN:S DD/MM/YYYY" width="200"/>
+		<mx:TextInput id="text" text="2016-11-06T00:09:34.244+03:00"/>		
+		<mx:Text id="valuetext" text="___"/>
+		<s:Button click="button1_clickHandler(event)" label="Click On Me" />
+	</mx:VBox>
+		
+	
+</s:Application>

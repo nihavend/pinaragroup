@@ -165,5 +165,25 @@ package com.likya.pinara.test.actscrpts
 			
 			return treeXml;
 		}
+		
+		public static function loadSimple():XML {
+			
+			var treeXml:XML = 
+				<list title="Grup Listesi" id="0">
+				  <jobGroup title="Independents" id="-1">
+					<jobProperty title="ilk tanımlı iş" id="23" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="24" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="25" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="26" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="27" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="28" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="29" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="30" statu="9" port="1"/>
+
+				  </jobGroup>
+				</list>
+			
+			return treeXml;
+		}
 	}
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			
+			
+			[Bindable]
+			public var menuBarData:XMLListCollection = new XMLListCollection();
+				
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				menuBarData.source = menuDataXMLList;
+
+				// MenuOperations.deleteRoledMenuItems(menuBarData, "VIEW"); 			
+				MenuOperations.testMe();
+
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		<fx:XMLList id="menuDataXMLList">
+			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="ADMIN">			
+				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties" role="VIEW"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
+				<menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile" role="OPERATION"/>			
+				<menuitem label="{resourceManager.getString('messages', 'myraLog')}" id="myraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
+				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>
+			</menuitem>
+		</fx:XMLList>
+	</fx:Declarations>
+	
+</s:Application>

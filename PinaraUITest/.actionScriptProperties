@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="com/likya/pinara/test/mxmls/PinaraTest.mxml" projectUUID="fd1cf56a-8069-411f-b222-f4e8bc10a767" version="11">
+  <compiler additionalCompilerArguments="-locale en_US tr_TR" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="true" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="true" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="false" verifyDigests="true" warn="true">
+    <compilerSourcePath>
+      <compilerSourcePathEntry kind="1" linkType="1" path="locale/{locale}"/>
+    </compilerSourcePath>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="1" linkType="1" path="libs"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_LIB_LOCATION}"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_LOCALE_LOCATION}"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/fiber.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/playerfds.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="/Users/serkan/git/pinaragroup/PinaraUI/libs"/>
+    </libraryPath>
+    <sourceAttachmentPath/>
+  </compiler>
+  <applications>
+    <application path="TabBarTester.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/SchemaLoaderTest.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/PinaraTest.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/CollapsiblePanelExample.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/grid/DynamicGrid.mxml"/>
+    <application path="com/likya/pinara/test/tabpopup/TabBarTester.mxml"/>
+    <application path="MenuSample.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/Serkan.mxml"/>
+    <application path="ScrollTester.mxml"/>
+    <application path="TestFilterFunction.mxml"/>
+    <application path="TestViewGraphOld.mxml"/>
+    <application path="IPv4AddressInputExample.mxml"/>
+    <application path="DateSelect.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/tree/TreeOpenItemsTest.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/FormLayoutTest1.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/EmbeddedImage.mxml"/>
+    <application path="com/likya/pinara/test/toggle/ToggleButtonTester.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/tree/TreeKeepOpen.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/ImageLoader.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/FormGenTest.mxml"/>
+    <application path="TimeInputExplorer.mxml"/>
+    <application path="TreeExpand.mxml"/>
+    <application path="GridFilter2.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/grid/DataGridResizeTest.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/tree/TreeKeepOpen2.mxml"/>
+    <application path="com/likya/pinara/test/tabpopup/TabTest.mxml"/>
+    <application path="TreeItemRemove.mxml"/>
+    <application path="GridFilter3.mxml"/>
+    <application path="ImageAlign.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/grid/ImageGrid.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/CopyofPinaraUI.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/logview/LogViewTesteee.mxml"/>
+    <application path="testas/TestAS.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/tree/TreeSample.mxml"/>
+    <application path="GridFilter.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/logview/LogViewTestOrj.mxml"/>
+    <application path="com/likya/pinara/test/filesystemutils/FileBrowser.mxml"/>
+    <application path="PreloaderTester.mxml"/>
+    <application path="VarInXml.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/logview/LogViewTest.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/tree/TestTreePanel.mxml"/>
+    <application path="com/likya/pinara/test/toggle/ToggleSwitchSkin.mxml"/>
+    <application path="com/likya/pinara/test/mxmls/grid/ImageIncludeLayaoutGrid.mxml"/>
+    <application path="LongTabBarTester.mxml"/>
+    <application path="TabTest.mxml"/>
+    <application path="com/likya/pinara/test/skins/tester/TextAreaLineNumbersSkinTester.mxml"/>
+    <application path="BasicAuthorizationTest.mxml"/>
+    <application path="TestViewGraph.mxml"/>
+    <application path="RegExValidatorExample.mxml"/>
+    <application path="DropDownListTester.mxml"/>
+    <application path="XmlTest.mxml"/>
+    <application path="DateTimeFormatter.mxml"/>
+  </applications>
+  <modules/>
+  <workers/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+</actionScriptProperties>

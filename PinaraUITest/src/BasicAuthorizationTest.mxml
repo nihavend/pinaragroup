@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.Base64Encoder;
+			
+			private function getLoginDataResultHandler(event:Event):void {
+				// Alert.show("event.result : " + event.toString());
+			}
+			
+			private function securityError(event:SecurityErrorEvent):void {
+				// Alert.show(event.toString());
+			}
+			
+			private function ioErrorHandler(event:IOErrorEvent):void {
+				// Alert.show(event.toString());
+				trace(event.toString());
+			}
+			
+			private function httpResult(event:HTTPStatusEvent):void {
+				
+				// Alert.show(event.toString());
+				
+				if(event.status == 200) {
+					Alert.show("Giriş başarılı :)"); 
+				} else if (event.status == 400) {
+					Alert.show("Kullacını adı ya da şifre hatalı !");
+				} else {
+					Alert.show("Unexpected Event : " + event.toString());
+				}
+				
+			}
+			
+			private function doWork():void {
+				
+				try {
+					
+					var httpServiceUrl:String = "http://localhost:3000/flex/restsrvc/authanticate/";
+					
+					var req:URLRequest = new URLRequest(httpServiceUrl);
+					req.method = URLRequestMethod.POST;
+					req.data = new URLVariables("name=John+Doe");
+					
+					
+					var encoder:Base64Encoder = new Base64Encoder();        
+					// encoder.encode("tlos:tlos");
+					// encoder.encode("pinara" + ":" + "pinara");
+					var authKey:String = user.text + ":" + pass.text;
+					encoder.encode(authKey);
+					
+					var credsHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + encoder.toString());
+					req.requestHeaders.push(credsHeader);
+					
+					var loader:URLLoader = new URLLoader();
+					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler); 
+					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpResult);
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityError);
+					loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+					
+					loader.load(req);
+				} catch (e1:IOError){
+					trace(e1.message);
+				} catch (e:Error){
+					Alert.show(e.message);
+				} 
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				try
+				{
+					// doWork();
+					testService(liveTreeDataService);
+				}
+				catch(e:IOError)
+				{
+					trace(e.message);
+				}
+			}
+			
+			private function testService(service:HTTPService):void {
+				var encoder:Base64Encoder = new Base64Encoder();
+				encoder.insertNewLines = false;
+				encoder.encode("pinara:pinara");
+				
+				service.headers = {Authorization:"Basic " + encoder.toString()};  
+				// service.headers["Authorization"] = "Basic " + encoder.toString();
+				
+				service.request.data = new URLVariables("name=ifthisdataisnotpassedPOSTmethodisconvertedtoGETbyflashplayer");
+				
+				service.send();
+			}
+			
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show("xmlService_faultHandler : " + event.toString());
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				Alert.show("xmlService_resultHandler : " + event.toString());
+			}
+		]]>
+	</fx:Script>
+	
+	
+	
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		<s:HTTPService id="liveTreeDataService" 
+					   method="POST"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   url="http://localhost:3000/flex/restsrvc/nettreexml/?_method=GET"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+	</fx:Declarations>
+	
+	<s:VGroup>
+		<s:Button click="button1_clickHandler(event)" label="Send"/>
+		
+		<s:HGroup>
+			<s:FormItem label="Kullanıcı">
+				<s:TextInput id="user" />
+			</s:FormItem>
+			<s:FormItem label="Şifre">
+				<s:TextInput id="pass" />
+			</s:FormItem>
+		</s:HGroup>
+		
+	</s:VGroup>
+	
+</s:Application>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   minWidth="955" minHeight="600" 
+			   creationComplete="loadTreeData()"
+			   xmlns:actscrpts="com.likya.pinara.test.actscrpts.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.test.actscrpts.DataLoader;
+			
+			import mx.controls.Alert;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable]
+			private var treeXmlList:XMLList = new XMLList();
+			
+			public function loadTreeData():void {
+				
+				var treeXml:XML = DataLoader.loadSimple();
+				
+				// trace("treeXml" + treeXml[0].toString());
+				
+				treeXmlList = new XMLList(treeXml);
+				
+				/// trace("treeXmlList" + treeXmlList[0].toString());
+				
+				// tlosTreeData = new XMLListCollection(treeXml.jobGroup); 
+				// treeXmlNew = "";
+				
+				//trace("Data : " + XML(treeXmlList[0])..jobGroup.@id);
+				
+				
+				/*var xml:XML=<items>
+					<item id="5">5</item>
+					<item id="3006">3006</item>
+					<item id="25">25</item>
+					<item id="458">458</item>
+					<item id="15">15</item>
+					<item id="78">78</item>
+				 </items>;*/
+
+				
+				//trace(xml..item.(@id=="458"));
+				
+				var xmlBig:XML=<list title="Grup Listesi" id="0">
+		          <jobGroup title="Independents" id="10">
+					<jobProperty title="ilk tanımlı iş" id="23" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="24" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="25" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="26" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="27" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="28" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="29" statu="9" port="1"/>
+					<jobProperty title="serkan işiiiii" id="30" statu="9" port="1"/>
+				  </jobGroup>
+				</list>;
+				
+				// trace("Data : " + xmlBig..jobGroup.(attribute("id") == "50"));
+				// trace("Data : " + xmlBig..myGroup.(attribute("id") == "20").text());
+				
+				/*trace("Data : " + xmlBig);
+				delete xmlBig..jobProperty.(attribute("id") == "30")[0];
+				trace("Data : " + xmlBig);
+				jobTree.dataProvider = xmlBig;
+				jobTree.validateNow();*/
+			}
+			
+			private function treeLabel(item:Object):String { 
+				
+				var node:XML = XML(item); 
+				//Alert.show(node.localName());
+				if (node.localName() == "list") {
+					return node.@title; 
+				} else if (node.localName() == "jobGroup") {
+					return node.@title + " [Id:" + node.@id + "]"; 
+				} else if(node.localName() == "jobProperty") {
+					//return node.@name; 
+					return node.@title + " [Id:" + node.@id + "]"; 
+				}
+				
+				return node;
+			} 
+			
+			var selected:Object; 
+				
+			protected function removeSelectedItem_clickHandler(event:MouseEvent):void
+			{
+				///var parentNode:Object = jobTree.getParentItem(jobTree.selectedItem);
+				//var parentNodeId:String = parentNode.@id;
+				//var selectedTreeNodeId:String = jobTree.selectedItem.@id;
+
+				// Alert.show("Selected Tree Node : " + ObjectUtil.toString(jobTree.selectedItem));
+				// Alert.show("Parent Node : " + ObjectUtil.toString(parentNode));
+				
+				// Alert.show("parentNodeId : " + parentNodeId);
+				// Alert.show("selectedTreeNodeId : " + selectedTreeNodeId);
+				
+				//treeXmlList..
+				// TODO Auto-generated method stub
+				
+				// trace("Data to remove : " + XML(treeXmlList[0])..jobProperty.(@id == selectedTreeNodeId));
+				
+				//trace(jobTree.selectedItem);
+				
+				//trace("Data : " + XML(treeXmlList[0]));
+				//delete XML(treeXmlList[0])..jobProperty.(attribute("id") == selectedTreeNodeId)[0];
+				//trace("Data : " + XML(treeXmlList[0]));
+				//jobTree.dataProvider = XML(treeXmlList[0]);
+				//jobTree.validateNow();
+				
+				
+				//var selected:Object = (jobTree.dataProvider[0] as XML)..jobGroup.(attribute("id") == parentNodeId)[0];
+				
+				//trace(selected);
+				
+				//jobTree.selectedItem = selected;
+				//jobTree.scrollToIndex(2);
+				//jobTree.expandItem(selected, true);
+				//jobTree.validateNow();
+				
+			
+				var selectedLocal:Object = (jobTree.dataProvider[0] as XML)..jobProperty.(attribute("id") == "25")[0];
+				//var selectedLocal:Object = (jobTree.dataProvider[0] as XML)..jobProperty.("id" == "25" && "id" == "serkan")[0];
+				
+				
+				//var selectedLocal:Object = (jobTree.dataProvider[0] as XML)..jobGroup.(@id == "-1" && @id == "serkan")[0];
+				
+				
+				jobTree.selectedItem = selectedLocal;
+				// jobTree.expandItem(jobTree.getParentItem(selectedLocal), true);
+				
+				// jobTree.expandChildrenOf(jobTree.getParentItem(jobTree.getParentItem(selectedLocal)), true);
+				
+				//jobTree.scrollToIndex(jobTree.selectedIndex);
+				
+			}
+			
+			protected function copyItem_clickHandler(event:MouseEvent):void
+			{
+				selected = jobTree.selectedItem;
+				
+			}
+			
+			protected function expandItem_clickHandler(event:MouseEvent):void
+			{
+				jobTree.expandItem(selected, true);
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:Panel width="100%" height="80%">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+		<s:Group>
+			<s:layout>
+				<s:HorizontalLayout/>
+			</s:layout>
+			
+			<s:Button id="removeSelectedItem" y="-27" right="10" width="100" label="Remove item" click="removeSelectedItem_clickHandler(event)" toolTip="Refresh" enabled="true" />
+			<s:Button id="copyItem" y="-27" right="10" width="100" label="Copy Item" click="copyItem_clickHandler(event)" toolTip="Refresh" enabled="true" />
+			<s:Button id="expandItem" y="-27" right="10" width="100" label="Expand Item" click="expandItem_clickHandler(event)" toolTip="Refresh" enabled="true" />				
+			
+		</s:Group>
+		
+		<!--tlosTreeData-->
+		<actscrpts:AutoSizeTree 
+			id="jobTree" left="0" right="0" top="0" bottom="0" width="520" height="100%" 
+			chromeColor="#E2E5E7" color="#0D173C" contentBackgroundColor="#DAE0E6" 
+			dataProvider="{treeXmlList}" 
+			focusColor="#E67A7A" 
+			fontSize="12" fontWeight="bold" iconField="@icon"
+			openItems="true" rollOverColor="#596E76" 
+			selectionColor="#8E9DA0" 
+			labelField="@label" labelFunction="treeLabel" 
+			showRoot="true" 
+			textRollOverColor="#FFFFFF" 
+			textSelectedColor="#063741"/>
+		
+	</s:Panel>
+	
+</s:Application>

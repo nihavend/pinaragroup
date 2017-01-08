@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple example to demonstrate the RegExpValidator. -->
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ValidationResultEvent;
+			import mx.validators.RegExpValidationResult;
+			import mx.validators.RegExpValidator;
+			
+/*			// Write the results to the 
+			private function handleResult(eventObj:ValidationResultEvent):void {
+				if (eventObj.type == ValidationResultEvent.VALID) {
+					// For valid events, the results Array contains
+					// RegExpValidationResult objects.
+					var xResult:RegExpValidationResult;
+					reResults.text = "";
+					for (var i:uint = 0; i < eventObj.results.length; i++) {
+						xResult = eventObj.results[i];
+						reResults.text=reResults.text + xResult.matchedIndex + " " + xResult.matchedString + "\n";
+					}
+				} else {
+					reResults.text = "";
+				}
+			}*/
+			
+			// Write the results to the 
+			private function handleResult(eventObj:ValidationResultEvent):void {
+				if (eventObj.type == ValidationResultEvent.VALID) {
+					// For valid events, the results Array contains
+					// RegExpValidationResult objects.
+					var xResult:RegExpValidationResult;
+					var result:String = "";
+					for (var i:uint = 0; i < eventObj.results.length; i++) {
+						xResult = eventObj.results[i];
+						result = result + xResult.matchedIndex + " " + xResult.matchedString + "\n";
+					}
+				} else {
+					result = "";
+					Alert.show("errorCode : " + eventObj.results[0].errorCode + "\nerrorMessage : " + eventObj.results[0].errorMessage + "\nisError : " + eventObj.results[0].isError);
+				}
+				
+			}
+			
+			// var regExp:String = "^\d([,-]\d)*$";
+			[Bindable]
+			public var regExp:String = "((\d\,(?=\d))|(\d\-(?=\d))|\d)+";
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:RegExpValidator id="regExpV" 
+							source="{regex_text}" property="text" 
+							flags="g" expression="^(?!([ \d]*-){2})\d+(?: *[-,] *\d+)*$" 
+							valid="handleResult(event)"
+							invalid="handleResult(event)"
+							trigger="{myButton}"
+							triggerEvent="click"/>
+		
+		<!--<mx:RegExpValidator id="regExpV" 
+							source="{regex_text}" property="text" 
+							flags="g" expression="{regex.text}" 
+							valid="handleResult(event)"
+							invalid="handleResult(event)"
+							trigger="{myButton}"
+							triggerEvent="click"/>-->
+	</fx:Declarations>
+	
+	<s:Panel title="Day definitin regex example" width="75%" height="75%" horizontalCenter="0" verticalCenter="0">
+		<s:VGroup left="10" right="10" top="10" bottom="10">
+			<mx:Form>
+				<mx:FormItem label="Enter text:">
+					<s:TextInput id="regex_text" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem >
+					<s:Button id="myButton" label="Validate"/>
+				</mx:FormItem>
+			</mx:Form>
+		</s:VGroup>
+	</s:Panel>
+	
+	
+	<!--<s:Panel title="RegExpValidator Example"
+			 width="75%" height="75%"
+			 horizontalCenter="0" verticalCenter="0">
+		<s:VGroup left="10" right="10" top="10" bottom="10">
+			<s:Label width="100%" text="Instructions:"/>
+			<s:Label width="100%" text="1. Enter text to search. By default, enter  a string containing the letters ABC in sequence followed by any digit."/>
+			<s:Label width="100%" text="2. Enter the regular expression. By default, enter ABC\d."/>
+			<s:Label width="100%" text="3. Click the Button control to trigger the validation."/>
+			<s:Label width="100%" text="4. The results show the index in the text where the matching pattern begins, and the matching pattern. "/>
+			<mx:Form>
+				<mx:FormItem label="Enter text:">
+					<s:TextInput id="regex_text" text="xxxxABC4xxx" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Enter regular expression:">
+					<s:TextInput id="regex" text="ABC\d" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem label="Results:">
+					<s:TextInput id="reResults" width="100%"/>
+				</mx:FormItem>
+				<mx:FormItem >
+					<s:Button id="myButton" label="Validate"/>
+				</mx:FormItem>
+			</mx:Form>
+		</s:VGroup>
+	</s:Panel>-->
+	
+</s:Application>

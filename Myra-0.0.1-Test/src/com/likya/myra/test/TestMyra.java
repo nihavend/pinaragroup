@@ -211,7 +211,7 @@ public class TestMyra {
 						if(jobId != null) {
 							TimeManagement timeManagement = coreFactory.getMonitoringOperations().getJobQueue().get(jobId).getAbstractJobType().getManagement().getTimeManagement();
 							
-							if(timeManagement.getJsPlannedTime().getStartTime().before(Calendar.getInstance())) {
+							if(timeManagement.getJsActualTime().getStartTime().before(Calendar.getInstance())) {
 								while(true) {
 									System.out.print("Başlama zamanı geçmiş hemen çalışsın mı ? (E, H veya Bir üst menu için Q): ");
 									String elCevap = br.readLine();
@@ -385,7 +385,13 @@ public class TestMyra {
 			xmlString = FileUtils.readFile("/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/2dep.xml");
 		}
 
+		System.out.println("Reading from " + senaryo);
+		
 		xmlString = FileUtils.readFile(senaryo);
+		
+		if(xmlString == null) {
+			throw new Exception();
+		}
 
 		// System.err.println(jobListDocument.toString());
 
@@ -497,8 +503,8 @@ public class TestMyra {
 						logstr_2 += jobImpl.getAbstractJobType().getBaseJobInfos().getJsName();
 
 						String dateStr = null;
-						if (jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsPlannedTime().getStartTime() != null) {
-							dateStr = MyraDateUtils.getDate(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsPlannedTime().getStartTime().getTime());
+						if (jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsActualTime().getStartTime() != null) {
+							dateStr = MyraDateUtils.getDate(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsActualTime().getStartTime().getTime());
 						}
 
 						logstr_2 += "		" + dateStr;

@@ -736,7 +736,7 @@ package com.likya.pinara.utils {
 			var currentDF:DateFormatter = new DateFormatter(); 
 			currentDF.formatString = "YYYY-MM-DD";
 			var dateString:String = currentDF.format(currentDateTime);
-			currentDF.formatString = "LL:NN:SS";
+			currentDF.formatString = "JJ:NN:SS"; //"LL:NN:SS";
 			var timeString:String = currentDF.format(currentDateTime);
 			
 			var dateTimeString:String = dateString + "T" + timeString + ".000+03:00";	

@@ -150,7 +150,10 @@
 					allJobDetail.selectedJobId = XML(event.object);
 					// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
 					var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
-					currentListNodeId = jobTree.liveTree.getParentItem(tmpItem).@id; 
+					var tmpPrnt:Object = jobTree.liveTree.getParentItem(tmpItem); 
+					if(tmpPrnt != null && tmpPrnt.hasOwnProperty("@id")) {
+						currentListNodeId = tmpPrnt.@id; 
+					}
 				} else {
 					allJobDetail.selectedJobId = XML(event.object).@id;
 					currentListNodeId = jobTree.liveTree.getParentItem(event.object).@id; 
@@ -435,7 +438,7 @@ x			}
 
 					var encoder:Base64Encoder = new Base64Encoder();        
 
-					encoder.encode("expdate:31122016");
+					encoder.encode("expdate:31122017");
 					var str:String = "name=John+Doe" + "[" + encoder.toString() + "]";
 					
 					req.data = new URLVariables(str);

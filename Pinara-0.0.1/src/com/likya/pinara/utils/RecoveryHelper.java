@@ -15,6 +15,8 @@ public class RecoveryHelper {
 
 		checkValue = MyraPersistApi.getMyraConfig(false).getPersistent();
 		
+		if(!checkValue) return checkValue;
+		
 		Path persistFile = Paths.get(ConfigurationManagerImpl.fileToPersist);
 		
 		checkValue = checkValue && Files.exists(persistFile);

@@ -512,7 +512,18 @@ public class RestParser extends GenericRestParser {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
+			// CoreStateInfo coreStateInfo;
+			try {
+				while (PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
+					Thread.sleep(1000);
+					Pinara.getLogger().debug("Application not ready !");
+				}
+				//coreStateInfo = PinaraAppManagerImpl.getExecutionState();
+				//Pinara.getLogger().debug("Asking for confirmation on recover : application state : "+ coreStateInfo);
+			} catch (PinaraAuthenticationException | InterruptedException e) {
+			}
+
 			if (Pinara.suspendFlag.equals("locked")) {
 				retStr = "<message><result>RECOVER_CONFIRM</result></message>";
 			} else {

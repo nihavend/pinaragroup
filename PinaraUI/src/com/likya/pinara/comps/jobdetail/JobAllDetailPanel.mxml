@@ -56,15 +56,15 @@
 			// public var role:String = UserRole.OPERATION;
 			// public var role:String = UserRole.VIEW;
 			
-			public function getStateChangedDate(item:Object, column:GridColumn):String {
+			/*public function getStateChangedDate(item:Object, column:GridColumn):String {
 				return getDate(item.@LSIDateTime);
-			}
+			}*/
 			
-			public function getDate(dateTxt:String):String {
+			/*public function getDate(dateTxt:String):String {
 				var dateFormatter:DateFormatter = new DateFormatter();
 				dateFormatter.formatString = 'JJ:NN:SS DD/MM/YYYY';
 				return dateFormatter.format(DateFormatter.parseDateString(dateTxt))
-			}
+			}*/
 			
 			public function getStateInfo(item:Object, column:GridColumn):String {
 				var stateInfo:String = "";
@@ -142,8 +142,8 @@
 					// manage.text = jobDetailXml.visualParams.commandabilityParams;
 					jobCommandType.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
 					groupId.text = jobDetailXml.@groupId;
-					lastCs.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsRealTime.startTime);
-					planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
+					lastCs.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsRecordedTime.startTime); //Transformer.getDate(jobDetailXml.management.timeManagement.jsRealTime.startTime);
+					planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsActualTime.startTime); //Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
 					sonSure.text = jobDetailXml.runtimeParams.realizedDuration;
 					
 					jobBaseInfoId.refreshData(jobDetailXml);
@@ -326,7 +326,7 @@
 					<s:DataGrid id="stateHistory" width="500" height="250" >
 						<s:columns>
 							<s:ArrayList>
-								<s:GridColumn labelFunction="getStateChangedDate" headerText="Tarih" />
+								<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
 								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
 							</s:ArrayList>
 						</s:columns>

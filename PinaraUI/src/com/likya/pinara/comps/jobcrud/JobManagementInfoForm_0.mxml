@@ -195,7 +195,7 @@
 				<!--s:CheckBox id="selectStartCond" click="selectStartCond_clickHandler(event)" /-->
 				<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="startTime" enabled="true">
 					<s:HGroup>
-						<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" />
+						<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 						<!--s:TextInput  id="bhour"
 						text="00"
 						restrict="0-23"

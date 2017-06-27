@@ -14,7 +14,7 @@
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
-			<pathelement location="${home.dir}/${sharedlib.dir}/antlib/ant-contrib-1.0b3.jar" />
+			<pathelement location="libs/ant-contrib-1.0b3.jar" />
 		</classpath>
 	</taskdef>
 	
@@ -29,7 +29,7 @@
 	<target name="doMac" if="isMac">
 		<echo message="Came into the Mac target" />
 		<!-- do whatever you want to do here for Mac systems -->
-		<property name="xmlbeans.lib" value="/Users/serkan/programlar/dev/workspace/SharedLibs/xmlbeans-2.5.0" />
+		<property name="xmlbeans.lib" value="libs" />
 	</target>
 
 	<target name="doWindows" if="isWindows">
@@ -68,7 +68,7 @@
 		<echo>...temporary directory cleared OK</echo>
 
 		<delete>
-			<fileset dir="." includes="**/*.jar" />
+			<fileset dir="." includes="**/*.jar" excludes="libs/*"/>
 		</delete>
 	</target>
 

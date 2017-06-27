@@ -140,11 +140,11 @@
 			<artifactId>myra-commons</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>likyateknoloji</groupId>
 			<artifactId>odi-myraext</artifactId>
 			<version>0.0.1</version>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>

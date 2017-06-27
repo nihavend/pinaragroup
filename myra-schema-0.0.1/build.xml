@@ -21,7 +21,11 @@
 			<pathelement location="libs/ant-contrib-1.0b3.jar" />
 		</classpath>
 	</taskdef>
-	
+
+	<condition property="isLinux">
+		<os family="Linux" />
+	</condition>
+		
 	<condition property="isMac">
 		<os family="mac" />
 	</condition>
@@ -39,6 +43,11 @@
 	<target name="doWindows" if="isWindows">
 		<echo message="Came into the Windows target" />
 		<property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" />
+	</target>
+	
+	<target name="doLinux" if="isLinux">
+		<echo message="Came into the Linux target" />
+		<property name="xmlbeans.lib" value="libs" />
 	</target>
 
 	<target name="init" depends="init2" unless="minor.number">

@@ -3,9 +3,11 @@
 
 	<property name="version" value="0.9.1" />
 
-	<property name="m2repo.dir" value="/Users/serkan/.m2/repository" />
-	<property name="dest.dir" value="/Users/serkan/Desktop/pinara_export-${version}" />
-	<property name="src.dir" value="/Users/serkan/git/pinaragroup/Pinara-0.0.1" />
+	<!--roperty name="pathinit" value="/Users/serkan" /-->
+	<property name="pathinit" value="/home/tloslite17/relman/releases" />
+	<property name="m2repo.dir" value="${pathinit}/.m2/repository" />
+	<property name="dest.dir" value="${pathinit}/Desktop/pinara_export-${version}" />
+	<property name="src.dir" value="${pathinit}/dev/git/pinaragroup/Pinara-0.0.1" />
 
 	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
 	<!--ANT 1.7 is required                                        -->
@@ -16,7 +18,7 @@
 				<attribute name="Main-Class" value="com.likya.pinara.Pinara"/>
 				<attribute name="Class-Path" value=". libs/myra-0.0.1.jar libs/myra-schema-0.0.1.jar libs/winp-1.14.jar libs/junit-3.8.1.jar libs/commons-collections-3.2.1.jar libs/eval-0.5.jar libs/myra-commons-0.0.1.jar libs/likya-commons-0.0.1.jar libs/joda-time-2.2.jar libs/log4j-1.2.17.jar libs/commons-codec-1.8.jar libs/commons-lang-2.6.jar libs/xmlbeans-2.6.0.jar libs/stax-api-1.0.1.jar libs/gson-2.2.3.jar libs/jmxremote_optional-1.0.0.jar libs/activation-1.1.1.jar libs/dsn-1.5.0.jar libs/javax.mail-1.5.0.jar libs/imap-1.5.0.jar libs/mailapi-1.4.3.jar libs/pop3-1.5.0.jar libs/smtp-1.5.0.jar libs/jsch-0.1.50.jar"/>
 			</manifest>
-			<fileset dir="/Users/serkan/git/pinaragroup/Pinara-0.0.1/target/classes"/>
+			<fileset dir="${pathinit}/dev/git/pinaragroup/Pinara-0.0.1/target/classes"/>
 		</jar>
 		<!--delete dir="${dest.dir}/libs"/-->
 		<mkdir dir="${dest.dir}/libs"/>
@@ -67,7 +69,7 @@
 		<copy file="${src.dir}/flexroot/rpc_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/mx_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 
-		<copy file="${src.dir}/bin/start-no-tr.bat" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/start.bat" todir="${dest.dir}"/>
 		<chmod file="${dest.dir}/start.sh" perm="ugo+rx"/>
 
 		<copy file="${src.dir}/bin/start-tr.bat" todir="${dest.dir}"/>
@@ -81,12 +83,12 @@
 		<copy file="${src.dir}/conf/myraConfig.xml" todir="${dest.dir}/conf"/>
 		<copy file="${src.dir}/conf/pinaraConfig.xml" todir="${dest.dir}/conf"/>
 
-		<delete dir="/Users/serkan/Desktop/pinaraDist"/>
-		<mkdir dir="/Users/serkan/Desktop/pinaraDist"/>
+		<delete dir="${pathinit}/Desktop/pinaraDist"/>
+		<mkdir dir="${pathinit}/Desktop/pinaraDist"/>
 
-		<tar destfile="/Users/serkan/Desktop/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/>
-		<gzip destfile="/Users/serkan/Desktop/pinaraDist/pinaraWLM-${version}.tar.gz" src="/Users/serkan/Desktop/pinaraDist/pinaraWLM-${version}.tar"/>
-		<delete file="/Users/serkan/Desktop/pinaraDist/pinaraWLM$-{version}.tar"/>
+		<tar destfile="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/>
+		<gzip destfile="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar.gz" src="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar"/>
+		<delete file="${pathinit}/Desktop/pinaraDist/pinaraWLM$-{version}.tar"/>
 
 	</target>
 </project>

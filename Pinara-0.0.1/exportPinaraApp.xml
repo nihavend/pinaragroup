@@ -3,12 +3,18 @@
 
 	<property name="version" value="0.9.1" />
 
-	<!--roperty name="pathinit" value="/Users/serkan" /-->
+	<property name="userhome" value="/Users/serkan" />
+	<property name="gitdir" value="${userhome}/dev/git" />
+	<property name="releases" value="${userhome}/dev/relman/releases" />
+
+	<!--
 	<property name="userhome" value="/home/pinara17" />
-	<property name="pathinit" value="${userhome}/relman/releases" />
 	<property name="gitdir" value="${userhome}/relman/git" />
+	<property name="releases" value="${userhome}/relman/releases" />
+	-->
+
 	<property name="m2repo.dir" value="${userhome}/.m2/repository" />
-	<property name="dest.dir" value="${userhome}/Desktop/pinara_export-${version}" />
+	<property name="dest.dir" value="${releases}/pinara_export-${version}" />
 	<property name="src.dir" value="${gitdir}/pinaragroup/Pinara-0.0.1" />
 
 	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
@@ -85,12 +91,12 @@
 		<copy file="${src.dir}/conf/myraConfig.xml" todir="${dest.dir}/conf"/>
 		<copy file="${src.dir}/conf/pinaraConfig.xml" todir="${dest.dir}/conf"/>
 
-		<delete dir="${pathinit}/Desktop/pinaraDist"/>
-		<mkdir dir="${pathinit}/Desktop/pinaraDist"/>
+		<delete dir="${releases}/pinaraDist"/>
+		<mkdir dir="${releases}/pinaraDist"/>
 
-		<tar destfile="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/>
-		<gzip destfile="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar.gz" src="${pathinit}/Desktop/pinaraDist/pinaraWLM-${version}.tar"/>
-		<delete file="${pathinit}/Desktop/pinaraDist/pinaraWLM$-{version}.tar"/>
+		<tar destfile="${releases}/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/>
+		<gzip destfile="${releases}/pinaraDist/pinaraWLM-${version}.tar.gz" src="${releases}/pinaraDist/pinaraWLM-${version}.tar"/>
+		<delete file="${releases}/pinaraDist/pinaraWLM$-{version}.tar"/>
 
 	</target>
 </project>

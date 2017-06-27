@@ -1,0 +1,12 @@
+<pinaraConfig version="0.0.1" instanceName="Pinara Deployment Manager" xmlns="http://www.likyateknoloji.com/pinara-config"
+	xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra="http://www.likyateknoloji.com/myra-stateinfo">
+	<senaryoDosyasi>senaryo</senaryoDosyasi>
+	<serverIpAddress>0.0.0.0</serverIpAddress>
+	<httpPort>4000</httpPort>
+	<httpsPort>4443</httpsPort>
+	<persistent>false</persistent>
+	<mcInfo>
+		<jmxPort>4002</jmxPort>
+	</mcInfo>
+	<logPath>logs</logPath>
+</pinaraConfig>

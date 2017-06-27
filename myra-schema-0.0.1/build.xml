@@ -23,7 +23,7 @@
 	</taskdef>
 
 	<condition property="isLinux">
-		<os family="linux" />
+		<os family="unix" />
 	</condition>
 		
 	<condition property="isMac">

@@ -12,6 +12,10 @@
 	<property name="app.deploy.dir" value="${basedir}" />
 	<property name="version.num" value="0.0.1" />
 
+	<echo>
+      OS Name is ${os.name}
+	 </echo>
+	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="libs/ant-contrib-1.0b3.jar" />

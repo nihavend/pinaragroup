@@ -23,7 +23,7 @@
 	</taskdef>
 
 	<condition property="isLinux">
-		<os family="Linux" />
+		<os family="linux" />
 	</condition>
 		
 	<condition property="isMac">
@@ -85,7 +85,7 @@
 		</delete>
 	</target>
 
-	<target name="initxmlbeans" depends="cleanUp, doMac, doWindows">
+	<target name="initxmlbeans" depends="cleanUp, doMac, doWindows, doLinux">
 		
 		<!-- check for xbean.jar from binary distribution -->
 		<available property="xmlbeans.lib" value="${xmlbeans.home}/lib" file="${xmlbeans.home}/lib/xbean.jar" />

@@ -205,10 +205,10 @@
 			<artifactId>smtp</artifactId>
 			<version>1.5.0</version>
 		</dependency>
-		<dependency>
+		<!-- dependency>
 			<groupId>jsch</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.50</version>
-		</dependency>
+		</dependency-->
 	</dependencies>
 </project>

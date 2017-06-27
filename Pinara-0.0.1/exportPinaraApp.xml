@@ -4,10 +4,11 @@
 	<property name="version" value="0.9.1" />
 
 	<!--roperty name="pathinit" value="/Users/serkan" /-->
-	<property name="pathinit" value="/home/pinara17/relman/releases" />
-	<property name="gitdir" value="/home/pinara17/relman/git" />
-	<property name="m2repo.dir" value="${pathinit}/.m2/repository" />
-	<property name="dest.dir" value="${pathinit}/Desktop/pinara_export-${version}" />
+	<property name="userhome" value="/home/pinara17" />
+	<property name="pathinit" value="${userhome}/relman/releases" />
+	<property name="gitdir" value="${userhome}/relman/git" />
+	<property name="m2repo.dir" value="${userhome}/.m2/repository" />
+	<property name="dest.dir" value="${userhome}/Desktop/pinara_export-${version}" />
 	<property name="src.dir" value="${gitdir}/pinaragroup/Pinara-0.0.1" />
 
 	<!--this file was created by Eclipse Runnable JAR Export Wizard-->

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_run_jar" name="Create Runnable Jar for Project Pinara with libraries in sub-folder">
-
+	<echo>User Home Folder : ${user.home}</echo>
 	<property name="version" value="0.9.1" />
 
-	<property name="userhome" value="/Users/serkan" />
-	<property name="gitdir" value="${userhome}/dev/git" />
-	<property name="releases" value="${userhome}/dev/relman/releases" />
-
-	<!--
-	<property name="userhome" value="/home/pinara17" />
-	<property name="gitdir" value="${userhome}/relman/git" />
-	<property name="releases" value="${userhome}/relman/releases" />
-	-->
-
-	<property name="m2repo.dir" value="${userhome}/.m2/repository" />
+	<property name="relman" value="${user.home}/relman" />
+	<property name="gitdir" value="${relman}/git" />
+	<property name="releases" value="${relman}/releases" />
+	
+	<property name="m2repo.dir" value="${user.home}/.m2/repository" />
 	<property name="dest.dir" value="${releases}/pinara_export-${version}" />
 	<property name="src.dir" value="${gitdir}/pinaragroup/Pinara-0.0.1" />
 

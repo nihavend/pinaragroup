@@ -1,0 +1,3 @@
+Lokal çalıştırırken aşağıdaki satırı komut satırına arguman olarak yazmanız gerekir.
+
+-Drelman=/Users/serkan/dev/relman -Dgitdir=/Users/serkan/dev/git

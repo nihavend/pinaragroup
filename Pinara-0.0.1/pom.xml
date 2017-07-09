@@ -9,6 +9,13 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<targetPath>com/likya/pinara/resources</targetPath>
+				<directory>src/com/likya/pinara/resources</directory>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
     			<!-- Ignore/Execute plugin execution -->
@@ -39,7 +46,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

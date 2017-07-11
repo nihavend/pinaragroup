@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="remoting-service" class="flex.messaging.services.RemotingService">
+
+	<adapters>
+		<adapter-definition id="java-object"
+			class="flex.messaging.services.remoting.adapters.JavaAdapter"
+			default="true" />
+	</adapters>
+
+	<default-channels>
+		<channel ref="my-amf" />
+	</default-channels>
+
+	<destination id="HyperSQL">
+		<properties>
+			<source>com.likya.tloslite.db.HyperSQLImpl</source>
+		</properties>
+	</destination>
+
+
+	<destination id="H2">
+		<properties>
+			<source>com.likya.tloslite.db.H2Impl</source>
+		</properties>
+	</destination>
+
+	<destination id="Oracle">
+		<properties>
+			<source>com.likya.tloslite.db.OracleLdapImpl</source>
+		</properties>
+	</destination>
+
+	<destination id="Sas">
+		<properties>
+			<source>com.likya.tloslite.db.SASImpl</source>
+		</properties>
+	</destination>
+
+	<destination id="JmxConnection">
+		<properties>
+			<source>com.likya.tloslite.jmx.Client</source>
+		</properties>
+	</destination>
+</service>

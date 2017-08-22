@@ -12,6 +12,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
@@ -171,6 +172,18 @@
 				}
 			}
 			
+			protected function viewXml_clickHandler():void
+			{
+				var myraGenericJob:XML = ViewToJobXml.getXML(this);
+				
+				var dummyWindow:DummyForm = PopUpManager.createPopUp(this, DummyForm, true) as DummyForm;
+				dummyWindow.title="Job XML";
+				dummyWindow.htmlTextAsHTML = myraGenericJob;
+				PopUpManager.centerPopUp(dummyWindow);
+				dummyWindow.setFocus();
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -254,6 +267,9 @@
 						  click="checkConfirmSave();" /> 
 				<s:Button label="Cancel"
 						  click="handleCloseEvent();"/> 
+				<s:Button label="View Job XML"
+						  click="viewXml_clickHandler();"/> 
+				
 			</s:HGroup>
 		</s:BorderContainer>
 	</s:VGroup>

@@ -238,52 +238,48 @@ package com.likya.pinara.utils {
 			var managementInfoXML:Object = myraJobList.myra::genericJob.myra_jobprops::management;
 			
 			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "USER") {
+				/** User Managed ****/
 				managementInfoXML.appendChild(<wla:trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">USER</wla:trigger>);
-				/** Time Management ****/
-				managementInfoXML = get_TimeManagement(managementInfoXML, j);
 			} else {
-				
-				/** Trigger Info ****/
-				
+				/** Time Managed ****/
 				managementInfoXML.appendChild(<wla:trigger xmlns:wla="http://www.likyateknoloji.com/wla-gen">TIME</wla:trigger>);
+			}
 				
-				/** Period Info ****/
-				
-				if(j.managementInfoForm_1.periodInfo.selected) {
-					managementInfoXML.appendChild(<myra-jobprops:periodInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
-					
-					managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm_1.relativeStart.selectedItem;
-					managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
-					if(j.managementInfoForm_1.maxCountValue.text != null && j.managementInfoForm_1.maxCountValue.text.length > 0 && j.managementInfoForm_1.maxCountValue.text != "0") {
-						managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
-					}
-				}
-				
-				/** Time Management ****/
-				managementInfoXML = get_TimeManagement(managementInfoXML, j);
-				
-				/** Cascading Conditions ****/
-				
-				managementInfoXML.appendChild(<wla:cascadingConditions xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
-				
-				managementInfoXML.cascadingConditions.appendChild(<wla:runEvenIfFailed xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.cascadingConditions.appendChild(<wla:jobSafeToRestart xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				
-				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
-				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
-				
-				if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
-					managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-					managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-					
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
-					if(j.managementInfoForm_1.maxCountValueAr.text != "") {
-						managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
-					}
-					
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
-				}
+			/** Period Info ****/
 			
+			if(j.managementInfoForm_1.periodInfo.selected) {
+				managementInfoXML.appendChild(<myra-jobprops:periodInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
+				
+				managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm_1.relativeStart.selectedItem;
+				managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
+				if(j.managementInfoForm_1.maxCountValue.text != null && j.managementInfoForm_1.maxCountValue.text.length > 0 && j.managementInfoForm_1.maxCountValue.text != "0") {
+					managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
+				}
+			}
+			
+			/** Time Management ****/
+			managementInfoXML = get_TimeManagement(managementInfoXML, j);
+			
+			/** Cascading Conditions ****/
+			
+			managementInfoXML.appendChild(<wla:cascadingConditions xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
+			
+			managementInfoXML.cascadingConditions.appendChild(<wla:runEvenIfFailed xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			managementInfoXML.cascadingConditions.appendChild(<wla:jobSafeToRestart xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			
+			managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
+			managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
+			
+			if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
+				managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				
+				managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
+				if(j.managementInfoForm_1.maxCountValueAr.text != "") {
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
+				}
+				
+				managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 			}
 			
 			return myraJobList;
@@ -296,7 +292,7 @@ package com.likya.pinara.utils {
 			
 			managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			
-			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "TIME") {
+			// if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "TIME") {
 				
 				var bInfo : Boolean = j.managementInfoForm_0.timeFrameStart.selected;
 				var eInfo : Boolean = j.managementInfoForm_0.timeFrameStop.selected;
@@ -342,7 +338,7 @@ package com.likya.pinara.utils {
 				managementInfoXML.timeManagement.jsActualTime.startTime = dateString;
 				//}
 				
-			}
+			// }
 			
 			managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);

@@ -62,9 +62,15 @@
 				if (node.localName() == "list") {
 					return node.@title; 
 				} else if (node.localName() == "jobGroup") {
+					if(node.@id == "") {
+						Alert.show("node : " + node);
+					}
 					return node.@title + " [Id:" + node.@id + "]"; 
 				} else if(node.localName() == "jobProperty") {
 					//return node.@name; 
+					if(node.@id == "") {
+						Alert.show("node : " + node);
+					}
 					return node.@title + " [Id:" + node.@id + "]"; 
 				}
 				

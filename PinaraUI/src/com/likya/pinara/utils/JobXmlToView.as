@@ -86,6 +86,20 @@ package com.likya.pinara.utils {
 				dependencyListForm.dependencyListGrid.dataProvider.addItem(depArray);
 			}
 			dependencyListForm.depExp.text = "" + jobDetailXml.DependencyList.DependencyExpression;
+			
+			if(jobDetailXml.DependencyList.hasOwnProperty("sensInfo")) {
+				if(jobDetailXml.DependencyList.sensInfo.hasOwnProperty("sensTime")) {
+					dependencyListForm.sensInfo.selectedValue = "time";
+					dependencyListForm.lbldel.visible = true;
+					dependencyListForm.step.visible = true;
+					dependencyListForm.lblrel.visible = true;
+					dependencyListForm.relative.visible = true;
+					dependencyListForm.relative.selectedItem = "" + jobDetailXml.DependencyList.sensInfo.sensTime.@relativeStart;
+					dependencyListForm.step.text = jobDetailXml.DependencyList.sensInfo.sensTime.@delay;
+				} else {
+					dependencyListForm.sensInfo.selectedValue = "dep";
+				}
+			}
 		}
 		
 		public static function prepare_managementInfoForm(managementInfoForm_0:JobManagementInfoForm_0, managementInfoForm_1:JobManagementInfoForm_1, jobDetailXml:XML):void {

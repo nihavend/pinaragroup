@@ -90,7 +90,7 @@ package com.likya.pinara.utils
 			 */
 			
 			if(event.statusCode == 200) {
-				Alert.show("Url : " + event.target.url + "\nHata Mesajı : " + event.fault.faultString);
+				Alert.show("Url : " + event.target.url + "\nHata Mesajı : " + event.fault.faultString + "\nResponse : " + event.message.body);
 			} else if (event.statusCode == 400) {
 				Alert.show("Kullacını adı ya da şifre hatalı !");
 			/*} else if (event.statusCode == 499) {

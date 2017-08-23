@@ -98,7 +98,11 @@ package com.likya.pinara.utils {
 
 			if(j.dependencyListForm.sensInfo.selectedValue == "time") {
 				dependencyListXML.appendChild(<myra-jobprops:sensInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops"><myra-jobprops:sensTime/></myra-jobprops:sensInfo>);
-				dependencyListXML.myra_jobprops::sensInfo.myra_jobprops::sensTime.@delay = j.dependencyListForm.step.text;
+				if(j.dependencyListForm.step.text == "") {
+					dependencyListXML.myra_jobprops::sensInfo.myra_jobprops::sensTime.@delay = "PT10S"
+				} else {
+					dependencyListXML.myra_jobprops::sensInfo.myra_jobprops::sensTime.@delay = j.dependencyListForm.step.text;
+				}
 				dependencyListXML.myra_jobprops::sensInfo.myra_jobprops::sensTime.@relativeStart = j.dependencyListForm.relative.selectedItem;
 			} 
 			

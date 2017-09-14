@@ -3,10 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>likyateknoloji</groupId>
 	<artifactId>pinara</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.9.1</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    	<!-- maven.build.timestamp.format>yyyyMMdd'T'HH:mm:ss</maven.build.timestamp.format -->
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -16,6 +17,7 @@
 				<directory>src/com/likya/pinara/resources</directory>
 			</resource>
 		</resources>
+		<!-- finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName -->
 		<pluginManagement>
 			<plugins>
     			<!-- Ignore/Execute plugin execution -->

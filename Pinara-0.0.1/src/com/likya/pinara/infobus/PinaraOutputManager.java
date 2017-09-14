@@ -50,7 +50,7 @@ public class PinaraOutputManager implements Runnable {
 					dump += (liveStateInfo.getStatusName() == null ? "" : ("-" + liveStateInfo.getStatusName().toString()));
 					Pinara.getLogger().debug(dump);
 					if(StateName.FINISHED.equals(outputData.getLiveStateInfo().getStateName())) {
-						Pinara.getLogger().debug(outputData.getJobId() + " is finished !!!!");
+						Pinara.getLogger().debug("Job >> " + outputData.getJobId() + ":" + outputData.getJobName() + " is finished !!!!");
 						// System.err.println(outputData.getJobId() + " is finished !!!!");
 					}
 					
@@ -63,7 +63,7 @@ public class PinaraOutputManager implements Runnable {
 						MailInfo mailInfo = pinaraConfig.getMailInfo();
 						LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
 						if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
-							SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job name:" + outputData.getJobId(), "Belirtilen iş şu duruma geçti : " + dump);
+							SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName(), "Belirtilen iş şu duruma geçti : " + dump);
 							Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
 						}
 					}

@@ -29,6 +29,8 @@
 				<xs:element ref="smsInfo" minOccurs="0" maxOccurs="1" />
 				<xs:element name="logFile" type="fileNameType" minOccurs="0" maxOccurs="1" />
 				<xs:element name="logPath" type="logPathType" minOccurs="0" maxOccurs="1" />
+				<!-- optional (if not provided cache is disabled) : cacheExpire  duration in seconds, default is 30 days -->
+				<xs:element name="cacheExpire" type="secondsType" minOccurs="0" maxOccurs="1" default="2592000" />
 			</xs:sequence>
 			<xs:attribute name="version" use="required">
 				<xs:simpleType>
@@ -97,4 +99,7 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:simpleType name="secondsType">
+		<xs:restriction base="xs:positiveInteger" />
+	</xs:simpleType>
 </xs:schema>

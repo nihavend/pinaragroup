@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
 import com.likya.pinara.Pinara;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.Headers;
 
 public class FlexHandler implements HttpHandler {
 
@@ -116,6 +118,14 @@ public class FlexHandler implements HttpHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		BigInteger bigInteger = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getCacheExpire();
+		if(bigInteger != null) {
+			Headers headers = httpExchange.getResponseHeaders();
+			// headers.add("Cache-Control", "max-age=2592000, public"); // 30days (60sec * 60min * 24hours * 30days)
+			// headers.add("Cache-Control", "max-age=86400, public"); // 30days (60sec * 60min * 24hours * 1days)
+			headers.add("Cache-Control", "max-age=" + bigInteger.intValue() + ", public");
 		}
 
 		httpExchange.sendResponseHeaders(200, outputByteArray.length);

@@ -1,1 +1,1 @@
-java -jar libs/tlostestjob.jar 10000 0 logUx01.log
+java -jar /Users/serkan/dev/git/pinaragroup/pinara-libs/libs/tlostestjob.jar 10000 0 logUx01.log

@@ -29,10 +29,10 @@
 			</myra:LiveStateInfos>
 		</myra:stateInfos>
 		<useEncryption>true</useEncryption>
-		<userName>test9027@likyateknoloji.com</userName>
-		<lik:userPassword>k=U6TS#wmSSF</lik:userPassword>
-		<smtpServerHostName>mail.likyateknoloji.com</smtpServerHostName>
-		<port>587</port>
+		<userName></userName>
+		<lik:userPassword></lik:userPassword>
+		<smtpServerHostName></smtpServerHostName>
+		<port></port>
 	</mailInfo>	
 	<mcInfo>
 		<jmxPort>4002</jmxPort>

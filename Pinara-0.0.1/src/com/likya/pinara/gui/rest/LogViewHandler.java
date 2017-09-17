@@ -3,7 +3,6 @@ package com.likya.pinara.gui.rest;
 import java.io.File;
 
 import com.likya.commons.utils.FileUtils;
-import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
@@ -13,7 +12,6 @@ public class LogViewHandler extends FileViewHandler {
 
 	public String handleView(ViewTypeInfo viewTypeInfo) {
 
-		String confPath = Pinara.CONFIG_PATH + File.separator;
 		String dataPath = Pinara.DATA_PATH + File.separator;
 		String logPath = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getLogPath() + File.separator;
 		
@@ -28,7 +26,7 @@ public class LogViewHandler extends FileViewHandler {
 			switch (viewTypeInfo.viewSubTypeText) {
 
 			case "pinaraConfig":
-				viewFile = confPath + Pinara.CONFIG_FILE;
+				viewFile = Pinara.CONFIG_FILE_PATH;
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {
@@ -40,7 +38,7 @@ public class LogViewHandler extends FileViewHandler {
 			case "myraConfig":
 				// response = TlosServer.getTlosParameters().getConfigFileContent();
 				// TlosParameters.setRequestedFileName(TlosServer.getConfigFileName());
-				viewFile = confPath + CoreFactory.CONFIG_FILE;
+				viewFile = Pinara.CONFIG_FILE_PATH;
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {

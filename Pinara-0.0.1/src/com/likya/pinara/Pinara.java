@@ -28,10 +28,9 @@ import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 
 public class Pinara extends PinaraBase {
 
-	public static final String CONFIG_PATH = "conf";
-	public static final String CONFIG_FILE = "pinaraConfig.xml";
+	public static String CONFIG_FILE_PATH = "conf" + File.separator + "pinaraConfig.xml";
 	
-	public static final String DATA_PATH = "data";
+	public static String DATA_PATH = "data";
 	
 	public static String suspendFlag = "locked";
 	public static boolean forceToRecover = false;
@@ -49,13 +48,13 @@ public class Pinara extends PinaraBase {
 
 	public static void main(String[] args) {
 		
+		parseCmdArgs(args);
+		
 		checkDataPath();
 
 		ConfigurationManager configurationManager = loadConfig();
 
 		registerMessageBundle();
-
-		parseCmdArgs(args);
 
 		checkStartUp();
 
@@ -86,7 +85,7 @@ public class Pinara extends PinaraBase {
 
 		PinaraConfigDocument pinaraConfigDocument = null;
 
-		Path configFile = Paths.get(CONFIG_PATH + File.separator + CONFIG_FILE);
+		Path configFile = Paths.get(CONFIG_FILE_PATH);
 
 		if (Files.notExists(configFile)) {
 			printlnerr("Dosya belirtilen dizinde bulunamadı : " + configFile.toString());
@@ -379,6 +378,12 @@ public class Pinara extends PinaraBase {
 				if (i < args.length) {
 					ValidateLicense.setLicensePath(args[i++]);
 				}
+			} else if (arg.equals("-cfg")) {
+				if (i < args.length)
+					CONFIG_FILE_PATH = args[i++];			
+			} else if (arg.equals("-dpath")) {
+				if (i < args.length)
+					DATA_PATH = args[i++];
 			}
 		}
 	}

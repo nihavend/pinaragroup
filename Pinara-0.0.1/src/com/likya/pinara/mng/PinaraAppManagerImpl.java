@@ -365,11 +365,12 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		}
 	}
 	
-	public void updateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
+	public String updateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
 			jobOperations.updateJob(abstractJobType, persist);
 			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
 			// e.printStackTrace();
 			throw new PinaraXMLValidationException(e);

@@ -9,7 +9,10 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.google.gson.Gson;
 import com.likya.myra.commons.utils.IdFilter;
 import com.likya.myra.commons.utils.SSSFilter;
+import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
+import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.ManagementOperationsImpl;
+import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.utils.JobQueueOperations;
@@ -26,6 +29,7 @@ import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
+import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
 
 public class RestParser extends GenericRestParser {
 
@@ -482,7 +486,9 @@ public class RestParser extends GenericRestParser {
 
 		case RestParser.CMD_JOBUPDATE:
 			try {
+				// String jobId = 
 				extractPostInfo(bufferString, (byte) 0x02);
+				// retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId></message>";
 				retStr = "<message><result>OK</result></message>";
 			} catch (Throwable t) {
 				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
@@ -492,8 +498,10 @@ public class RestParser extends GenericRestParser {
 
 		case RestParser.CMD_JOBDELETE:
 			try {
-				extractPostInfo(bufferString, (byte) 0x03);
-				retStr = "<message><result>OK</result></message>";
+				String netTreeId = extractPostInfo(bufferString, (byte) 0x03);
+				// retStr = "<message><result>OK</result></message>";
+				retStr = "<message><result>OK</result><netTreeId>" + netTreeId + "</netTreeId></message>";
+				Pinara.getLogger().info("netTreeId : " + netTreeId);
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
@@ -557,11 +565,21 @@ public class RestParser extends GenericRestParser {
 		case 0x01:
 			return PinaraAppManagerImpl.getInstance().addJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 		case 0x02:
-			PinaraAppManagerImpl.getInstance().updateJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
-			break;
+			return PinaraAppManagerImpl.getInstance().updateJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 		case 0x03:
-			PinaraAppManagerImpl.getInstance().deleteJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
-			break;
+			String jobId = myraGenericJob;
+			String netTreeId = "-1";
+			JobImpl jobImpl = CoreFactory.getInstance().getMonitoringOperations().getJobQueue().get(jobId);
+			if (jobImpl.getAbstractJobType().getDependencyList() != null && jobImpl.getAbstractJobType().getDependencyList().sizeOfItemArray() != 0) {
+				Item item = jobImpl.getAbstractJobType().getDependencyList().getItemArray()[0];
+				String jsId = item.getJsId();
+				PinaraAppManagerImpl.getInstance().deleteJob(jobId, Boolean.parseBoolean(serializeInfo));
+				NetTree netTree = JobQueueOperations.getNetTree(jsId);
+				netTreeId = netTree.getVirtualId();
+			} else {
+				PinaraAppManagerImpl.getInstance().deleteJob(jobId, Boolean.parseBoolean(serializeInfo));
+			}
+			return netTreeId;
 		default:
 			try {
 				throw new Exception("Undefined command value : " + command);

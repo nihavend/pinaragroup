@@ -9,7 +9,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.google.gson.Gson;
 import com.likya.myra.commons.utils.IdFilter;
 import com.likya.myra.commons.utils.SSSFilter;
-import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.jobs.JobImpl;
@@ -476,8 +475,12 @@ public class RestParser extends GenericRestParser {
 		case RestParser.CMD_JOBADD:
 			try {
 				String jobId = extractPostInfo(bufferString, (byte) 0x01);
-				retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId></message>";
-			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
+				String netTreeId = JobQueueOperations.getNetTreeId(jobId);
+				netTreeId = netTreeId == null ? "-1":netTreeId;
+				
+				retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId><netTreeId>" + netTreeId + "</netTreeId></message>";
+				Pinara.getLogger().info("netTreeId : " + netTreeId);
+			} catch (PinaraAuthenticationException | PinaraXMLValidationException | Exception e) {
 				retStr = "<message><result>NOK</result><desc>" + e.getLocalizedMessage() + "</desc></message>";
 				e.printStackTrace();
 			}
@@ -486,10 +489,12 @@ public class RestParser extends GenericRestParser {
 
 		case RestParser.CMD_JOBUPDATE:
 			try {
-				// String jobId = 
-				extractPostInfo(bufferString, (byte) 0x02);
-				// retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId></message>";
-				retStr = "<message><result>OK</result></message>";
+				String jobId = extractPostInfo(bufferString, (byte) 0x02);
+				String netTreeId = JobQueueOperations.getNetTreeId(jobId);
+				netTreeId = netTreeId == null ? "-1":netTreeId;
+				
+				retStr = "<message><result>OK</result><jobId>" + jobId + "</jobId><netTreeId>" + netTreeId + "</netTreeId></message>";
+				Pinara.getLogger().info("netTreeId : " + netTreeId);
 			} catch (Throwable t) {
 				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
 				t.printStackTrace();
@@ -498,8 +503,14 @@ public class RestParser extends GenericRestParser {
 
 		case RestParser.CMD_JOBDELETE:
 			try {
-				String netTreeId = extractPostInfo(bufferString, (byte) 0x03);
-				// retStr = "<message><result>OK</result></message>";
+				
+				String fJobId = extractPostInfo(bufferString, (byte) 0x03);
+				String netTreeId = "-1";
+				if(fJobId != null) {
+					netTreeId = JobQueueOperations.getNetTreeId(fJobId);
+				}
+				netTreeId = netTreeId == null ? "-1":netTreeId;
+				
 				retStr = "<message><result>OK</result><netTreeId>" + netTreeId + "</netTreeId></message>";
 				Pinara.getLogger().info("netTreeId : " + netTreeId);
 			} catch (PinaraAuthenticationException | PinaraXMLValidationException e) {
@@ -567,6 +578,13 @@ public class RestParser extends GenericRestParser {
 		case 0x02:
 			return PinaraAppManagerImpl.getInstance().updateJob(myraGenericJob, Boolean.parseBoolean(serializeInfo));
 		case 0x03:
+			
+			String jobId = myraGenericJob;
+			String fJobId = getFamilyJobId(myraGenericJob);
+			
+			PinaraAppManagerImpl.getInstance().deleteJob(jobId, Boolean.parseBoolean(serializeInfo));
+			
+			/*
 			String jobId = myraGenericJob;
 			String netTreeId = "-1";
 			JobImpl jobImpl = CoreFactory.getInstance().getMonitoringOperations().getJobQueue().get(jobId);
@@ -579,7 +597,9 @@ public class RestParser extends GenericRestParser {
 			} else {
 				PinaraAppManagerImpl.getInstance().deleteJob(jobId, Boolean.parseBoolean(serializeInfo));
 			}
-			return netTreeId;
+			*/
+			// returns the friend of job after delete
+			return fJobId;
 		default:
 			try {
 				throw new Exception("Undefined command value : " + command);
@@ -589,6 +609,20 @@ public class RestParser extends GenericRestParser {
 			break;
 		}
 
+		return null;
+	}
+	
+	private static String getFamilyJobId(String jobId) {
+		
+		JobImpl jobImpl = CoreFactory.getInstance().getMonitoringOperations().getJobQueue().get(jobId);
+		
+		if (jobImpl.getAbstractJobType().getDependencyList() != null && jobImpl.getAbstractJobType().getDependencyList().sizeOfItemArray() != 0) {
+			Item item = jobImpl.getAbstractJobType().getDependencyList().getItemArray()[0];
+			String jsId = item.getJsId();
+			
+			return jsId;
+		}
+		
 		return null;
 	}
 }

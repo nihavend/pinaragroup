@@ -83,12 +83,15 @@
 					return;
 				}
 				if(isMode == 0 || isMode == 2) { // add or clone
-					Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+					// Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
+					Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processSave, null, Alert.CANCEL);
 				} else if(isMode == 1) { // edit update
-					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);		
+					// Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);		
+					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processSave, null, Alert.CANCEL);
 				}
 			}
 			
+			/*
 			private function checkConfirmSerialization(eventObj:CloseEvent):void {
 				if(eventObj.detail == Alert.OK) {
 					Alert.okLabel = resourceManager.getString("messages", "AlertokLabel");
@@ -96,6 +99,7 @@
 					Alert.show(resourceManager.getString("messages", "serializeConfirm"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processSave, null, Alert.CANCEL);
 				}
 			}
+			*/
 			
 			// Handle the OK button.
 			private function processSave(eventObj:CloseEvent):void {

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<flexProperties enableServiceManager="false" flexServerFeatures="4" flexServerType="2" fmlDataModelLocation=".model/PinaraUI.fml" serverContextRoot="/tlmctest" serverRoot="/Users/serkan/Desktop/Demo/apache-tomcat-8.0.18/webapps/tlmctest" serverRootURL="http://127.0.0.1:3000/flex/PinaraUI.html" toolCompile="true" useServerFlexSDK="false" version="2"/>
+<flexProperties enableServiceManager="false" flexServerFeatures="4" flexServerType="2" fmlDataModelLocation=".model/PinaraUI.fml" serverContextRoot="/tlmctest" serverRoot="/Users/serkan/dev/git/pinaragroup/Pinara-0.0.1" serverRootURL="http://127.0.0.1:4000/flex/PinaraUI.html" toolCompile="true" useServerFlexSDK="false" version="2"/>

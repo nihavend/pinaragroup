@@ -293,15 +293,20 @@
 				
 				var returnXml:XML = XML(event.message.body);
 				if(returnXml.result == "NOK") {
-					// WindowUtils.showDummyWindow(this, returnXml.desc.toString());
 					trace(returnXml);
-					/**
-					 * Ekran çalışırken server kapanıp açıldığında her şeyin yenilenmesi lazım,
-					 * buna nettree id ler de dahil. Bunun için zorla login sonrası ağaç güncellemesi
-					 * yapılıyor.
-					 */
-					Alert.show("Server state is not available, please relogin !");
-					FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+
+					if(XML(returnXml).hasOwnProperty("desc")) {
+						// WindowUtils.showDummyWindow(this, returnXml.desc.toString());
+						Alert.show(returnXml.desc.toString() + " Tree data is refreshed !");
+					} else {
+						/**
+						 * Ekran çalışırken server kapanıp açıldığında her şeyin yenilenmesi lazım,
+						 * buna nettree id ler de dahil. Bunun için zorla login sonrası ağaç güncellemesi
+						 * yapılıyor.
+						 */
+						Alert.show("Server state is not available, please relogin !");
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
+					}
 					return;
 				} 
 				

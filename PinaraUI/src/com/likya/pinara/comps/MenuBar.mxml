@@ -178,7 +178,7 @@
 			}
 			private function showCloneJob():void {
 				var cloneJobWindow:JobEditWindow = PopUpManager.createPopUp(this, JobEditWindow, true) as JobEditWindow;
-				cloneJobWindow.jobDetailXml = currentDataItem;
+				cloneJobWindow.jobDetailXml = currentDataItem.copy();
 				cloneJobWindow.isMode = 2;
 				PopUpManager.centerPopUp(cloneJobWindow);
 				//Alert.show("Selected Job id : " + "");	

@@ -85,7 +85,8 @@
 				if(isMode == 0 || isMode == 2) { // add or clone
 					Alert.show(resourceManager.getString("messages", "confirmAdd"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);
 				} else if(isMode == 1) { // edit update
-					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);		}
+					Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, checkConfirmSerialization, null, Alert.CANCEL);		
+				}
 			}
 			
 			private function checkConfirmSerialization(eventObj:CloseEvent):void {
@@ -119,13 +120,16 @@
 					// Alert.show("jobManagerService.updatejob");
 					BasicAuthenticationHandler.authAndCall(jobManagerService, "updatejob", packedResponse); //jobManagerService.updatejob(myraGenericJob);
 				} 
-				refreshAfter();
+				// Aşağıdaki refreshi kaldırdım, cünkü
+				// Her job edit ya da add da netree refresh oluyor. Update sonrası yeni nettree id oluşuyor. Ancak 
+				// aşağıdaki komut eski netrre id ile server'a gidiyor ve bu nedenel de hata alıyor.
+				//refreshAfter();
 			}
 			
-			protected function refreshAfter():void {
+			// protected function refreshAfter():void {
 				// Alert.show("Dispatching refresh event...");
-				FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH));
-			}
+			//	FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH));
+			// }
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
 				Alert.show("Fault : " + event.message);	
@@ -162,8 +166,9 @@
 					
 					try {
 						returnXml = XML(event.message.body);
-						var selectedJobId:String = returnXml.jobId;
-						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH_SELECT, selectedJobId));
+						// var selectedJobId:String = returnXml.jobId;
+						// FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.REFRESH_SELECT, selectedJobId));
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, returnXml));
 					} catch(err:Error) {
 						Alert.show("jobManagerService_resultHandler Result : " + err.message);
 						returnTxt = String(event.result)

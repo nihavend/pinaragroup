@@ -36,7 +36,6 @@
 			import com.likya.pinara.utils.TreeUtils;
 			
 			import mx.controls.Alert;
-			import mx.core.FlexGlobals;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.CursorManager;
@@ -127,9 +126,23 @@
 					}
 				} else {
 					
+					if (XML(event.object).hasOwnProperty("netTreeId")) {
+						
+						selectedTreeNode = ""; // Bu alanı netTreeId için kullanmıştım artık temizlemek lazım.
+						
+						var netTreeId:String = XML(event.object).netTreeId;
+						jobListDetail.selectedNetTreeId = netTreeId;
+						
+						var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), netTreeId);
+						
+						if (searchResult[0] != undefined) {
+							jobTree.liveTree.expandItem(searchResult[0], true, false);
+							jobTree.liveTree.selectedItem = searchResult[0];
+						}
+					}					
 					// bazen id attribute olmadan direk olarak da gelebiliyor.
 					// Bu nedenle kontrol kondu Serkan...j
-					if (!XML(event.object).hasOwnProperty("@id")) {
+					else if (!XML(event.object).hasOwnProperty("@id")) {
 						jobListDetail.selectedNetTreeId = XML(event.object);
 					} else {
 						jobListDetail.selectedNetTreeId = XML(event.object).@id;
@@ -138,16 +151,25 @@
 				}
 				
 				jobListDetail.updateData();
-				
+
 			}
 			private function jobNodeSelectedHandler(event:ResourceEvent):void {
 				
 				currentState = "jobDetailState";
 				
+				if(XML(event.object).hasOwnProperty("jobId")) { // add ya da clone için buraya giriyor
+					allJobDetail.selectedJobId = XML(event.object).jobId;
+					var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), allJobDetail.selectedJobId);
+					if (searchResult[0] != undefined) {
+						TreeUtils.expandNode(jobTree.liveTree, searchResult[0]);
+						// jobTree.liveTree.selectedItem = searchResult[0];
+						jobTree.refreshTree(searchResult[0]);
+					}
+				}
 				// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
 				// bu durumda id attribute olmadan direk skalar olarak geliyor
-				if (!XML(event.object).hasOwnProperty("@id")) {
-					allJobDetail.selectedJobId = XML(event.object);
+				else if (!XML(event.object).hasOwnProperty("@id")) {
+					allJobDetail.selectedJobId = XML(event.object).jobId;
 					// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
 					var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
 					var tmpPrnt:Object = jobTree.liveTree.getParentItem(tmpItem); 
@@ -217,7 +239,14 @@ x			}
 			private function updateTree(event:ResourceEvent):void {
 				
 				trace("Updating tree !");
-				selectedTreeNode = jobTree.liveTree.getParentItem(jobTree.liveTree.selectedItem);
+				if(XML(event.object).hasOwnProperty("netTreeId")) { // add,clone,update ve delete için buraya giriyor
+					selectedTreeNode = XML(event.object);
+				} else if(event.object != null) {
+					selectedTreeNode = XML(event.object);
+				} else {
+					// selectedTreeNode = jobTree.liveTree.getParentItem(jobTree.liveTree.selectedItem);
+					selectedTreeNode = jobTree.liveTree.selectedItem;
+				}
 				//jobTree.liveTree.selectedItem = selectedTreeNode;
 				//selectedTreeNodeIdx = jobTree.liveTree.selectedIndex;
 				
@@ -233,6 +262,27 @@ x			}
 				//trace(selectedTreeNode.@id);
 				
 				jobTree.liveTree.validateNow();
+				
+				trace("onTreeUpdateComplete returned : " + new Date().valueOf());
+				
+				if(XML(selectedTreeNode).hasOwnProperty("netTreeId")) { // add,clone,update ve delete için buraya giriyor
+					if(XML(selectedTreeNode).hasOwnProperty("jobId")) { // add,clone ve update için buraya giriyor
+						if(currentState == "jobListState") {
+							// var searchResult:XMLList = TreeUtils.findNode((jobTree.liveTree.dataProvider[0] as XML), selectedTreeNode.jobId);
+							//if (searchResult[0] != undefined) {
+							// 	selectedTreeNode = jobTree.liveTree.getParentItem(searchResult[0]);
+							// }
+							dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode /*data.@Id*/));
+						} else if(currentState == "jobDetailState") {
+							dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, selectedTreeNode /*data.@Id*/));
+						}
+					} else {// delete için buraya giriyor
+						dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode));
+					}
+
+				}
+				
+				trace((jobTree.liveTree.dataProvider[0] as XML));
 				// var selectedLocal:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup.(@id == selectedTreeNode.@id)[0];
 				
 				/*

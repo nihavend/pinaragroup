@@ -178,10 +178,11 @@
 			<artifactId>gson</artifactId>
 			<version>2.2.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.glassfish.main.external/jmxremote_optional-repackaged -->
 		<dependency>
-			<groupId>jmxmp</groupId>
-			<artifactId>jmxremote_optional</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.glassfish.main.external</groupId>
+			<artifactId>jmxremote_optional-repackaged</artifactId>
+			<version>5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.activation</groupId>

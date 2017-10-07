@@ -42,7 +42,8 @@
 
 	<target name="doWindows" if="isWindows">
 		<echo message="Came into the Windows target" />
-		<property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" />
+		<!-- property name="xmlbeans.lib" value="${home.dir}/${sharedlib.dir}/xmlbeans-2.5.0" / D:/dev/git/pinaragroup -->
+		<property name="xmlbeans.lib" value="${home.dir}/git/pinaragroup/pinara-libs/libs/" />
 	</target>
 	
 	<target name="doLinux" if="isLinux">

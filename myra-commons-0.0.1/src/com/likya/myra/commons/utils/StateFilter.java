@@ -1,7 +1,8 @@
 package com.likya.myra.commons.utils;
 
-import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.PredicateUtils;
+
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.PredicateUtils;
 
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
@@ -9,7 +10,7 @@ import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 
 public class StateFilter implements JobListFilter {
 
-	private Predicate []  predicateStateNames;
+	private Predicate[]  predicateStateNames;
 
 	Predicate[] filters = new Predicate[] { new Predicate() {
 		public boolean evaluate(Object object) {

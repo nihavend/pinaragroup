@@ -6,7 +6,7 @@ import java.util.Map;
 
 import net.java.dev.eval.Expression;
 
-import org.apache.commons.collections.iterators.ArrayIterator;
+import org.apache.commons.collections4.iterators.ArrayIterator;
 import org.apache.log4j.Logger;
 
 import com.likya.myra.commons.model.UnresolvedDependencyException;

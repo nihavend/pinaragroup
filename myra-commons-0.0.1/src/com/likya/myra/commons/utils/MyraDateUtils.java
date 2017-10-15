@@ -1,12 +1,17 @@
 package com.likya.myra.commons.utils;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.xmlbeans.GDate;
 import org.apache.xmlbeans.GDuration;
+
+/*
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -16,14 +21,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
-
+*/
 import com.likya.commons.utils.DateUtils;
-import com.likya.xsd.myra.model.generics.DatetimeType;
 import com.likya.xsd.myra.model.generics.TypeOfTimeType;
 import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
 
 public class MyraDateUtils extends DateUtils {
 
+	/*
 	public static Calendar getTransitionPeriod(DatetimeType transitionDateTime) {
 
 		LocalTime localTime = new LocalTime(transitionDateTime.getTime().toString());
@@ -47,13 +52,16 @@ public class MyraDateUtils extends DateUtils {
 		return dateTime.toCalendar(Locale.US);
 
 	}
-
+	*/
+	/*
 	public static Calendar addPeriod2TransitionDateTime(Calendar transitionDateTime, Calendar transitionPeriod) {
 		DateTime transitionDateTime2 = new DateTime(transitionDateTime);
 		transitionDateTime2.plus(transitionPeriod.getTimeInMillis());
 		return transitionDateTime2.toCalendar(Locale.US);
 	}
-
+	*/
+	
+	/*
 	public static Calendar getTransitionDateTime(DatetimeType transitionDateTime) {
 
 		Calendar newCalendar = Calendar.getInstance();
@@ -71,6 +79,7 @@ public class MyraDateUtils extends DateUtils {
 		return dateTime.toCalendar(Locale.US);
 
 	}
+	*/
 	
 	/*
 	// jobın calistığı zaman verildiginde string degerini donuyor. 
@@ -226,28 +235,44 @@ public class MyraDateUtils extends DateUtils {
 		return workDuration;
 	}
 
+//  JODA
+//	public static String getServerW3CDateTime() {
+//
+//		String serverTimeZone = new String("Europe/Istanbul");
+//
+//		TimeZone timeZone = TimeZone.getTimeZone(serverTimeZone);
+//		Calendar calendar = Calendar.getInstance(timeZone);
+//
+//		DateTimeZone zone = DateTimeZone.forID(serverTimeZone);
+//
+//		LocalTime jobLocalTime = new LocalTime(calendar.getTime(), zone);
+//		LocalDate t = new LocalDate(calendar.getTime(), zone);
+//		DateTime dt = t.toDateTime(jobLocalTime, zone);
+//
+//		//		boolean isStandardOffset = zone.isStandardOffset(dt.getMillis());
+//		//		boolean isDaylightOfset = !isStandardOffset;
+//
+//		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+//		String dateStr = dt.toString(outputFormat);
+//
+//		return dateStr;
+//	}
+	
 	public static String getServerW3CDateTime() {
 
 		String serverTimeZone = new String("Europe/Istanbul");
 
-		TimeZone timeZone = TimeZone.getTimeZone(serverTimeZone);
-		Calendar calendar = Calendar.getInstance(timeZone);
+		ZoneId zone = ZoneId.of(serverTimeZone);
 
-		DateTimeZone zone = DateTimeZone.forID(serverTimeZone);
-
-		LocalTime jobLocalTime = new LocalTime(calendar.getTime(), zone);
-		LocalDate t = new LocalDate(calendar.getTime(), zone);
-		DateTime dt = t.toDateTime(jobLocalTime, zone);
-
-		//		boolean isStandardOffset = zone.isStandardOffset(dt.getMillis());
-		//		boolean isDaylightOfset = !isStandardOffset;
-
+		ZonedDateTime zonedDateTime = ZonedDateTime.now(zone);
+				
 		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
-		String dateStr = dt.toString(outputFormat);
-
+		String dateStr = zonedDateTime.format(DateTimeFormatter.ofPattern(outputFormat));
+		
 		return dateStr;
 	}
 
+	/*
 	public static Calendar dateToXmlTime(String time, String selectedTZone) {
 
 		//		DateTimeZone zonex = DateTimeZone.forID(selectedTZone);
@@ -264,56 +289,92 @@ public class MyraDateUtils extends DateUtils {
 		// TODO Locale için doğru seçim konusunda birşeyler yapmak lazım.
 		return tx.toCalendar(Locale.US);
 	}
+	*/
+
+	// JODA
+//	public static String getW3CDateTime(Calendar calendar, String selectedTZone, TypeOfTimeType.Enum myType) {
+//
+//		//		String serverTimeZone = new String("Europe/Istanbul"); // Bu server ın olduğu makinadan otomatik mi alınsın, yoksa kullanıcı mı seçsin. Yoksa ikisi birlikte mi? 
+//		//TimeZone serverTZ = TimeZone.getTimeZone(serverTimeZone);
+//
+//		String selectedTimeZone = new String(selectedTZone);
+//		//		TimeZone timeZone = TimeZone.getTimeZone(selectedTimeZone);
+//
+//		//		boolean isDstExistWhenJobIsDefined = calendar.getTimeZone().useDaylightTime(); 
+//		//		boolean isDstExistWhenJobIsPlannedToRun = timeZone.inDaylightTime(calendar.getTime());
+//
+//		//		DateTimeZone zonex = DateTimeZone.forID(serverTimeZone);
+//		DateTimeZone zone = DateTimeZone.forID(selectedTimeZone);
+//
+//		//int timeOffSet2 = zone.getOffset(calendar.getTimeInMillis())/3600000;
+//		int timeOffSet = calendar.getTimeZone().getRawOffset() / 3600000; // İşin tanımlandığı andaki Offset i, ornek +02:00
+//		//LocalTime localTime = new LocalTime(calendar.getTimeInMillis(), zonex.UTC);
+//		//		LocalTime jobLocalTime = null;
+//		LocalDateTime localDateTime = null;
+//		// Seçilen zaman tipine göre işin çalışma zamanını belirleyelim
+//		switch (myType.intValue()) {
+//		case TypeOfTimeType.INT_ACTUAL:
+//			//				jobLocalTime = new LocalTime(calendar.getTime(), zone);
+//			localDateTime = new LocalDateTime(calendar.getTime(), zone);
+//			break;
+//
+//		case TypeOfTimeType.INT_RECURRING:
+//			//				jobLocalTime = new LocalTime(calendar.getTime(), DateTimeZone.forOffsetHours(timeOffSet));
+//			localDateTime = new LocalDateTime(calendar.getTime(), DateTimeZone.forOffsetHours(timeOffSet));
+//			break;
+//
+//		case TypeOfTimeType.INT_BROADCAST: // Burası nasıl olacak tam karar vermedim.
+//			//				jobLocalTime = new LocalTime(calendar.getTime(), zone);
+//			localDateTime = new LocalDateTime(calendar.getTime(), DateTimeZone.UTC);
+//			break;
+//
+//		default:
+//			break;
+//		}
+//
+//		//LocalDate t = new LocalDate(calendar.getTime(), zone);
+//		DateTime dt = localDateTime.toDateTime(zone);
+//
+//		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+//		String dateStr = dt.toString(outputFormat);
+//
+//		return dateStr;
+//	}
 
 	public static String getW3CDateTime(Calendar calendar, String selectedTZone, TypeOfTimeType.Enum myType) {
 
-		//		String serverTimeZone = new String("Europe/Istanbul"); // Bu server ın olduğu makinadan otomatik mi alınsın, yoksa kullanıcı mı seçsin. Yoksa ikisi birlikte mi? 
-		//TimeZone serverTZ = TimeZone.getTimeZone(serverTimeZone);
-
 		String selectedTimeZone = new String(selectedTZone);
-		//		TimeZone timeZone = TimeZone.getTimeZone(selectedTimeZone);
 
-		//		boolean isDstExistWhenJobIsDefined = calendar.getTimeZone().useDaylightTime(); 
-		//		boolean isDstExistWhenJobIsPlannedToRun = timeZone.inDaylightTime(calendar.getTime());
+		ZoneId zone = ZoneId.of(selectedTimeZone);
 
-		//		DateTimeZone zonex = DateTimeZone.forID(serverTimeZone);
-		DateTimeZone zone = DateTimeZone.forID(selectedTimeZone);
-
-		//int timeOffSet2 = zone.getOffset(calendar.getTimeInMillis())/3600000;
 		int timeOffSet = calendar.getTimeZone().getRawOffset() / 3600000; // İşin tanımlandığı andaki Offset i, ornek +02:00
-		//LocalTime localTime = new LocalTime(calendar.getTimeInMillis(), zonex.UTC);
-		//		LocalTime jobLocalTime = null;
-		LocalDateTime localDateTime = null;
+
+		ZonedDateTime zonedDateTime = null;
 		// Seçilen zaman tipine göre işin çalışma zamanını belirleyelim
 		switch (myType.intValue()) {
 		case TypeOfTimeType.INT_ACTUAL:
-			//				jobLocalTime = new LocalTime(calendar.getTime(), zone);
-			localDateTime = new LocalDateTime(calendar.getTime(), zone);
+			zonedDateTime = ZonedDateTime.now(zone);
 			break;
 
 		case TypeOfTimeType.INT_RECURRING:
-			//				jobLocalTime = new LocalTime(calendar.getTime(), DateTimeZone.forOffsetHours(timeOffSet));
-			localDateTime = new LocalDateTime(calendar.getTime(), DateTimeZone.forOffsetHours(timeOffSet));
+			zonedDateTime = ZonedDateTime.now(ZoneOffset.ofHours(timeOffSet));
 			break;
 
-		case TypeOfTimeType.INT_BROADCAST: // Burası nasıl olacak tam karar vermedim.
-			//				jobLocalTime = new LocalTime(calendar.getTime(), zone);
-			localDateTime = new LocalDateTime(calendar.getTime(), DateTimeZone.UTC);
+		case TypeOfTimeType.INT_BROADCAST:
+			zonedDateTime = ZonedDateTime.now(ZoneOffset.UTC);
 			break;
 
 		default:
 			break;
 		}
 
-		//LocalDate t = new LocalDate(calendar.getTime(), zone);
-		DateTime dt = localDateTime.toDateTime(zone);
-
 		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
-		String dateStr = dt.toString(outputFormat);
-
+		String dateStr = zonedDateTime.format(DateTimeFormatter.ofPattern(outputFormat));
+		
 		return dateStr;
 	}
 
+	
 	public static long getDurationInMilliSecs(GDuration gDuration) {
 
 		// GDuration gDuration = new GDuration(durationString);

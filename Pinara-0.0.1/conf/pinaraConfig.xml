@@ -5,7 +5,7 @@
 	<httpPort>4000</httpPort>
 	<httpsPort>4443</httpsPort>
 	<persistent>false</persistent>
-	<mailInfo>
+	<!-- mailInfo>
 		<lik:EmailList>
 			<lik:email>serkan.tas@likyateknoloji.com</lik:email>
 		</lik:EmailList>
@@ -33,7 +33,7 @@
 		<lik:userPassword></lik:userPassword>
 		<smtpServerHostName></smtpServerHostName>
 		<port></port>
-	</mailInfo>	
+	</mailInfo-->	
 	<mcInfo>
 		<jmxPort>4002</jmxPort>
 	</mcInfo>

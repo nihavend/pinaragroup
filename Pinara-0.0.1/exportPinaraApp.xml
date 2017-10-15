@@ -18,7 +18,28 @@
 		<jar destfile="${dest.dir}/pinara-${version}.jar">
 			<manifest>
 				<attribute name="Main-Class" value="com.likya.pinara.Pinara"/>
-				<attribute name="Class-Path" value=". libs/myra-0.0.1.jar libs/myra-schema-0.0.1.jar libs/winp-1.14.jar libs/junit-3.8.1.jar libs/commons-collections-3.2.1.jar libs/eval-0.5.jar libs/myra-commons-0.0.1.jar libs/likya-commons-0.0.1.jar libs/joda-time-2.2.jar libs/log4j-1.2.17.jar libs/commons-codec-1.8.jar libs/commons-lang-2.6.jar libs/xmlbeans-2.6.0.jar libs/stax-api-1.0.1.jar libs/gson-2.2.3.jar libs/jmxremote_optional-1.0.0.jar libs/activation-1.1.1.jar libs/dsn-1.5.0.jar libs/javax.mail-1.5.0.jar libs/imap-1.5.0.jar libs/mailapi-1.4.3.jar libs/pop3-1.5.0.jar libs/smtp-1.5.0.jar libs/jsch-0.1.50.jar"/>
+				<attribute name="Class-Path" value=". libs/myra-0.0.1.jar 
+					libs/myra-schema-0.0.1.jar 
+					libs/winp-1.14.jar libs/junit-3.8.1.jar 
+					libs/commons-collections4-4.1.jar 
+					libs/eval-0.5.jar 
+					libs/myra-commons-0.0.1.jar 
+					libs/likya-commons-0.0.1.jar 
+					libs/log4j-1.2.17.jar 
+					libs/commons-codec-1.8.jar 
+					libs/commons-lang-2.6.jar 
+					libs/xmlbeans-2.6.0.jar 
+					libs/stax-api-1.0.1.jar 
+					libs/gson-2.2.3.jar 
+					libs/jmxremote_optional-repackaged-5.0.jar 
+					libs/activation-1.1.1.jar 
+					libs/dsn-1.5.0.jar 
+					libs/javax.mail-1.5.0.jar 
+					libs/imap-1.5.0.jar 
+					libs/mailapi-1.4.3.jar 
+					libs/pop3-1.5.0.jar 
+					libs/smtp-1.5.0.jar 
+					libs/jsch-0.1.50.jar"/>
 			</manifest>
 			<fileset dir="${gitdir}/pinaragroup/Pinara-0.0.1/target/classes"/>
 		</jar>
@@ -28,18 +49,20 @@
 		<copy file="${m2repo.dir}/likyateknoloji/myra-schema/0.0.1/myra-schema-0.0.1.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/org/jvnet/winp/winp/1.14/winp-1.14.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/junit/junit/3.8.1/junit-3.8.1.jar" todir="${dest.dir}/libs"/>
-		<copy file="${m2repo.dir}/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" todir="${dest.dir}/libs"/>
+		<!--copy file="${m2repo.dir}/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar" todir="${dest.dir}/libs"/-->
+		<copy file="${m2repo.dir}/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/net/java/dev/eval/eval/0.5/eval-0.5.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/likyateknoloji/myra-commons/0.0.1/myra-commons-0.0.1.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/likyateknoloji/likya-commons/0.0.1/likya-commons-0.0.1.jar" todir="${dest.dir}/libs"/>
-		<copy file="${m2repo.dir}/joda-time/joda-time/2.2/joda-time-2.2.jar" todir="${dest.dir}/libs"/>
+		<!--copy file="${m2repo.dir}/joda-time/joda-time/2.2/joda-time-2.2.jar" todir="${dest.dir}/libs"/-->
 		<copy file="${m2repo.dir}/log4j/log4j/1.2.17/log4j-1.2.17.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/commons-codec/commons-codec/1.8/commons-codec-1.8.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/stax/stax-api/1.0.1/stax-api-1.0.1.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/com/google/code/gson/gson/2.2.3/gson-2.2.3.jar" todir="${dest.dir}/libs"/>
-		<copy file="${m2repo.dir}/jmxmp/jmxremote_optional/1.0.0/jmxremote_optional-1.0.0.jar" todir="${dest.dir}/libs"/>
+		<!--- copy file="${m2repo.dir}/jmxmp/jmxremote_optional/1.0.0/jmxremote_optional-1.0.0.jar" todir="${dest.dir}/libs"/ -->
+		<copy file="${m2repo.dir}/org/glassfish/main/external/jmxremote_optional-repackaged/5.0/jmxremote_optional-repackaged-5.0.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/javax/activation/activation/1.1.1/activation-1.1.1.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/com/sun/mail/dsn/1.5.0/dsn-1.5.0.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/com/sun/mail/javax.mail/1.5.0/javax.mail-1.5.0.jar" todir="${dest.dir}/libs"/>

@@ -1,6 +1,6 @@
 package com.likya.myra.test.filters;
 
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 class UserNameFilter implements Predicate {
 	String userName;

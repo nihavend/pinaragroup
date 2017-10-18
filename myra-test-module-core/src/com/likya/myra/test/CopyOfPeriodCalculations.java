@@ -1,22 +1,20 @@
 package com.likya.myra.test;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.apache.xmlbeans.GDate;
 import org.apache.xmlbeans.GDuration;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
 
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.xsd.myra.model.generics.TypeOfTimeType;
@@ -130,21 +128,19 @@ public class CopyOfPeriodCalculations {
 
 	}
 
-	public static Calendar addPeriod(Calendar startDateTime, long period, String selectedTZone) {
+	protected static Calendar addPeriod(Calendar startDateTime, long period, String selectedTZone) {
 
-		DateTimeZone zonex = DateTimeZone.forID(selectedTZone);
+		ZoneId zone = ZoneId.of(selectedTZone);
 
-		// construct DateTime from JDK Date
-		DateTime dt = new DateTime(startDateTime, zonex);
+		LocalDateTime dateTime = LocalDateTime.ofInstant(startDateTime.toInstant(), zone);
 
-		Period periodInJoda = new Period(period);
+		dateTime = dateTime.plus(period, ChronoUnit.MILLIS);
 
-		DateTime newDateTime = dt.plus(periodInJoda);
+		ZonedDateTime zdt = ZonedDateTime.of(dateTime, zone);
 
-		//String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
-		//String dateStr = newDateTime.toString(outputFormat);
-
-		return newDateTime.toCalendar(Locale.ENGLISH);
+		GregorianCalendar cal = GregorianCalendar.from(zdt);
+		
+		return cal;
 	}
 
 	public static Date changeYMDPart(Date firstDate, Date secondDate) {
@@ -189,27 +185,39 @@ public class CopyOfPeriodCalculations {
 		return durationInMillis;
 	}
 
-	public static Calendar dateToXmlTime(String time, String selectedTZone) {
+	protected static Calendar dateToXmlTime(String time, String selectedTZone) {
 		
-		DateTimeParser[] parsers = { DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZZ").getParser(), DateTimeFormat.forPattern("HH:mm:ss.SSSZZ").getParser(), DateTimeFormat.forPattern("HH:mm:ss.SSS").getParser(), DateTimeFormat.forPattern("HH:mm:ss").getParser() };
-
-		DateTimeFormatter dtf = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
-
-		DateTime tx = dtf.parseDateTime(time);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+			    "[yyyy-MM-dd'T'HH:mm:ss.SSSZZ]"
+			  + "[HH:mm:ss.SSSZZ]"
+			  + "[HH:mm:ss.SSS]"
+			  + "[HH:mm:ss]"
+			);
 		
-		return tx.toCalendar(Locale.US);
+		DateTimeFormatter dtf = new DateTimeFormatterBuilder().append(formatter).toFormatter();
+		
+		LocalDateTime localDateTime = LocalDateTime.parse(time, dtf);
+		
+		ZoneId zone = ZoneId.of(selectedTZone);
+		
+		ZonedDateTime zdt = ZonedDateTime.of(localDateTime, zone);
+		
+		GregorianCalendar cal = GregorianCalendar.from(zdt);
+		
+		return cal;
+
 	}
 
 	// Alternative way of finding datetime from time with timeZone
-	public static String calendarToStringTimeFormat(Calendar time, String selectedTZone, String timeOutputFormat) {
-
-		DateTimeZone zone = DateTimeZone.forID(selectedTZone);
-		LocalTime jobLocalTime = new LocalTime(time);
-		DateTimeFormatter formatter = DateTimeFormat.forPattern(timeOutputFormat);
-		String timeString = jobLocalTime.toDateTimeToday(zone).toString(formatter);
-
-		return timeString;
-	}
+//	public static String calendarToStringTimeFormat(Calendar time, String selectedTZone, String timeOutputFormat) {
+//
+//		DateTimeZone zone = DateTimeZone.forID(selectedTZone);
+//		LocalTime jobLocalTime = new LocalTime(time);
+//		DateTimeFormatter formatter = DateTimeFormat.forPattern(timeOutputFormat);
+//		String timeString = jobLocalTime.toDateTimeToday(zone).toString(formatter);
+//
+//		return timeString;
+//	}
 	
 	public static boolean checkMaxCount(PeriodInfo periodInfo) {
 		

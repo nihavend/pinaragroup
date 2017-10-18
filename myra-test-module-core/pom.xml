@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>likyateknoloji</groupId>
 			<artifactId>pinara</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.9.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
@@ -63,6 +63,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
 		</dependency>
 	</dependencies>
 </project>

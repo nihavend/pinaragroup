@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.PredicateUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.PredicateUtils;
 
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
@@ -22,7 +21,7 @@ public class TestJobListFilter extends TestFilterBase {
 		// Predicate userNoFilter =  new UserNoFilter(myUser.userNo);
 		
 		
-		ArrayList<Predicate> filters = new ArrayList<Predicate>();
+		ArrayList filters = new ArrayList();
 
 		// filters.add(userNoFilter);
 		// filters.add(userNameFilter);
@@ -49,7 +48,7 @@ public class TestJobListFilter extends TestFilterBase {
 		
 		JobList jobList = getJobList("/Users/serkan/git/localgit/TL-2.0.0-Test/xmls/10.xml");
 		
-		Collection<?> collection = Arrays.asList(jobList.getGenericJobArray());
+		Collection collection = Arrays.asList(jobList.getGenericJobArray());
 
 		@SuppressWarnings("unchecked")
 		Collection<AbstractJobType> filteredList = CollectionUtils.select(collection, PredicateUtils.anyPredicate(filters));

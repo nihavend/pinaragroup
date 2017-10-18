@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.commons.collections.PredicateUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.PredicateUtils;
 import org.apache.log4j.Logger;
 
 import com.likya.commons.utils.FileUtils;
@@ -65,7 +65,7 @@ public class TestPredicateUtils {
 
 		StateName.Enum filterStates[] = { StateName.RUNNING, StateName.CANCELLED, StateName.FAILED, StateName.FINISHED, StateName.PENDING};
 
-		Collection<?> collection = Arrays.asList(jobListDocument.getJobList().getGenericJobArray());
+		Collection collection = Arrays.asList(jobListDocument.getJobList().getGenericJobArray());
 
 		@SuppressWarnings("unchecked")
 		Collection<AbstractJobType> filteredList = CollectionUtils.select(collection, new StateFilter(filterStates).anyPredicate());

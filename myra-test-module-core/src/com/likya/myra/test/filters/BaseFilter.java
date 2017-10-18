@@ -1,6 +1,6 @@
 package com.likya.myra.test.filters;
 
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.Predicate;
 
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;

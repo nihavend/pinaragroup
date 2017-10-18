@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.apache.commons.collections.iterators.ArrayIterator;
+import org.apache.commons.collections4.iterators.ArrayIterator;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 

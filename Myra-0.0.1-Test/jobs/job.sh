@@ -1,2 +1,0 @@
-echo  job is executed !!!!!
-

@@ -1,9 +1,12 @@
 package com.likya.pinara.test.jobcrud;
 
+import com.likya.xsd.myra.model.joblist.JobListDocument;
 
-public interface JobCrudInterface {
+public abstract class JobCrudDAO {
 
-//	public void testSimpleAdd();
+	public abstract JobListDocument readJobs(String dbPath); 
+	
+	public abstract void saveJob(String dbPath, String jobId, String jobXml);
 
 //	public void testSimpleGetUserList();
 //	

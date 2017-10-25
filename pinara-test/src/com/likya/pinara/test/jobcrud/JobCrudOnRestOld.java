@@ -3,10 +3,9 @@ package com.likya.pinara.test.jobcrud;
 
 import java.util.HashMap;
 
-import junit.framework.Assert;
-
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlOptions;
+import org.junit.Assert;
 
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.test.job.crud.SimplePropertiesGenerator;
@@ -15,8 +14,7 @@ import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
 
-
-public class JobCrudOnRestOld extends JobRestTestCaseBase implements JobCrudInterface {
+public class JobCrudOnRestOld extends JobRestTestCaseBase {
 	
 	public final static String RESTJOBROPS_CTX = pinaraUrl + "/flex/restsrvc/";
 	
@@ -222,6 +220,11 @@ public class JobCrudOnRestOld extends JobRestTestCaseBase implements JobCrudInte
 //		User tmpUser = pinaraAuthorization.readUser(recordId);
 //		Assert.assertNotNull(tmpUser);
 //	}
+
+	public void testAddJob() {
+		// TODO Auto-generated method stub
+		
+	}
 
 //	public void testSimpleReadWithUsername() {
 //		User tmpUser = pinaraAuthorization.readUser(sampleUser.getUsername());

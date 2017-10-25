@@ -10,7 +10,7 @@ public class DeSerializeSenaryo {
 	
 	public static void main(String[] args) throws Exception {
 		
-		String srcFileName = "/Users/serkan/git/pinaragroup/Pinara-0.0.1/1.xml.bin";
+		String srcFileName = "D:\\dev\\git\\pinaragroup\\Pinara-0.0.1\\data\\senaryo.pnr";
 		
 		FileInputStream inputStream = new FileInputStream(srcFileName);
 		

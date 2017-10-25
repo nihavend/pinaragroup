@@ -2,13 +2,14 @@ package com.likya.pinara.test.authcrud;
 
 import java.util.ArrayList;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Assert;
 
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
 import com.likya.pinara.model.User.StatuInfo;
+
+import junit.framework.TestCase;
 
 
 public class AuthCrud extends TestCase implements AuthCrudInterface {

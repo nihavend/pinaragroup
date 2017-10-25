@@ -2,3 +2,6 @@
 /.settings/
 /logs/
 /target/
+/console.log
+/myraTrace.log
+/testconsole.log

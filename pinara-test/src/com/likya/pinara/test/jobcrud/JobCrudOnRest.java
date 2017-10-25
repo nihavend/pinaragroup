@@ -1,13 +1,14 @@
 package com.likya.pinara.test.jobcrud;
 
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.likya.commons.utils.FileUtils;
 import com.likya.pinara.gui.rest.RestParser;
 
 
-public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterface {
+
+public class JobCrudOnRest extends JobRestTestCaseBase {
 	
 	public final static String RESTJOBROPS_CTX = "http://127.0.0.1:4000" + "/flex/restsrvc/"; // pinaraUrl + "/flex/restsrvc/";
 	
@@ -223,6 +224,11 @@ public class JobCrudOnRest extends JobRestTestCaseBase implements JobCrudInterfa
 		StringBuffer xmlString = FileUtils.readFile("/Users/serkan/git/pinaragroup/PinaraTest/testData/job.xml");
 		String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBUPDATE, xmlString.toString());
 		Assert.assertTrue(retString.contains("<result>OK</result>"));
+	}
+
+	public void testAddJob() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

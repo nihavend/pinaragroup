@@ -27,14 +27,27 @@ public class PersistApi {
 	
 	public static final String FILE_EXT = ".pnr";
 
+	public static void serialize(String dstFile, String text) throws Exception {
+		byte[] data = encryptedArray(text);
+		serializeInternal(dstFile, data);
+	}
+
 	public static void serialize(JobListDocument jobListDocument) throws Exception {
-
-		String fileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
-		
-		String dstFile = Pinara.DATA_PATH + File.separator + fileName + FILE_EXT;
-		String tmpDstFile = dstFile + ".tmp";
-
 		byte[] data = encryptedArray(jobListDocument);
+		serializeInternal(data);
+	}
+	
+	private static void serializeInternal(byte[] data) throws Exception {
+		
+		String fileName = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi();
+		String dstFile = Pinara.DATA_PATH + File.separator + fileName + FILE_EXT;
+		
+		serializeInternal(dstFile, data);
+	}
+	
+	private static void serializeInternal(String dstFile, byte[] data) throws Exception {
+		
+		String tmpDstFile = dstFile + ".tmp";
 
 		FileOutputStream outputStream = new FileOutputStream(tmpDstFile);
 
@@ -54,7 +67,8 @@ public class PersistApi {
 			Files.move(tmpPath, dstPath, StandardCopyOption.REPLACE_EXISTING);
 		} else {
 			throw new Exception(dstFile + " is not created, serialization failed !");
-		}
+		}		
+		
 	}
 	
 	public static void serializeAsFlat(String dstFileName, String text) throws Exception {
@@ -127,10 +141,14 @@ public class PersistApi {
 		
 		return dstFileName;
 	}
-
+	
 	public static byte[] encryptedArray(JobListDocument jobListDocument) throws Exception {
+		return encryptedArray(jobListDocument.toString());
+	}
 
-		LicenseMap licenseMap = LikyaSecurity.encrypt(jobListDocument.toString());
+	public static byte[] encryptedArray(String textToEncrypt) throws Exception {
+
+		LicenseMap licenseMap = LikyaSecurity.encrypt(textToEncrypt);
 
 		byte[] senaryoBytes = licenseMap.getLicenseData();
 		int sizeOfLicenseData = senaryoBytes.length;

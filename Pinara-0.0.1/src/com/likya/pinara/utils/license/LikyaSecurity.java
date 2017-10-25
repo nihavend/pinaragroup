@@ -43,6 +43,19 @@ public class LikyaSecurity {
 		return licenseMap;
 	}
 
+	public static String encryptAsStr(String input) throws Exception {
+		setUp();
+		cipher.init(Cipher.ENCRYPT_MODE, key, paramSpec);
+
+		byte[] inputBytes = input.getBytes(encoding);
+
+		// System.out.println(new String(inputBytes, encoding));
+
+		String str = new String(cipher.doFinal(inputBytes), encoding);
+		
+		return str;
+	}
+	
 	public static String decrypt(byte[] encryptionBytes, Key key) throws Exception {
 
 		// long startTime = System.currentTimeMillis();

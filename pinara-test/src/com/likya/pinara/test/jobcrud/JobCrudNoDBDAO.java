@@ -1,9 +1,7 @@
 package com.likya.pinara.test.jobcrud;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
@@ -15,11 +13,14 @@ import com.likya.pinara.utils.PersistApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfosDocument;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 
 public class JobCrudNoDBDAO extends JobCrudDAO {
 
 	private static final String dbFolderName = "pnr";
 	private static final String jobFileExt = ".pjf";
+	private static final String jobHistFileExt = ".phf";
 
 	private boolean validateXml(XmlObject objectXml) {
 
@@ -62,17 +63,41 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 		}
 	}
 
-	public JobListDocument readJobs(String dbPath) {
+	// Read file system data path
+	// Get all the job files
+	// Decrypte encrypted files
+	// Construct JobListDocument from files
+	// Validate JobListDocument object
+
+	// Pinara.java L:197 - 232
+
+	//
+	// JobListDocument jobListDocument = PersistApi.deserialize();
+	// if (jobListDocument == null) {
+	//	jobListDocument = JobListDocument.Factory.newInstance();
+	//	jobListDocument.addNewJobList().setVersion(getVersion());
+	//	PersistApi.serialize(jobListDocument);
+	//} else {
+	//	String dataFileVersion = jobListDocument.getJobList().getVersion();
+	//	if (!getVersion().equals(dataFileVersion)) {
+	//		jobListDocument = migrateDataFile(jobListDocument, dataFileVersion);
+	//		if (jobListDocument == null) {
+	//			return false;
+	//		}
+	//	}
+	//}
+	
+	public JobListDocument readJobs(Path dbPath) {
 
 		JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
 		JobList jobList = jobListDocument.addNewJobList();
 		jobList.setVersion("getVersion()");
-		
+
 		try {
 
-			dbPath = dbPath + dbFolderName;
+			dbPath = dbPath.resolve(dbFolderName);
 
-			try (Stream<Path> paths = Files.walk(Paths.get(dbPath))) {
+			try (Stream<Path> paths = Files.walk(dbPath)) {
 				paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(jobFileExt))
 						.forEach(path -> readJobFiles(jobList, path.toString()));
 				// .forEach(System.out::println);
@@ -85,32 +110,6 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 				// 2. Fresh new install and no job defined yet
 				System.out.println("No valid job file found !");
 			}
-
-			// Read file system data path
-			// Get all the job files
-			// Decrypte encrypted files
-			// Construct JobListDocument from files
-			// Validate JobListDocument object
-
-			// Pinara.java L:197 - 232
-
-			//
-			// JobListDocument jobListDocument = PersistApi.deserialize();
-
-			// 	if (jobListDocument == null) { 
-			//		jobListDocument = JobListDocument.Factory.newInstance();
-			// 		jobListDocument.addNewJobList().setVersion(getVersion());
-			// 		PersistApi.serialize(jobListDocument); 
-			// 	} else { 
-			// 		String dataFileVersion = jobListDocument.getJobList().getVersion();
-			// 		if(!getVersion().equals(dataFileVersion)) { 
-			//			jobListDocument = migrateDataFile(jobListDocument, dataFileVersion); 
-			//			if(jobListDocument == null) { 
-			//				return false; 
-			//			} 
-			//		} 
-			//	}
-
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -118,16 +117,87 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 		return jobListDocument;
 	}
 
-	public void saveJob(String dbPath, String jobId, String jobXml) {
+	public void saveJob(Path dbPath, String jobId, String jobXml) {
 
 		try {
-			dbPath = dbPath + File.separator + dbFolderName;
 			String fileName = jobId;
-			PersistApi.serialize(dbPath + File.separator + fileName + jobFileExt, jobXml);
+			dbPath = dbPath.resolve(dbFolderName).resolve(fileName + jobFileExt);
+			PersistApi.serialize(dbPath.toString(), jobXml);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 
 	}
 
+	public void deleteJob(Path dbPath, String jobId) {
+		try {
+			dbPath = dbPath.resolve(dbFolderName).resolve(jobId + jobFileExt);
+			Files.deleteIfExists(dbPath);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	@Override
+	public void readJob() {
+		// Bu metod özellikle boş bırakıldı. Zira uygulama içinde yapılacak 
+		// Değişiklikler memeorydeki veri yapısı üzerinde yapılacağından
+		// diskten okunmayacak. 
+		// diskten job okuma sadece en başta ve bir kere yapılacak
+		// Serkan Taş : 28.10.2017 00:43 İstanbul
+		return;
+	}
+	
+	@Override
+	public LiveStateInfosDocument readJobHist(Path dbPath, String jobId) {
+
+		LiveStateInfosDocument liveStateInfosDocument = LiveStateInfosDocument.Factory.newInstance();
+		LiveStateInfosType liveStateInfosType = liveStateInfosDocument.addNewLiveStateInfos();
+
+		String fileName = jobId;
+		dbPath = dbPath.resolve(dbFolderName).resolve(fileName + jobHistFileExt);
+
+		String fileContent = "";
+
+		try {
+
+			fileContent = PersistApi.deserializeAsFlat(dbPath.toString());
+
+			LiveStateInfosType liveStateInfosTypeTmp = LiveStateInfosType.Factory.parse(fileContent);
+
+			if (!validateXml(liveStateInfosTypeTmp)) {
+				System.out.println("Not validated => " + liveStateInfosType.toString());
+			} else {
+				liveStateInfosType.set(liveStateInfosTypeTmp);
+			}
+
+		} catch (Exception e) {
+			System.err.println(fileName + " is corrupted => " + e.getStackTrace()[0]);
+		}
+
+		return liveStateInfosDocument;
+	}
+
+	@Override
+	public void saveJobHist(Path dbPath, String jobId, String jobXml) {
+		try {
+			String fileName = jobId;
+			dbPath = dbPath.resolve(dbFolderName).resolve(fileName + jobHistFileExt);
+			PersistApi.serialize(dbPath.toString(), jobXml);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	@Override
+	public void deleteJobHist(Path dbPath, String jobId) {
+		try {
+			dbPath = dbPath.resolve(dbFolderName).resolve(jobId + jobHistFileExt);
+			Files.deleteIfExists(dbPath);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	
 }

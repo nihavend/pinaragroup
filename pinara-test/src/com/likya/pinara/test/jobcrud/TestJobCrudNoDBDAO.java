@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.likya.myra.test.helpers.LiveStateInfosGenerator;
 import com.likya.myra.test.helpers.SimplePropsGenerator;
+import com.likya.pinara.dao.nodb.JobCrudNoDBDAO;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfosDocument;
 
 public class TestJobCrudNoDBDAO {

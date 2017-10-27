@@ -7,7 +7,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.likya.pinara.test.jobcrud.JobCrudNoDBDAO;
+import com.likya.pinara.dao.nodb.JobCrudNoDBDAO;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public class TestPinaraStartup {

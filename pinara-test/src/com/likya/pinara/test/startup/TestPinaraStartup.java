@@ -1,18 +1,27 @@
 package com.likya.pinara.test.startup;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+
 import org.apache.xmlbeans.XmlOptions;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import com.likya.pinara.test.jobcrud.JobCrudNoDBDAO;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
-import junit.framework.TestCase;
+public class TestPinaraStartup {
 
-public class TestPinaraStartup extends TestCase {
-
-	public void testStartWithoutPersist() {
+	String dataPath = "D:\\dev\\git\\pinaragroup\\pinara-test\\data\\";
+	
+	@Test
+	public void startWithoutPersist() {
 		try {
-			JobListDocument jobListDocument = new JobCrudNoDBDAO().readJobs("D:\\dev\\git\\pinaragroup\\pinara-test\\data\\");
-			
+
+			Path path = FileSystems.getDefault().getPath(dataPath);
+
+			JobListDocument jobListDocument = new JobCrudNoDBDAO().readJobs(path);
+
 			XmlOptions xmlOptions = new XmlOptions();
 			xmlOptions.setSavePrettyPrint();
 			System.out.println(jobListDocument.xmlText(xmlOptions));
@@ -21,7 +30,8 @@ public class TestPinaraStartup extends TestCase {
 		}
 	}
 
-	public void testStartWithPersist() {
+	@Ignore
+	public void startWithPersist() {
 		try {
 			
 			// Pinara .java 225-230

@@ -1,4 +1,4 @@
-package com.likya.pinara.test.jobcrud;
+package com.likya.pinara.dao.nodb;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 
 import com.likya.myra.commons.utils.XMLValidations;
+import com.likya.pinara.dao.JobCrudDAO;
 import com.likya.pinara.utils.PersistApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;

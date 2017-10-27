@@ -1,4 +1,4 @@
-package com.likya.pinara.test.jobcrud;
+package com.likya.pinara.dao;
 
 import java.nio.file.Path;
 

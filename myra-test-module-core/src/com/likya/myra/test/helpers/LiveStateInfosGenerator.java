@@ -22,8 +22,8 @@ public class LiveStateInfosGenerator {
 		int counter = 0;
 		// quantity <= 0 ? 1:quantity;
 		
-		if(quantity <= 0) quantity = 1;
-		while (counter < quantity) {
+		if(quantity < 0) quantity = 0;
+		while (counter ++ < quantity) {
 
 			LiveStateInfo liveStateInfo = liveStateInfosType.addNewLiveStateInfo();
 

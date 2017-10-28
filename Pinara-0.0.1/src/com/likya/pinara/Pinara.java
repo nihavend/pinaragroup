@@ -19,6 +19,7 @@ import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.model.PinaraOutput;
 import com.likya.pinara.utils.DataMigration;
 import com.likya.pinara.utils.PersistApi;
+import com.likya.pinara.utils.PersistDBApi;
 import com.likya.pinara.utils.RecoveryHelper;
 import com.likya.pinara.utils.license.LicenseClientUtil;
 import com.likya.pinara.utils.license.LicenseManager;
@@ -230,23 +231,32 @@ public class Pinara extends PinaraBase {
 			}
 		} else {
 		
-			JobListDocument jobListDocument = PersistApi.deserialize();
+			// DB yapısı öncesi
+			// JobListDocument jobListDocument = PersistApi.deserialize();
 	
-			if (jobListDocument == null) {
-				jobListDocument = JobListDocument.Factory.newInstance();
-				jobListDocument.addNewJobList().setVersion(getVersion());
-				
-				PersistApi.serialize(jobListDocument);
-			} else {
-				String dataFileVersion = jobListDocument.getJobList().getVersion();
-				if(!getVersion().equals(dataFileVersion)) {
-					jobListDocument = migrateDataFile(jobListDocument, dataFileVersion);
-					if(jobListDocument == null) {
-						return false;
-					}
-				}
-			}
+			// if (jobListDocument == null) {
+			//	jobListDocument = JobListDocument.Factory.newInstance();
+			//	jobListDocument.addNewJobList().setVersion(getVersion());
+			//	
+			//	PersistApi.serialize(jobListDocument);
+			// } else {
+			//	String dataFileVersion = jobListDocument.getJobList().getVersion();
+			//	if(!getVersion().equals(dataFileVersion)) {
+			//		jobListDocument = migrateDataFile(jobListDocument, dataFileVersion);
+			//		if(jobListDocument == null) {
+			//			return false;
+			//		}
+			//	}
+			// }
+			
+			// Bir önceki yapıda var olan migration artık çalışmıyor, yeni bir yapı tasarlanacak.
+			// DB Yapısı Gelince : 
+			
+			JobListDocument jobListDocument = PersistDBApi.readJobs();
 	
+			/**
+			 * Generate runtime structure of data from persisted file.
+			 */
 			if(Starter.start(jobListDocument, testOutput) == null) {
 				return false;
 			}

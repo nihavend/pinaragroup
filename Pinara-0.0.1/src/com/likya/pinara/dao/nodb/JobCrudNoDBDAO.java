@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 
 import com.likya.myra.commons.utils.XMLValidations;
+import com.likya.pinara.Pinara;
 import com.likya.pinara.dao.JobCrudDAO;
 import com.likya.pinara.utils.PersistApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -92,7 +93,7 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 
 		JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
 		JobList jobList = jobListDocument.addNewJobList();
-		jobList.setVersion("getVersion()");
+		jobList.setVersion(Pinara.getVersion());
 
 		try {
 
@@ -118,31 +119,34 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 		return jobListDocument;
 	}
 
-	public void saveJob(Path dbPath, String jobId, String jobXml) {
+	public boolean saveJob(Path dbPath, String jobId, String jobXml) {
 
 		try {
 			String fileName = jobId;
 			dbPath = dbPath.resolve(dbFolderName).resolve(fileName + jobFileExt);
 			PersistApi.serialize(dbPath.toString(), jobXml);
-		} catch (Throwable t) {
-			t.printStackTrace();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 
 	}
 
-	public void deleteJob(Path dbPath, String jobId) {
+	public boolean deleteJob(Path dbPath, String jobId) {
 		try {
 			dbPath = dbPath.resolve(dbFolderName).resolve(jobId + jobFileExt);
 			Files.deleteIfExists(dbPath);
-		} catch (Throwable t) {
-			t.printStackTrace();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
-	@Override
 	public void readJob() {
 		// Bu metod özellikle boş bırakıldı. Zira uygulama içinde yapılacak 
-		// Değişiklikler memeorydeki veri yapısı üzerinde yapılacağından
+		// Değişiklikler memorydeki veri yapısı üzerinde yapılacağından
 		// diskten okunmayacak. 
 		// diskten job okuma sadece en başta ve bir kere yapılacak
 		// Serkan Taş : 28.10.2017 00:43 İstanbul
@@ -164,14 +168,15 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 
 			fileContent = PersistApi.deserializeAsFlat(dbPath.toString());
 
-			LiveStateInfosType liveStateInfosTypeTmp = LiveStateInfosType.Factory.parse(fileContent);
-
-			if (!validateXml(liveStateInfosTypeTmp)) {
-				System.out.println("Not validated => " + liveStateInfosType.toString());
-			} else {
-				liveStateInfosType.set(liveStateInfosTypeTmp);
+			if(fileContent != null) {
+				LiveStateInfosType liveStateInfosTypeTmp = LiveStateInfosType.Factory.parse(fileContent);
+	
+				if (!validateXml(liveStateInfosTypeTmp)) {
+					System.out.println("Not validated => " + liveStateInfosType.toString());
+				} else {
+					liveStateInfosType.set(liveStateInfosTypeTmp);
+				}
 			}
-
 		} catch (Exception e) {
 			System.err.println(fileName + " is corrupted => " + e.getStackTrace()[0]);
 		}
@@ -180,23 +185,27 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 	}
 
 	@Override
-	public void saveJobHist(Path dbPath, String jobId, String jobXml) {
+	public boolean saveJobHist(Path dbPath, String jobId, String jobXml) {
 		try {
 			String fileName = jobId;
 			dbPath = dbPath.resolve(dbFolderName).resolve(fileName + jobHistFileExt);
 			PersistApi.serialize(dbPath.toString(), jobXml);
-		} catch (Throwable t) {
-			t.printStackTrace();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return true;
 		}
 	}
 
 	@Override
-	public void deleteJobHist(Path dbPath, String jobId) {
+	public boolean deleteJobHist(Path dbPath, String jobId) {
 		try {
 			dbPath = dbPath.resolve(dbFolderName).resolve(jobId + jobHistFileExt);
 			Files.deleteIfExists(dbPath);
-		} catch (Throwable t) {
-			t.printStackTrace();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 

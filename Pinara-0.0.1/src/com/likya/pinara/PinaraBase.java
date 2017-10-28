@@ -53,6 +53,8 @@ public abstract class PinaraBase {
 
 	public final static String authTxt = "pinara";
 	
+	public static final int MAX_HISTROY_LEN = 10;
+	
 	public PinaraBase() {
 		super();
 	}

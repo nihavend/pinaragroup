@@ -183,7 +183,8 @@
 	</fx:Script>
 	
 	<fx:Declarations>
-		<fx:XML id="levelgraph" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/Ravis/trunk/ravis/RaVisExamples/src/data/levelgraph.xml"/>
+		<!--fx:XML id="levelgraph" source="/Users/serkan/Documents/Adobe Flash Builder 4.7/Ravis/trunk/ravis/RaVisExamples/src/data/levelgraph.xml"/-->
+		<fx:XML id="levelgraph" source="/PinaraUI/xmls/levelgraph.xml"/>
 	</fx:Declarations>
 	
 	<fx:Metadata>

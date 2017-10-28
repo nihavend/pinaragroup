@@ -4,6 +4,7 @@ import com.likya.myra.commons.utils.LiveStateInfoUtils;
 import com.likya.myra.jef.model.OutputData;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraOutput;
+import com.likya.pinara.utils.PersistDBApi;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
@@ -16,7 +17,7 @@ import com.likya.xsd.pinara.model.config.PinaraConfigDocument.PinaraConfig;
  */
 public class PinaraOutputManager implements Runnable {
 
-	private final int timeout = 10000;
+	private final int timeout = 500;
 	private boolean executePermission = true;
 	private PinaraOutput pinaraOutput = PinaraOutput.getInstance();
 
@@ -42,6 +43,9 @@ public class PinaraOutputManager implements Runnable {
 
 					OutputData outputData = (OutputData) pinaraOutput.getOutputList().get(0);
 					Pinara.getLogger().debug("OutputManager işliyor ...");
+					
+					PersistDBApi.handleJobDataChangeEvent(outputData.getJobId());
+					
 					// System.err.println(outputData.getLiveStateInfo());
 					// Pinara.getLogger().debug(outputData.getLiveStateInfo());
 					LiveStateInfo liveStateInfo = outputData.getLiveStateInfo();

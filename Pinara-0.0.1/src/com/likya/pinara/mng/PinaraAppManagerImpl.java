@@ -31,7 +31,7 @@ import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
-import com.likya.pinara.utils.PersistApi;
+import com.likya.pinara.utils.PersistDBApi;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
@@ -355,8 +355,13 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 	
 	public void deleteJob(String jobId, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 		try {
+			// DB yapısı öncesi böyleydi
+			// jobOperations.deleteJob(jobId, persist);
+			// PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			
+			// DB yapısı sonrası			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.deleteJob(jobId, persist);
-			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			PersistDBApi.deleteJob(jobId);
 		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -368,8 +373,13 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 	public String updateJob(String jobXml, boolean persist) throws PinaraAuthenticationException, PinaraXMLValidationException {
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
+			// DB yapısı öncesi böyleydi
+			// jobOperations.updateJob(abstractJobType, persist);
+			// PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			
+			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.updateJob(abstractJobType, persist);
-			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			PersistDBApi.saveJob(abstractJobType);
 			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
 			// e.printStackTrace();
@@ -384,14 +394,17 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		
 		AbstractJobType abstractJobType = validateJob(jobXml, persist);
 		try {
+			// DB yapısı öncesi böyleydi
+			// jobOperations.addJob(abstractJobType, persist);
+			// PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			
+			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.addJob(abstractJobType, persist);
-			PersistApi.serialize(CoreFactory.getInstance().getJobListDocument());
+			PersistDBApi.saveJob(abstractJobType);
 			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -446,7 +459,6 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			return abstractJobType;
 			
 		} catch (XmlException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		

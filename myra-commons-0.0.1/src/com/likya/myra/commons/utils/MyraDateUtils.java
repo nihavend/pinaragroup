@@ -266,8 +266,13 @@ public class MyraDateUtils extends DateUtils {
 
 		ZonedDateTime zonedDateTime = ZonedDateTime.now(zone);
 				
-		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+		// String outputFormat1 = new String("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+		// String dateStr1 = zonedDateTime.format(DateTimeFormatter.ofPattern(outputFormat1));
+		// OUT : 2017-10-29T01:22:11.046+0300
+
+		String outputFormat = new String("yyyy-MM-dd'T'HH:mm:ss.SSS[XXX]");
 		String dateStr = zonedDateTime.format(DateTimeFormatter.ofPattern(outputFormat));
+		// OUT : 2017-10-29T01:22:55.907+03:00
 		
 		return dateStr;
 	}

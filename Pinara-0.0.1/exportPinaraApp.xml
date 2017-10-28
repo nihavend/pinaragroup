@@ -83,6 +83,7 @@
 		<!-- delete file="${dest.dir}/flexroot/PinaraUI.swf"/>
     	<delete file="${dest.dir}/flexroot/ViewDepGraph.swf"/-->
 		<copy file="${src.dir}/flexroot/swfobject.js" todir="${dest.dir}/flexroot" />
+		<copy file="${src.dir}/flexroot/history.js" todir="${dest.dir}/flexroot" />
 		<copy file="${src.dir}/flexroot/history.css" todir="${dest.dir}/flexroot" />
 		<copy file="${src.dir}/flexroot/PinaraUI.html" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/PinaraUI.swf" todir="${dest.dir}/flexroot"/>

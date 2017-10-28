@@ -27,7 +27,16 @@ public class PersistDBApi {
 	}
 	
 	public static boolean deleteJob(String jobId) {
-		return new JobCrudNoDBDAO().deleteJob(dataPath, jobId);
+		
+		boolean retValue = false;
+		
+		retValue = new JobCrudNoDBDAO().deleteJob(dataPath, jobId);
+		
+		if(retValue) {
+			new JobCrudNoDBDAO().deleteJobHist(dataPath, jobId);
+		}
+		
+		return retValue;
 	}
 	
 	public static boolean updateJobHist(String jobId, LiveStateInfosType liveStateInfosType) {
@@ -41,7 +50,7 @@ public class PersistDBApi {
 				liveStateInfosType.removeLiveStateInfo(liveStateInfosType.getLiveStateInfoArray().length - 1);
 			}
 			System.out.println(liveStateInfosDocument);
-			new JobCrudNoDBDAO().saveJobHist(dataPath, jobId, liveStateInfosDocument.xmlText());
+			new JobCrudNoDBDAO().saveJobHist(dataPath, jobId, liveStateInfosDocument.getLiveStateInfos().xmlText());
 		}
 		return true;
 	}

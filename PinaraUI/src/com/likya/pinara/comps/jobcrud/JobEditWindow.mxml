@@ -104,6 +104,10 @@
 			// Handle the OK button.
 			private function processSave(eventObj:CloseEvent):void {
 
+				if(eventObj.detail == Alert.CANCEL) {
+					return;
+				}
+				
 				var serializationInfo:String = "false";
 				
 				if(eventObj.detail == Alert.OK) {

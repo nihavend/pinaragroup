@@ -99,6 +99,7 @@
 				<xs:element ref="expectedTime" minOccurs="0" />
 				<xs:element ref="tolerancePercentage" minOccurs="0" />
 				<xs:element ref="minPercentage" minOccurs="0" />
+				<xs:element name="prevWorkDuration" type="xs:string" minOccurs="0" maxOccurs="1" default="-" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

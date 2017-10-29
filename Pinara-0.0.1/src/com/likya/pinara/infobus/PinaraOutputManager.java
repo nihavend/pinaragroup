@@ -20,6 +20,7 @@ public class PinaraOutputManager implements Runnable {
 	private final int timeout = 500;
 	private boolean executePermission = true;
 	private PinaraOutput pinaraOutput = PinaraOutput.getInstance();
+	private boolean setForced = false;
 
 	public PinaraOutputManager() {
 	}
@@ -27,7 +28,13 @@ public class PinaraOutputManager implements Runnable {
 	public void terminate(boolean forcedTerminate) {
 		synchronized (this) {
 			if (forcedTerminate) {
-				pinaraOutput.getOutputList().clear();
+				// pinaraOutput.getOutputList().clear();
+				// artık hemen kapatmayacak çünkü eventler var.
+				// sadece mailleri göndermeyecek
+				/**
+				 *  @author serkan taş 29.10.2017 15:37
+				 */
+				setForced = true;
 			}
 			this.executePermission = false;
 		}
@@ -46,29 +53,31 @@ public class PinaraOutputManager implements Runnable {
 					
 					PersistDBApi.handleJobDataChangeEvent(outputData.getJobId());
 					
-					// System.err.println(outputData.getLiveStateInfo());
-					// Pinara.getLogger().debug(outputData.getLiveStateInfo());
-					LiveStateInfo liveStateInfo = outputData.getLiveStateInfo();
-					String dump = "	Live State : " + (liveStateInfo.getStateName() == null ? "" : liveStateInfo.getStateName().toString());
-					dump += (liveStateInfo.getSubstateName() == null ? "" : ("-" + liveStateInfo.getSubstateName().toString()));
-					dump += (liveStateInfo.getStatusName() == null ? "" : ("-" + liveStateInfo.getStatusName().toString()));
-					Pinara.getLogger().debug(dump);
-					if(StateName.FINISHED.equals(outputData.getLiveStateInfo().getStateName())) {
-						Pinara.getLogger().debug("Job >> " + outputData.getJobId() + ":" + outputData.getJobName() + " is finished !!!!");
-						// System.err.println(outputData.getJobId() + " is finished !!!!");
-					}
-					
-					// TODO Resolve broadcasting type
-					// email, db, sms, etc
-					
-					PinaraConfig pinaraConfig = Pinara.getInstance().getConfigurationManager().getPinaraConfig();
-					
-					if(pinaraConfig.isSetMailInfo()) {
-						MailInfo mailInfo = pinaraConfig.getMailInfo();
-						LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
-						if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
-							SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName(), "Belirtilen iş şu duruma geçti : " + dump);
-							Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
+					if(!setForced) {
+						// System.err.println(outputData.getLiveStateInfo());
+						// Pinara.getLogger().debug(outputData.getLiveStateInfo());
+						LiveStateInfo liveStateInfo = outputData.getLiveStateInfo();
+						String dump = "	Live State : " + (liveStateInfo.getStateName() == null ? "" : liveStateInfo.getStateName().toString());
+						dump += (liveStateInfo.getSubstateName() == null ? "" : ("-" + liveStateInfo.getSubstateName().toString()));
+						dump += (liveStateInfo.getStatusName() == null ? "" : ("-" + liveStateInfo.getStatusName().toString()));
+						Pinara.getLogger().debug(dump);
+						if(StateName.FINISHED.equals(outputData.getLiveStateInfo().getStateName())) {
+							Pinara.getLogger().debug("Job >> " + outputData.getJobId() + ":" + outputData.getJobName() + " is finished !!!!");
+							// System.err.println(outputData.getJobId() + " is finished !!!!");
+						}
+						
+						// TODO Resolve broadcasting type
+						// email, db, sms, etc
+						
+						PinaraConfig pinaraConfig = Pinara.getInstance().getConfigurationManager().getPinaraConfig();
+						
+						if(pinaraConfig.isSetMailInfo()) {
+							MailInfo mailInfo = pinaraConfig.getMailInfo();
+							LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
+							if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
+								SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName(), "Belirtilen iş şu duruma geçti : " + dump);
+								Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
+							}
 						}
 					}
 

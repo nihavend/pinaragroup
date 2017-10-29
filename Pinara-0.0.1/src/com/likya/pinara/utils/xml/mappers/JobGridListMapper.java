@@ -74,7 +74,7 @@ public class JobGridListMapper {
 		
 		xmlCursor.beginElement("runtimeParams");
 		xmlCursor.beginElement("realizedDuration");
-		xmlCursor.insertChars(jobImpl.getJobRuntimeProperties().getWorkDuration());
+		xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
 		xmlCursor.toNextToken(); // exit from realizedDuration
 		
 		xmlCursor.beginElement("previousDuration");

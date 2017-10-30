@@ -211,4 +211,14 @@ public class PersistApi {
 		return path.toString();
 		
 	}
+	
+	public static void deleteScenario() throws Exception {
+		
+		String srcFileName = Pinara.DATA_PATH + File.separator + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getSenaryoDosyasi() + FILE_EXT;
+		
+		Files.deleteIfExists(Paths.get(srcFileName));
+		
+		return;
+		
+	}
 }

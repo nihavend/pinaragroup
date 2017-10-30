@@ -10,6 +10,19 @@ import com.likya.xsd.myra.model.joblist.JobListDocument;
 
 public class DataMigration {
 
+	public static JobListDocument migrate_null_to_0_9_2(String jobListDocumentStr) throws Exception {
+		
+		JobListDocument jobListDocumentRecent = JobListDocument.Factory.parse(jobListDocumentStr);
+		
+		for (AbstractJobType abstractJobType : jobListDocumentRecent.getJobList().getGenericJobArray()) {
+			PersistDBApi.saveJob(abstractJobType);
+		}
+		
+		JobListDocument jobListDocument = PersistDBApi.readJobs();
+
+		return jobListDocument;
+	}
+		
 	public static JobListDocument migrate_null_to_0_9_1(String jobListDocumentStr) throws Exception {
 
 		final String version = Pinara.DEF_0_9_1;

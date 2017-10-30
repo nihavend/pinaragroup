@@ -249,10 +249,18 @@ public class Pinara extends PinaraBase {
 			//	}
 			// }
 			
-			// Bir önceki yapıda var olan migration artık çalışmıyor, yeni bir yapı tasarlanacak.
-			// DB Yapısı Gelince : 
+			JobListDocument jobListDocument = null;
 			
-			JobListDocument jobListDocument = PersistDBApi.readJobs();
+			// DB Yapısı Gelince : 
+			// V1.0 itibarı ile pinara config içinde senaryo dosyası da kalkmalı, migration  da !
+			JobListDocument jobListDocumentRecent = PersistApi.deserialize();
+			if (jobListDocumentRecent != null) {
+				String dataFileVersion = jobListDocumentRecent.getJobList().getVersion();
+				jobListDocument = migrateDataFile(jobListDocumentRecent, dataFileVersion);
+			} else { 
+				// else : Fresh install, no need for migration
+				jobListDocument = PersistDBApi.readJobs();
+			}
 	
 			/**
 			 * Generate runtime structure of data from persisted file.
@@ -282,9 +290,10 @@ public class Pinara extends PinaraBase {
 			break;
 
 		case DEF_0_9_1:
-			/** migrate from 0.9.1 to xxxx */
-			throw new UnsupportedOperationException("Migrate from 0.9.1 to xxxx");
-
+			/** migrate from 0.9.1 to 0.9.2 */
+			jobListDocumentStr = PersistApi.deserializeAsFlat();
+			jobListDocument = DataMigration.migrate_null_to_0_9_2(jobListDocumentStr);
+			PersistApi.deleteScenario();
 		default:
 			break;
 		}

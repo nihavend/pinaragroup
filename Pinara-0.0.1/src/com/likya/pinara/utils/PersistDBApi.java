@@ -1,5 +1,6 @@
 package com.likya.pinara.utils;
 
+import java.math.BigInteger;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
@@ -40,11 +41,15 @@ public class PersistDBApi {
 	}
 	
 	public static boolean updateJobHist(String jobId, LiveStateInfosType liveStateInfosType) {
-
-		if(liveStateInfosType.getLiveStateInfoArray().length > Pinara.MAX_HISTROY_LEN) {
+		
+		BigInteger tmpValue = Pinara.getInstance().getConfigurationManager().getPinaraConfig().getMaxHistoryLen();
+		
+		int maxHistoryLen = (tmpValue == null) ? 20 : tmpValue.intValue();
+		
+		if(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
 			LiveStateInfosDocument liveStateInfosDocument = new JobCrudNoDBDAO().readJobHist(dataPath, jobId);
 			System.out.println(liveStateInfosDocument);
-			while(liveStateInfosType.getLiveStateInfoArray().length > Pinara.MAX_HISTROY_LEN) {
+			while(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
 				LiveStateInfo liveStateInfo = liveStateInfosType.getLiveStateInfoArray(liveStateInfosType.getLiveStateInfoArray().length - 1);
 				liveStateInfosDocument.getLiveStateInfos().insertNewLiveStateInfo(0).set(liveStateInfo);
 				liveStateInfosType.removeLiveStateInfo(liveStateInfosType.getLiveStateInfoArray().length - 1);

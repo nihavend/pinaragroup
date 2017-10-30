@@ -1,5 +1,6 @@
 package com.likya.pinara.dao.nodb;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -99,18 +100,21 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 
 			dbPath = dbPath.resolve(dbFolderName);
 
-			try (Stream<Path> paths = Files.walk(dbPath)) {
-				paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(jobFileExt))
-						.forEach(path -> readJobFiles(jobList, path.toString()));
-				// .forEach(System.out::println);
-			}
-			if (jobList.getGenericJobArray().length > 0) {
-				validateXml(jobListDocument);
-			} else {
-				// May be to reason :
-				// 1. All files are corrupted
-				// 2. Fresh new install and no job defined yet
-				System.out.println("No valid job file found !");
+			if(Files.exists(dbPath)) {
+			
+				try (Stream<Path> paths = Files.walk(dbPath)) {
+					paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(jobFileExt))
+							.forEach(path -> readJobFiles(jobList, path.toString()));
+					// .forEach(System.out::println);
+				}
+				if (jobList.getGenericJobArray().length > 0) {
+					validateXml(jobListDocument);
+				} else {
+					// May be to reason :
+					// 1. All files are corrupted
+					// 2. Fresh new install and no job defined yet
+					System.out.println("No valid job file found !");
+				}
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -209,5 +213,16 @@ public class JobCrudNoDBDAO extends JobCrudDAO {
 		}
 	}
 
+	public static void checkDataPath(Path dbPath) {
+		dbPath = dbPath.resolve(dbFolderName);
+		if (Files.notExists(dbPath)) {
+			try {
+				Files.createDirectory(dbPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+		}
+	}
 	
 }

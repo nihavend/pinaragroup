@@ -249,10 +249,12 @@ public class Pinara extends PinaraBase {
 			//	}
 			// }
 			
+			PersistDBApi.checkDbFolder();
+			
 			JobListDocument jobListDocument = null;
 			
 			// DB Yapısı Gelince : 
-			// V1.0 itibarı ile pinara config içinde senaryo dosyası da kalkmalı, migration  da !
+			// V1.0 itibarı ile pinara config içinde senaryo dosyası da kalkmalı, migration da !
 			JobListDocument jobListDocumentRecent = PersistApi.deserialize();
 			if (jobListDocumentRecent != null) {
 				String dataFileVersion = jobListDocumentRecent.getJobList().getVersion();

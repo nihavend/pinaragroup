@@ -71,4 +71,8 @@ public class PersistDBApi {
 		PersistDBApi.updateJobHist(jobId, liveStateInfosType);
 		
 	}
+	
+	public static void checkDbFolder() {
+		JobCrudNoDBDAO.checkDataPath(dataPath);
+	}
 }

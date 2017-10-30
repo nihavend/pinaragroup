@@ -31,6 +31,7 @@
 				<xs:element name="logPath" type="logPathType" minOccurs="0" maxOccurs="1" />
 				<!-- optional (if not provided cache is disabled) : cacheExpire  duration in seconds, default is 30 days -->
 				<xs:element name="cacheExpire" type="secondsType" minOccurs="0" maxOccurs="1" default="2592000" />
+				<xs:element name="maxHistoryLen" type="xs:integer" minOccurs="0" maxOccurs="1" default="20"/>
 			</xs:sequence>
 			<xs:attribute name="version" use="required">
 				<xs:simpleType>

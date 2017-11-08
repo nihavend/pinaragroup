@@ -60,8 +60,9 @@ public class PinaraMailServer implements Runnable {
 		this.userName = mailInfo.getUserName();
 		this.password = mailInfo.getUserPassword();
 
-		this.from = this.userName;
-				
+		this.from = mailInfo.getFrom();
+			
+		/*
 		if(mailInfo.getSmtpServerHostName() == null) {
 			props.put("mail.smtp.host", mailInfo.getSmtpServerIpAddress());
 		} else {
@@ -70,7 +71,13 @@ public class PinaraMailServer implements Runnable {
 		
 		props.put("mail.smtp.auth", mailInfo.getUseEncryption());
 		props.put("mail.smtp.port", Integer.toString(mailInfo.getPort()));
-		 
+		*/
+		
+		for(String prop : mailInfo.getMailProps().getPropArray()) {
+			// System.out.println(prop.split(",")[0] + " " + prop.split(",")[1]);
+			props.put(prop.split(",")[0], prop.split(",")[1]);
+		}
+		
 	}
 
 	public void terminate(boolean forcedTerminate) {
@@ -157,9 +164,11 @@ public class PinaraMailServer implements Runnable {
 		} catch(AuthenticationFailedException a) {
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.9"));
 			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
+			a.printStackTrace();
 		} catch(MessagingException me) {
 			Pinara.getLogger().info(me.toString());
-			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
+			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6"));
+			me.printStackTrace();
 		}
 	}
 

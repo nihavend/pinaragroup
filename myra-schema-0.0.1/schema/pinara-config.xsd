@@ -74,19 +74,29 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="mailProps">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="prop" type="xs:string" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
 	<xs:element name="mailInfo">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="from" type="likya-gen:ST_Email" minOccurs="1" maxOccurs="1" />
 				<xs:element ref="likya-gen:EmailList" minOccurs="0" />
 				<xs:element ref="myra-stateinfo:stateInfos" />
-				<xs:element name="useEncryption" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+				<!-- xs:element name="useEncryption" type="xs:boolean" minOccurs="0" maxOccurs="1" / -->
 				<xs:element name="userName" type="xs:string" />
 				<xs:element ref="likya-gen:userPassword" />
-				<xs:choice>
+				<!-- xs:choice>
 					<xs:element name="smtpServerHostName" type="xs:string" />
 					<xs:element name="smtpServerIpAddress" type="likya-gen:ipAddressType" />
-				</xs:choice>
-				<xs:element name="port" type="likya-gen:portType" default="22" />
+				</xs:choice-->
+				<!-- xs:element name="port" type="likya-gen:portType" default="22" / -->
+				<xs:element ref="mailProps" minOccurs="1" maxOccurs="1" />			
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

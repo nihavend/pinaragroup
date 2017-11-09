@@ -21,6 +21,7 @@ import com.likya.xsd.myra.model.jobprops.DaysOfMonthDocument.DaysOfMonth;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
 import com.likya.xsd.myra.model.jobprops.GraphInfoDocument.GraphInfo;
 import com.likya.xsd.myra.model.jobprops.ManagementDocument.Management;
+import com.likya.xsd.myra.model.jobprops.PeriodInfoDocument.PeriodInfo;
 import com.likya.xsd.myra.model.jobprops.ScheduleInfoDocument.ScheduleInfo;
 import com.likya.xsd.myra.model.stateinfo.JobStatusListDocument.JobStatusList;
 import com.likya.xsd.myra.model.stateinfo.JsDependencyRuleDocument.JsDependencyRule;
@@ -190,8 +191,11 @@ public class SimplePropsGenerator {
 	}
 
 	public static XmlObject generateAbstractJobType() throws Exception {
-
 		boolean debug = true;
+		return generateAbstractJobType(debug);
+	}
+	
+	public static XmlObject generateAbstractJobType(boolean debug) throws Exception {
 
 		JobListDocument jobListDocument = JobListDocument.Factory.newInstance();
 		JobList jobList = jobListDocument.addNewJobList();
@@ -270,6 +274,10 @@ public class SimplePropsGenerator {
 		jobAutoRetryInfo.setStep(new GDuration("PT0H30M0S"));
 
 		cascadingConditions.setJobAutoRetryInfo(jobAutoRetryInfo);
+		
+		PeriodInfo periodInfo = management.addNewPeriodInfo();
+		periodInfo.setStep(new GDuration("PT5M"));
+		periodInfo.setRelativeStart(false);
 
 		DependencyList dependencyList = simpleProperties.addNewDependencyList();
 		dependencyList.setDependencyExpression("I can not express my deps !");

@@ -10,6 +10,7 @@ import com.likya.xsd.myra.model.stateinfo.StateInfosDocument.StateInfos;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
 import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
+import com.likya.xsd.pinara.model.config.MailPropsDocument.MailProps;
 import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 import com.likya.xsd.pinara.model.config.PinaraConfigDocument.PinaraConfig;
 
@@ -48,11 +49,21 @@ public class PinaraConfigGenerator {
 		emailList.addEmail("myra-watchers@likyateknoloji.com");
 		
 		mailInfo.setEmailList(emailList);
-		mailInfo.setUseEncryption(false);
 		mailInfo.setUserName("myra@likyateknoloji.com");
 		mailInfo.setUserPassword("dddddd");
-		mailInfo.setSmtpServerHostName("mail.likyateknoloji.com");
-		mailInfo.setPort(587);
+
+		MailProps mailProps = MailProps.Factory.newInstance();
+		
+		mailProps.addProp("mail.smtp.auth,true");
+		mailProps.addProp("mail.smtp.starttls.enable,false");
+		// mailProps.addProp("mail.smtp.host,itcsrvcas03.enerjisa.local");
+		// mailProps.addProp("mail.smtp.port,25");
+		// mailProps.addProp("mail.smtp.auth.mechanisms,NTLM");
+		// mailProps.addProp("mail.smtp.auth.ntlm.domain,enerjisa");
+		mailProps.addProp("mail.smtp.host,mail.likyateknoloji.com");
+		mailProps.addProp("mail.smtp.port,587");
+		mailProps.addProp("mail.debug,true");
+
 		
 		/*
 		<xs:element ref="tcpInfo" minOccurs="0" maxOccurs="1" />

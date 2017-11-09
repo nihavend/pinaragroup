@@ -16,6 +16,13 @@
 				<targetPath>com/likya/pinara/resources</targetPath>
 				<directory>src/com/likya/pinara/resources</directory>
 			</resource>
+			<resource>
+				<directory>src</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.dtd</include>
+				</includes>
+			</resource>
 		</resources>
 		<!-- finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName -->
 		<pluginManagement>

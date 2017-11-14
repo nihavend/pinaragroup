@@ -101,7 +101,7 @@ public abstract class PinaraBase {
 
 		MailInfo mailInfo = configurationManager.getPinaraConfig().getMailInfo();
 
-		if (mailInfo != null) {
+		if (mailInfo != null && mailInfo.getEnabled()) {
 
 			println(Pinara.getMessage("Pinara.24"));
 			PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
@@ -275,7 +275,7 @@ public abstract class PinaraBase {
 		
 		MailInfo mailInfo = configurationManager.getPinaraConfig().getMailInfo();
 		
-		if (mailInfo != null) {
+		if (mailInfo != null && mailInfo.getEnabled()) {
 			logger.info(getMessage("PinaraServer.26"));
 
 			try {

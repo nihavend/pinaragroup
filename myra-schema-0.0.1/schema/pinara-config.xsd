@@ -98,6 +98,11 @@
 				<!-- xs:element name="port" type="likya-gen:portType" default="22" / -->
 				<xs:element ref="mailProps" minOccurs="1" maxOccurs="1" />			
 			</xs:sequence>
+			<xs:attribute name="enabled" use="optional" default="false">
+				<xs:simpleType>
+					<xs:restriction base="xs:boolean" />
+				</xs:simpleType>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 

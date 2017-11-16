@@ -169,6 +169,30 @@ public class LiveStateInfoUtils {
 		return LiveStateInfoUtils.equalStates(getLastStateInfo(abstractJobType), StateName.INT_PENDING, SubstateName.INT_DEACTIVATED);
 	}
 
+	/**
+	 * @param abstractJobType
+	 * @return true if equals to PENDING-PAUSED
+	 */
+	public static boolean eq_PENDING_PAUSED(AbstractJobType abstractJobType) {
+		return LiveStateInfoUtils.equalStates(getLastStateInfo(abstractJobType), StateName.INT_PENDING, SubstateName.INT_PAUSED);
+	}
+	
+	/**
+	 * @param abstractJobType
+	 * @return true if equals to FINISHED-COMPLETED-FAILED
+	 */
+	public static boolean eq_FINISHED_COMPLETED_FAILED(AbstractJobType abstractJobType) {
+		return LiveStateInfoUtils.equalStates(getLastStateInfo(abstractJobType), StateName.INT_FINISHED, SubstateName.INT_COMPLETED, StatusName.INT_FAILED);
+	}
+
+	/**
+	 * @param abstractJobType
+	 * @return true if equals to FINISHED-STOPPED
+	 */
+	public static boolean eq_FINISHED_STOPPED(AbstractJobType abstractJobType) {
+		return LiveStateInfoUtils.equalStates(getLastStateInfo(abstractJobType), StateName.INT_FINISHED, SubstateName.INT_STOPPED);
+	}
+	
 	public static boolean compareDepencyRule(Map<String, BigDecimal> variables, Item item, LiveStateInfo liveStateInfo) {
 
 		boolean retValue = true;

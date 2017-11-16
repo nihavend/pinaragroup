@@ -395,7 +395,7 @@
 			<menuitem label="{resourceManager.getString('messages', 'configFiles')}" id="configfiles" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'pinaraProperties')}" id="pinaraProperties"/>			
 				<menuitem label="{resourceManager.getString('messages', 'myraProperties')}" id="myraProperties"/>
-				<menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile"/>			
+				<!--menuitem label="{resourceManager.getString('messages', 'senaryoFile')}" id="scenarioFile"/-->			
 				<menuitem label="{resourceManager.getString('messages', 'myraLog')}" id="myraLog"/>
 				<menuitem label="{resourceManager.getString('messages', 'pinaraLog')}" id="pinaraLog"/>
 				<menuitem label="{resourceManager.getString('messages', 'pinaraEkran')}" id="pinaraEkran"/>

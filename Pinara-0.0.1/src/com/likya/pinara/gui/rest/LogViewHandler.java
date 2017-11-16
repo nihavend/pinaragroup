@@ -3,6 +3,7 @@ package com.likya.pinara.gui.rest;
 import java.io.File;
 
 import com.likya.commons.utils.FileUtils;
+import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
@@ -38,7 +39,7 @@ public class LogViewHandler extends FileViewHandler {
 			case "myraConfig":
 				// response = TlosServer.getTlosParameters().getConfigFileContent();
 				// TlosParameters.setRequestedFileName(TlosServer.getConfigFileName());
-				viewFile = Pinara.CONFIG_FILE_PATH;
+				viewFile = "conf" + File.separator + CoreFactory.CONFIG_FILE;
 				try {
 					response = getLimited(viewTypeInfo.queryParamArr, viewFile, FileTypeInfo.NATIVEXML);
 				} catch (Throwable t) {

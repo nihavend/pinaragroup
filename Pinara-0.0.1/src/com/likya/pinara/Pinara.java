@@ -155,7 +155,7 @@ public class Pinara extends PinaraBase {
 			PinaraAppManagerImpl.setExecutionState(CoreStateInfo.STATE_WORKING);
 		}
 
-		pinara.sendStartUpInfos();
+		pinara.sendInfos(EventTypeInfo.StartUp);
 		duration = System.currentTimeMillis() - startTime;
 		System.err.println("pinara.sendStartUpInfos()" + " in " + duration + " ms");
 		System.out.println();

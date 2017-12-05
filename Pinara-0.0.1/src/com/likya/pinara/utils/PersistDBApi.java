@@ -48,13 +48,13 @@ public class PersistDBApi {
 		
 		if(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
 			LiveStateInfosDocument liveStateInfosDocument = new JobCrudNoDBDAO().readJobHist(dataPath, jobId);
-			System.out.println(liveStateInfosDocument);
+			// System.out.println(liveStateInfosDocument);
 			while(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
 				LiveStateInfo liveStateInfo = liveStateInfosType.getLiveStateInfoArray(liveStateInfosType.getLiveStateInfoArray().length - 1);
 				liveStateInfosDocument.getLiveStateInfos().insertNewLiveStateInfo(0).set(liveStateInfo);
 				liveStateInfosType.removeLiveStateInfo(liveStateInfosType.getLiveStateInfoArray().length - 1);
 			}
-			System.out.println(liveStateInfosDocument);
+			// System.out.println(liveStateInfosDocument);
 			new JobCrudNoDBDAO().saveJobHist(dataPath, jobId, liveStateInfosDocument.getLiveStateInfos().xmlText());
 		}
 		return true;

@@ -23,7 +23,7 @@ public class WelcomeMail extends MultipartMail {
 		try {
 			setMailSubject(Pinara.getMessage("WelcomeMail.0") + Pinara.getInstance().getConfigurationManager().getPinaraConfig().getInstanceName() + Pinara.getMessage("WelcomeMail.1"));
 			setMultipart(prepareWelcomeMail(jobQueue));
-			setMAIL_TYPE(PinaraMail.WELCOME);
+			setMAIL_TYPE(PinaraMail.MULTIPART);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {

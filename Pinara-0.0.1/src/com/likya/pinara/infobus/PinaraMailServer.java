@@ -37,7 +37,9 @@ public class PinaraMailServer implements Runnable {
 	private String from;
 	
 	private MailInfo mailInfo;
-
+	
+	private Thread executorThread;
+	
 	/**
 	 * SimpleAuthenticator is used to do simple authentication when the SMTP
 	 * server requires it.
@@ -108,10 +110,7 @@ public class PinaraMailServer implements Runnable {
 						case PinaraMail.SIMPLE:
 							postMail(emailAddress, ((SimpleMail) pinaraMail).getMailSubject(), ((SimpleMail) pinaraMail).getMailText());
 							break;
-						case PinaraMail.WELCOME:
-							postMultiPartMail(emailAddress, ((MultipartMail) pinaraMail).getMailSubject(), ((MultipartMail) pinaraMail).getMultipart());
-							break;
-						case PinaraMail.ENDOFCYCLE:
+						case PinaraMail.MULTIPART:
 							postMultiPartMail(emailAddress, ((MultipartMail) pinaraMail).getMailSubject(), ((MultipartMail) pinaraMail).getMultipart());
 							break;
 						}
@@ -198,5 +197,13 @@ public class PinaraMailServer implements Runnable {
 
 	public int getQueueSize() {
 		return mailQueue.size();
+	}
+
+	public Thread getExecutorThread() {
+		return executorThread;
+	}
+
+	public void setExecutorThread(Thread executorThread) {
+		this.executorThread = executorThread;
 	}
 }

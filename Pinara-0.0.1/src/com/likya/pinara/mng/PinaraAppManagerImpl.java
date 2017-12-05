@@ -25,6 +25,7 @@ import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.pinara.Pinara;
+import com.likya.pinara.PinaraBase.EventTypeInfo;
 import com.likya.pinara.comm.TcpManagementConsole;
 import com.likya.pinara.infobus.PinaraMailServer;
 import com.likya.pinara.infobus.PinaraOutputManager;
@@ -221,6 +222,12 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		PinaraSMSServer pinaraSMSServer = Pinara.getInstance().getConfigurationManager().getPinaraSmsServer();
 		TcpManagementConsole tcpManagementConsole = Pinara.getInstance().getConfigurationManager().getTcpManagementConsole();
 		
+		long startTime = System.currentTimeMillis();
+		Pinara.getInstance().sendInfos(EventTypeInfo.ShutDown);
+		long duration = System.currentTimeMillis() - startTime;
+		System.err.println("pinara.sendShutDownInfos()" + " in " + duration + " ms");
+		System.out.println();
+		
 		if(isForced) {
 			managementOperations.forceFullShutDown();
 		} else {
@@ -244,13 +251,16 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		}
 		
 		new Thread(new Runnable() {
-			
+			boolean isLoop = true;
 			public void run() {
-				try {
-					// Wait until sending response to web clients
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				while (isLoop) {
+					try {
+						// Wait until sending response to web clients
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					isLoop = pinaraMailServer.getExecutorThread().isAlive() || pinaraOutputManager.getExecutorThread().isAlive(); // || pinaraSMSServer.getExecutorThread().isAlive();
 				}
 				System.exit(0);				
 			}

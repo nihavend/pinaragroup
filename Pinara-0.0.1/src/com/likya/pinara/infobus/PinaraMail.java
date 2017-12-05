@@ -3,8 +3,7 @@ package com.likya.pinara.infobus;
 public abstract class PinaraMail {
 	
 	public static final int SIMPLE = 0;
-	public static final int WELCOME = 1;
-	public static final int ENDOFCYCLE = 2;
+	public static final int MULTIPART = 1;
 	
 	private int MAIL_TYPE = -1;
 

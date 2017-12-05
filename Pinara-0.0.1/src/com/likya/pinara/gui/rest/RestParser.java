@@ -445,7 +445,7 @@ public class RestParser extends GenericRestParser {
 		Pinara.getLogger().debug(uriTxt + " command received and response forwarded !");
 		// System.err.println(uriTxt + " command received and response forwarded !");
 
-		Pinara.getLogger().debug(uriTxt+ ", Response : " + retStr);
+		// Pinara.getLogger().debug(uriTxt+ ", Response : " + retStr);
 		
 		responseBytes = retStr.getBytes();
 

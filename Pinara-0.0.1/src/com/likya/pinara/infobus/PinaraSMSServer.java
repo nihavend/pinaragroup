@@ -19,6 +19,8 @@ public class PinaraSMSServer implements Runnable {
 	private ArrayList<String> msisdnList;
 
 	private PinaraSMSHandler tlosSMSHandler;
+	
+	private Thread executorThread;
 
 	public PinaraSMSServer(SmsInfo smsInfo, PinaraSMSHandler tlosSMSHandler) {
 		this.tlosSMSHandler = tlosSMSHandler;
@@ -76,5 +78,13 @@ public class PinaraSMSServer implements Runnable {
 
 	public int getQueueSize() {
 		return smsQueue.size();
+	}
+
+	public Thread getExecutorThread() {
+		return executorThread;
+	}
+
+	public void setExecutorThread(Thread executorThread) {
+		this.executorThread = executorThread;
 	}
 }

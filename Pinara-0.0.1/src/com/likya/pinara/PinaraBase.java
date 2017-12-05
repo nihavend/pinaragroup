@@ -15,6 +15,7 @@ import com.likya.myra.jef.model.JobRuntimeProperties;
 import com.likya.pinara.comm.JmxManagementConsole;
 import com.likya.pinara.comm.TcpManagementConsole;
 import com.likya.pinara.gui.WebManager;
+import com.likya.pinara.infobus.GoodByeMail;
 import com.likya.pinara.infobus.PinaraMailServer;
 import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSHandler;
@@ -54,6 +55,17 @@ public abstract class PinaraBase {
 	private ConfigurationManager configurationManager;
 
 	public final static String authTxt = "pinara";
+	
+	public enum EventTypeInfo {
+
+		StartUp(10), ShutDown(20);
+		
+		public int value;
+		
+		private EventTypeInfo(int value) {
+			this.value = value;
+		}
+	}
 	
 	public PinaraBase() {
 		super();
@@ -95,6 +107,7 @@ public abstract class PinaraBase {
 		
 		PinaraOutputManager pinaraOutputManager = new PinaraOutputManager();
 		Thread pinaraOutputManagerThread = new Thread(pinaraOutputManager);
+		pinaraOutputManager.setExecutorThread(pinaraOutputManagerThread);
 		pinaraOutputManagerThread.start();
 
 		configurationManager.setPinaraOutputManager(pinaraOutputManager);
@@ -106,6 +119,7 @@ public abstract class PinaraBase {
 			println(Pinara.getMessage("Pinara.24"));
 			PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
 			Thread pinaraMailServerThread = new Thread(pinaraMailServer);
+			pinaraMailServer.setExecutorThread(pinaraMailServerThread);
 			pinaraMailServerThread.start();
 
 			println(getMessage("Pinara.25"));
@@ -123,6 +137,7 @@ public abstract class PinaraBase {
 				println(getMessage("Pinara.26"));
 				PinaraSMSServer pinaraSmsServer = new PinaraSMSServer(smsInfo, pinaraSMSHandler);
 				Thread pinaraSmsServerThread = new Thread(pinaraSmsServer);
+				pinaraSmsServer.setExecutorThread(pinaraSmsServerThread);
 				pinaraSmsServerThread.start();
 				println(getMessage("Pinara.27"));
 				configurationManager.setPinaraSmsServer(pinaraSmsServer);
@@ -270,17 +285,28 @@ public abstract class PinaraBase {
 		return true;
 	}
 	
-	
-	public void sendStartUpInfos() {
-		
+	public void sendInfos(EventTypeInfo eventTypeInfo) {
+
 		MailInfo mailInfo = configurationManager.getPinaraConfig().getMailInfo();
-		
+
 		if (mailInfo != null && mailInfo.getEnabled()) {
 			logger.info(getMessage("PinaraServer.26"));
 
 			try {
 				HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
-				configurationManager.getPinaraMailServer().sendMail(new WelcomeMail(jobQueue));
+				
+				switch (eventTypeInfo) {
+				case StartUp:
+					configurationManager.getPinaraMailServer().sendMail(new WelcomeMail(jobQueue));
+					break;
+				case ShutDown:
+					configurationManager.getPinaraMailServer().sendMail(new GoodByeMail(jobQueue));
+					break;
+				default:
+					logger.error("Undefined enum for EventTypeInfo : " + eventTypeInfo);
+					break;
+				}
+				
 			} catch (Exception e) {
 				logger.fatal(getMessage("PinaraServer.27"));
 				logger.fatal(getMessage("PinaraServer.28"));
@@ -289,7 +315,7 @@ public abstract class PinaraBase {
 			}
 			logger.info(getMessage("PinaraServer.29"));
 		}
-		
+
 		SmsInfo smsInfo = configurationManager.getPinaraConfig().getSmsInfo();
 		
 		if (smsInfo != null) {
@@ -306,7 +332,7 @@ public abstract class PinaraBase {
 			}
 			logger.info(getMessage("PinaraServer.36"));
 		}
-		
+
 	}
 	
 	public static Logger getLogger() {

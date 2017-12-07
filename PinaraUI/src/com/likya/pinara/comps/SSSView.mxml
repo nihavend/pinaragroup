@@ -170,7 +170,7 @@
 	
 	
 	<s:FormItem label="State" width="140">
-		<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)"> 
+		<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>PENDING</fx:String>
@@ -184,7 +184,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="Subtate" width="170">
-		<s:DropDownList id="substateName" width="110" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="false"> 
+		<s:DropDownList id="substateName" width="120" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="true" selectedIndex="0"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<!--<fx:String>CREATED</fx:String>
@@ -201,12 +201,15 @@
 					<fx:String>COMPLETED</fx:String>
 					<fx:String>STOPPED</fx:String>
 					<fx:String>SKIPPED</fx:String>-->
+					<fx:Object value="COMPLETED"/>
+					<fx:Object value="STOPPED"/>
+					<fx:Object value="SKIPPED"/>
 				</mx:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>
 	</s:FormItem>
 	<s:FormItem label="Status">
-		<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="false"> 
+		<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="2"> 
 			<s:dataProvider>
 				<mx:ArrayList>
 					<!--<fx:String>SUCCESS</fx:String>
@@ -226,6 +229,10 @@
 					<fx:String>TEST</fx:String>
 					<fx:String>REQUEST</fx:String>
 					<fx:String>DEPLOYED</fx:String>-->
+					<fx:Object value="SUCCESS"/>
+					<fx:Object value="WARNING"/>
+					<fx:Object value="FAILED"/>
+										
 				</mx:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>

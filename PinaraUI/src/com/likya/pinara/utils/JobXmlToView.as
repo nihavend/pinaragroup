@@ -276,79 +276,87 @@ package com.likya.pinara.utils {
 				return;
 			}
 			
-			var isLogAnalyseEnable:Boolean = jobDetailXml.logAnalysis.@active;
+			logAnalysisForm.currentState = "defined";
+			
+			var logaXML:XMLList = jobDetailXml.logAnalysis;
+			
+			logAnalysisForm.laToggle.selected = true;
+			
+			var isLogAnalyseEnable:Boolean = logaXML.@active;
 			
 			if(isLogAnalyseEnable) {
-				logAnalysisForm.enableLA.selected = true;
+				logAnalysisForm.logAnalyseEnable.selectedValue = "enableLA";
 			} else {
-				logAnalysisForm.disableLA.selected = true;				
+				logAnalysisForm.logAnalyseEnable.selectedValue = "disableLA";
 			}
-			// findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>
-			logAnalysisForm.searchDirection.selectedItem = "" + jobDetailXml.logAnalysis.findWhat.@direction;
 			
-			if(("" + jobDetailXml.logAnalysis.findWhat.@mode == "regEx")) {
+			// findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>
+			logAnalysisForm.searchDirection.selectedItem = "" + logaXML.findWhat.@direction;
+			
+			
+			if(("" + logaXML.findWhat.@mode == "regEx")) {
 				logAnalysisForm.patternType.selectedItem = "Regex";
 			} else {
 				logAnalysisForm.patternType.selectedItem = "String";
 			}
 			
-			if(("" + jobDetailXml.logAnalysis.findWhat.@matchCase == "true")) {
+			if(("" + logaXML.findWhat.@matchCase == "true")) {
 				logAnalysisForm.matchCase.selected = true;
 			}
 
-			if(("" + jobDetailXml.logAnalysis.findWhat.@matchWholeWordOnly == "true")) {
+			if(("" + logaXML.findWhat.@matchWholeWordOnly == "true")) {
 				logAnalysisForm.matchWholeWordOnly.selected = true;
 			}
 			
-			logAnalysisForm.searchPattern.text = jobDetailXml.logAnalysis.findWhat;
+			logAnalysisForm.searchPattern.text = logaXML.findWhat;
 			
 			// Then Action Definition
-			logAnalysisForm.thenLogLineNumBack.text = jobDetailXml.logAnalysis.action.thencase.event.content.@logLineNumBack;
-			logAnalysisForm.thenLogLineNumForward.text = jobDetailXml.logAnalysis.action.thencase.event.content.@logLineNumForward;
-			logAnalysisForm.thenActionContent.text = jobDetailXml.logAnalysis.action.thencase.event.content;
+			logAnalysisForm.thenLogLineNumBack.text = logaXML.action.thencase.event.content.@logLineNumBack;
+			logAnalysisForm.thenLogLineNumForward.text = logaXML.action.thencase.event.content.@logLineNumForward;
+			logAnalysisForm.thenActionContent.text = logaXML.action.thencase.event.content;
 			
-			logAnalysisForm.thenSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.StateName;
+			logAnalysisForm.thenSSS.stateName.selectedItem = "" + logaXML.action.thencase.forcedResult.LiveStateInfo.StateName;
 			logAnalysisForm.thenSSS.stateName_changeHandler(null);
 			logAnalysisForm.thenSSS.refreshSubstateNameCombo();
 			
-			if(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
-				logAnalysisForm.thenSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.thenSSS.substateName.dataProvider.toArray());
+			if(logaXML.action.thencase.forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
+				logAnalysisForm.thenSSS.substateName.selectedIndex = JobXmlToView.indexOf(logaXML.action.thencase.forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.thenSSS.substateName.dataProvider.toArray());
 				logAnalysisForm.thenSSS.substateName_changeHandler(null);
 				if(logAnalysisForm.thenSSS.statusName.dataProvider != null) {
 					(logAnalysisForm.thenSSS.statusName.dataProvider as ArrayCollection).refresh();
 				}
 			}
 			
-			if(jobDetailXml.logAnalysis.thencase.event.forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
-				logAnalysisForm.thenSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.StatusName, logAnalysisForm.thenSSS.statusName.dataProvider.toArray());
+			if(logaXML.action.thencase.forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
+				logAnalysisForm.thenSSS.statusName.selectedIndex = JobXmlToView.indexOf(logaXML.action.thencase.forcedResult.LiveStateInfo.StatusName, logAnalysisForm.thenSSS.statusName.dataProvider.toArray());
 			}
 			
-			logAnalysisForm.thenRetCode.text = jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Code;
-			logAnalysisForm.thenRetCodeDesc.text = jobDetailXml.logAnalysis.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Desc;
+			logAnalysisForm.thenRetCode.text = logaXML.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Code;
+			logAnalysisForm.thenRetCodeDesc.text = logaXML.action.thencase.forcedResult.LiveStateInfo.ReturnCode.Desc;
 			
 			// Else Action Definition
-			logAnalysisForm.elseLogLineNumBack.text = jobDetailXml.logAnalysis.action["else"].event.content.@logLineNumBack;
-			logAnalysisForm.elseLogLineNumForward.text = jobDetailXml.logAnalysis.action["else"].event.content.@logLineNumForward;
-			logAnalysisForm.elseActionContent.text = jobDetailXml.logAnalysis.action["else"].event.content;
+			logAnalysisForm.elseLogLineNumBack.text = logaXML.action["else"].event.content.@logLineNumBack;
+			logAnalysisForm.elseLogLineNumForward.text = logaXML.action["else"].event.content.@logLineNumForward;
+			logAnalysisForm.elseActionContent.text = logaXML.action["else"].event.content;
 			
-			logAnalysisForm.elseSSS.stateName.selectedItem = "" + jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StateName;
+			logAnalysisForm.elseSSS.stateName.selectedItem = "" + logaXML.action["else"].forcedResult.LiveStateInfo.StateName;
 			logAnalysisForm.elseSSS.stateName_changeHandler(null);
 			logAnalysisForm.elseSSS.refreshSubstateNameCombo();
 			
-			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
-				logAnalysisForm.elseSSS.substateName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.elseSSS.substateName.dataProvider.toArray());
+			if(logaXML.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("SubstateName")) {
+				logAnalysisForm.elseSSS.substateName.selectedIndex = JobXmlToView.indexOf(logaXML.action["else"].forcedResult.LiveStateInfo.SubstateName, logAnalysisForm.elseSSS.substateName.dataProvider.toArray());
 				logAnalysisForm.elseSSS.substateName_changeHandler(null);
 				if(logAnalysisForm.elseSSS.statusName.dataProvider != null) {
 					(logAnalysisForm.elseSSS.statusName.dataProvider as ArrayCollection).refresh();
 				}
 			}
 			
-			if(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
-				logAnalysisForm.elseSSS.statusName.selectedIndex = JobXmlToView.indexOf(jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.StatusName, logAnalysisForm.elseSSS.statusName.dataProvider.toArray());
+			if(logaXML.action["else"].forcedResult.LiveStateInfo.hasOwnProperty("StatusName")) {
+				logAnalysisForm.elseSSS.statusName.selectedIndex = JobXmlToView.indexOf(logaXML.action["else"].forcedResult.LiveStateInfo.StatusName, logAnalysisForm.elseSSS.statusName.dataProvider.toArray());
 			}
 			
-			logAnalysisForm.elseRetCode.text = jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.ReturnCode.Code;
-			logAnalysisForm.elseRetCodeDesc.text = jobDetailXml.logAnalysis.action["else"].forcedResult.LiveStateInfo.ReturnCode.Desc;
+			logAnalysisForm.elseRetCode.text = logaXML.action["else"].forcedResult.LiveStateInfo.ReturnCode.Code;
+			logAnalysisForm.elseRetCodeDesc.text = logaXML.action["else"].forcedResult.LiveStateInfo.ReturnCode.Desc;
 		}
 		
 		public static function prepare_scheduleInfoForm(scheduleInfoForm:ScheduleInfoForm, jobDetailXml:XML):void {

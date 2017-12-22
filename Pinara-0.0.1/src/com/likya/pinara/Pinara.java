@@ -201,10 +201,12 @@ public class Pinara extends PinaraBase {
 			licenseFlag = ulicense;
 			synchronized (licenseFlag) {
 				licenseFlag.wait();
+				/*
 				if(!isLicensed()) {
 					System.err.println("Your license expired, contact to your vendor !");
 					System.exit(-1);
 				}
+				*/
 				licenseFlag = license;
 			}
 		} else {

@@ -78,13 +78,13 @@
 			</s:FormItem>
 		</s:VGroup>
 		<s:FormItem label="Days of Week">
-			<s:CheckBox width="150" label="Monday" id="d1"/>
-			<s:CheckBox width="150" label="Tuesday" id="d2"/>
-			<s:CheckBox width="150" label="Wednesday" id="d3"/>
-			<s:CheckBox width="150" label="Thursday" id="d4"/>
-			<s:CheckBox width="150" label="Friday" id="d5"/>
-			<s:CheckBox width="150" label="Saturday" id="d6"/>
-			<s:CheckBox width="150" label="Sunday" id="d7"/>
+			<s:CheckBox width="150" label="Monday" id="d2"/>
+			<s:CheckBox width="150" label="Tuesday" id="d3"/>
+			<s:CheckBox width="150" label="Wednesday" id="d4"/>
+			<s:CheckBox width="150" label="Thursday" id="d5"/>
+			<s:CheckBox width="150" label="Friday" id="d6"/>
+			<s:CheckBox width="150" label="Saturday" id="d7"/>
+			<s:CheckBox width="150" label="Sunday" id="d1"/>
 		</s:FormItem>
 	</s:HGroup>
 	

@@ -73,7 +73,14 @@ public class PinaraOutputManager implements Runnable {
 				if(mailInfo.getEnabled()) {
 					LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
 					if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
-						SimpleMail simpleMail = new SimpleMail("Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName(), "Belirtilen iş şu duruma geçti : " + dump);
+						String subjectTxt = "Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName();
+						String bodyTxt = "Belirtilen iş şu duruma geçti : " + dump + "\n";
+						String content = "";
+						if(liveStateInfo.getReturnCode().getDesc() != null && liveStateInfo.getReturnCode().getDesc().length() > 0) {
+							content = "\nİçerik : \n" + liveStateInfo.getReturnCode().getDesc();	
+						}
+						
+						SimpleMail simpleMail = new SimpleMail(subjectTxt, bodyTxt + content);
 						Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
 					}
 				}

@@ -288,11 +288,13 @@
 			}
 			
 			protected function suspendAppResult_resultHandler(event:ResultEvent):void {
-				// Alert.show(String(event.result));
-				if(String(event.result) == "OK") {
+				
+				var returnXml:XML;
+				returnXml = XML(event.message.body);
+				if(returnXml.result == "OK") {
 					// trace(XML(menuDataXMLList[3]).children()[0].@label);
-					XML(menuDataXMLList[3]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
-					XML(menuDataXMLList[3]).children()[0].@id = "resumeApp";
+					XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
+					XML(menuDataXMLList[1]).children()[0].@id = "resumeApp";
 					// trace(XML(menuDataXMLList[3]).children()[0].@label);
 					// trace(XML(menuDataXMLList[3]).children()[0].@id);
 				}
@@ -301,9 +303,11 @@
 			
 			protected function resumeAppResult_resultHandler(event:ResultEvent):void {
 				// Alert.show(String(event.result));
-				if(String(event.result) == "OK") {
-					XML(menuDataXMLList[3]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'suspendApp');
-					XML(menuDataXMLList[3]).children()[0].@id = "suspendApp";
+				var returnXml:XML;
+				returnXml = XML(event.message.body);
+				if(returnXml.result == "OK") {
+					XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'suspendApp');
+					XML(menuDataXMLList[1]).children()[0].@id = "suspendApp";
 				}
 			}
 			

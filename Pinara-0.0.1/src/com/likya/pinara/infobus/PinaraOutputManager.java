@@ -76,7 +76,7 @@ public class PinaraOutputManager implements Runnable {
 						String subjectTxt = "Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName();
 						String bodyTxt = "Belirtilen iş şu duruma geçti : " + dump + "\n";
 						String content = "";
-						if(liveStateInfo.getReturnCode().getDesc() != null && liveStateInfo.getReturnCode().getDesc().length() > 0) {
+						if(liveStateInfo.getReturnCode() != null && liveStateInfo.getReturnCode().getDesc() != null && liveStateInfo.getReturnCode().getDesc().length() > 0) {
 							content = "\nİçerik : \n" + liveStateInfo.getReturnCode().getDesc();	
 						}
 						

@@ -34,8 +34,8 @@
 	<xs:element name="ReturnCode">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="Code" />
-				<xs:element ref="Desc" />
+				<xs:element ref="Code" minOccurs="0"/>
+				<xs:element ref="Desc" minOccurs="0"/>
 			</xs:sequence>
 			<xs:attribute name="cdId" use="optional">
 				<xs:simpleType>

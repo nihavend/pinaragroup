@@ -43,4 +43,8 @@
 		if not defined cache is disabled. To see the effect browser must be restarted  
 	-->
 	<cacheExpire></cacheExpire>
+	<!--
+		if empty value maxHistoryLen default is 20
+	-->
+	<maxHistoryLen>20</maxHistoryLen>
 </pinaraConfig>

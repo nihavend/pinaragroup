@@ -47,15 +47,34 @@ public class PersistDBApi {
 		int maxHistoryLen = (tmpValue == null) ? 20 : tmpValue.intValue();
 		
 		if(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
-			LiveStateInfosDocument liveStateInfosDocument = new JobCrudNoDBDAO().readJobHist(dataPath, jobId);
+			
+			/** 
+			 * NOT : Aşağıdaki Açıklamaya Bknz : 
+			 * LiveStateInfosDocument historicLiveStateInfosDocument = new JobCrudNoDBDAO().readJobHist(dataPath, jobId);
+			 */
 			// System.out.println(liveStateInfosDocument);
 			while(liveStateInfosType.getLiveStateInfoArray().length > maxHistoryLen) {
-				LiveStateInfo liveStateInfo = liveStateInfosType.getLiveStateInfoArray(liveStateInfosType.getLiveStateInfoArray().length - 1);
-				liveStateInfosDocument.getLiveStateInfos().insertNewLiveStateInfo(0).set(liveStateInfo);
+				/**
+				 *  NOT : Aşağıdaki Açıklamaya Bknz : 
+				 *  LiveStateInfo liveStateInfo = liveStateInfosType.getLiveStateInfoArray(liveStateInfosType.getLiveStateInfoArray().length - 1);
+				 *  historicLiveStateInfosDocument.getLiveStateInfos().insertNewLiveStateInfo(0).set(liveStateInfo);
+				 */
 				liveStateInfosType.removeLiveStateInfo(liveStateInfosType.getLiveStateInfoArray().length - 1);
 			}
 			// System.out.println(liveStateInfosDocument);
-			new JobCrudNoDBDAO().saveJobHist(dataPath, jobId, liveStateInfosDocument.getLiveStateInfos().xmlText());
+			/**
+			 * AÇIKLAMA :
+			 * 
+			 * Serkan Taş 18.01.2018 23:40
+			 * 
+			 * Job içinde config'de tanımlı MAX 20 hareket historic olarak tutulmaktadır.
+			 * Bu metod, tanımlı max değeri aşan kısmın job xml den silinip diske yazılmasını amaçlamaktadır.
+			 * Ancak bu oluşan dosyanın sınırı da zamanla büyüdüğünden, yeni bir akış tasarlanana dek 
+			 * artan bilgilerin diske yazma işlemi iptal edilmiştir.
+			 * 
+			 * new JobCrudNoDBDAO().saveJobHist(dataPath, jobId, liveStateInfosDocument.getLiveStateInfos().xmlText());
+			 */
+
 		}
 		return true;
 	}

@@ -494,8 +494,9 @@ x			}
 					req.data = new URLVariables(str);
 					
 					// encoder.encode("tlos:tlos");
-					encoder.encode(userInfo.username + ":" + userInfo.password);
-					
+					// encoder.encode(userInfo.username + ":" + userInfo.password);
+					// tr şifre ve kullanıcı sorunu nedeni utf8 e geçtim
+					encoder.encodeUTFBytes(userInfo.username + ":" + userInfo.password);
 					var credsHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + encoder.toString());
 					req.requestHeaders.push(credsHeader);
 					

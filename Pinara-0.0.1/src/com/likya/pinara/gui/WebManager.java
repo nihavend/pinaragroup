@@ -47,42 +47,57 @@ public class WebManager {
 			super(realm);
 		}
 
-//		public Result authenticate(HttpExchange t) {
-//			HttpContext context = t.getHttpContext();
-//			Headers rmap = (Headers) t.getRequestHeaders();
-//			/*
-//			 * look for auth token
-//			 */
-//			String auth = rmap.getFirst("Authorization");
-//			if (auth == null) {
-//				Headers map = (Headers) t.getResponseHeaders();
-//				map.set("WWW-Authenticate", "Basic realm=" + "\"" + realm + "\"");
-//				return new Authenticator.Retry(401);
-//			}
-//			int sp = auth.indexOf(' ');
-//			if (sp == -1 || !auth.substring(0, sp).equals("Basic")) {
-//				return new Authenticator.Failure(401);
-//			}
-//			byte[] b = Base64.base64ToByteArray(auth.substring(sp + 1));
-//			String userpass = new String(b);
-//			int colon = userpass.indexOf(':');
-//			String uname = userpass.substring(0, colon);
-//			String pass = userpass.substring(colon + 1);
-//
-//			if (checkCredentials(uname, pass)) {
-//				return new Authenticator.Success(new HttpPrincipal(uname, realm));
-//			} else {
-//				/* reject the request again with 401 */
-//
-//				Headers map = (Headers) t.getResponseHeaders();
-//				map.set("WWW-Authenticate", "Basic realm=" + "\"" + realm + "\"");
-//				return new Authenticator.Failure(401);
-//			}
-//		}
+		/*
+		 * Aşağıdaki metod, internalleri ile test etmek amaçklı bırakıldı
+		 * (non-Javadoc)
+		 * @see com.sun.net.httpserver.BasicAuthenticator#authenticate(com.sun.net.httpserver.HttpExchange)
+		 */
+		/*
+		public Result authenticate(HttpExchange t) {
+			
+			// HttpContext context = t.getHttpContext();
+			com.sun.net.httpserver.Headers rmap = (com.sun.net.httpserver.Headers) t.getRequestHeaders();
+			
+			// look for auth token
+			
+			String auth = rmap.getFirst("Authorization");
+			if (auth == null) {
+				com.sun.net.httpserver.Headers map = (com.sun.net.httpserver.Headers) t.getResponseHeaders();
+				map.set("WWW-Authenticate", "Basic realm=" + "\"" + realm + "\"");
+				return new Authenticator.Retry(401);
+			}
+			int sp = auth.indexOf(' ');
+			if (sp == -1 || !auth.substring(0, sp).equals("Basic")) {
+				return new Authenticator.Failure(401);
+			}
+			// Çalışmadı aşağıdakini denedim : byte[] b = Base64.base64ToByteArray(auth.substring(sp + 1));
+			byte[] b = null;
+			try {
+				b = Base64.getDecoder().decode(new String(auth.substring(sp + 1)).getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			String userpass = new String(b);
+			int colon = userpass.indexOf(':');
+			String uname = userpass.substring(0, colon);
+			String pass = userpass.substring(colon + 1);
 
+			if (checkCredentials(uname, pass)) {
+				return new Authenticator.Success(new com.sun.net.httpserver.HttpPrincipal(uname, realm));
+			} else {
+				// reject the request again with 401
+
+				com.sun.net.httpserver.Headers map = (com.sun.net.httpserver.Headers) t.getResponseHeaders();
+				map.set("WWW-Authenticate", "Basic realm=" + "\"" + realm + "\"");
+				return new Authenticator.Failure(401);
+			}
+		}
+		*/
+		
 		public Result authenticate(HttpExchange arg0) {
+
 			// Aşağıdakiler debug için
-			// Headers rmap = (Headers) arg0.getRequestHeaders();
+			// com.sun.net.httpserver.Headers rmap = (com.sun.net.httpserver.Headers) arg0.getRequestHeaders();
 			// String auth = rmap.getFirst("Authorization");
 			// System.out.println(auth);
 			

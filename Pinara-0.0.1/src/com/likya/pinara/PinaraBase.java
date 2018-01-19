@@ -54,7 +54,7 @@ public abstract class PinaraBase {
 
 	private ConfigurationManager configurationManager;
 
-	public final static String authTxt = "pinara";
+	public final static String authTxt = "pınara";
 	
 	public enum EventTypeInfo {
 

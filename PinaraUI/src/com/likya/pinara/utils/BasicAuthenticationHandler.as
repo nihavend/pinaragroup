@@ -29,7 +29,10 @@ package com.likya.pinara.utils
 			encoder.insertNewLines = false; // see below for why you need to do this
 			var tmpUserInfo:User = ModelLocator.getInstance().currentUser;
 			// encoder.encode("pinara:pinara");
-			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
+			// encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
+			// tr şifre ve kullanıcı sorunu nedeni utf8 e geçtim
+			encoder.encodeUTFBytes(tmpUserInfo.username + ":" + tmpUserInfo.password);
+
 			
 			service.headers = {Authorization:"Basic " + encoder.toString()};   
 			
@@ -57,7 +60,10 @@ package com.likya.pinara.utils
 			encoder.insertNewLines = false;
 			//encoder.encode("pinara:pinara");
 			var tmpUserInfo:User = ModelLocator.getInstance().currentUser;
-			encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
+			// encoder.encode(tmpUserInfo.username + ":" + tmpUserInfo.password);
+			// tr şifre ve kullanıcı sorunu nedeni utf8 e geçtim
+			encoder.encodeUTFBytes(tmpUserInfo.username + ":" + tmpUserInfo.password);
+
 			
 			service.operations[operationName].headers["Authorization"] = "Basic " + encoder.toString();
 			

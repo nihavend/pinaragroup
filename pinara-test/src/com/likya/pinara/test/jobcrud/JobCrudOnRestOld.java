@@ -8,7 +8,7 @@ import org.apache.xmlbeans.XmlOptions;
 import org.junit.Assert;
 
 import com.likya.myra.commons.utils.XMLValidations;
-import com.likya.myra.test.job.crud.SimplePropertiesGenerator;
+import com.likya.myra.test.model.generators.SimplePropertiesGenerator;
 import com.likya.pinara.gui.rest.RestParser;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;

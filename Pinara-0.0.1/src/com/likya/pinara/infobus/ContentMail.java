@@ -11,14 +11,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import com.likya.pinara.Pinara;
-
 public class ContentMail extends MultipartMail {
 
 	public ContentMail(String mailType, String content) {
 		try {
 			// Instance name yanlış, artık tek bir senaryo yok !
-			setMailSubject(Pinara.getMessage("EndOfCycleMail.0") + mailType /*Pinara.getInstance().getConfigurationManager().getPinaraConfig().getInstanceName()*/ + Pinara.getMessage(""));
+			setMailSubject("Log Analyzer Action : " + mailType);
 			setMultipart(prepare(content));
 			setMAIL_TYPE(PinaraMail.MULTIPART);
 		} catch (MessagingException e) {

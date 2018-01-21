@@ -8,6 +8,6 @@
   <usejobnamesforlog>NO</usejobnamesforlog>
   <logFileExt>.log</logFileExt>
   <globalLogPath>./</globalLogPath>
-  <logbuffersize>800</logbuffersize>
+  <logbuffersize>2000</logbuffersize>
   <logpagesize>10</logpagesize>
 </myraConfig>

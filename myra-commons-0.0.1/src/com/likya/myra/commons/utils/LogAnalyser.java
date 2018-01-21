@@ -32,6 +32,7 @@ public class LogAnalyser {
 	private int logLineNumBack = 0;
 	private int logLineNumForward = 0;
 	
+	
 	public LiveStateInfo evaluate(AbstractJobType abstractJobType, StringBuffer logContent) {
 
 		LiveStateInfo liveStateInfo = null;
@@ -39,60 +40,72 @@ public class LogAnalyser {
 		logAnalysis = abstractJobType.getLogAnalysis();
 		
 		Action logAction = logAnalysis.getAction();
-				
+
+		boolean result = false;
+		
 		if (logAction.getThencase() != null) {
 			parseEvent(logAction.getThencase().getEvent());
+			result = innerEval(abstractJobType, logContent);
+			if(result) {
+				if(logAction.getThencase().getForcedResult() != null ) {
+					liveStateInfo = logAction.getThencase().getForcedResult().getLiveStateInfo();
+				}
+			}	
 		} else if (logAction.getElsecase() != null) {
 			parseEvent(logAction.getElsecase().getEvent());
-		}
-
-		if(logAction.getThencase() != null || logAction.getElsecase() != null) {
-			
-			boolean result = false;
-
-			try {
-				// Evaluate log analyzing procedures.
-
-				String filePath = abstractJobType.getBaseJobInfos().getJobLogPath();
-				String fileName = abstractJobType.getBaseJobInfos().getJobLogFile();
-
-				File sourceFile = new File(filePath + File.separator + fileName);
-
-				int direction = logAnalysis.getFindWhat().getDirection().intValue();
-
-				boolean matcWholeWordOnly = logAnalysis.getFindWhat().getMatchWholeWordOnly();
-				boolean isCaseSensitive = logAnalysis.getFindWhat().getMatchCase();
-
-				String searchString = logAnalysis.getFindWhat().getStringValue();
-
-				int modeType = logAnalysis.getFindWhat().getMode().intValue();
-
-				if (matcWholeWordOnly) {
-					result = matcWholeWordOnly(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, direction, modeType);
-				} else {
-					result = matcWord(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, direction, modeType);
+			result = innerEval(abstractJobType, logContent);
+			if(!result) {
+				if(logAction.getElsecase().getForcedResult() != null ) {
+					liveStateInfo = logAction.getElsecase().getForcedResult().getLiveStateInfo();
 				}
-
-			} catch (UnsupportedOperationException uoe) {
-				uoe.printStackTrace();
-			}
-			
-			for(Object text : limitedArrayList.toArray()) {
-				defaultLogContent += text.toString() + "\n";
-			}
-			
-			logContent.append(defaultLogContent);
-			
-			if(result) {
-				liveStateInfo = logAction.getThencase().getForcedResult().getLiveStateInfo();
-			} else {
-				liveStateInfo = logAction.getElsecase().getForcedResult().getLiveStateInfo();
-			}
-			
+			}	
 		}
 		
 		return liveStateInfo;
+		
+	}
+	
+	private boolean innerEval(AbstractJobType abstractJobType, StringBuffer logContent) {
 
+		boolean result = false;
+
+		try {
+			// Evaluate log analyzing procedures.
+
+			String filePath = abstractJobType.getBaseJobInfos().getJobLogPath();
+			String fileName = abstractJobType.getBaseJobInfos().getJobLogFile();
+
+			File sourceFile = new File(filePath + File.separator + fileName);
+
+			int direction = logAnalysis.getFindWhat().getDirection().intValue();
+
+			boolean matcWholeWordOnly = logAnalysis.getFindWhat().getMatchWholeWordOnly();
+			boolean isCaseSensitive = logAnalysis.getFindWhat().getMatchCase();
+
+			String searchString = logAnalysis.getFindWhat().getStringValue();
+
+			logContent.append("Search String : " + searchString);
+
+			int modeType = logAnalysis.getFindWhat().getMode().intValue();
+
+			if (matcWholeWordOnly) {
+				result = matcWholeWordOnly(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, direction, modeType);
+			} else {
+				result = matcWord(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, direction, modeType);
+			}
+
+		} catch (UnsupportedOperationException uoe) {
+			uoe.printStackTrace();
+		}
+		
+		for(Object text : limitedArrayList.toArray()) {
+			defaultLogContent += text.toString() + "\n";
+		}
+		
+		logContent.append(defaultLogContent);
+		
+		return result;
+		
 	}
 	
 	private void parseEvent(Event myEvent) {
@@ -110,18 +123,18 @@ public class LogAnalyser {
 		limitedArrayList.setMaxLength(logLineNumBack + logLineNumForward + 1);
 	}
 
-	private static boolean matcWord(File sourceFile, AbstractCollection<Object> collection, int logLineNumForward, String searchString, boolean isCaseSensitive, int direction, int modeType) {
+	private static boolean matcWord(File sourceFile, AbstractCollection<Object> limitedArrayList, int logLineNumForward, String searchString, boolean isCaseSensitive, int direction, int modeType) {
 
 		boolean retValue = false;
 
 		switch (direction) {
 
 		case DirectionType.INT_DOWN:
-			retValue = find(sourceFile, collection, logLineNumForward, searchString, isCaseSensitive, modeType);
+			retValue = find(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, modeType);
 			break;
 
 		case DirectionType.INT_UP:
-			retValue = reverseFind(sourceFile, collection, logLineNumForward, " " + searchString + " ", isCaseSensitive, modeType);
+			retValue = reverseFind(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, modeType);
 			break;
 
 		default:
@@ -132,18 +145,18 @@ public class LogAnalyser {
 
 	}
 
-	private static boolean matcWholeWordOnly(File sourceFile, AbstractCollection<Object> collection, int logLineNumForward, String searchString, boolean isCaseSensitive, int direction, int modeType) {
+	private static boolean matcWholeWordOnly(File sourceFile, AbstractCollection<Object> limitedArrayList, int logLineNumForward, String searchString, boolean isCaseSensitive, int direction, int modeType) {
 
 		boolean retValue = false;
 
 		switch (direction) {
 
 		case DirectionType.INT_DOWN:
-			retValue = find(sourceFile, collection, logLineNumForward, " " + searchString + " ", isCaseSensitive, modeType);
+			retValue = find(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, modeType);
 			break;
 
 		case DirectionType.INT_UP:
-			retValue = reverseFind(sourceFile, collection, logLineNumForward, " " + searchString + " ", isCaseSensitive, modeType);
+			retValue = reverseFind(sourceFile, limitedArrayList, logLineNumForward, searchString, isCaseSensitive, modeType);
 			break;
 
 		default:
@@ -153,7 +166,7 @@ public class LogAnalyser {
 		return retValue;
 	}
 
-	public static boolean find(File f, AbstractCollection<Object> collection, int logLineNumForward, String searchString, boolean isCaseSensitive, int modeType) {
+	public static boolean find(File f, AbstractCollection<Object> limitedArrayList, int logLineNumForward, String searchString, boolean isCaseSensitive, int modeType) {
 
 		boolean result = false;
 
@@ -164,7 +177,7 @@ public class LogAnalyser {
 			in = new Scanner(new FileReader(f));
 
 			int fwCounter = 0;
-			while (in.hasNextLine() && (fwCounter < logLineNumForward)) {
+			while (in.hasNextLine()) {
 
 				String myLine = in.nextLine();
 
@@ -184,7 +197,11 @@ public class LogAnalyser {
 					fwCounter++;
 				}
 
-				collection.add(myLine);
+				limitedArrayList.add(myLine);
+				
+				if(result && fwCounter > logLineNumForward) {
+					break;
+				}
 
 			}
 		} catch (IOException e) {
@@ -200,7 +217,7 @@ public class LogAnalyser {
 
 	}
 
-	public static boolean reverseFind(File f, AbstractCollection<Object> collection, int logLineNumForward, String searchString, boolean isCaseSensitive, int modeType) {
+	public static boolean reverseFind(File f, AbstractCollection<Object> limitedArrayList, int logLineNumForward, String searchString, boolean isCaseSensitive, int modeType) {
 
 		boolean result = false;
 
@@ -213,7 +230,7 @@ public class LogAnalyser {
 			in = new Scanner(reverseLineInputStream);
 
 			int fwCounter = 0;
-			while (in.hasNextLine() && (fwCounter < logLineNumForward)) {
+			while (in.hasNextLine()) {
 
 				String myLine = in.nextLine();
 
@@ -233,8 +250,12 @@ public class LogAnalyser {
 				} else {
 					fwCounter++;
 				}
-
-				collection.add(myLine);
+			
+				limitedArrayList.add(myLine);
+				
+				if(result && fwCounter > logLineNumForward) {
+					break;
+				}
 
 			}
 		} catch (IOException e) {
@@ -257,7 +278,7 @@ public class LogAnalyser {
 		if (isCaseSensitive) {
 			result = source.indexOf(key) >= 0;
 		} else {
-			result = source.indexOf(key.toUpperCase()) >= 0;
+			result = source.toUpperCase().indexOf(key.toUpperCase()) >= 0;
 		}
 
 		return result;

@@ -12,6 +12,7 @@ import com.likya.myra.jef.core.JobOperations;
 import com.likya.myra.jef.core.ManagementOperations;
 import com.likya.myra.jef.jobs.ChangeLSI;
 import com.likya.myra.jef.jobs.JobImpl;
+import com.likya.myra.test.model.generators.SimplePropertiesGenerator;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;

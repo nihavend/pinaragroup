@@ -282,12 +282,14 @@ package com.likya.pinara.utils {
 			
 			logAnalysisForm.laToggle.selected = true;
 			
-			var isLogAnalyseEnable:Boolean = logaXML.@active;
+			var isLogAnalyseEnable:Boolean = ("" + logaXML.@active) == "true";
 			
 			if(isLogAnalyseEnable) {
-				logAnalysisForm.logAnalyseEnable.selectedValue = "enableLA";
+				logAnalysisForm.enableLA.selected = true;
+				logAnalysisForm.handleDecoration("true");
 			} else {
-				logAnalysisForm.logAnalyseEnable.selectedValue = "disableLA";
+				logAnalysisForm.disableLA.selected = true;
+				logAnalysisForm.handleDecoration("false");
 			}
 			
 			// findWhat direction="Down" matchCase="false" matchWholeWordOnly="false" mode="regEx">string</findWhat>

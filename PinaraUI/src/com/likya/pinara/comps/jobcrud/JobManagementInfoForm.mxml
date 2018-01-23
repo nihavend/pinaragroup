@@ -278,7 +278,7 @@
 			<s:FormItem label="Delay between auto retry" top="60">
 				<s:TextInput id="arStepValue" width="100%" enabled="false"/>
 				<s:helpContent>
-					<s:Label text="Define delay, e.g. P1D"/>
+					<s:Label text="Define delay, e.g. P1D, PT1M"/>
 				</s:helpContent>
 			</s:FormItem>
 			
@@ -315,7 +315,7 @@
 		<s:FormItem label="Delay between periods" top="60">
 			<s:TextInput id="stepValue" width="100%" enabled="false"/>
 			<s:helpContent>
-				<s:Label text="Define delay, e.g. P1D"/>
+				<s:Label text="Define delay, e.g. P1D, PT1M"/>
 			</s:helpContent>
 		</s:FormItem>
 		

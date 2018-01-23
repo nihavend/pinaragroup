@@ -140,7 +140,8 @@ package com.likya.pinara.utils {
 				} else {
 					managementInfoForm_1.autoRetry.selectedItem = "false";
 				}
-				
+			
+				managementInfoForm_1.autoRetryDecoration();
 			}
 			
 		}

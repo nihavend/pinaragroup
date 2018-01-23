@@ -556,11 +556,13 @@ package com.likya.pinara.utils {
 				
 				logAnalysisXML.wla::action.appendChild(elsecaseXML);
 			}
-			
-			if(liveStateInfo.hasOwnProperty("StateName")) {
+
+			// myra-stateinfo:StateName
+			// Aşağıdaki kod çalışmıyor, namespace ile çalışan sürüm gelene kadar kaldırdım.
+			// if(liveStateInfo.hasOwnProperty("StateName")) {
 				thencaseXML.wla::forcedResult.appendChild(liveStateInfo);
 				myraJobList.myra::genericJob.appendChild(logAnalysisXML);
-			}
+			// }
 			
 			trace(logAnalysisXML);
 			

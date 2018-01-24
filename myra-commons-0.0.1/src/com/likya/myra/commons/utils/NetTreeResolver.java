@@ -20,7 +20,7 @@ public class NetTreeResolver {
 
 	public static class NetTree {
 		
-		private boolean isActive = false;
+		private boolean isActive = true;
 		
 		protected String virtualId;
 		protected ArrayList<String> members = new ArrayList<String>();

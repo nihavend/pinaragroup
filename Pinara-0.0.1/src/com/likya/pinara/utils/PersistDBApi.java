@@ -10,8 +10,6 @@ import com.likya.pinara.Pinara;
 import com.likya.pinara.dao.nodb.JobCrudNoDBDAO;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
-import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
-import com.likya.xsd.myra.model.stateinfo.LiveStateInfosDocument;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 
 public class PersistDBApi {

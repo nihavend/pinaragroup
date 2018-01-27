@@ -15,6 +15,10 @@ public class DataMigration {
 		JobListDocument jobListDocumentRecent = JobListDocument.Factory.parse(jobListDocumentStr);
 		
 		for (AbstractJobType abstractJobType : jobListDocumentRecent.getJobList().getGenericJobArray()) {
+			if(abstractJobType.toString().contains("\"simpleProperties\"")) {
+				jobListDocumentStr = abstractJobType.toString().replace("\"simpleProperties\"", "\"myra:simpleProperties\"");
+				abstractJobType.set(XmlObject.Factory.parse(jobListDocumentStr));
+			}
 			PersistDBApi.saveJob(abstractJobType);
 		}
 		

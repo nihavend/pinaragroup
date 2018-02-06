@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_run_jar" name="Create Runnable Jar for Project Pinara with libraries in sub-folder">
+	
+	<property file="version.info" />
+	
 	<echo>User Home Folder : ${user.home}</echo>
-	<property name="version" value="0.9.2" />
 
 	<property name="relman" value="${user.home}/relman" />
 	<property name="gitdir" value="${relman}/git" />

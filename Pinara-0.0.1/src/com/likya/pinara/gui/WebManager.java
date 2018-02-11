@@ -12,7 +12,7 @@ import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.PasswordService;
 import com.sun.net.httpserver.Authenticator;
-// Yenisini paket altına taşıdım :
+// Kaynak kodundan alıp paket altına taşıdım :
 // http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/com/sun/net/httpserver
 // import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpContext;

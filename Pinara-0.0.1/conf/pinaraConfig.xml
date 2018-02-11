@@ -41,10 +41,10 @@
 	<!--
 		if empty value cacheExpire default is 2592000 (30 days in seconds)
 		if not defined cache is disabled. To see the effect browser must be restarted  
+		<cacheExpire></cacheExpire>
 	-->
-	<cacheExpire></cacheExpire>
 	<!--
 		if empty value maxHistoryLen default is 20
-	-->
 	<maxHistoryLen>20</maxHistoryLen>
+	-->
 </pinaraConfig>

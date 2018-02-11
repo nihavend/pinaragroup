@@ -260,7 +260,10 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					isLoop = pinaraMailServer.getExecutorThread().isAlive() || pinaraOutputManager.getExecutorThread().isAlive(); // || pinaraSMSServer.getExecutorThread().isAlive();
+					// || pinaraSMSServer.getExecutorThread().isAlive();
+					isLoop = 
+					((pinaraMailServer == null || pinaraMailServer.getExecutorThread() == null) ? false : pinaraMailServer.getExecutorThread().isAlive()) || 
+					((pinaraOutputManager == null || pinaraOutputManager.getExecutorThread() == null) ? false : pinaraOutputManager.getExecutorThread().isAlive()); 
 				}
 				System.exit(0);				
 			}

@@ -10,6 +10,7 @@ import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
+import com.likya.pinara.utils.UTF8String;
 import com.likya.pinara.utils.xml.mappers.UserMapper;
 
 public class RestUserOps extends PinaraRestHandler {
@@ -92,7 +93,7 @@ public class RestUserOps extends PinaraRestHandler {
 				break;
 
 			case "username":
-				String userName = paramValue;
+				String userName = UTF8String.getValue(paramValue.getBytes()); // Serkan : paramValue;
 				user = pinaraAuthorization.readUser(userName);
 				break;
 			default:
@@ -207,7 +208,7 @@ public class RestUserOps extends PinaraRestHandler {
 			break;
 		}
 		
-		responseBytes = retStr.getBytes();
+		responseBytes = retStr.getBytes("utf8");
 
 		return responseBytes;
 	}

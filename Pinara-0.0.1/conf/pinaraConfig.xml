@@ -5,9 +5,10 @@
 	<httpPort>4000</httpPort>
 	<httpsPort>4443</httpsPort>
 	<persistent>false</persistent>
-	<!-- mailInfo>
+	<mailInfo enabled="false">
+	    <from>test@likyateknoloji.com</from>
 		<lik:EmailList>
-			<lik:email>serkan.tas@likyateknoloji.com</lik:email>
+			<lik:email>test2@likyateknoloji.com</lik:email>
 		</lik:EmailList>
 		<myra:stateInfos>
 			<myra:LiveStateInfos>
@@ -18,22 +19,25 @@
 				</myra:LiveStateInfo>
 				<myra:LiveStateInfo LSIDateTime="2013-12-22T18:44:31.130+02:00">
 					<myra:StateName>RUNNING</myra:StateName>
-					<myra:SubstateName>ON-RESOURCE</myra:SubstateName>
-					<myra:StatusName>TIME-OUT</myra:StatusName>
+                     <myra:SubstateName>ON-RESOURCE</myra:SubstateName>
+                     <myra:StatusName>TIME-OUT</myra:StatusName>
 				</myra:LiveStateInfo>
 				<myra:LiveStateInfo LSIDateTime="2013-12-22T18:44:31.130+02:00">
 					<myra:StateName>FINISHED</myra:StateName>
 					<myra:SubstateName>COMPLETED</myra:SubstateName>
 					<myra:StatusName>SUCCESS</myra:StatusName>
-				</myra:LiveStateInfo>
+				</myra:LiveStateInfo>				
 			</myra:LiveStateInfos>
 		</myra:stateInfos>
-		<useEncryption>true</useEncryption>
-		<userName></userName>
-		<lik:userPassword></lik:userPassword>
-		<smtpServerHostName></smtpServerHostName>
-		<port></port>
-	</mailInfo-->	
+		<userName>testUser@likyateknoloji.com</userName>
+		<lik:userPassword>testUserPassword</lik:userPassword>	
+		<mailProps>
+			<prop>mail.smtp.host,mail.likya.com</prop>
+		    <prop>mail.smtp.port,587</prop>
+		    <prop>mail.smtp.auth,true</prop>
+		    <prop>mail.debug,false</prop>
+		</mailProps>
+	</mailInfo>
 	<mcInfo>
 		<jmxPort>4002</jmxPort>
 	</mcInfo>

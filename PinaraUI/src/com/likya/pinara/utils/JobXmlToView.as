@@ -198,10 +198,10 @@ package com.likya.pinara.utils {
 			*/
 			
 			if(tmXML.hasOwnProperty("jsScheduledTime")) {
-				tmXML = mXML.timeManagement.jsScheduledTime;
-				if(tmXML.hasOwnProperty("startTime")) {
-					managementInfoForm.bdate.selectedDate = getDatePart(tmXML.startTime);
-					pairs = getTimePart(tmXML.startTime);
+				var stXML:XMLList = mXML.timeManagement.jsScheduledTime;
+				if(stXML.hasOwnProperty("startTime")) {
+					managementInfoForm.bdate.selectedDate = getDatePart(stXML.startTime);
+					pairs = getTimePart(stXML.startTime);
 					managementInfoForm.bhour.value = pairs[0];
 					managementInfoForm.bminute.value = pairs[1];
 					managementInfoForm.bsecond.value = pairs[2];
@@ -259,13 +259,18 @@ package com.likya.pinara.utils {
 //					//managementInfoForm.stopTime.enabled = true;
 //				}
 
-//				managementInfoForm.timoutValue.text = mXML.timeManagement.jsTimeOut.value_integer;
-//				managementInfoForm.timeoutUnit.selectedItem = "" + mXML.timeManagement.jsTimeOut.unit;
-//				
-//				managementInfoForm.expectedValue.text = mXML.timeManagement.expectedTime.value_integer;
-//				managementInfoForm.expectedTimeUnit.selectedItem = "" + mXML.timeManagement.expectedTime.unit;
 				
 				// }
+			
+			if(tmXML.hasOwnProperty("jsTimeOut")) {
+				managementInfoForm.timeoutValue.text = tmXML.expectedTime.value_integer;
+				managementInfoForm.timeoutUnit.selectedItem = "" + tmXML.jsTimeOut.unit;
+			}
+			if(tmXML.hasOwnProperty("expectedTime")) {
+				managementInfoForm.expectedValue.text = tmXML.expectedTime.value_integer;
+				managementInfoForm.expectedTimeUnit.selectedItem = "" + tmXML.expectedTime.unit;
+			}
+			
 		}
 		
 		public static function prepare_logAnalysisForm(logAnalysisForm:LogAnalysisForm, jobDetailXml:XML):void {

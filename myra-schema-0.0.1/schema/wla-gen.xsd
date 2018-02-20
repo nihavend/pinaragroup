@@ -95,7 +95,7 @@
 				<xs:element ref="likya-gen:timeZone" minOccurs="0" />
 				<xs:element ref="likya-gen:typeOfTime" minOccurs="0" />
 				<xs:element ref="jsRelativeTimeOption" minOccurs="0" />
-				<xs:element ref="jsTimeOut" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="jsTimeOut" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="expectedTime" minOccurs="0" />
 				<xs:element ref="tolerancePercentage" minOccurs="0" />
 				<xs:element ref="minPercentage" minOccurs="0" />

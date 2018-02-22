@@ -203,7 +203,7 @@
 
 			private function selectTreeNodeHandler(event:ResourceEvent):void {
 				selectTreeNode(XML(event.object));
-x			}
+			}
 			
 			private function selectTreeNode(data:XML):void {
 				// Alert.show("event.currentTarget : " + event.currentTarget);	

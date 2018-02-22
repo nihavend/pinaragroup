@@ -15,7 +15,7 @@
 			import mx.rpc.events.ResultEvent;
 			
 			[Bindable]
-			public var data:Object;
+			public var data:XML //Changed from Object to XML and removed warnings according to https://forums.adobe.com/thread/72306
 			
 			[Bindable]
 			public var selectedGroupId:String;

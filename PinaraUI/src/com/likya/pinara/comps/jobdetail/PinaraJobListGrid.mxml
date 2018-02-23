@@ -4,23 +4,21 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
 		 width="100%" height="100%" 
 		 xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
-		 xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:grpmanager="com.likya.pinara.services.grpmanager.*" >
+		 xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" 
+		 xmlns:grpmanager="com.likya.pinara.services.grpmanager.*" >
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
-			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.RoleFilters;
 			import com.likya.pinara.utils.Transformer;
 			
 			import mx.collections.XMLListCollection;
-			import mx.controls.Alert;
 			import mx.core.FlexGlobals;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-			import mx.utils.object_proxy;
 			
 			import spark.components.Grid;
 			import spark.events.GridSelectionEvent;
@@ -99,7 +97,6 @@
 				trace();
 			}
 			
-			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -133,37 +130,6 @@
 									<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
 								</s:layout>
 								<jobdetail:StateImageItem id="stateImageItem" data="{data}"/>
-								<!-- Aşağıdaki kısım yerine yukarıdaki StateImageItem componenti yazıldı-->
-								<!--<fx:Script>
-									<![CDATA[
-										import com.likya.pinara.containers.ImageContainer;
-										import com.likya.pinara.containers.ToolTipContainer;
-										
-										public function mylabelFunc(data:Object):String {
-											var liveStateInfo:XML = XMLList(XML(data.stateInfos.LiveStateInfos).children())[0];
-											
-											var retStr:String = "";
-											
-											if(liveStateInfo.StateName != "" || liveStateInfo.StateName != null) {
-												retStr = liveStateInfo.StateName;
-											}
-
-											if(liveStateInfo.SubstateName != "" || liveStateInfo.SubstateName != null) {
-												retStr = retStr + "-" + liveStateInfo.SubstateName;
-											}
-											
-											if(liveStateInfo.StatusName != "" || liveStateInfo.StatusName != null) {
-												retStr = retStr + "-" + liveStateInfo.StatusName;
-											}
-											
-											return retStr; // XMLList(XML(data.stateInfos.LiveStateInfos).children())[0].StateName;
-										}
-										
-										// {trace('XML : ' + XMLList(XML(data.stateInfos.LiveStateInfos).children())[0].StateName)}
-									]]>
-								</fx:Script>
-								<s:Image source="{ImageContainer.resolveStatus(data)}" toolTip="{ToolTipContainer.getToolTip(data) + ':' + mylabelFunc(data)}"/>-->
-								<!--<s:Label text="{mylabelFunc(data)}" fontSize="8" />-->
 							</s:GridItemRenderer>
 						</fx:Component>
 					</s:itemRenderer>
@@ -175,7 +141,7 @@
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn dataField="@Id" headerText="Job Id" width="{this.pinaraJobList.width * 0.06}">
+				<s:GridColumn dataField="@Id" headerText="Job Id" sortDescending="false" sortCompareFunction="Transformer.compareIds" width="{this.pinaraJobList.width * 0.06}">
 					<s:itemRenderer>
 						<fx:Component>
 							<s:DefaultGridItemRenderer textAlign="left" />
@@ -197,9 +163,9 @@
 					</s:itemRenderer>
 				</s:GridColumn>
 				<s:GridColumn dataField="@groupId" headerText="Group Id" width="{this.pinaraJobList.width * 0.10}"/>
-				<s:GridColumn labelFunction="Transformer.getRecordedDT" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
-				<s:GridColumn labelFunction="Transformer.getActualDT" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
-				<s:GridColumn labelFunction="getRealizedDuration" headerText="Son Çalışma Süresi" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn dataField="son_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getRecordedDT" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn dataField="planlanan_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getActualDT" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn dataField="son_calisma_suresi" sortCompareFunction="Transformer.compareSortForDuration" labelFunction="getRealizedDuration" headerText="Son Çalışma Süresi" width="{this.pinaraJobList.width * 0.10}"/>
 			</s:ArrayList>
 		</s:columns>
 	</s:DataGrid>

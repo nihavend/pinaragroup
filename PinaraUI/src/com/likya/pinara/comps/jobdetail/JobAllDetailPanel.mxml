@@ -326,8 +326,8 @@
 					<s:DataGrid id="stateHistory" width="500" height="250" >
 						<s:columns>
 							<s:ArrayList>
-								<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
-								<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
+								<s:GridColumn dataField="tarih" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
+								<s:GridColumn dataField="durum_bilgisi" sortCompareFunction="Transformer.compareSortString" labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
 							</s:ArrayList>
 						</s:columns>
 					</s:DataGrid> 

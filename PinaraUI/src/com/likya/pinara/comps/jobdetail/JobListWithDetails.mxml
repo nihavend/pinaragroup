@@ -489,8 +489,8 @@
 										<s:ArrayList>
 											<!-- width="{this.stateHistory.width * 0.35}" birinci kolon icin verince kolon başlık kısmı çizilemiyor. serkan...-->
 											
-											<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
-											<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}" />
+											<s:GridColumn dataField="tarih" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
+											<s:GridColumn dataField="durum_bilgisi" sortCompareFunction="Transformer.compareSortString" labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}" />
 										</s:ArrayList>
 									</s:columns>
 								</s:DataGrid> 
@@ -514,43 +514,5 @@
 		</mx:ViewStack>
 		
 	</s:VGroup>	
-	
-	
-	<!--s:layout> 
-		<s:VerticalLayout/> 
-	</s:layout> 
-	
-	<s:Button label="show xml" click="button1_clickHandler(event)" visible="false" includeInLayout="false"/>
-
-	<jobdetail:PinaraJobListGrid jobListXmlCollection="{jobListXmlCollection}" selectedGroupId="{selectedNetTreeId}"/>
-		
-	<s:Panel id="detailPanel" title="Job Summary Detail Form" height="detailPanelDefHeight" width="100%" visible="false" includeInLayout="false">
-
-		<s:Button id="toggleTree" y="-27" right="10" width="80" click="toggleTreeComp()" toolTip="Collapse" label="Collapse"/>
-		<s:HGroup width="100%">
-			
-			<jobdetail:JobBaseInfo id="jobBaseInfoId" height="150"/>
-			
-			<jobdetail:DepLists id="depListComp" width="100%">
-				<jobdetail:layout>
-					<s:VerticalLayout gap="10" paddingLeft="5" paddingTop="10" />
-				</jobdetail:layout>
-			</jobdetail:DepLists>
-
-			<s:VGroup paddingLeft="0" paddingTop="10"  width="100%" clipAndEnableScrolling="true">
-				<s:Label text="İş Tarihçesi :" width="120" />
-				<s:DataGrid id="stateHistory" width="95%" height="120" >
-					<s:columns>
-						<s:ArrayList>
-							<s:GridColumn labelFunction="Transformer.getStateChangedDate" headerText="Tarih" width="{this.stateHistory.width * 0.35}"/>
-							<s:GridColumn labelFunction="getStateInfo" headerText="Durum Bilgisi" />
-						</s:ArrayList>
-					</s:columns>
-				</s:DataGrid> 
-			</s:VGroup>
-			
-		</s:HGroup>
-
-	</s:Panel-->
 	
 </s:Group>

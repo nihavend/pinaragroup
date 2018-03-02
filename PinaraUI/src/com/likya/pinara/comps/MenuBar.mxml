@@ -193,9 +193,9 @@
 				if(eventObj.detail == Alert.OK) {
 					//Alert.show("deleting job with id : " + currentDataItem.@Id);
 					serializationInfo = "true";
+					var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + currentDataItem.@Id + "</datamess></data>");
+					BasicAuthenticationHandler.authAndCall(jobManagerService, "deletejob", packedResponse);
 				} 
-				var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + currentDataItem.@Id + "</datamess></data>");
-				BasicAuthenticationHandler.authAndCall(jobManagerService, "deletejob", packedResponse);
 				//dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
 			}
 			

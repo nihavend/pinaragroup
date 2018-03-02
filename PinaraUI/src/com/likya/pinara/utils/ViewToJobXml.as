@@ -291,12 +291,13 @@ package com.likya.pinara.utils {
 		
 		private static function get_TimeManagement(managementInfoXML:Object, j:JobEditWindow):Object {
 			
-			var currentDF:DateFormatter = new DateFormatter(); 
-			currentDF.formatString = "YYYY-MM-DD";
+			//var currentDF:DateFormatter = new DateFormatter(); 
+			//currentDF.formatString = "YYYY-MM-DD";
 			
 			managementInfoXML.appendChild(<wla:timeManagement xmlns:wla="http://www.likyateknoloji.com/wla-gen"/>);
 			
-			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == j.managementInfoForm_0.data[0].value) {//"TIME") {
+			//"TIME") {
+			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == j.managementInfoForm_0.data[0].value) {
 				
 				var bInfo : Boolean = j.managementInfoForm_0.timeFrameStart.selected;
 				var eInfo : Boolean = j.managementInfoForm_0.timeFrameStop.selected;
@@ -308,15 +309,15 @@ package com.likya.pinara.utils {
 					if(bInfo) {
 						managementInfoXML.wla::timeManagement.wla::jsExecutionTimeFrame.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 						var sDate:Date = j.managementInfoForm_0.tFbdate.selectedDate;
-						var dateString:String = currentDF.format(sDate);
-						dateString = getW3Dt(sDate, j.managementInfoForm_0.tFbhour.value, j.managementInfoForm_0.tFbminute.value, j.managementInfoForm_0.tFbsecond.value);
+						// var dateString:String = currentDF.format(sDate);
+						var dateString:String = getW3Dt(sDate, j.managementInfoForm_0.tFbhour.value, j.managementInfoForm_0.tFbminute.value, j.managementInfoForm_0.tFbsecond.value);
 						managementInfoXML.timeManagement.jsExecutionTimeFrame.startTime = dateString;
 					}
 					
 					if(eInfo) {
 						managementInfoXML.wla::timeManagement.wla::jsExecutionTimeFrame.appendChild(<wla:stopTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 						sDate = j.managementInfoForm_0.tFedate.selectedDate;
-						dateString = currentDF.format(sDate);
+						// dateString = currentDF.format(sDate);
 						dateString = getW3Dt(sDate, j.managementInfoForm_0.tFehour.value, j.managementInfoForm_0.tFeminute.value, j.managementInfoForm_0.tFesecond.value);
 						managementInfoXML.timeManagement.jsExecutionTimeFrame.stopTime = dateString;
 						
@@ -331,7 +332,7 @@ package com.likya.pinara.utils {
 				managementInfoXML.wla::timeManagement.wla::jsScheduledTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				
 				sDate = j.managementInfoForm_0.bdate.selectedDate;
-				dateString = currentDF.format(sDate);
+				// dateString = currentDF.format(sDate);
 				
 				dateString = getW3Dt(sDate, j.managementInfoForm_0.bhour.value, j.managementInfoForm_0.bminute.value, j.managementInfoForm_0.bsecond.value);
 				
@@ -358,6 +359,19 @@ package com.likya.pinara.utils {
 					managementInfoXML.timeManagement.expectedTime.lik::unit = j.managementInfoForm_0.expectedTimeUnit.selectedItem;
 				}
 				
+			} else {//"USER - MANUEL")
+				// Boş da olsa xml element eklenmeli validasyon için.
+				var currentDateTime:Date = new Date();
+				
+				dateString = getW3Dt(currentDateTime, 0, 0, 0);
+				
+				managementInfoXML.wla::timeManagement.appendChild(<wla:jsScheduledTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.wla::timeManagement.wla::jsScheduledTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.timeManagement.jsScheduledTime.startTime = dateString;
+				
+				managementInfoXML.wla::timeManagement.appendChild(<wla:jsActualTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.wla::timeManagement.wla::jsActualTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+				managementInfoXML.timeManagement.jsActualTime.startTime = dateString;
 			}
 			
 			return managementInfoXML;

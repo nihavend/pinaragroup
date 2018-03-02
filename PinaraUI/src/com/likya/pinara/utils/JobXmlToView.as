@@ -263,7 +263,7 @@ package com.likya.pinara.utils {
 				// }
 			
 			if(tmXML.hasOwnProperty("jsTimeOut")) {
-				managementInfoForm.timeoutValue.text = tmXML.expectedTime.value_integer;
+				managementInfoForm.timeoutValue.text = tmXML.jsTimeOut.value_integer;
 				managementInfoForm.timeoutUnit.selectedItem = "" + tmXML.jsTimeOut.unit;
 			}
 			if(tmXML.hasOwnProperty("expectedTime")) {

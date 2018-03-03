@@ -110,7 +110,10 @@
 
 		<copy file="${src.dir}/conf/myraConfig.xml" todir="${dest.dir}/conf"/>
 		<copy file="${src.dir}/conf/pinaraConfig.xml" todir="${dest.dir}/conf"/>
-
+		
+		<mkdir dir="${dest.dir}/data/pnr"/>
+		<copy file="${src.dir}/testjob/1.pjf" todir="${dest.dir}/data/pnr"/>
+		
 		<delete dir="${releases}/pinaraDist"/>
 		<mkdir dir="${releases}/pinaraDist"/>
 

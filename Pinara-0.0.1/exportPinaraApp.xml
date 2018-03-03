@@ -98,13 +98,16 @@
 		<copy file="${src.dir}/flexroot/mx_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 
 		<copy file="${src.dir}/bin/start.bat" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/start.sh" todir="${dest.dir}"/>
 		<chmod file="${dest.dir}/start.sh" perm="ugo+rx"/>
 
 		<copy file="${src.dir}/bin/start-tr.bat" todir="${dest.dir}"/>
-		<chmod file="${dest.dir}/start-tr.sh" perm="ugo+rx"/>
-
 		<copy file="${src.dir}/bin/start-tr.sh" todir="${dest.dir}"/>
 		<chmod file="${dest.dir}/start-tr.sh" perm="ugo+rx"/>
+
+		<copy file="${src.dir}/bin/start-notr.bat" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/start-notr.sh" todir="${dest.dir}"/>
+		<chmod file="${dest.dir}/start-notr.sh" perm="ugo+rx"/>
 
 		<copy file="${src.dir}/bin/README.txt" todir="${dest.dir}"/>
 

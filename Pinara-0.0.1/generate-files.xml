@@ -29,53 +29,53 @@
 		<!-- rem java -Duser.country=ENTR -Duser.language=entr -jar pinara-0.9.3.jar> nohup.out 2> nohup.err -->
 		<echo file="bin/start-notr.sh">
 cat README.txt
-java -Duser.country=ENTR -Duser.language=entr -jar pinara-${version.num}.jar 2> error.log
+java -Duser.country=ENTR -Duser.language=entr -jar pinara-${version}.jar 2> error.log
 		</echo>
 		<echo file="bin/start-notr.bat">
 type README.txt
 @echo off
 Chcp 1254
-java -Duser.country=ENTR -Duser.language=entr -jar pinara-${version.num}.jar 2> error.log
+java -Duser.country=ENTR -Duser.language=entr -jar pinara-${version}.jar 2> error.log
 		</echo>
 		
 		<!-- Türkçe karakter içeren türkçe dil desteği -->
 		<echo file="bin/start-tr.sh">
 cat README.txt
-java -Duser.country=TR -Duser.language=tr -jar pinara-${version.num}.jar 2> error.log
+java -Duser.country=TR -Duser.language=tr -jar pinara-${version}.jar 2> error.log
 		</echo>
 		<echo file="bin/start-tr.bat">
 type README.txt
 @echo off
 Chcp 1254
-java -Duser.country=TR -Duser.language=tr -jar pinara-${version.num}.jar 2> error.log
+java -Duser.country=TR -Duser.language=tr -jar pinara-${version}.jar 2> error.log
 		</echo>
 		
 
 		<!-- Ortama bağlı dil desteği -->
 		<echo file="bin/start.sh">
 cat README.txt
-java -jar pinara-${version.num}.jar 2> error.log
+java -jar pinara-${version}.jar 2> error.log
 		</echo>
 		<echo file="bin/start.bat">
 type README.txt
 @echo off
 Chcp 1254
-java -jar pinara-${version.num}.jar 2> error.log
+java -jar pinara-${version}.jar 2> error.log
 		</echo>
 
 
-		<!--echo file="stop.sh">java -cp tloslite-${version.num}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -terminate</echo>
+		<!--echo file="stop.sh">java -cp tloslite-${version}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -terminate</echo>
 
-		<echo file="stopf.sh">java -cp tloslite-${version.num}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -fterminate</echo>
+		<echo file="stopf.sh">java -cp tloslite-${version}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -fterminate</echo>
 
 		<echo file="stop.bat">@echo off
 Chcp 1254
-java -cp tloslite-${version.num}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -terminate
+java -cp tloslite-${version}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -terminate
 		</echo>
 
 		<echo file="stopf.bat">@echo off
 Chcp 1254
-java -cp tloslite-${version.num}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -fterminate
+java -cp tloslite-${version}.jar com.likya.tlos.TlosRemoteManager -port 3001 -host localhost -fterminate
 		</echo>
 
 		<echo file="jobs/job01.sh">java -jar libs/tlostestjob.jar 10000 0 logUx01.log</echo>

@@ -369,20 +369,20 @@ public class Pinara extends PinaraBase {
 	//
 	//	}
 
-	public static StringBuffer getMyraData() throws Exception {
-
-		StringBuffer xmlString = null;
-
-		xmlString = FileUtils.readFile(pinara.getConfigurationManager().getPinaraConfig().getSenaryoDosyasi());
-
-		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
-
-		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
-			throw new Exception("JobList.xml is null or damaged !");
-		}
-
-		return xmlString;
-	}
+//	public static StringBuffer getMyraData() throws Exception {
+//
+//		StringBuffer xmlString = null;
+//
+//		xmlString = FileUtils.readFile(pinara.getConfigurationManager().getPinaraConfig().getSenaryoDosyasi());
+//
+//		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
+//
+//		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), jobListDocument)) {
+//			throw new Exception("JobList.xml is null or damaged !");
+//		}
+//
+//		return xmlString;
+//	}
 
 	public static void parseCmdArgs(String[] args) {
 

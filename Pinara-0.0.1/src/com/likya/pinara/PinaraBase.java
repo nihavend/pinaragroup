@@ -40,11 +40,13 @@ public abstract class PinaraBase {
 
 	private final static Logger logger = Logger.getLogger(Pinara.class);
 
+	public static final String DEF_0_9_3 = "0.9.3";
+	
 	public static final String DEF_0_9_2 = "0.9.2";
 
 	public static final String DEF_0_9_1 = "0.9.1";
 	
-	private static final String version = DEF_0_9_2;
+	private static final String version = DEF_0_9_3;
 
 	private static LicenseInfo licenseInfo = new LicenseInfo();
 
@@ -54,7 +56,7 @@ public abstract class PinaraBase {
 
 	private ConfigurationManager configurationManager;
 
-	public final static String authTxt = "pınara";
+	public final static String authTxt = "pinara";
 	
 	public enum EventTypeInfo {
 

@@ -3,7 +3,7 @@ package com.likya.pinara.utils
 	import flash.display.DisplayObject;
 	
 	import mx.collections.ArrayCollection;
-	import mx.core.Application;
+	import mx.core.FlexGlobals;
 	import mx.core.IChildList;
 	import mx.core.UIComponent;
 	import mx.managers.PopUpManager;
@@ -35,7 +35,7 @@ package com.likya.pinara.utils
 				//applicationInstance = FlexGlobals.topLevelApplication;
 				
 				// NOTE: use this line for Flex 3.x and lower
-				applicationInstance = Application.application;
+				applicationInstance = FlexGlobals.topLevelApplication;
 			}
 			
 			var rawChildren: IChildList = applicationInstance.systemManager.rawChildren;
@@ -73,7 +73,7 @@ package com.likya.pinara.utils
 				//applicationInstance = FlexGlobals.topLevelApplication;
 				
 				// NOTE: use this line for Flex 3.x and lower
-				applicationInstance = Application.application;
+				applicationInstance = FlexGlobals.topLevelApplication;
 			}
 			
 			var rawChildren: IChildList = applicationInstance.systemManager.rawChildren;

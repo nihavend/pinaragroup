@@ -115,7 +115,7 @@
 		<s:Button id="enableAllBtn" label="Enable All Jobs" visible="false" includeInLayout="false" click="enableAllBtn_clickHandler(event)" />
 		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" includeInLayout="false" click="disableAllBtn_clickHandler(event)" />
 		<s:Button visible="false"/>
-		<s:Button id="grpState" label="DISABLED GROUP" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
+		<s:Button id="grpState" label="DISABLED GROUP" chromeColor="0xFF2D00" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
 		<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
 	</s:HGroup>
 	

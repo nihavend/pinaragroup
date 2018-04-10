@@ -30,7 +30,7 @@
 	
 	
 	<s:VGroup verticalAlign="top">
-		<s:Label text="Bekleyen :" />
+		<s:Label text="{resourceManager.getString('messages', 'jobWaitingMeListLabel')}" />
 		<s:List id="waitingMeJobs" height="60" width="150">
 			<s:dataProvider>
 				<mx:ArrayCollection />
@@ -38,7 +38,7 @@
 		</s:List>
 	</s:VGroup>
 	<s:VGroup verticalAlign="top">
-		<s:Label text="Beklediğim :"/>
+		<s:Label text="{resourceManager.getString('messages', 'jobImWaitingforListLabel')}"/>
 		<s:List id="meToWaitJobs" height="60" width="150" labelFunction="getDepInfo"> 
 			<s:dataProvider>
 				<mx:ArrayCollection/>

@@ -466,26 +466,26 @@
 		<s:FormLayout gap="1"/>
 	</s:layout>  
 	
-	<s:Label left="15" top="10" text="Dependency Info" fontSize="14" fontWeight="bold"/>
+	<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobDependencyInfo')}" fontSize="14" fontWeight="bold"/>
 	
 	<s:VGroup left="15" top="15">
 		<s:FormItem top="5">
 			<s:HGroup verticalAlign="baseline">
-				<s:Label text="Select Ignition Priority" fontSize="12" fontWeight="bold"/>
+				<s:Label text="{resourceManager.getString('messages', 'jobSelectIgnitionPriority')}" fontSize="12" fontWeight="bold"/>
 				<s:RadioButton group="{sensInfo}" 
 							   id="dep"
 							   value="dep"
-							   label="Dependency is first"
+							   label="{resourceManager.getString('messages', 'depencyIsFirst')}"
 							   selected="true"
 							   width="130"/>
 				<s:RadioButton group="{sensInfo}" 
 							   id="time"
 							   value="time"
-							   label="Wait for time" 
+							   label="{resourceManager.getString('messages', 'waitForTime')}" 
 							   width="100"/>
-				<s:Label text="Delay" visible="false" id="lbldel"/>
+				<s:Label text="{resourceManager.getString('messages', 'delay')}" visible="false" id="lbldel"/>
 				<s:TextInput id="step" width="80" visible="false"/>
-				<s:Label text="Relative" visible="false" id="lblrel"/>
+				<s:Label text="{resourceManager.getString('messages', 'relative')}" visible="false" id="lblrel"/>
 				<s:DropDownList id="relative" selectedIndex="0" visible="false"> 
 					<s:dataProvider>
 						<mx:ArrayList>
@@ -510,7 +510,7 @@
 			<s:HGroup gap="-20">
 				<s:VGroup>
 					<s:HGroup>				
-						<s:FormItem label="State" width="140">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobStateLabel')}" width="140">
 							<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4" labelField="value" > 
 								<s:dataProvider>
 									<mx:ArrayList>
@@ -529,7 +529,7 @@
 							</s:DropDownList>
 						</s:FormItem>
 						
-						<s:FormItem label="Subtate" width="170">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobSubStateNameLabel')}" width="170">
 							<s:DropDownList id="substateName" width="120" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="true" selectedIndex="0"> 
 								<s:dataProvider>
 									<mx:ArrayList>
@@ -558,7 +558,7 @@
 								</s:dataProvider>
 							</s:DropDownList>
 						</s:FormItem>
-						<s:FormItem label="Status">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobStatusLabel')}">
 							<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="0"> 
 								<s:dataProvider>
 									<mx:ArrayList>
@@ -598,12 +598,12 @@
 					<!--<s:Button label="Test" id="testCombos" click="testCombos_clickHandler(event)" enabled="true"/>-->
 					<s:HGroup>
 						<s:FormItem width="100">
-							<s:Button id="btn1" label="Select Job" click="btn_click1(event);" />
+							<s:Button id="btn1" label="{resourceManager.getString('messages', 'jobSelectButLabel')}" click="btn_click1(event);" />
 						</s:FormItem>
 						<s:FormItem width="140">
 							<s:TextInput id="selectedJobInfo" editable="false"/>
 						</s:FormItem>
-						<s:FormItem label="Comment">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobCommentLabel')}">
 							<s:TextInput id="comment" width="300"/>
 						</s:FormItem>
 					</s:HGroup>
@@ -614,15 +614,15 @@
 		
 		<s:BorderContainer id="dependencyListBoxAddRemove" top="50" width="700" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 			<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="250">
-				<s:Button label="Ekle" id="depEkle" click="depEkle_clickHandler(event)" enabled="true"/>
-				<s:Button label="Çıkar" id="depCikar" click="depCikar_clickHandler(event)" enabled="false"/>
-				<s:Button label="Değiştir" id="depDegistir" click="depDegistir_clickHandler(event)" enabled="false"/>
+				<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="depEkle" click="depEkle_clickHandler(event)" enabled="true"/>
+				<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="depCikar" click="depCikar_clickHandler(event)" enabled="false"/>
+				<s:Button label="{resourceManager.getString('messages', 'retCodeUpdateButLabel')}" id="depDegistir" click="depDegistir_clickHandler(event)" enabled="false"/>
 			</s:HGroup>
 		</s:BorderContainer>
 		
 		<s:BorderContainer id="dependencyListBox" top="50" width="700" height="120" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 			
-			<s:Label left="15" top="10" text="Dependency List" fontSize="14" fontWeight="bold"/>
+			<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobDependencyListLabel')}" fontSize="14" fontWeight="bold"/>
 			
 			<s:DataGrid id="dependencyListGrid" width="695" height="80" rowHeight="50" selectionChange="depListGrid_selectionChangeHandler(event)"  left="15" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
 				<s:columns>
@@ -631,7 +631,7 @@
 						Simple custom item renderer based on GridItemRenderer and Label.
 						Prevent line breaking by setting maxDisplayedLines="1".
 						-->
-						<s:GridColumn dataField="depid" headerText="Dependency id">
+						<s:GridColumn dataField="depid" headerText="{resourceManager.getString('messages', 'jobDepIdColText')}">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:GridItemRenderer>
@@ -641,7 +641,7 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="jobinfo" headerText="Job id and name">
+						<s:GridColumn dataField="jobinfo" headerText="{resourceManager.getString('messages', 'jobInfoColText')}">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:GridItemRenderer>
@@ -651,7 +651,7 @@
 								</fx:Component>
 							</s:itemRenderer>
 						</s:GridColumn>
-						<s:GridColumn dataField="stateinfo" headerText="State Substate Status" id="listGridCol">
+						<s:GridColumn dataField="stateinfo" headerText="{resourceManager.getString('messages', 'jobStateSubstateStatusColText')}" id="listGridCol">
 							<s:itemRenderer>
 								<fx:Component>
 									<s:GridItemRenderer>
@@ -666,7 +666,7 @@
 				<s:ArrayCollection />
 			</s:DataGrid>
 		</s:BorderContainer>
-		<s:FormItem label="Dependency Expression">
+		<s:FormItem label="{resourceManager.getString('messages', 'jobDepExpressionLabel')}">
 			<s:TextInput id="depExp" width="500"/>
 		</s:FormItem>
 	</s:VGroup>

@@ -135,16 +135,16 @@
 		<s:FormLayout gap="5"/>
 	</s:layout>
 	
-	<s:FormItem label="Job Trigger Type">
+	<s:FormItem label="{resourceManager.getString('messages', 'jobTriggerTypeLabel')}">
 		<s:DropDownList id="jsJobTriggerType" labelField="value" width="140" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" change="dropDownList_changeHandler(event)"/> 
 	</s:FormItem>
 	
 	<s:BorderContainer id="timeBox" width="700" height="100" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
-		<s:Label left="15" top="10" text="Info" fontSize="14" fontWeight="bold"/>
+		<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobInfoLabel')}" fontSize="14" fontWeight="bold"/>
 		
 		<s:VGroup verticalAlign="middle" top="25" paddingLeft="0" gap="-10">
-			<s:FormItem label="Time-out değeri                :" fontSize="12">
+			<s:FormItem label="{resourceManager.getString('messages', 'jobTimeOutValue')}" fontSize="12">
 				<s:HGroup>
 					<s:TextInput  id="timeoutValue"
 								  restrict="0-999999"
@@ -163,7 +163,7 @@
 				</s:HGroup>
 			</s:FormItem>
 			
-			<s:FormItem label="Beklenen çalışma süresi :" fontSize="12">
+			<s:FormItem label="{resourceManager.getString('messages', 'jobExpectedWorkingDuration')}" fontSize="12">
 				<s:HGroup>
 					<s:TextInput  id="expectedValue"
 								  restrict="0-999999"
@@ -186,15 +186,15 @@
 	
 	<s:BorderContainer id="scheduleBox" top="200" width="700" height="190" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		
-		<s:Label left="15" top="10" text="Time Data" fontSize="14" fontWeight="bold"/>
+		<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobTimeDataLabel')}" fontSize="14" fontWeight="bold"/>
 		
 		<s:VGroup left="15" top="45" gap="-5">
 			
-			<s:Label left="15" top="10" text="İlk Çalışma Zamanı" fontSize="12" fontWeight="bold"/>
+			<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobFirstWorkingTime')}" fontSize="12" fontWeight="bold"/>
 			
 			<s:HGroup verticalAlign="middle" paddingLeft="0" top="-10">
 				<!--s:CheckBox id="selectStartCond" click="selectStartCond_clickHandler(event)" /-->
-				<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="startTime" enabled="true">
+				<s:FormItem label="{resourceManager.getString('messages', 'jobStartDateTime')}" top="20" id="startTime" enabled="true">
 					<s:HGroup>
 						<mx:DateField id="bdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 						<!--s:TextInput  id="bhour"
@@ -226,11 +226,11 @@
 			</s:HGroup>
 			
 			<s:BorderContainer id="executionTimeFrameInfo" width="670" height="90" borderWeight="1" cornerRadius="3" dropShadowVisible="true" visible="false" enabled="false" includeInLayout="false">
-				<s:Label left="15" top="10" text="Çalışma Aralığı Tanımı" fontSize="12" fontWeight="bold"/>
+				<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobWorkingIntervalDefinition')}" fontSize="12" fontWeight="bold"/>
 				<s:VGroup left="15" gap="-20" top="20">	
 					<s:HGroup verticalAlign="middle" paddingLeft="0" top="20" left="10">
 						<s:CheckBox id="timeFrameStart" click="timeFrameStart_clickHandler(event)" />
-						<s:FormItem label="Başlama Tarih ve Saati : " top="20" id="tFStartTime" enabled="false">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobStartDateTime')}" top="20" id="tFStartTime" enabled="false">
 							<s:HGroup>
 								<mx:DateField id="tFbdate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}" />
 								<s:NumericStepper id="tFbhour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />
@@ -246,7 +246,7 @@
 					</s:HGroup>
 					<s:HGroup verticalAlign="middle" paddingLeft="0" top="20" left="10">
 						<s:CheckBox id="timeFrameStop" fontWeight="bold" click="timeFrameStop_clickHandler(event)"/>
-						<s:FormItem label="Bitiş Tarih ve Saati        : " top="20" id="tFStopTime" enabled="false">
+						<s:FormItem label="{resourceManager.getString('messages', 'jobFinishDateTime')}" top="20" id="tFStopTime" enabled="false">
 							<s:HGroup>
 								<mx:DateField id="tFedate" top="50" left="10" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
 								<s:NumericStepper id="tFehour" minimum="0" maximum="23" value="0" stepSize="1" maxChars="2" valueFormatFunction="{leadingZero}" />

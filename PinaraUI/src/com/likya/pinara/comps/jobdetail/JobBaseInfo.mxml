@@ -191,47 +191,47 @@
 					  borderStyle="solid" 
 					  width="100%" height="160">
 			
-			<s:NavigatorContent id="search" label="Base Info">
+			<s:NavigatorContent id="search" label="{resourceManager.getString('messages', 'jobBaseInfoTabLabel')}">
 				<s:HGroup width="100%" >
 					
 					<s:VGroup paddingLeft="5" paddingRight="5" gap="-10" width="100%">
 						
 						<s:HGroup verticalAlign="middle" paddingTop="15">
-							<s:Label text="Job Command :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobCommandText')}" width="105"/>
 							<s:TextInput id="jobCommand" top="5" editable="false" width="95"/>
 							<s:Image id="showJobContent" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'commandFileTooltip')}" 
 									 buttonMode="true" click="showJobContentPopup()" visible="false" includeInLayout="false" />
 							<s:Image id="dontShowJobContent" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noCommandFileTooltip')}"/>
-							<s:Label text="DZ Group Id :" width="105" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'dzGroupIdLabel')}" width="105" paddingLeft="10" />
 							<s:TextInput id="dzGroup" top="5" editable="false"/>
 						</s:HGroup>
 						<s:HGroup verticalAlign="middle" paddingTop="15">
-							<s:Label text="Job Log File :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobLogFileLabel')}" width="105"/>
 							<s:TextInput id="jobLogFile" top="5" editable="false" width="95"/>
 							<s:Image id="showJobLog" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'logFileTooltip')}"
 									 buttonMode="true" click="showJobLogPopup()" visible="false" includeInLayout="false"/>
 							<s:Image id="dontShowJobLog" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noLogFileTooltip')}" />
-							<s:Label text="Restartable :" width="105" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobRestartableLabel')}" width="105" paddingLeft="10" />
 							<s:TextInput id="restartable" top="5" editable="false"/>
 						</s:HGroup>
 						<s:HGroup verticalAlign="middle" paddingTop="15">
-							<s:Label text="Previous Duration :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobPreviousDurationLabel')}" width="105"/>
 							<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
 							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'errBuffTooltip')}"
 									 buttonMode="true" click="showJobBuffPopup()" top="0"/>
-							<s:Label text="Parameter :" width="105" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobParameterLabel')}" width="105" paddingLeft="10" />
 							<s:TextInput id="paramValue" top="5" editable="false"/>
 						</s:HGroup>
 						<s:HGroup verticalAlign="baseline" paddingTop="15">
-							<s:Label text="Diff Duration :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobDiffDurationLabel')}" width="105"/>
 							<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
-							<s:Label text="Args :" width="65"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobArgsLabel')}" width="65"/>
 							<s:TextInput id="argValues" top="5" editable="false" width="140"/>
-							<s:Button y="-27" right="290" label="Edit" click="showArgValuePopup()" width="50"/>
+							<s:Button y="-27" right="290" label="{resourceManager.getString('messages', 'jobEditButtonLabel')}" click="showArgValuePopup()" width="50"/>
 						</s:HGroup>
 						
 						<s:HGroup verticalAlign="baseline" paddingTop="15">
-							<s:Label text="Handler URI :" width="105" />
+							<s:Label text="{resourceManager.getString('messages', 'jobHandlerUriLabel')}" width="105" />
 							<s:TextInput id="handlerURI" top="5" editable="false" width="300"/>
 						</s:HGroup>
 						

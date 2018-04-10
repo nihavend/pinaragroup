@@ -241,12 +241,12 @@
 	
 	<s:BorderContainer id="jobStatusInfoBox" width="100%" height="200" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 
-		<s:Label left="15" top="10" text="Job Status Info" fontSize="14" fontWeight="bold"/>
+		<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobStatusInfoLabel')}" fontSize="14" fontWeight="bold"/>
 
 		<s:VGroup left="15" top="25">
 			
 			<s:HGroup paddingLeft="0" gap="0">
-				<s:FormItem label="Job Status Name">
+				<s:FormItem label="{resourceManager.getString('messages', 'jobStatusNameLabel')}">
 					<s:DropDownList id="jobStatusName" width="120" prompt="Select Status"> 
 						<s:dataProvider>
 							<mx:ArrayList>
@@ -258,7 +258,7 @@
 					</s:DropDownList>
 				</s:FormItem>
 				
-				<s:FormItem label="Status Description">
+				<s:FormItem label="{resourceManager.getString('messages', 'jobstatusDescriptionLabel')}">
 					<s:TextInput id="statusDescription" width="300"/>
 				</s:FormItem>
 			</s:HGroup>
@@ -268,7 +268,7 @@
 				<s:HGroup>
 					<s:FormItem> 
 						<s:VGroup>
-							<s:Label text="Return Code List" top="20" fontSize="14" fontWeight="bold"/>
+							<s:Label text="{resourceManager.getString('messages', 'retCodeListLabel')}" top="20" fontSize="14" fontWeight="bold"/>
 							<s:List id="retCodeList" change="retCodeList_changeHandler(event)" maxHeight="60" maxWidth="300" width="300"> 
 								<mx:ArrayCollection />
 							</s:List>
@@ -279,18 +279,18 @@
 					<s:VGroup paddingTop="10">
 						<s:HGroup>
 							<s:VGroup>
-								<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+								<s:Label text="{resourceManager.getString('messages', 'retCodeLabel')}" fontSize="14" fontWeight="bold"/>
 								<s:TextInput id="retCode" width="100%" change="retCodeDesc_changeHandler(event)" restrict="0-9" widthInChars="8" maxChars="6" />
 							</s:VGroup>
 							<s:VGroup>	
-								<s:Label text="Return Code Description" fontSize="14" fontWeight="bold"/>
+								<s:Label text="{resourceManager.getString('messages', 'retCodeDescLabel')}" fontSize="14" fontWeight="bold"/>
 								<s:TextInput id="retCodeDesc" width="100%" change="retCodeDesc_changeHandler(event)"/>
 							</s:VGroup>
 						</s:HGroup>
 						<s:HGroup>
-							<s:Button label="Ekle" id="retCodeEkle" click="retCodeEkle_clickHandler(event)" enabled="false"/>
-							<s:Button label="Çıkar" id="retCodeCikar" click="retCodeCikar_clickHandler(event)" enabled="false"/>
-							<s:Button label="Degistir" id="retCodeDegistir" click="retCodeDegistir_clickHandler(event)" enabled="false"/>
+							<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="retCodeEkle" click="retCodeEkle_clickHandler(event)" enabled="false"/>
+							<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="retCodeCikar" click="retCodeCikar_clickHandler(event)" enabled="false"/>
+							<s:Button label="{resourceManager.getString('messages', 'retCodeUpdateButLabel')}" id="retCodeDegistir" click="retCodeDegistir_clickHandler(event)" enabled="false"/>
 						</s:HGroup>
 					</s:VGroup>
 				</s:HGroup>
@@ -302,15 +302,15 @@
 	
 	<s:BorderContainer id="jobStatusInfoListBoxAddRemove" top="50" width="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 		<s:HGroup paddingTop="5" paddingBottom="5" paddingLeft="250">
-			<s:Button label="Ekle" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
-			<s:Button label="Çıkar" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="false"/>
-			<s:Button label="Değiştir" id="jobStatusDegistir" click="jobStatusDegistir_clickHandler(event)" enabled="false"/>
+			<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="jobStatusEkle" click="jobStatusEkle_clickHandler(event)" enabled="true"/>
+			<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="jobStatusCikar" click="jobStatusCikar_clickHandler(event)" enabled="false"/>
+			<s:Button label="{resourceManager.getString('messages', 'retCodeUpdateButLabel')}" id="jobStatusDegistir" click="jobStatusDegistir_clickHandler(event)" enabled="false"/>
 		</s:HGroup>
 	</s:BorderContainer>
 	
 	<s:BorderContainer id="jobStatusInfoListBox" top="50" width="100%" height="130" borderWeight="2" cornerRadius="3" dropShadowVisible="true" enabled="true">
 
-		<s:Label left="15" top="10" text="Job Status Info List" fontSize="14" fontWeight="bold"/>
+		<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'jobStatusInfoListLabel')}" fontSize="14" fontWeight="bold"/>
 		
 <!--		<s:VGroup left="15" top="40">
 			<s:List id="statusInfoList" change="statusInfoList_changeHandler(event)" width="695" height="200"> 
@@ -325,7 +325,7 @@
 					Simple custom item renderer based on GridItemRenderer and Label.
 					Prevent line breaking by setting maxDisplayedLines="1".
 					-->
-					<s:GridColumn dataField="statusname" headerText="Job Status Name">
+					<s:GridColumn dataField="statusname" headerText="{resourceManager.getString('messages', 'jobStatusNameColText')}">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:GridItemRenderer>
@@ -335,7 +335,7 @@
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="desc" headerText="Status Description">
+					<s:GridColumn dataField="desc" headerText="{resourceManager.getString('messages', 'jobStatusDescColText')}">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:GridItemRenderer>
@@ -345,7 +345,7 @@
 							</fx:Component>
 						</s:itemRenderer>
 					</s:GridColumn>
-					<s:GridColumn dataField="retCodeList" headerText="Return Code List" id="listGridCol">
+					<s:GridColumn dataField="retCodeList" headerText="{resourceManager.getString('messages', 'jobretCodeListColText')}" id="listGridCol">
 						<s:itemRenderer>
 							<fx:Component>
 								<s:GridItemRenderer>

@@ -120,13 +120,13 @@
 					showPinaraEkranLogPopup();
 				} else if (event.label == resourceManager.getString("messages", "suspendApp")) {
 					// Alert.show("suspendApp : " + currentDataItem);
-					Alert.show("Uygulama beklemeye alınacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, suspendApp, null, Alert.CANCEL);
+					Alert.show(ResourceManager.getInstance().getString('messages', 'suspendPinaraConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, suspendApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "resumeApp")) {
-					Alert.show("Uygulama beklemeden çıkarılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, resumeApp, null, Alert.CANCEL);
+					Alert.show(ResourceManager.getInstance().getString('messages', 'resumePinaraConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, resumeApp, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "shutdownNormal")) {
-					Alert.show("Uygulama normal kapatılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, shutdownNormal, null, Alert.CANCEL);
+					Alert.show(ResourceManager.getInstance().getString('messages', 'shutdownPinaraNormalConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, shutdownNormal, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "shutdownForce")) {
-					Alert.show("Uygulama koşulsuz kapatılacak, emin misiniz ?", warningStr, Alert.OK|Alert.CANCEL, this, shutdownForce, null, Alert.CANCEL);
+					Alert.show(ResourceManager.getInstance().getString('messages', 'shutdownPinaraForcefulConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, shutdownForce, null, Alert.CANCEL);
 				} else if(event.label == resourceManager.getString("messages", "addJob")) {
 					showAddJob();
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {

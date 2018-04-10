@@ -132,19 +132,19 @@
 	</s:layout>  
 	
 	<s:HGroup>
-		<utils:ToggleSwitch id="laToggle" selected="false" selectedLabel="Defined" deselectedLabel="Undefined" styleName="toggleSwitch" change="laToggle_changeHandler(event)" />
+		<utils:ToggleSwitch id="laToggle" selected="false" selectedLabel="{resourceManager.getString('messages', 'logAnalysSelectedLabel')}" deselectedLabel="{resourceManager.getString('messages', 'logAnalysDeselectedLabel')}" styleName="toggleSwitch" change="laToggle_changeHandler(event)" />
 		
 		<s:HGroup includeIn="defined">
 			<s:RadioButton group="{logAnalyseEnable}" 
 						   id="disableLA"
 						   value="false"
-						   label="Disable Log Analyse"
+						   label="{resourceManager.getString('messages', 'logAnalysRadioButtonDisable')}"
 						   width="150"/>
 			<s:RadioButton group="{logAnalyseEnable}" 
 						   id="enableLA"
 						   value="true"
 						   selected="true"
-						   label="Enable Log Analyse" 
+						   label="{resourceManager.getString('messages', 'logAnalysRadioButtonEnable')}" 
 						   width="200"/>
 		</s:HGroup>		
 	</s:HGroup>
@@ -158,17 +158,17 @@
 		<!-- Define the ViewStack and the three child containers. -->
 		<mx:ViewStack id="myViewStack1" width="100%">
 			
-			<s:NavigatorContent id="basicParams1" label="Search Def">
+			<s:NavigatorContent id="basicParams1" label="{resourceManager.getString('messages', 'logAnalysSearchDefNavLbl')}">
 <!--				<jobcrud:JobManagementInfoForm_0 id="managementInfoForm_0"/>-->
 				
-				<s:BorderContainer id="findWhat" width="96%" height="300" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined"> 
+				<s:BorderContainer id="findWhat" width="730" height="300" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined"> 
 					
-					<s:Label left="15" top="10" text="Search Pattern Properties" fontSize="14" fontWeight="bold"/>
+					<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'logAnalysSearchPatternPrp')}" fontSize="14" fontWeight="bold"/>
 					
 					<s:VGroup left="10" top="20">
 						
 						<s:HGroup top="30" gap="-20">
-							<s:FormItem label="Search Direction">
+							<s:FormItem label="{resourceManager.getString('messages', 'logAnalysSearcDirection')}">
 								<s:DropDownList id="searchDirection" selectedIndex="0"> 
 									<s:dataProvider>
 										<mx:ArrayList>
@@ -179,7 +179,7 @@
 								</s:DropDownList>
 							</s:FormItem>
 							
-							<s:FormItem label="Pattern Type">
+							<s:FormItem label="{resourceManager.getString('messages', 'logAnalysPattenType')}">
 								<s:DropDownList id="patternType" selectedIndex="0" change="patternTypeList_changeHandler(event)"> 
 									<s:dataProvider>
 										<mx:ArrayList>
@@ -191,25 +191,25 @@
 							</s:FormItem>
 							
 							<s:FormItem label="">
-								<s:CheckBox label="Case Sensitive" id="matchCase"/>
+								<s:CheckBox label="{resourceManager.getString('messages', 'logAnalysCaseSensitive')}" id="matchCase"/>
 							</s:FormItem>
 							
 							<s:FormItem label="">
-								<s:CheckBox label="Exact Match" id="matchWholeWordOnly"/>
+								<s:CheckBox label="{resourceManager.getString('messages', 'logAnalysExactMatch')}" id="matchWholeWordOnly"/>
 							</s:FormItem>
 							
 						</s:HGroup>
 						
-						<s:FormItem label="Search Pattern">
+						<s:FormItem label="{resourceManager.getString('messages', 'logAnalysSearchPattern')}">
 							<s:TextInput id="searchPattern" width="300"/>
 						</s:FormItem>
 						
 						<s:BorderContainer id="thenAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true">
 							
-							<s:Label left="15" top="10" text="[Then] Action Definition" fontSize="14" fontWeight="bold"/>
+							<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'logAnalysThenActionDef')}" fontSize="14" fontWeight="bold"/>
 							
 							<s:HGroup top="20">
-								<s:FormItem label="Include Back Line : ">
+								<s:FormItem label="{resourceManager.getString('messages', 'logAnalysIncludeBackLine')}">
 									<s:HGroup>
 										<s:TextInput  id="thenLogLineNumBack"
 													  restrict="0-999999"
@@ -218,7 +218,7 @@
 									</s:HGroup>
 								</s:FormItem>
 								
-								<s:FormItem label="Include For Line : ">
+								<s:FormItem label="{resourceManager.getString('messages', 'logAnalysIncludeForLine')}">
 									<s:HGroup>
 										<s:TextInput  id="thenLogLineNumForward"
 													  restrict="0-999999"
@@ -229,16 +229,16 @@
 								
 							</s:HGroup>
 							
-							<s:FormItem label="Predefined Content" top="50">
+							<s:FormItem label="{resourceManager.getString('messages', 'logAnalysPredefinedContent')}" top="50">
 								<s:TextInput id="thenActionContent" width="300"/>
 							</s:FormItem>
 							
 							<comps:SSSView paddingTop="90" id="thenSSS"/>
 							
 							<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
-								<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+								<s:Label text="{resourceManager.getString('messages', 'logAnalysReturnCode')}" fontSize="14" fontWeight="bold"/>
 								<s:TextInput id="thenRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
-								<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+								<s:Label text="{resourceManager.getString('messages', 'logAnalysReturnCodeDesc')}" fontSize="14" fontWeight="bold" paddingLeft="30"/>
 								<s:TextInput id="thenRetCodeDesc" width="250"/>
 							</s:HGroup>
 							
@@ -249,20 +249,20 @@
 				</s:BorderContainer>
 				
 			</s:NavigatorContent>
-			<s:NavigatorContent id="extendedParams1" label="Else Action">
+			<s:NavigatorContent id="extendedParams1" label="{resourceManager.getString('messages', 'logAnalysElseActionNavLbl')}">
 				<!--<jobcrud:JobManagementInfoForm_1 id="managementInfoForm_1"/>-->
-				<s:BorderContainer id="actionDef" width="96%" height="220" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+				<s:BorderContainer id="actionDef" width="730" height="220" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
 					
 					<s:VGroup left="10" top="10">
 						
-						<s:CheckBox width="150" label="Enable Else Action" id="elseActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
+						<s:CheckBox width="150" label="{resourceManager.getString('messages', 'logAnalysEnableElseAction')}" id="elseActionCheckBox" selected="false" click="thenActionCheckBox_clickHandler(event)"/>
 						
 						<s:BorderContainer id="elseAction" width="705" height="175" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="false">
 							
-							<s:Label left="15" top="10" text="[Else] Action Definition" fontSize="14" fontWeight="bold"/>
+							<s:Label left="15" top="10" text="{resourceManager.getString('messages', 'logAnalysElseActionDef')}" fontSize="14" fontWeight="bold"/>
 							
 							<s:HGroup top="20" gap="-20">
-								<s:FormItem label="Include Back Line : ">
+								<s:FormItem label="{resourceManager.getString('messages', 'logAnalysIncludeBackLine')}">
 									<s:HGroup>
 										<s:TextInput  id="elseLogLineNumBack"
 													  restrict="0-999999"
@@ -271,7 +271,7 @@
 									</s:HGroup>
 								</s:FormItem>
 								
-								<s:FormItem label="Include For Line : ">
+								<s:FormItem label="{resourceManager.getString('messages', 'logAnalysIncludeForLine')}">
 									<s:HGroup>
 										<s:TextInput  id="elseLogLineNumForward"
 													  restrict="0-999999"
@@ -282,16 +282,16 @@
 								
 							</s:HGroup>
 							
-							<s:FormItem label="Predefined Content" top="50">
+							<s:FormItem label="{resourceManager.getString('messages', 'logAnalysPredefinedContent')}" top="50">
 								<s:TextInput id="elseActionContent" width="300"/>
 							</s:FormItem>
 							
 							<comps:SSSView paddingTop="90" id="elseSSS"/>
 							
 							<s:HGroup paddingTop="140" paddingLeft="15" alignmentBaseline="ideographicBottom">
-								<s:Label text="Return Code" fontSize="14" fontWeight="bold"/>
+								<s:Label text="{resourceManager.getString('messages', 'logAnalysReturnCode')}" fontSize="14" fontWeight="bold"/>
 								<s:TextInput id="elseRetCode" width="100%" restrict="0-9" widthInChars="8" maxChars="6" />
-								<s:Label text="Return Code Description" fontSize="14" fontWeight="bold" paddingLeft="30"/>
+								<s:Label text="{resourceManager.getString('messages', 'logAnalysReturnCodeDesc')}" fontSize="14" fontWeight="bold" paddingLeft="30"/>
 								<s:TextInput id="elseRetCodeDesc" width="250"/>
 							</s:HGroup>
 							

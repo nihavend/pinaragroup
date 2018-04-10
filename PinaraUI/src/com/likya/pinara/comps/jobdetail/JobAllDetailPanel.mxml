@@ -248,7 +248,7 @@
 		UYARI : width ve height' dokununca scrollbar lar bozuluyor. !!!!!
 	-->
 	<s:Panel id="allDetailPanel" visible="true"
-			 title="Job All Detail Form"
+			 title="{resourceManager.getString('messages', 'jobAllDetailPanelLabel')}"
 			 left="5"
 			 top="5"
 			 width="90%" 
@@ -269,39 +269,39 @@
 				<s:HGroup width="100%">
 					<s:VGroup paddingLeft="5" gap="-10" width="100%">
 						<s:HGroup verticalAlign="middle" paddingTop="5">
-							<s:Label text="Job Name :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobNameLabel')}" width="105"/>
 							<s:TextInput id="jobName" top="5" editable="false"/>
 							<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
-							<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>
-							<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
+							<s:Button label="{resourceManager.getString('messages', 'viewJobXmlButLabel')}" click="button1_clickHandler(event)"></s:Button>
+							<s:Button visible="true" label="{resourceManager.getString('messages', 'jobShowInTreeButLabel')}" click="button2_clickHandler(event)"/>
 						</s:HGroup>
 						<s:HGroup verticalAlign="middle" paddingTop="15">
 							<!--<s:FormItem label="Job Trigger Type">-->
-							<s:Label text="Job Trigger Type :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobTriggerTypeLabel')}" width="105"/>
 							<s:DropDownList id="jsJobTriggerType" labelField="value" width="{jobCommandType.width}" prompt="Select Trigger Type" selectedIndex="0" dataProvider="{data}" enabled="false" /> 
 							<!--</s:FormItem>-->
-							<s:Label text="Job Id :" width="75" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobIdText')}" width="75" paddingLeft="10" />
 							<s:TextInput id="jobId" top="5" editable="false" paddingLeft="10"/>
-							<s:Label text="Job State :" width="75" paddingLeft="10"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobStateLabel')}" width="75" paddingLeft="10"/>
 							<!--<s:TextInput id="jobState" top="5" editable="false" />-->
 							<jobdetail:StateImageItem id="stateImageItem" data="{jobDetailXml}"/>
 							<!--<s:Button label="View Job XML" click="button1_clickHandler(event)"></s:Button>-->
 						</s:HGroup>
 						<s:HGroup verticalAlign="middle" paddingTop="15">
-							<s:Label text="Command Type :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobCommandTypeLabel')}" width="105"/>
 							<s:TextInput id="jobCommandType" top="5" editable="false"/>
-							<s:Label text="Group Id :" width="75" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobGroupIdLabel')}" width="75" paddingLeft="10" />
 							<s:TextInput id="groupId" top="5" editable="false" paddingLeft="10"/>
-							<s:Label id="manageButtonGroupLbl" text="Manage :" width="75" paddingLeft="10" />
+							<s:Label id="manageButtonGroupLbl" text="{resourceManager.getString('messages', 'jobManageGroupButLabel')}" width="75" paddingLeft="10" />
 							<!--<s:TextInput id="manage" top="5" editable="false"/>-->
 							<jobdetail:ManageButtonGroup id="manageButtonGroup" data="{jobDetailXml}" />
 						</s:HGroup>
 						<s:HGroup verticalAlign="baseline" paddingTop="15">
-							<s:Label text="Planlanan ÇZ :" width="105"/>
+							<s:Label text="{resourceManager.getString('messages', 'jobPlannedWTLabel')}" width="105"/>
 							<s:TextInput id="planlananCZ" top="5" editable="false"/>
-							<s:Label text="Son ÇZ :" width="75" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobLastWTLabel')}" width="75" paddingLeft="10" />
 							<s:TextInput id="lastCs" top="5" editable="false" paddingLeft="10"/>
-							<s:Label text="Son Süre :" width="75" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobLastDurationLabel')}" width="75" paddingLeft="10" />
 							<s:TextInput id="sonSure" top="5" editable="false"/>
 						</s:HGroup>
 					</s:VGroup>
@@ -322,12 +322,12 @@
 				<mx:HRule width="100%" />
 				
 				<s:VGroup paddingLeft="10" paddingTop="10">
-					<s:Label text="İş Tarihçesi :" width="120" />
+					<s:Label text="{resourceManager.getString('messages', 'jobHistoryLabel')}" width="120" />
 					<s:DataGrid id="stateHistory" width="500" height="250" >
 						<s:columns>
 							<s:ArrayList>
-								<s:GridColumn dataField="tarih" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getStateChangedDate" headerText="Tarih" />
-								<s:GridColumn dataField="durum_bilgisi" sortCompareFunction="Transformer.compareSortString" labelFunction="getStateInfo" headerText="Durum Bilgisi" width="{this.stateHistory.width * 0.65}"/>
+								<s:GridColumn dataField="tarih" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getStateChangedDate" headerText="{resourceManager.getString('messages', 'jobHisColHeaderTextDate')}" />
+								<s:GridColumn dataField="durum_bilgisi" sortCompareFunction="Transformer.compareSortString" labelFunction="getStateInfo" headerText="{resourceManager.getString('messages', 'jobHisColHeaderTextState')}" width="{this.stateHistory.width * 0.65}"/>
 							</s:ArrayList>
 						</s:columns>
 					</s:DataGrid> 

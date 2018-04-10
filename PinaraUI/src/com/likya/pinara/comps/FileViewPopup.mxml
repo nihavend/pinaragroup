@@ -20,6 +20,7 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
+			import mx.resources.ResourceManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
@@ -33,7 +34,7 @@
 			
 			public var isNativeXML:Boolean = false;
 			public var fileTag:String;
-			private var titlePrefix:String = "Log Görüntüleme Penceresi";
+			private var titlePrefix:String = ResourceManager.getInstance().getString('messages', 'logViewWindowTitle');
 			
 			[Bindable]	
 			private var defEndOff:int = 5000;
@@ -244,22 +245,22 @@
 	<s:VGroup left="5" right="10" top="10" bottom="10" height="100%" width="100%">
 
 		<mx:HBox horizontalAlign="center">
-			<s:FormItem label="Başlangıç Offset" layout="{new HorizontalLayout()}" width="100%" >
+			<s:FormItem label="{resourceManager.getString('messages', 'initialOffset')}" layout="{new HorizontalLayout()}" width="100%" >
 				<s:NumericStepper id="beginOff" stepSize="1" width="100" minimum="0" maximum="999999999" />
 			</s:FormItem>
-			<s:FormItem label="Bitiş Offset" layout="{new HorizontalLayout()}" width="100%" >
+			<s:FormItem label="{resourceManager.getString('messages', 'endOffset')}" layout="{new HorizontalLayout()}" width="100%" >
 				<s:NumericStepper id="endOff" stepSize="1" width="100" minimum="0" maximum="999999999" value="{defEndOff}"/>
 			</s:FormItem>
 			<s:FormItem width="100%" >
-				<s:Button label="Refresh" click="refreshService(event)" />
+				<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refreshService(event)" />
 			</s:FormItem>
 		</mx:HBox>
 		
 		<mx:HRule width="100%" />
 		
-		<s:FormItem label="Search Text" layout="{new HorizontalLayout()}" width="100%" >
+		<s:FormItem label="{resourceManager.getString('messages', 'searchTextLabel')}" layout="{new HorizontalLayout()}" width="100%" >
 			<s:TextInput id="searchTxt" text="fname" />
-			<s:Button label="Search Next" click="button1_clickHandler(event)" />
+			<s:Button label="{resourceManager.getString('messages', 'searchNextButLabel')}" click="button1_clickHandler(event)" />
 		</s:FormItem>
 		
 		<s:Line width="100%">
@@ -274,14 +275,14 @@
 			<s:layout>
 				<s:HorizontalLayout paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" verticalAlign="middle"/>
 			</s:layout>
-			<s:Label text="Line Numbers :" />
+			<s:Label text="{resourceManager.getString('messages', 'lineNumbersLabel')}" />
 			<s:Label id="lineNumbers" />
 			<s:Spacer width="5%" />
-			<s:Label text="Caret Pos :" />
+			<s:Label text="{resourceManager.getString('messages', 'caretPositionLabel')}" />
 			<s:Label id="activePosition" text="[0]" />
 			<s:Spacer width="100%" />
 			<s:HGroup horizontalAlign="right">
-				<s:Label text="File Size :" />
+				<s:Label text="{resourceManager.getString('messages', 'fileSizeLabel')}" />
 				<s:Label id="fileSize" right="0" />
 			</s:HGroup>
 		</s:BorderContainer>

@@ -169,7 +169,7 @@
 	</fx:Declarations>
 	
 	
-	<s:FormItem label="State" width="140">
+	<s:FormItem label="{resourceManager.getString('messages', 'logAnalysState')}" width="140">
 		<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4"> 
 			<s:dataProvider>
 				<mx:ArrayList>
@@ -183,7 +183,7 @@
 		</s:DropDownList>
 	</s:FormItem>
 	
-	<s:FormItem label="Subtate" width="170">
+	<s:FormItem label="{resourceManager.getString('messages', 'logAnalysSubstate')}" width="170">
 		<s:DropDownList id="substateName" width="120" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="true" selectedIndex="0"> 
 			<s:dataProvider>
 				<mx:ArrayList>
@@ -208,7 +208,7 @@
 			</s:dataProvider>
 		</s:DropDownList>
 	</s:FormItem>
-	<s:FormItem label="Status">
+	<s:FormItem label="{resourceManager.getString('messages', 'logAnalysStatus')}">
 		<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="2"> 
 			<s:dataProvider>
 				<mx:ArrayList>

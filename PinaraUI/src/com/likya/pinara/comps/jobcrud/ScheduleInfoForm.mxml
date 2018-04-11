@@ -52,32 +52,32 @@
 		<s:RadioButton group="{scheduleType}" 
 					   id="everyDaySchedule"
 					   value="everyDaySchedule"
-					   label="Execute Everyday"
+					   label="{resourceManager.getString('messages', 'jobExecScheduleEveryday')}"
 					   selected="true"
 					   width="150"/>
 		<s:RadioButton group="{scheduleType}" 
 					   id="specificSchedule"
 					   value="specificSchedule"
-					   label="Execute On Day(s) Of Month" 
+					   label="{resourceManager.getString('messages', 'jobExecSpecificSchedule')}" 
 					   width="200"/>
 	</s:VGroup>
 	
 	<s:HGroup enabled="false" id="dom">
 		<s:VGroup>
 			<s:FormItem label="">
-				<s:CheckBox width="150" label="First Day Of Month" id="fdom"/>
+				<s:CheckBox width="150" label="{resourceManager.getString('messages', 'jobExecScheduleFDOM')}" id="fdom"/>
 			</s:FormItem>
 			<s:FormItem label="">
-				<s:CheckBox width="150" label="Last Day Of Month" id="ldom"/>
+				<s:CheckBox width="150" label="{resourceManager.getString('messages', 'jobExecScheduleLDOM')}" id="ldom"/>
 			</s:FormItem>
-			<s:FormItem label="Day list">
+			<s:FormItem label="{resourceManager.getString('messages', 'jobExecScheduleDL')}">
 				<s:TextInput id="specDays" width="100%"/>
 				<s:helpContent>
-					<s:Label text="E.g. 1,5,9-13"/>
+					<s:Label text="{resourceManager.getString('messages', 'jobExecScheduleDLHelpContx')}"/>
 				</s:helpContent>
 			</s:FormItem>
 		</s:VGroup>
-		<s:FormItem label="Days of Week">
+		<s:FormItem label="{resourceManager.getString('messages', 'jobExecScheduleLDOW')}">
 			<s:CheckBox width="150" label="Monday" id="d2"/>
 			<s:CheckBox width="150" label="Tuesday" id="d3"/>
 			<s:CheckBox width="150" label="Wednesday" id="d4"/>

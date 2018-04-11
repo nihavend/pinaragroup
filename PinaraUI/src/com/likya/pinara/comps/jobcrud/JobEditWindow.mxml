@@ -5,7 +5,7 @@
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   creationComplete="titlewindow1_creationCompleteHandler(event)" 
 			   close="handleCloseEvent();" xmlns:jobdetail="com.likya.pinara.comps.jobdetail.*" xmlns:jobcrud="com.likya.pinara.comps.jobcrud.*"
-			   title="Job Definition Window" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
+			   title="{resourceManager.getString('messages', 'jobDefinitionWindowTitle')}" xmlns:jobmanager="com.likya.pinara.services.jobmanager.*">
 	<s:layout>
 		<s:VerticalLayout/>
 	</s:layout>
@@ -216,7 +216,7 @@
 		
 		<mx:ViewStack id="vs" width="100%" height="400" left="8" y="23" creationPolicy="all">
 			
-			<s:NavigatorContent id="baseInfo" label="Base Information of Job">
+			<s:NavigatorContent id="baseInfo" label="{resourceManager.getString('messages', 'jobBaseInformationTabLabel')}">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
 					<!--<jobcrud:JobBaseTypeInfoForm id="baseInfoForm" visible="false"/>-->
 					<s:VGroup>
@@ -225,25 +225,25 @@
 						<s:ButtonBar dataProvider="{myViewStack}"/>
 						<!-- Define the ViewStack and the three child containers. -->
 						<mx:ViewStack id="myViewStack" width="100%">
-							<s:NavigatorContent id="basicParams" label="Basic">
+							<s:NavigatorContent id="basicParams" label="{resourceManager.getString('messages', 'jobBaseTabLabel')}">
 								<jobcrud:JobBaseTypeInfoForm_0 id="baseInfoForm_0" includeInLayout="false"/>
 							</s:NavigatorContent>
-							<s:NavigatorContent id="extendedParams" label="Extended">
+							<s:NavigatorContent id="extendedParams" label="{resourceManager.getString('messages', 'jobExtendedTabLabel')}">
 								<jobcrud:JobBaseTypeInfoForm_1 id="baseInfoForm_1" includeInLayout="false"/>
 							</s:NavigatorContent>
 						</mx:ViewStack>
 					</s:VGroup>
 				</s:BorderContainer>
 			</s:NavigatorContent>
-			<s:NavigatorContent id="stateInfos" label="State Information of Job">
+			<s:NavigatorContent id="stateInfos" label="{resourceManager.getString('messages', 'jobStateInformationTabLabel')}">
 				<jobcrud:StateInfosForm id="stateInfosForm"/>
 			</s:NavigatorContent>
-			<s:NavigatorContent id="depList" label="Dependency Definitions">
+			<s:NavigatorContent id="depList" label="{resourceManager.getString('messages', 'jobDependencyTabLabel')}">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
 					<jobcrud:DependencyListForm id="dependencyListForm" visible="true"/>
 				</s:BorderContainer>
 			</s:NavigatorContent>
-			<s:NavigatorContent label="Job Management Info"  width="100%" height="100%">
+			<s:NavigatorContent label="{resourceManager.getString('messages', 'jobManagementInfoTabLabel')}"  width="100%" height="100%">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
 					<!--<jobcrud:JobManagementInfoForm id="managementInfoForm" visible="false"/>-->
 					<s:VGroup>
@@ -252,22 +252,22 @@
 						<s:ButtonBar dataProvider="{myViewStack1}"/>
 						<!-- Define the ViewStack and the three child containers. -->
 						<mx:ViewStack id="myViewStack1" width="100%">
-							<s:NavigatorContent id="basicParams1" label="Common">
+							<s:NavigatorContent id="basicParams1" label="{resourceManager.getString('messages', 'jobManagementCommonTab')}">
 								<jobcrud:JobManagementInfoForm_0 id="managementInfoForm_0" parentWin="{this}"/>
 							</s:NavigatorContent>
-							<s:NavigatorContent id="extendedParams1" label="Time Related">
+							<s:NavigatorContent id="extendedParams1" label="{resourceManager.getString('messages', 'jobManagementTimeRelatedTab')}">
 								<jobcrud:JobManagementInfoForm_1 id="managementInfoForm_1"/>
 							</s:NavigatorContent>
 						</mx:ViewStack>
 					</s:VGroup>
 				</s:BorderContainer>
 			</s:NavigatorContent>
-			<s:NavigatorContent id="logAnalysisTab" label="Log Analysis Action Definitions">
+			<s:NavigatorContent id="logAnalysisTab" label="{resourceManager.getString('messages', 'logAnalysActionTab')}">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
 					<jobcrud:LogAnalysisForm id="logAnalysisForm"/>
 				</s:BorderContainer>
 			</s:NavigatorContent>
-			<s:NavigatorContent label="Job Execution Schedule Info"  width="100%" height="100%">
+			<s:NavigatorContent label="{resourceManager.getString('messages', 'jobExecScheduleInfo')}"  width="100%" height="100%">
 				<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true">
 					<jobcrud:ScheduleInfoForm  id="scheduleInfoForm"/>
 				</s:BorderContainer>
@@ -276,11 +276,11 @@
 
 		<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="8">
 			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="300">
-				<s:Button label="Save"
+				<s:Button label="{resourceManager.getString('messages', 'saveLabel')}"
 						  click="checkConfirmSave();" /> 
-				<s:Button label="Cancel"
+				<s:Button label="{resourceManager.getString('messages', 'cancelLabel')}"
 						  click="handleCloseEvent();"/> 
-				<s:Button label="View Job XML"
+				<s:Button label="{resourceManager.getString('messages', 'viewJobXmlLabel')}"
 						  click="viewXml_clickHandler();"/> 
 				
 			</s:HGroup>

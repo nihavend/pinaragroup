@@ -282,11 +282,11 @@
 				 itemDoubleClick="liveTree_itemDoubleClickHandler(event)"
 				 />
 
-		<s:Button id="depGrpButton" y="-27" right="92" width="30" click="changeView()" toolTip="(D)ep/(G)rp View" label="D"/>
+		<s:Button id="depGrpButton" y="-27" right="92" width="30" click="changeView()" toolTip="{resourceManager.getString('messages', 'treeDepButToolTip')}" label="{resourceManager.getString('messages', 'treeDepButLabel')}"/>
 
-		<s:Button id="toggleTree" y="-27" right="32" width="60" click="toggleTreeComp()" toolTip="Expand" label="Expand"/>
+		<s:Button id="toggleTree" y="-27" right="32" width="60" click="toggleTreeComp()" toolTip="{resourceManager.getString('messages', 'treeToogleExpandToolTip')}" label="{resourceManager.getString('messages', 'treeToogleExpandLabel')}"/>
 		
-		<s:Button id="refreshTreeButton" y="-27" right="2" width="30" click="refreshTree()" toolTip="Refresh" label="R"/>
+		<s:Button id="refreshTreeButton" y="-27" right="2" width="30" click="refreshTree()" toolTip="{resourceManager.getString('messages', 'treeRefreshButtonToolTip')}" label="{resourceManager.getString('messages', 'treeRefreshButtonLabel')}"/>
 		
 	</containers:CollapsiblePanel>	
 </s:Group>

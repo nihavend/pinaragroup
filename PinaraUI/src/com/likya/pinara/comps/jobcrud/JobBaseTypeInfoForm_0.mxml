@@ -46,29 +46,29 @@
 		<s:FormLayout gap="1"/>
 	</s:layout>  
 	
-	<s:FormItem label="Name">
+	<s:FormItem label="{resourceManager.getString('messages', 'jobNameItemLabel')}">
 		<s:TextInput id="jsName" width="100%"/>
 		<s:helpContent>
-			<s:Label text="* Enter a name for your Job"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobNameHelpContentLabel')}"/>
 		</s:helpContent>
 	</s:FormItem>
 
 	
-	<s:FormItem label="Command">
+	<s:FormItem label="{resourceManager.getString('messages', 'jobCommandItemLabel')}">
 		<s:TextInput id="jsCommand" width="300" />
 		<s:helpContent>
-			<s:Label text="* Enter the command for your Job with full path" left="50"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobCommandHelpContentLabel')}" left="50"/>
 		</s:helpContent>
 	</s:FormItem>
 
-	<s:FormItem label="Group">
+	<s:FormItem label="{resourceManager.getString('messages', 'jobGroupItemLabel')}">
 		<s:TextInput id="jsJobGroup" width="300" />
 		<s:helpContent>
-			<s:Label text="* Enter job group name" left="50"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobGroupHelpContentLabel')}" left="50"/>
 		</s:helpContent>
 	</s:FormItem>
 	
-	<s:FormItem label="Job Type">
+	<s:FormItem label="{resourceManager.getString('messages', 'jobTypeItemLabel')}">
 		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="false"> 
 			<s:dataProvider>
 				<mx:ArrayList>
@@ -90,7 +90,7 @@
 		</s:DropDownList>
 	</s:FormItem>
 	
-	<s:FormItem label="Job Arguments"> 
+	<s:FormItem label="{resourceManager.getString('messages', 'jobArgsItemLabel')}"> 
 		<s:TextArea id="jsJobArgs" height="25"/>
 	</s:FormItem>
 		

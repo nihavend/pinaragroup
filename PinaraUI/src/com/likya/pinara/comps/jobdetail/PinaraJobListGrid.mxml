@@ -96,6 +96,19 @@
 				}
 				trace();
 			}
+			public static function getLastWorkingStatus(item:Object, column:GridColumn):String {
+				var stateInfo:String = "";
+				
+				if(item.stateInfos.LiveStateInfos.LiveStateInfo[0] != null && item.stateInfos.LiveStateInfos.LiveStateInfo[0].StatusName != null) {
+					stateInfo = item.stateInfos.LiveStateInfos.LiveStateInfo[0].StatusName;
+				}
+				if(item.stateInfos.LiveStateInfos.LiveStateInfo[1] != null && item.stateInfos.LiveStateInfos.LiveStateInfo[1].StatusName != null) {
+					stateInfo = item.stateInfos.LiveStateInfos.LiveStateInfo[1].StatusName;
+				}
+				
+				return stateInfo;
+			}
+
 			
 		]]>
 	</fx:Script>
@@ -110,13 +123,13 @@
 	
 	<s:HGroup>
 		<s:Button label="{resourceManager.getString('messages', 'refresh')}" click="refresh_button1_clickHandler(event)" visible="true" includeInLayout="true"/>
-		<s:Button label="View Xml" click="button1_clickHandler(event)" visible="true" includeInLayout="true"/>
+		<s:Button label="{resourceManager.getString('messages', 'xmlButtonLabel')}" click="button1_clickHandler(event)" visible="true" includeInLayout="true"/>
 		<jobdetail:GridStatuFilter data="{jobListXmlCollection}" width="100%" height="20"/>
-		<s:Button id="enableAllBtn" label="Enable All Jobs" visible="false" includeInLayout="false" click="enableAllBtn_clickHandler(event)" />
-		<s:Button id="disableAllBtn" label="Disable All Jobs" visible="false" includeInLayout="false" click="disableAllBtn_clickHandler(event)" />
+		<s:Button id="enableAllBtn" label="{resourceManager.getString('messages', 'enableAllBtnLabel')}" visible="false" includeInLayout="false" click="enableAllBtn_clickHandler(event)" />
+		<s:Button id="disableAllBtn" label="{resourceManager.getString('messages', 'disableAllBtnLabel')}" visible="false" includeInLayout="false" click="disableAllBtn_clickHandler(event)" />
 		<s:Button visible="false"/>
-		<s:Button id="grpState" label="DISABLED GROUP" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
-		<s:Button visible="true" label="Show In Tree" click="button2_clickHandler(event)"/>
+		<s:Button id="grpState" label="{resourceManager.getString('messages', 'disabledGroupLabel')}" chromeColor="0xFF2D00" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
+		<s:Button visible="true" label="{resourceManager.getString('messages', 'showInTreeButLabel')}" click="button2_clickHandler(event)"/>
 	</s:HGroup>
 	
 	<s:DataGrid id="pinaraJobList" width="100%" height="100%" selectionChange="selectionChangeHandlerPinara(event)" dataProvider="{jobListXmlCollection}" addedToStage="pinaraJobList_addedToStageHandler(event)"> 
@@ -141,31 +154,32 @@
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn dataField="@Id" headerText="Job Id" sortDescending="false" sortCompareFunction="Transformer.compareIds" width="{this.pinaraJobList.width * 0.06}">
+				<s:GridColumn dataField="@Id" headerText="{resourceManager.getString('messages', 'jobIdGrid')}" sortDescending="false" sortCompareFunction="Transformer.compareIds" width="{this.pinaraJobList.width * 0.06}">
 					<s:itemRenderer>
 						<fx:Component>
 							<s:DefaultGridItemRenderer textAlign="left" />
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn dataField="baseJobInfos.jsName" headerText="Job Name" width="{this.pinaraJobList.width * 0.10}">
+				<s:GridColumn dataField="baseJobInfos.jsName" headerText="{resourceManager.getString('messages', 'jobNameGrid')}" width="{this.pinaraJobList.width * 0.10}">
 					<s:itemRenderer>
 						<fx:Component>
 							<s:DefaultGridItemRenderer textAlign="left" />
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn labelFunction="getJobCommandType" headerText="Job Command Type" width="{this.pinaraJobList.width * 0.12}">
+				<s:GridColumn labelFunction="getJobCommandType" headerText="{resourceManager.getString('messages', 'jobCommandTypeGrid')}" width="{this.pinaraJobList.width * 0.12}">
 					<s:itemRenderer>
 						<fx:Component>
 							<s:DefaultGridItemRenderer textAlign="left" />
 						</fx:Component>
 					</s:itemRenderer>
 				</s:GridColumn>
-				<s:GridColumn dataField="@groupId" headerText="Group Id" width="{this.pinaraJobList.width * 0.10}"/>
-				<s:GridColumn dataField="son_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getRecordedDT" headerText="Son ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
-				<s:GridColumn dataField="planlanan_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getActualDT" headerText="Planlanan ÇZ" width="{this.pinaraJobList.width * 0.15}"/>
-				<s:GridColumn dataField="son_calisma_suresi" sortCompareFunction="Transformer.compareSortForDuration" labelFunction="getRealizedDuration" headerText="Son Çalışma Süresi" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn dataField="@groupId" headerText="{resourceManager.getString('messages', 'jobGrupIdGrid')}" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn dataField="son_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getRecordedDT" headerText="{resourceManager.getString('messages', 'jobLastWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn dataField="planlanan_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getActualDT" headerText="{resourceManager.getString('messages', 'jobPlannedWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>
+				<s:GridColumn dataField="son_calisma_suresi" sortCompareFunction="Transformer.compareSortForDuration" labelFunction="getRealizedDuration" headerText="{resourceManager.getString('messages', 'jobRealizedDuration')}" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn dataField="son_calisma_statu" sortCompareFunction="Transformer.compareSortString" labelFunction="getLastWorkingStatus" headerText="{resourceManager.getString('messages', 'jobLastWorkingStatus')}" width="{this.pinaraJobList.width * 0.12}"/>
 			</s:ArrayList>
 		</s:columns>
 	</s:DataGrid>

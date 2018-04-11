@@ -96,6 +96,19 @@
 				}
 				trace();
 			}
+			public static function getLastWorkingStatus(item:Object, column:GridColumn):String {
+				var stateInfo:String = "";
+				
+				if(item.stateInfos.LiveStateInfos.LiveStateInfo[0] != null && item.stateInfos.LiveStateInfos.LiveStateInfo[0].StatusName != null) {
+					stateInfo = item.stateInfos.LiveStateInfos.LiveStateInfo[0].StatusName;
+				}
+				if(item.stateInfos.LiveStateInfos.LiveStateInfo[1] != null && item.stateInfos.LiveStateInfos.LiveStateInfo[1].StatusName != null) {
+					stateInfo = item.stateInfos.LiveStateInfos.LiveStateInfo[1].StatusName;
+				}
+				
+				return stateInfo;
+			}
+
 			
 		]]>
 	</fx:Script>
@@ -166,6 +179,7 @@
 				<s:GridColumn dataField="son_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getRecordedDT" headerText="{resourceManager.getString('messages', 'jobLastWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>
 				<s:GridColumn dataField="planlanan_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getActualDT" headerText="{resourceManager.getString('messages', 'jobPlannedWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>
 				<s:GridColumn dataField="son_calisma_suresi" sortCompareFunction="Transformer.compareSortForDuration" labelFunction="getRealizedDuration" headerText="{resourceManager.getString('messages', 'jobRealizedDuration')}" width="{this.pinaraJobList.width * 0.10}"/>
+				<s:GridColumn dataField="son_calisma_statu" sortCompareFunction="Transformer.compareSortString" labelFunction="getLastWorkingStatus" headerText="{resourceManager.getString('messages', 'jobLastWorkingStatus')}" width="{this.pinaraJobList.width * 0.12}"/>
 			</s:ArrayList>
 		</s:columns>
 	</s:DataGrid>

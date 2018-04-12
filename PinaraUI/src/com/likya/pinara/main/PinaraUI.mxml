@@ -169,7 +169,7 @@
 				// Eğer job ile iligli işlem komutu detay sayfadan geliyorsa
 				// bu durumda id attribute olmadan direk skalar olarak geliyor
 				else if (!XML(event.object).hasOwnProperty("@id")) {
-					allJobDetail.selectedJobId = XML(event.object).jobId;
+					allJobDetail.selectedJobId = "" + event.object;
 					// liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
 					var tmpItem:Object = (jobTree.liveTree.dataProvider[0] as XML)..jobGroup..jobProperty.(@id == allJobDetail.selectedJobId)[0];
 					var tmpPrnt:Object = jobTree.liveTree.getParentItem(tmpItem); 

@@ -480,6 +480,14 @@ public class DateUtils {
 		return getDigitStr(hours) + ":" + getDigitStr(minutes) + ":" + getDigitStr(seconds);
 	}
 	
+	public static String getUnFormattedElapsedTimeInMilliSec(long timeInMilliSeconds) {
+		
+		long timeInSeconds = (long) timeInMilliSeconds / 1000;
+		long milliSeconds = timeInMilliSeconds - (timeInSeconds * 1000);
+		
+		return getUnFormattedElapsedTime(timeInSeconds) + "." + milliSeconds;
+	}
+	
 	public static int [] getFormattedElapsedTime(int timeInSeconds) {
 		int hours, minutes, seconds;
 		hours = timeInSeconds / 3600;

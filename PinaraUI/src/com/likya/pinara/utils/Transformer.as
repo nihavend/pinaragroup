@@ -73,14 +73,23 @@ package com.likya.pinara.utils {
 		
 		public static function compareSortForDuration(itemA:XML, itemB:XML, column:GridColumn):int {
 			
-			var valueA:String = column.labelFunction(itemA, column);
-			var valueB:String = column.labelFunction(itemB, column);
+			var valueX:String = column.labelFunction(itemA, column);
+			var valueY:String = column.labelFunction(itemB, column);
+			
+			var pairsX:Array = valueX.split(".");
+			var pairsY:Array = valueY.split(".");
+			
+			var valueA:String = pairsX[0];
+			var valueB:String = pairsY[0];
+
+			//var valueA:String = column.labelFunction(itemA, column);
+			//var valueB:String = column.labelFunction(itemB, column);
 			
 			var pairsA:Array = valueA.split(":");
 			var pairsB:Array = valueB.split(":");
 			
-			var objInt1:Number = parseInt(pairsA[0]) * 24 + parseInt(pairsA[1]) * 60 + parseInt(pairsA[2]) * 60;  
-			var objInt2:Number = parseInt(pairsB[0]) * 24 + parseInt(pairsB[1]) * 60 + parseInt(pairsB[2]) * 60;
+			var objInt1:Number = (parseInt(pairsA[0]) * 3600 + parseInt(pairsA[1]) * 60 + parseInt(pairsA[2])) * 1000 + pairsX[1];  
+			var objInt2:Number = (parseInt(pairsB[0]) * 3600 + parseInt(pairsB[1]) * 60 + parseInt(pairsB[2])) * 1000 + pairsY[1];  
 			
 			if(isNaN(objInt1)) objInt1 = 0; 
 			if(isNaN(objInt2)) objInt2 = 0; 

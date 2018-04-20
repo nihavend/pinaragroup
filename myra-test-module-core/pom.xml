@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>likyateknoloji</groupId>
 			<artifactId>pinara</artifactId>
-			<version>0.9.1</version>
+			<version>0.9.3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>

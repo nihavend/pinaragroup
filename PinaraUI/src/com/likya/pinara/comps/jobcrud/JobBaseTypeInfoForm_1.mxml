@@ -39,8 +39,24 @@
 					Alert.show("Job Priority is not selected !");
 					return false;
 				}
+				checkLogPath();
 				
 				return true;
+			}
+			
+			protected function checkLogPath():void
+			{
+				var logPath:String = jsJobLogPath.text;
+				//unix path - windows path
+				if(logPath.indexOf("/") != -1 && logPath.indexOf("/", logPath.length-1) == -1) {
+					logPath = logPath + "/";
+				} else if(logPath.indexOf("\\") != -1 && logPath.indexOf("\\", logPath.length-1) == -1) {
+					logPath = logPath + "\\";
+				} else {
+					logPath = logPath;
+				}
+				
+				jsJobLogPath.text = logPath;
 			}
 			
 			protected function ekle_clickHandler(event:MouseEvent):void

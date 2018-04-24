@@ -20,5 +20,8 @@ package com.likya.pinara.model
 		
 		[Bindable]
 		public var currentBusyCursorId:int;
+		
+		[Bindable]
+		public var appInfo:AppInfo;
 	}
 }

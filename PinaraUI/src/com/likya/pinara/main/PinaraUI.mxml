@@ -30,6 +30,7 @@
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.model.AppInfo;
 			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.User;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
@@ -104,6 +105,7 @@
 				addEventListener(ResourceEvent.SERVER_UNREADY_LOGOUT, serverUnreadyLogout);
 				
 				ModelLocator.getInstance().currentUser = new User();
+				ModelLocator.getInstance().appInfo = new AppInfo();
 				
 				// currentState = "anaSayfaState";
 				currentState = "loggedOutState";
@@ -378,6 +380,15 @@
 				BasicAuthenticationHandler.authAndCall(userOpsService, "userread", packedResponse);
 				
 			}
+			
+			private function getAppDataHandler(event:Event):void {
+				
+				var url:String = "/logview" + "?" + "infotag=appInfo";
+				appDataService.url = url;
+				appDataService.method = "POST";
+				BasicAuthenticationHandler.authAndSend(appDataService);
+				
+			}
 
 			private function checkIfRecover():void {
 				
@@ -501,7 +512,8 @@
 					req.requestHeaders.push(credsHeader);
 					
 					var loader:URLLoader = new URLLoader();
-					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler); 
+					loader.addEventListener(Event.COMPLETE, getLoginDataResultHandler);
+					loader.addEventListener(Event.COMPLETE, getAppDataHandler); 
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityError);
 					loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 					if(islogout) {
@@ -606,6 +618,20 @@
 				
 			}
 			
+			protected function getappinfo_resultHandler(event:ResultEvent):void
+			{
+				try {
+					ModelLocator.getInstance().appInfo.version = String(event.result);
+				} catch(err:Error) {
+					ModelLocator.getInstance().appInfo.version = "";
+				}
+				
+			}
+			
+			protected function getappinfo_faultHandler(event:FaultEvent):void {
+				BasicAuthenticationHandler.service_faultHandler(event);
+			}
+			
 			private function serverUnreadyLogout(event:ResourceEvent):void {
 				myTimer.stop();
 				PopUpManager.removePopUp(dummyWindow);
@@ -667,8 +693,17 @@
 		<s:CallResponder id="getappstate" result="getappstate_resultHandler(event)" />
 <!--		<s:CallResponder id="recover" result="suspendAppResult_resultHandler(event)"/>
 		<s:CallResponder id="norecover" result="resumeAppResult_resultHandler(event)"/>
--->	
+-->
+		
 		<userops:UserOps id="userOpsService" result="userOpsService_resultHandler(event)" fault="userOpsService_faultHandler(event)" />
+		
+		<s:HTTPService id="appDataService" 
+					   method="POST"
+					   showBusyCursor="true"
+					   resultFormat="text"
+					   result="getappinfo_resultHandler(event)"
+					   fault="getappinfo_faultHandler(event)"
+					   />
 
 	</fx:Declarations>
 	

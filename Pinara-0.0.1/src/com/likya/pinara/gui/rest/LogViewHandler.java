@@ -6,8 +6,10 @@ import com.likya.commons.utils.FileUtils;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
+import com.likya.pinara.PinaraBase;
 import com.likya.pinara.mng.PinaraAppManagerImpl;
 import com.likya.pinara.utils.PersistApi;
+import com.likya.pinara.utils.PinaraFileUtils;
 
 public class LogViewHandler extends FileViewHandler {
 
@@ -106,6 +108,10 @@ public class LogViewHandler extends FileViewHandler {
 				} catch (Exception e) {
 					response = "\"lisans.htm\"" + Pinara.getMessage("FileViewHandler.6");
 				}
+				break;
+				
+			case "appInfo":
+				response = PinaraFileUtils.readVersionInfo(PinaraBase.versionFile).toString();
 				break;
 
 			default:

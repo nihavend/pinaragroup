@@ -150,7 +150,7 @@ public class Pinara extends PinaraBase {
 		PinaraAppManagerImpl.initialize();
 		duration = System.currentTimeMillis() - startTime;
 		System.err.println("PinaraAppManagerImpl.initialize()" + " in " + duration + " ms");
-
+		
 		if(PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
 			PinaraAppManagerImpl.setExecutionState(CoreStateInfo.STATE_WORKING);
 		}
@@ -166,6 +166,7 @@ public class Pinara extends PinaraBase {
 
 		println(Pinara.getMessage("Pinara.4"));
 		println(Pinara.getMessage("Pinara.5"));
+		loadVersionInfo();
 		println(Pinara.getMessage("Pinara.6") + Pinara.getVersion() + Pinara.getMessage("Pinara.7"));
 		println(Pinara.getMessage("Pinara.8"));
 		println(Pinara.getMessage("Pinara.4"));

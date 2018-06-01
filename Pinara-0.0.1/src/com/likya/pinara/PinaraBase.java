@@ -203,11 +203,12 @@ public abstract class PinaraBase {
 		TcpInfo tcpInfo = getConfigurationManager().getPinaraConfig().getTcpInfo();
 
 		if (tcpInfo != null) {
-			
+
 			logger.info(getMessage("PinaraServer.18"));
-			
+
 			try {
-				TcpManagementConsole managementConsoleHandler = TcpManagementConsole.initComm(PinaraAppManagerImpl.getInstance(), tcpInfo.getTcpPort(), getConfigurationManager().getPinaraConfig().getServerIpAddress());
+				TcpManagementConsole managementConsoleHandler = TcpManagementConsole.initComm(PinaraAppManagerImpl.getInstance(), tcpInfo.getTcpPort(),
+						getConfigurationManager().getPinaraConfig().getServerIpAddress());
 				configurationManager.setTcpManagementConsole(managementConsoleHandler);
 				new Thread(managementConsoleHandler).start();
 			} catch (SocketException e) {
@@ -217,7 +218,7 @@ public abstract class PinaraBase {
 				System.exit(-1);
 			}
 			logger.info(getMessage("PinaraServer.21"));
-			
+
 		}
 
 		McInfo mcInfo = getConfigurationManager().getPinaraConfig().getMcInfo();

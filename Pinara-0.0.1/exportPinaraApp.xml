@@ -110,6 +110,8 @@
 		<chmod file="${dest.dir}/start-notr.sh" perm="ugo+rx"/>
 
 		<copy file="${src.dir}/bin/README.txt" todir="${dest.dir}"/>
+		
+		<copy file="${src.dir}/version.info" todir="${dest.dir}"/>
 
 		<copy file="${src.dir}/conf/myraConfig.xml" todir="${dest.dir}/conf"/>
 		<copy file="${src.dir}/conf/pinaraConfig.xml" todir="${dest.dir}/conf"/>

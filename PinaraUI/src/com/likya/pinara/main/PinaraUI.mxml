@@ -619,11 +619,19 @@
 			}
 			
 			protected function getappinfo_resultHandler(event:ResultEvent):void
-			{
+			{	
+				var returnTxt:String = String(event.result);
+				var appInfoArray:Array;
+				
 				try {
-					ModelLocator.getInstance().appInfo.version = String(event.result);
+					appInfoArray = returnTxt.split(";");
+					ModelLocator.getInstance().appInfo.version = appInfoArray[0];
+					ModelLocator.getInstance().appInfo.osname = appInfoArray[1];
+					ModelLocator.getInstance().appInfo.setOsType(ModelLocator.getInstance().appInfo.osname);
 				} catch(err:Error) {
 					ModelLocator.getInstance().appInfo.version = "";
+					ModelLocator.getInstance().appInfo.osname = "";
+					ModelLocator.getInstance().appInfo.ostype = "";
 				}
 				
 			}

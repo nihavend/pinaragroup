@@ -215,6 +215,17 @@ package com.likya.pinara.services.jobmanager
 			operation.resultType = Object;
 			operations.push(operation);
 			
+			operation = new mx.rpc.http.Operation(null, "changegrpname");
+			operation.url = "/flex/restsrvc/changegrpname/{chnggrpId}";
+			operation.method = "GET";
+			argsArray = new Array("chnggrpId");
+			operation.argumentNames = argsArray;    
+			operation.serializationFilter = serializer0;
+			operation.properties = new Object();
+			operation.properties["urlParamNames"] = ["chnggrpId"];
+			operation.resultType = Object;
+			operations.push(operation);
+			
 			_serviceControl.operationList = operations;  
 			
 			

@@ -29,6 +29,7 @@ import com.likya.pinara.model.User;
 import com.likya.pinara.model.User.RoleInfo;
 import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.AuthorizationLoader;
+import com.likya.pinara.utils.PinaraFileUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
@@ -46,7 +47,7 @@ public abstract class PinaraBase {
 
 	public static final String DEF_0_9_1 = "0.9.1";
 	
-	private static final String version = DEF_0_9_3;
+	private static String version = DEF_0_9_3;
 
 	private static LicenseInfo licenseInfo = new LicenseInfo();
 
@@ -57,6 +58,8 @@ public abstract class PinaraBase {
 	private ConfigurationManager configurationManager;
 
 	public final static String authTxt = "pinara";
+	
+	public static final String versionFile = "version.info";
 	
 	public enum EventTypeInfo {
 
@@ -76,6 +79,10 @@ public abstract class PinaraBase {
 	protected static void registerMessageBundle() {
 		LocaleMessages.registerBundle(localePath);
 		logger.info(Pinara.getMessage("Pinara.37") + localePath);
+	}
+	
+	protected static void loadVersionInfo() {
+		version = PinaraFileUtils.readVersionInfo(versionFile);
 	}
 
 	protected void loadAuthenticationInfo() {
@@ -190,17 +197,18 @@ public abstract class PinaraBase {
 
 		return pinaraSMSHandler;
 	}
-
+	
 	protected void startCommServer() throws InstanceNotFoundException {
 
 		TcpInfo tcpInfo = getConfigurationManager().getPinaraConfig().getTcpInfo();
 
 		if (tcpInfo != null) {
-			
+
 			logger.info(getMessage("PinaraServer.18"));
-			
+
 			try {
-				TcpManagementConsole managementConsoleHandler = TcpManagementConsole.initComm(PinaraAppManagerImpl.getInstance(), tcpInfo.getTcpPort(), getConfigurationManager().getPinaraConfig().getServerIpAddress());
+				TcpManagementConsole managementConsoleHandler = TcpManagementConsole.initComm(PinaraAppManagerImpl.getInstance(), tcpInfo.getTcpPort(),
+						getConfigurationManager().getPinaraConfig().getServerIpAddress());
 				configurationManager.setTcpManagementConsole(managementConsoleHandler);
 				new Thread(managementConsoleHandler).start();
 			} catch (SocketException e) {
@@ -210,7 +218,7 @@ public abstract class PinaraBase {
 				System.exit(-1);
 			}
 			logger.info(getMessage("PinaraServer.21"));
-			
+
 		}
 
 		McInfo mcInfo = getConfigurationManager().getPinaraConfig().getMcInfo();

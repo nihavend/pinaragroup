@@ -240,4 +240,45 @@ public class PinaraFileUtils extends FileUtils {
 		
 		return checkFile(fileName);
 	}
+	
+	public static StringBuffer readFile(String fileName) {
+
+		FileInputStream fis = null;
+		BufferedReader bufferedReader = null;
+		StringBuffer outputBuffer = new StringBuffer();
+
+		try {
+			fis = new FileInputStream(fileName);
+			InputStreamReader inputStreamReader = new InputStreamReader(fis, "UTF8");
+			bufferedReader = new BufferedReader(inputStreamReader);
+			String bufferString = null;
+
+			while ((bufferString = bufferedReader.readLine()) != null) {
+				outputBuffer.append(bufferString + '\n');
+			}
+		} catch (FileNotFoundException fnfex) {
+			fnfex.printStackTrace();
+			return null;
+		} catch (Throwable t) {
+			if(t instanceof  java.lang.OutOfMemoryError) {
+				System.err.println("Dosya boyutu kapasitenin üstünde, açılamıyor !");
+			} else {
+				t.printStackTrace();
+			}
+			return null;
+		}
+
+		try {
+			fis.close();
+		} catch (IOException e) {}
+		
+		return outputBuffer;
+	}
+
+	public static String readVersionInfo(String versionFile) {
+		StringBuffer versionBuff = FileUtils.readFile(versionFile);
+		String versionInfo = (versionBuff != null && versionBuff.indexOf("=") != -1) ? versionBuff.substring(versionBuff.indexOf("=") + 1, versionBuff.length() - 1) : versionBuff+"";
+		
+		return versionInfo;
+	}
 }

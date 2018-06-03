@@ -37,12 +37,16 @@ public class ValidPlatforms {
 		return System.getProperty("os.name"); 
 	}
 	
+	public static String[] getCommand(String jobCommand) {
+		return getCommand(jobCommand, true);
+	}
+	
 	// TODO Bu kısım değişmeli!
 	/**
 	 * Aslında aşağıdaki gibi bir liste olmamalı. Sadece deploy edilecek sisteme
 	 * ait lisans olmalı
 	 */
-	public static String[] getCommand(String jobCommand) {
+	public static String[] getCommand(String jobCommand, boolean isScriptFile) {
 		
 //		if(TlosServer.getTlosParameters().getJobCommand() != null && TlosServer.getTlosParameters().getJobCommand().length != 0) {
 //			TlosServer.println(LocaleMessages.getString("TlosServer.71") + " " + TlosServer.getTlosParameters().getJobCommand()); 
@@ -52,81 +56,60 @@ public class ValidPlatforms {
 		String osName = System.getProperty("os.name"); 
 		String[] cmd;
 
-		if (osName.equals(OS_WINDOWS7)) {
+		if (osName.equals(OS_WINDOWS_VISTA) || osName.equals(OS_WINDOWS_2003)) {
 			String[] tmpCmd = new String[3];
 			tmpCmd[0] = jobCommand;
-			tmpCmd[1] = ""; 
-			tmpCmd[2] = ""; 
+			tmpCmd[1] = "";
+			tmpCmd[2] = "";
 			cmd = tmpCmd;
-		} else if (osName.equals(OS_WINDOWS_VISTA)) {
+		} else if (osName.equals(OS_WINDOWS7) || osName.equals(OS_WINDOWS_NT) || osName.equals(OS_WINDOWS_XP)) {
 			String[] tmpCmd = new String[3];
-			tmpCmd[0] = jobCommand;
-			tmpCmd[1] = ""; 
-			tmpCmd[2] = ""; 
-			cmd = tmpCmd;
-		} else if (osName.equals(OS_WINDOWS_2003)) {
-			String[] tmpCmd = new String[3];
-			tmpCmd[0] = jobCommand;
-			tmpCmd[1] = ""; 
-			tmpCmd[2] = ""; 
-			cmd = tmpCmd;
-		} else if (osName.equals(OS_WINDOWS_NT)) {
-			String[] tmpCmd = new String[3];
-			tmpCmd[0] = "cmd.exe"; 
-			tmpCmd[1] = "/C"; 
+			tmpCmd[0] = "cmd.exe";
+			tmpCmd[1] = "/C";
 			tmpCmd[2] = jobCommand;
 			cmd = tmpCmd;
 		} else if (osName.equals(OS_WINDOWS_95)) {
 			String[] tmpCmd = new String[3];
-			tmpCmd[0] = "command.com"; 
-			tmpCmd[1] = "/C"; 
+			tmpCmd[0] = "command.com";
+			tmpCmd[1] = "/C";
 			tmpCmd[2] = jobCommand;
 			cmd = tmpCmd;
-		} else if (osName.equals(OS_WINDOWS_XP)) {
-			String[] tmpCmd = new String[3];
-			tmpCmd[0] = "cmd.exe"; 
-			tmpCmd[1] = "/C"; 
-			tmpCmd[2] = jobCommand;
-			cmd = tmpCmd;
-		} else if (osName.equals(OS_HP_UX)) {
-			String[] tmpCmd = new String[2];
-			tmpCmd[0] = "/bin/sh"; 
-			tmpCmd[1] = jobCommand;
-			cmd = tmpCmd;
-		} else if (osName.equals(OS_AIX)) {
-			String[] tmpCmd = new String[2];
-			tmpCmd[0] = "/bin/sh"; 
-			tmpCmd[1] = jobCommand;
-			cmd = tmpCmd;
-		} else if (osName.equals(OS_LINUX)) {
-			String[] tmpCmd = new String[2];
-			tmpCmd[0] = "/bin/sh"; 
-			tmpCmd[1] = jobCommand;
-			cmd = tmpCmd;
-		}  else if (osName.equals(OS_SUNOS)) {
-			String[] tmpCmd = new String[2];
-			tmpCmd[0] = "/bin/sh"; 
-			tmpCmd[1] = jobCommand;
-			cmd = tmpCmd;
-		}  else if (osName.equals(MAC_OS_X)) {
-			String[] tmpCmd = new String[2];
-			tmpCmd[0] = "/bin/sh"; 
-			tmpCmd[1] = jobCommand;
-			cmd = tmpCmd;
-		}  else {
-			if (osName.indexOf("Windows") != -1) { 
+		} else if (osName.equals(OS_HP_UX) || osName.equals(OS_AIX) || osName.equals(OS_LINUX) || osName.equals(OS_SUNOS) || osName.equals(MAC_OS_X)) {
+			if (isScriptFile) {
+				String[] tmpCmd = new String[2];
+				tmpCmd[0] = "/bin/sh";
+				tmpCmd[1] = jobCommand;
+				cmd = tmpCmd;
+			} else {
 				String[] tmpCmd = new String[3];
-				tmpCmd[0] = "cmd.exe"; 
-				tmpCmd[1] = "/C"; 
+				tmpCmd[0] = "/bin/sh";
+				tmpCmd[1] = "-c";
+				tmpCmd[2] = jobCommand;
+				cmd = tmpCmd;
+			}
+		} else {
+			if (osName.indexOf("Windows") != -1) {
+				String[] tmpCmd = new String[3];
+				tmpCmd[0] = "cmd.exe";
+				tmpCmd[1] = "/C";
 				tmpCmd[2] = jobCommand;
 				cmd = tmpCmd;
 			} else {
-				String[] tmpCmd = new String[2];
-				tmpCmd[0] = "/bin/sh"; 
-				tmpCmd[1] = jobCommand;
-				cmd = tmpCmd;
+				if (isScriptFile) {
+					String[] tmpCmd = new String[2];
+					tmpCmd[0] = "/bin/sh";
+					tmpCmd[1] = jobCommand;
+					cmd = tmpCmd;
+				} else {
+					String[] tmpCmd = new String[3];
+					tmpCmd[0] = "/bin/sh";
+					tmpCmd[1] = "-c";
+					tmpCmd[2] = jobCommand;
+					cmd = tmpCmd;
+				}
+				osValid = false;
 			}
-			osValid = false;
+
 		}
 		
 		if(!osValid) { 

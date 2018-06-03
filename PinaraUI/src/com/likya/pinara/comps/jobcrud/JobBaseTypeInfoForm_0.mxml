@@ -3,7 +3,8 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
 		xmlns:MyComp="*"
-		width="450" height="150">
+		width="450" height="150" 
+		creationComplete="loadJobTypes()">
 	
 	<!--
 	<fx:Declarations>
@@ -12,13 +13,23 @@
 	</fx:Declarations>
 	-->
  						 
- 
-	
 	<fx:Script>
 		<![CDATA[
 			import mx.controls.Alert;
-			
+			import mx.collections.ArrayList;
+			import com.likya.pinara.model.AppInfo;
 			import spark.components.NavigatorContent;
+			import com.likya.pinara.model.ModelLocator;
+			
+			private static const BATCH_PROCESS:String = "BATCH PROCESS"; 
+			private static const SHELL_SCRIPT:String = "SHELL SCRIPT"; 
+			private static const SYSTEM_COMMAND:String = "SYSTEM COMMAND";
+			private static const BATCH_FILE_EXT:String = ".bat";
+			
+			private static var regExPath:RegExp = new RegExp("([abcdefgABCDEFG]:[\\\\/])?([a-zA-Z/\\\\\\.0-9_ \\-])*");
+			
+			[Bindable] 
+			public var appInfo:AppInfo = ModelLocator.getInstance().appInfo;
 			
 			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
 			public var jsJobWorkDir:TextInput = new TextInput();
@@ -35,8 +46,37 @@
 					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
+				if(jsJobType.selectedItem == undefined) {
+					Alert.show("Job Type is not selected !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				if(jsJobType.selectedItem == BATCH_PROCESS) {
+					if(!regExPath.test(jsCommand.text) || jsCommand.text.indexOf(BATCH_FILE_EXT) == -1) {
+						Alert.show("Windows path or batch file extension is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+						return false;
+					}
+				}
 				
 				return true;
+			}
+			
+			public function loadJobTypes():void
+			{	
+				var jobTypesArray:ArrayList = new ArrayList();
+				jobTypesArray.addItem(SYSTEM_COMMAND);
+				
+				if(appInfo.ostype == AppInfo.OS_UNIX) {
+					jobTypesArray.addItem(SHELL_SCRIPT);
+					
+				} else if(appInfo.ostype == AppInfo.OS_WINDOWS){
+					jobTypesArray.addItem(BATCH_PROCESS);
+					
+				} else {
+					jobTypesArray.addItem(BATCH_PROCESS);
+					jobTypesArray.addItem(SHELL_SCRIPT);
+				}
+				
+				jsJobType.dataProvider = jobTypesArray;
 			}
 			
 		]]>
@@ -69,25 +109,25 @@
 	</s:FormItem>
 	
 	<s:FormItem label="{resourceManager.getString('messages', 'jobTypeItemLabel')}">
-		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="false"> 
-			<s:dataProvider>
+		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="true"/> 
+			<!--s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>BATCH PROCESS</fx:String>
-					<!--<fx:String>SHELL SCRIPT</fx:String>
+					<fx:String>SHELL SCRIPT</fx:String>
+					<fx:String>SYSTEM COMMAND</fx:String>
 					<fx:String>REMOTE SHELL</fx:String>
 					<fx:String>ETL TOOL JOBS</fx:String>
 					<fx:String>SAP</fx:String>
 					<fx:String>SAS</fx:String>
-					<fx:String>SYSTEM COMMAND</fx:String>
 					<fx:String>FTP</fx:String>
 					<fx:String>FILE PROCESS</fx:String>
 					<fx:String>FILE LISTENER</fx:String>
 					<fx:String>PROCESS NODE</fx:String>
 					<fx:String>DB JOBS</fx:String>
-					<fx:String>WEB SERVICE</fx:String>-->
+					<fx:String>WEB SERVICE</fx:String>>
 				</mx:ArrayList>
 			</s:dataProvider>
-		</s:DropDownList>
+		</s:DropDownList-->
 	</s:FormItem>
 	
 	<s:FormItem label="{resourceManager.getString('messages', 'jobArgsItemLabel')}"> 

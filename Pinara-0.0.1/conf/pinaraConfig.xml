@@ -37,9 +37,12 @@
 		    <prop>mail.debug,false</prop>
 		</mailProps>
 	</mailInfo>
-	<mcInfo>
+		<tcpInfo>
+		<tcpPort>4004</tcpPort>
+	</tcpInfo>
+	<!-- mcInfo>
 		<jmxPort>4002</jmxPort>
-	</mcInfo>
+	</mcInfo-->
 	<logPath>logs</logPath>
 	<!--
 		if empty value cacheExpire default is 2592000 (30 days in seconds)

@@ -38,12 +38,14 @@ package com.likya.pinara.utils {
 				myraJobList.myra::genericJob.@groupId = "my_group"; // Ekrandan girilmesi gerekiyor !!!!
 				trace("UYARI !!!! : myraJobList.myra::genericJob.@groupId ekrandan girilmeli");
 				myraJobList.myra::genericJob.@agentId = "1";
+				myraJobList.myra::genericJob.@scenarioId = "";
 				trace("UYARI !!!! : myraJobList.myra::genericJob.@agentId ekrandan girilmeli");
 			} else { 
 				myraJobList.myra::genericJob.@handlerURI = j.jobDetailXml.@handlerURI; //"com.likya.myra.jef.jobs.ExecuteInShell";
 				myraJobList.myra::genericJob.@Id = j.jobDetailXml.@Id; //"22";
 				// myraJobList.myra::genericJob.@groupId = j.jobDetailXml.@groupId; //"my_group";
 				myraJobList.myra::genericJob.@agentId = j.jobDetailXml.@agentId; //"1";
+				myraJobList.myra::genericJob.@scenarioId = j.jobDetailXml.@scenarioId;
 			}
 			
 			// Alert.show("myraJobList.myra::genericJob.@handlerURI : " + myraJobList.myra::genericJob.@handlerURI);

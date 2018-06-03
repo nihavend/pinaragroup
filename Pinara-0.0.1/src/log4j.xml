@@ -28,8 +28,8 @@
 	</appender>
 
 	<appender name="myratracefile" class="org.apache.log4j.RollingFileAppender">
-		<param name="maxFileSize" value="2000KB" />
-		<param name="maxBackupIndex" value="5" />
+		<param name="maxFileSize" value="10MB" />
+		<param name="maxBackupIndex" value="20" />
 		<param name="File" value="logs/myraTrace.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ISO8601}|%c{1}|%m%n" />
@@ -37,8 +37,8 @@
 	</appender>
 
 	<appender name="pinaratracefile" class="org.apache.log4j.RollingFileAppender">
-		<param name="maxFileSize" value="2000KB" />
-		<param name="maxBackupIndex" value="5" />
+		<param name="maxFileSize" value="10MB" />
+		<param name="maxBackupIndex" value="20" />
 		<param name="File" value="logs/pinaraTrace.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{DATE} %5p %c{1}:%L - %m%n" />
@@ -69,8 +69,8 @@
 	</appender-->
 
 	<appender name="pinaraEkran" class="org.apache.log4j.RollingFileAppender">
-		<param name="maxFileSize" value="1000KB" />
-		<param name="maxBackupIndex" value="5" />
+		<param name="maxFileSize" value="10MB" />
+		<param name="maxBackupIndex" value="20" />
 		<param name="File" value="logs/pinaraEkran.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ISO8601}|%c{1}|%m%n" />

@@ -46,6 +46,8 @@
 			[Bindable]
 			public var jobListXmlCollection:XMLListCollection = new XMLListCollection();
 			
+			//private var freeGrpDefaultName:String = "Independents";
+			
 			
 			protected function group1_creationCompleteHandler(event:FlexEvent):void {
 				addEventListener(ResourceEvent.ROW_SELECTION_CHANGED, rowSelectionChangedHandler);
@@ -265,11 +267,17 @@
 					pinaraJobListGrid.enableAllBtn.visible = true;
 					pinaraJobListGrid.enableAllBtn.includeInLayout = true;
 					
+					pinaraJobListGrid.changeGrpNameBtn.visible = true;
+					pinaraJobListGrid.changeGrpNameBtn.includeInLayout = true;
+					
 					pinaraJobListGrid.grpState.visible = true;
 					pinaraJobListGrid.grpState.includeInLayout = true;
 				}  else {
 					pinaraJobListGrid.enableAllBtn.visible = false;
 					pinaraJobListGrid.enableAllBtn.includeInLayout = false;
+					
+					pinaraJobListGrid.changeGrpNameBtn.visible = false;
+					pinaraJobListGrid.changeGrpNameBtn.includeInLayout = false;
 
 					pinaraJobListGrid.grpState.visible = false;
 					pinaraJobListGrid.grpState.includeInLayout = false;
@@ -278,10 +286,15 @@
 				if(netTreeDisablable && !netTreeEnablable) {
 					pinaraJobListGrid.disableAllBtn.visible = true;
 					pinaraJobListGrid.disableAllBtn.includeInLayout = true;
+					
+					pinaraJobListGrid.changeGrpNameBtn.visible = true;
+					pinaraJobListGrid.changeGrpNameBtn.includeInLayout = true;
 				} else {
 					pinaraJobListGrid.disableAllBtn.visible = false;
 					pinaraJobListGrid.disableAllBtn.includeInLayout = false;
 				}
+				
+				//pinaraJobListGrid.changeGrpNameBtn.visible = changeGrpNameBtnEnabled();
 				
 			}
 
@@ -435,6 +448,23 @@
 				pinaraJobListGrid.jobListXmlCollection = jobListXmlCollection;
 				// permitEnableAllBtn();
 			}
+			
+/*			private function changeGrpNameBtnEnabled():Boolean {
+				var grpNameStr:String = "";
+				var btnEnabled:Boolean = false;
+				var searchResult:XMLList = TreeUtils.findNode((this.parentApplication.jobTree.liveTree.dataProvider[0] as XML), selectedNetTreeId);
+				
+				if (searchResult.hasOwnProperty("@title")) {
+					grpNameStr = searchResult[0].@title;
+					if(grpNameStr == freeGrpDefaultName) {
+						btnEnabled = false;
+					} else {
+						btnEnabled = true;
+					}
+				}
+				
+				return btnEnabled;
+			}*/
 			
 		]]>
 	</fx:Script>

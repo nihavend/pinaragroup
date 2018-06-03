@@ -66,4 +66,6 @@ public interface PinaraAppManager {
 	public void enableGroup(String grpId) throws PinaraAuthenticationException;
 
 	public void disableGroup(String grpId) throws PinaraAuthenticationException;
+	
+	public void changeGroupName(String netTreeGrpId, String newGrpName) throws PinaraAuthenticationException;
 }

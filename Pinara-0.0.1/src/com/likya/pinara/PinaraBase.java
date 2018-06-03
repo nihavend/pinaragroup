@@ -12,7 +12,6 @@ import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.InstanceNotFoundException;
 import com.likya.myra.jef.model.JobRuntimeInterface;
 import com.likya.myra.jef.model.JobRuntimeProperties;
-import com.likya.pinara.comm.JmxManagementConsole;
 import com.likya.pinara.comm.TcpManagementConsole;
 import com.likya.pinara.gui.WebManager;
 import com.likya.pinara.infobus.GoodByeMail;
@@ -220,7 +219,7 @@ public abstract class PinaraBase {
 			logger.info(getMessage("PinaraServer.21"));
 
 		}
-
+/*
 		McInfo mcInfo = getConfigurationManager().getPinaraConfig().getMcInfo();
 
 		if (mcInfo != null) {
@@ -245,7 +244,7 @@ public abstract class PinaraBase {
 			}
 
 		}
-
+*/
 	}
 
 	protected void startWebManager() {

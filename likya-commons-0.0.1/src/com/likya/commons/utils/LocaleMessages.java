@@ -27,6 +27,9 @@ public class LocaleMessages {
 	}
 
 	public static String getString(String bundleName, String key) {
+		if(BUNDLEMAP == null || BUNDLEMAP.size() == 0) {
+			registerBundle("com.likya.pinara.resources.messages");
+		}
 		
 		if (!BUNDLEMAP.containsKey(bundleName)) {
 			throw new RuntimeException(bundleName + " is not registered, register bundle !");

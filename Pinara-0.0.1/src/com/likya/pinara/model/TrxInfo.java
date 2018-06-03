@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.likya.myra.jef.core.CoreFactory;
+import com.likya.pinara.Pinara;
 
 public class TrxInfo implements Serializable {
 	
@@ -26,7 +26,7 @@ public class TrxInfo implements Serializable {
 	public static final int STATE_JOBOVERFLOW = 30;
 	public static final int STATE_WORKING = 40;
 	
-	String clientId = CoreFactory.getMessage("TlosInfo.0"); //$NON-NLS-1$
+	String clientId = Pinara.getMessage("PinaraInfo.0"); //$NON-NLS-1$
 	private CommandType commandType;
 	
 	private int tlosStatus;

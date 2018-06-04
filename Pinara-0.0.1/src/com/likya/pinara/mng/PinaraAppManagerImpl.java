@@ -24,6 +24,7 @@ import com.likya.myra.jef.core.MonitoringOperations;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.CoreStateInfo;
 import com.likya.myra.jef.model.InstanceNotFoundException;
+import com.likya.myra.jef.utils.JobQueueOperations;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.PinaraBase.EventTypeInfo;
 import com.likya.pinara.comm.TcpManagementConsole;
@@ -33,6 +34,7 @@ import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
 import com.likya.pinara.utils.PersistDBApi;
+import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
@@ -374,6 +376,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			
 			// DB yapısı sonrası			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.deleteJob(jobId, persist);
+			scanTreeForChange(null, true);
 			PersistDBApi.deleteJob(jobId);
 		} catch (UnknownServiceException e) {
 			// TODO Auto-generated catch block
@@ -392,6 +395,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			
 			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.updateJob(abstractJobType, persist);
+			scanTreeForChange(abstractJobType, false);
 			PersistDBApi.saveJob(abstractJobType);
 			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
@@ -413,6 +417,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			
 			// DB yapısı sonrası -- ilk olarak RT'ye ekliyoruz çünkü jobid orada oluşuyor.
 			jobOperations.addJob(abstractJobType, persist);
+			scanTreeForChange(abstractJobType, false);
 			PersistDBApi.saveJob(abstractJobType);
 			return abstractJobType.getId();
 		} catch (UnknownServiceException e) {
@@ -477,4 +482,167 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		
 		return null;
 	}
+	
+	public void changeGroupName(String netTreeGrpId, String newGrpName) throws PinaraAuthenticationException {
+		
+		if (!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		
+		NetTree netTree;
+		ArrayList<AbstractJobType> abstractJobTypeList = null;
+		HashMap<String, String> freeJobs = null;
+		ArrayList<String> jobIdList = new ArrayList<>();
+		
+		try {
+			//Bagimsiz joblar icin changeGrpName ekrandan simdilik yapilmiyor.
+			if(NetTreeMapper.getFreeJobsGrpId().equals(netTreeGrpId)) {
+				freeJobs = PinaraAppManagerImpl.getInstance().getFreeJobs();
+				for(String jobId : freeJobs.values()) {
+					jobIdList.add(jobId);
+				}
+			} else {
+				netTree = PinaraAppManagerImpl.getInstance().getNetTreeMap().get(netTreeGrpId);
+				for (String jobId : netTree.getMembers()) {
+					jobIdList.add(jobId);
+				}
+			}
+			
+			abstractJobTypeList = jobOperations.changeGrpName(jobIdList, newGrpName);
+			
+			for(AbstractJobType job : abstractJobTypeList) {
+				PersistDBApi.saveJob(job);
+			}
+			
+		}  catch (InstanceNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
+	}
+	
+	/*
+	 * a.the job we are working on is updatedJob
+	 * b.affectedNetTree is the node which updatedJob is inside
+	 * c.firstJobInNetTree is the first level job in the tree diagram
+	 * So we find firstJobInNetTree in affectedNetTree to use its scenarioId to name other jobs scenarioId's
+	 * which doesn't have same name with. These are the cases which can generate new dependent group: 
+	 * 1.Two independent jobs can generate new dependent group
+	 * 2.One job (can be from dependent or independent group) or group can join at down or middle level of dependent group tree
+	 * 3.One job (can be from dependent or independent group) or group can join at first level of dependent group tree
+	 * 4.updatedJob can move to another group so it should take this group name
+	 * 5.one dependent group can become two pieces with same group name 
+	 */
+	private void scanTreeForChange(AbstractJobType updatedJob, boolean isDeleteOperation) {
+		
+		HashMap<String, AbstractJobType> jobMap;
+		HashMap<String, NetTree> netTreeMap = null;
+		HashMap<String, String> freeJobs = null;
+		NetTree affectedNetTree;
+		AbstractJobType firstJobInNetTree;
+		ArrayList<AbstractJobType> jobListForUpdate = new ArrayList<>();
+		ArrayList<Object> affectedNode = new ArrayList<>();
+		
+		try {
+			netTreeMap = PinaraAppManagerImpl.getInstance().getNetTreeMap();
+			freeJobs = PinaraAppManagerImpl.getInstance().getFreeJobs();
+		} catch (InstanceNotFoundException e) {
+			e.printStackTrace();
+		} catch (PinaraAuthenticationException e) {
+			e.printStackTrace();
+		}
+		jobMap = JobQueueOperations.toAbstractJobTypeList(CoreFactory.getInstance().getMonitoringOperations().getJobQueue());
+		
+		//freeNode scan for add, update, delete
+		for(String jobId : freeJobs.values()) {
+			if(jobMap.get(jobId) != null && !NetTreeMapper.freeGrpDefaultName.equals(jobMap.get(jobId).getScenarioId())) {
+				jobListForUpdate.add(jobMap.get(jobId));
+			}
+		}
+		
+		if(jobListForUpdate.size() > 0) {
+			updateTreeNodes(jobListForUpdate, NetTreeMapper.freeGrpDefaultName);
+		}
+		
+		//depNode scan for add, update
+		if(!isDeleteOperation) {
+			jobListForUpdate = new ArrayList<>();
+			boolean nodeFound = findAffectedNodeInTree(affectedNode, updatedJob, jobMap, netTreeMap);
+			
+			if(nodeFound) {
+				affectedNetTree = (NetTree) affectedNode.get(0);
+				firstJobInNetTree = (AbstractJobType) affectedNode.get(1);
+				
+				for(String jobId : affectedNetTree.getMembers()) {
+					if(firstJobInNetTree.getScenarioId() != null && jobMap.get(jobId) != null) {
+						if(firstJobInNetTree.getScenarioId().equals(NetTreeMapper.freeGrpDefaultName)) {
+							jobListForUpdate.add(jobMap.get(jobId));
+						} else {
+							if(!firstJobInNetTree.getScenarioId().equals(jobMap.get(jobId).getScenarioId())) {
+								jobListForUpdate.add(jobMap.get(jobId));
+							}
+						}
+					}
+				}
+				
+				if(jobListForUpdate.size() > 0) {
+					updateTreeNodes(jobListForUpdate, firstJobInNetTree.getScenarioId().equals(NetTreeMapper.freeGrpDefaultName) ? NetTreeMapper.depGrpDefaultName : firstJobInNetTree.getScenarioId());
+				}
+			}
+		}
+		
+	}
+	
+	private boolean findAffectedNodeInTree(ArrayList<Object> affectedNode, AbstractJobType updatedJob, HashMap<String, AbstractJobType> jobMap, HashMap<String, NetTree> netTreeMap) {
+		
+		boolean affectedNetTreeFound = false;
+		boolean firstJobInNetTreeFound = false;
+		NetTree affectedNetTree = null;
+		AbstractJobType firstJobInNetTree = null;
+		
+		for(NetTree netTree : netTreeMap.values()) {
+			if(!affectedNetTreeFound) {
+				for(String jobId : netTree.getMembers()) {
+					if(updatedJob.getId().equals(jobId)) {
+						affectedNetTree = netTree;
+						affectedNode.add(0, netTree);
+						affectedNetTreeFound = true;
+					}
+				}
+			}
+		}
+		
+		if(affectedNetTreeFound) {
+			for(String jobId : affectedNetTree.getMembers()) {
+				if(jobMap.get(jobId).getDependencyList() == null || jobMap.get(jobId).getDependencyList().sizeOfItemArray() == 0) {
+					
+					firstJobInNetTree = jobMap.get(jobId);
+					
+					if(!firstJobInNetTreeFound) {
+						affectedNode.add(1, firstJobInNetTree);
+						firstJobInNetTreeFound = true;
+					} else {
+						if((!NetTreeMapper.freeGrpDefaultName.equals(firstJobInNetTree.getScenarioId()) && !updatedJob.getScenarioId().equals(firstJobInNetTree.getScenarioId()))
+								|| NetTreeMapper.freeGrpDefaultName.equals(((AbstractJobType) affectedNode.get(1)).getScenarioId()) ) {
+							affectedNode.add(1, firstJobInNetTree);
+						}
+					}
+					
+				}
+			}
+		}
+		
+		return (affectedNetTreeFound && firstJobInNetTreeFound) ? true : false;
+	}
+	
+	private void updateTreeNodes(ArrayList<AbstractJobType> jobList, String scenarioId) {
+		String tmpScenarioId = "";
+		for(AbstractJobType job : jobList) {
+			tmpScenarioId = job.getScenarioId();
+			job.setScenarioId(scenarioId);
+			PersistDBApi.saveJob(job);
+			Pinara.getLogger().debug("CHANGEDINTREE-AND-UPDATED:---->" + "jobId: " + job.getId() + "--" + "jobName: " + job.getBaseJobInfos().getJsName() + "--"  + "ScenarioOLD: " + tmpScenarioId + "--" + "ScenarioNEW: " + job.getScenarioId() + "--" + "GroupId: " + job.getGroupId());
+		}
+	}
+	
+
 }

@@ -1,5 +1,6 @@
 package com.likya.pinara.utils.xml.mappers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -16,6 +17,10 @@ import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 
 public class NetTreeMapper {
+	
+	public static final String freeJobsGrpId = "-1";
+	public static final String depGrpDefaultName = "Dep Group";
+	public static final String freeGrpDefaultName = "Independents";
 	
 	public static XmlCursor addJobGroup(XmlCursor xmlCursor, String groupId, String title) {
 		
@@ -61,7 +66,8 @@ public class NetTreeMapper {
 		xmlCursor.insertAttributeWithValue("title", "Grup Listesi");
 		xmlCursor.insertAttributeWithValue("id", "0");
 		
-		xmlCursor = addJobGroup(xmlCursor, "-1", "Independents");
+		//xmlCursor = addJobGroup(xmlCursor, freeJobsGrpId, getFreeGrpName(freeJobs));
+		xmlCursor = addJobGroup(xmlCursor, freeJobsGrpId, freeGrpDefaultName);
 		// add free jobs to list
 		
 		for(String jobId : freeJobs.values()) {
@@ -72,7 +78,7 @@ public class NetTreeMapper {
 		
 		for(NetTree netTree : netTreeMap.values()) {
 			
-			xmlCursor = addJobGroup(xmlCursor, netTree.getVirtualId(), "Dep Group");
+			xmlCursor = addJobGroup(xmlCursor, netTree.getVirtualId(), getNetTreeGrpName(netTree.getMembers()));
 			
 			xmlCursor.insertAttributeWithValue("grpState", "" + netTree.isActive());
 			
@@ -123,6 +129,26 @@ public class NetTreeMapper {
 		
 		return retValue;
 	}
+
+	public static String getNetTreeGrpName(ArrayList<String> netTreeMembers) {
+		String netTreeGrpName = null;
+		HashMap<String, JobImpl> jobQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
+		
+		for(String jobId : netTreeMembers) {
+			if(jobQueue.get(jobId) != null && jobQueue.get(jobId).getAbstractJobType() != null && (jobQueue.get(jobId).getAbstractJobType().getDependencyList() == null || jobQueue.get(jobId).getAbstractJobType().getDependencyList().sizeOfItemArray() == 0)
+					&& jobQueue.get(jobId).getAbstractJobType().getScenarioId() != null && !"".equals(jobQueue.get(jobId).getAbstractJobType().getScenarioId())) {
+				netTreeGrpName = jobQueue.get(jobId).getAbstractJobType().getScenarioId();
+			}
+		}
+		
+		netTreeGrpName = (netTreeGrpName != null && !freeGrpDefaultName.equals(netTreeGrpName)) ? netTreeGrpName : depGrpDefaultName;
+		return netTreeGrpName;
+	}
+	
+	public static String getFreeJobsGrpId() {
+		return freeJobsGrpId;
+	}
+	
 }
 /*
 

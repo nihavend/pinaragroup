@@ -68,6 +68,7 @@ public class RestParser extends GenericRestParser {
 
 	public static final String CMD_GRPENABLE = "enablegrp";
 	public static final String CMD_GRPDISABLE = "disablegrp";
+	public static final String CMD_CHANGEGRPNAME = "changegrpname";
 	
 	public static byte[] parse(User reqUserInfo, String uriTxt) throws InstanceNotFoundException {
 
@@ -436,6 +437,27 @@ public class RestParser extends GenericRestParser {
 			// retStr = "<message><result>NOK : " + "Service not implemented !" + "</result>";
 			break;
 			
+		case RestParser.CMD_CHANGEGRPNAME:
+			if (restCommArr.length != 2) {
+				retStr = "Group id or Group Name not defined or invalid : " + uriTxt;
+				retStr = "<message><result>NOK</result><desc>" + retStr + "</desc></message>";
+				break;
+			}
+			
+			String params[] = restCommArr[1].split(":");
+			String newGrpName = params[1];
+			grpId = params[0];
+
+			try {
+				PinaraAppManagerImpl.getInstance().changeGroupName(grpId, newGrpName);
+				retStr = "<message><result>OK</result><desc></desc></message>";
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
+			}
+
+			break;
+			
 		default:
 			retStr = "<message><result>NOK</result><desc>" + "Command not found : " + restCommArr[0] + "</desc></message>";
 
@@ -625,4 +647,5 @@ public class RestParser extends GenericRestParser {
 		
 		return null;
 	}
+	
 }

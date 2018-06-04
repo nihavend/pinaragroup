@@ -9,6 +9,7 @@
 	<fx:Script>
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
+			import com.likya.pinara.comps.GrpNameForm;
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.RoleFilters;
@@ -109,6 +110,15 @@
 				return stateInfo;
 			}
 
+			protected function changeGrpName_clickHandler(event:MouseEvent):void
+			{
+				var grpNameWindow:GrpNameForm = PopUpManager.createPopUp(this, GrpNameForm, true) as GrpNameForm;
+				grpNameWindow.title="Change Group Name";
+				grpNameWindow.selectedNetTreeId = selectedGroupId;
+				PopUpManager.centerPopUp(grpNameWindow);
+				grpNameWindow.setFocus();
+			}
+
 			
 		]]>
 	</fx:Script>
@@ -127,6 +137,7 @@
 		<jobdetail:GridStatuFilter data="{jobListXmlCollection}" width="100%" height="20"/>
 		<s:Button id="enableAllBtn" label="{resourceManager.getString('messages', 'enableAllBtnLabel')}" visible="false" includeInLayout="false" click="enableAllBtn_clickHandler(event)" />
 		<s:Button id="disableAllBtn" label="{resourceManager.getString('messages', 'disableAllBtnLabel')}" visible="false" includeInLayout="false" click="disableAllBtn_clickHandler(event)" />
+		<s:Button id="changeGrpNameBtn" label="Change Grp Name" visible="false" includeInLayout="false" click="changeGrpName_clickHandler(event)"/>
 		<s:Button visible="false"/>
 		<s:Button id="grpState" label="{resourceManager.getString('messages', 'disabledGroupLabel')}" chromeColor="0xFF2D00" visible="false" includeInLayout="false" fontWeight="bold" enabled="false" />
 		<s:Button visible="true" label="{resourceManager.getString('messages', 'showInTreeButLabel')}" click="button2_clickHandler(event)"/>

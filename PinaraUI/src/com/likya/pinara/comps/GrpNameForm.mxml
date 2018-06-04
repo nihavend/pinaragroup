@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!-- containers\spark\myComponents\ArrayEntryForm.mxml -->
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   width="520" height="150" borderAlpha="1"
+			   xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
+			   close="removeMe();" keyDown="titleWindow_keyDown(event);"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.TreeUtils;
+			
+			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+
+			[Bindable]
+			public var selectedNetTreeId:String;
+			
+			[Bindable]
+			private var serviceUrl:String = "/flex/restsrvc/grpNameChange/";
+			
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void {
+				var grpNameStr:String = "";
+				var searchResult:XMLList = TreeUtils.findNode((this.parentApplication.jobTree.liveTree.dataProvider[0] as XML), selectedNetTreeId);
+				
+				if (searchResult.hasOwnProperty("@title")) {
+					grpNameStr = searchResult[0].@title;
+				}
+				grpName.appendText(grpNameStr);
+			}
+			
+			private function titleWindow_keyDown(evt:KeyboardEvent):void {
+				if (evt.charCode == Keyboard.ESCAPE) {
+					this.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				}
+			}
+			
+			private function removeMe():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function updateGrpName_clickHandler(event:MouseEvent):void
+			{
+				Alert.show(resourceManager.getString("messages", "confirmUpdate"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processUpdate, null, Alert.CANCEL);
+			}
+			
+			private function processUpdate(eventObj:CloseEvent):void {
+				
+				if(eventObj.detail == Alert.CANCEL) {
+					return;
+				}
+				
+				var params:String = selectedNetTreeId + ":" + grpName.text;
+				BasicAuthenticationHandler.authAndCall(grpNameService, "changegrpname", params);
+
+			}
+			
+			protected function grpName_resultHandler(event:ResultEvent):void {
+				trace("jobManagerService_resultHandler returned : " + new Date().valueOf());
+				PopUpManager.removePopUp(this);
+				
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "NOK") {
+						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+					} 
+					if(returnXml.result == "OK") {
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+			}
+			
+			protected function grpName_faultHandler(event:FaultEvent):void {
+				Alert.show("Fault : " + event.message);
+			}
+			
+			protected function grpName_closeHandler():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<jobmanager:JobManager id="grpNameService" result="grpName_resultHandler(event)" fault="grpName_faultHandler(event)"/>
+	</fx:Declarations>
+
+	<s:VGroup paddingLeft="10" paddingTop="10">
+		<s:FormItem label="Group Name">
+			<s:TextInput id="grpName" width="100%"/>
+			<s:helpContent>
+				<s:Label text="Group Name"/>
+			</s:helpContent>
+		</s:FormItem>
+		
+		<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="300">
+			<s:Button label="{resourceManager.getString('messages', 'updateLabel')}" click="updateGrpName_clickHandler(event)" visible="true" includeInLayout="true"/>
+			<s:Button label="{resourceManager.getString('messages', 'cancelLabel')}" click="grpName_closeHandler();"/> 
+		</s:HGroup>
+	</s:VGroup>
+	
+</s:TitleWindow> 

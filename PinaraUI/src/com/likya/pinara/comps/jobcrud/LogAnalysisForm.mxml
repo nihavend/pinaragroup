@@ -43,17 +43,17 @@
 				}
 				
 				if(searchPattern.text == "") {
-					Alert.show("Search Pattern is  not defined !");
+					Alert.show(resourceManager.getString("messages", "logAnalySearchPatNotDefined"));
 					return false;
 				}
 				
 				if(thenSSS.stateName.selectedIndex == -1) {
-					Alert.show("[Then] State is not selected !");
+					Alert.show(resourceManager.getString("messages", "logAnalyThenStatetNotSelected"));
 					return false;
 				}
 				
 				if(elseActionCheckBox.selected && elseSSS.stateName.selectedIndex == -1) {
-					Alert.show("[Else] State is not selected !");
+					Alert.show(resourceManager.getString("messages", "logAnalyElseStatetNotSelected"));
 					return false;
 				}
 				/*

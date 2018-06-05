@@ -16,7 +16,7 @@
 			{
 				var regexVal:Boolean = ViewToJobXml.isValidSpecDays(specDays.text);
 				if(specDays.text.length > 0 && !regexVal) {
-					Alert.show("spec days not valid !");
+					Alert.show(resourceManager.getString("messages", "scheduleFormSpecDayNotValid"));
 					return false;
 				}
 				
@@ -33,7 +33,7 @@
 				} else if (selectedValue == "specificSchedule") {
 					this.dom.enabled = true;
 				} else {
-					Alert.show("You selected Nothing.");
+					Alert.show(resourceManager.getString("messages", "depNothingSelected"));
 				}
 			}
 			

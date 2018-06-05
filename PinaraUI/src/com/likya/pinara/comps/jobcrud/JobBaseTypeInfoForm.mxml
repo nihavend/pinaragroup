@@ -32,19 +32,19 @@
 					return false;
 				}*/
 				if(jsJobActivity.selectedIndex == -1) {
-					Alert.show("Job Activity is not selected !");
+					Alert.show(resourceManager.getString("messages", "jobBaseActivityNotSelected"));
 					return false;
 				}
 				if(jsJobPriority.selectedIndex == -1) {
-					Alert.show("Job Priority is not selected !");
+					Alert.show(resourceManager.getString("messages", "jobBasePriorityNotSelected"));
 					return false;
 				}
 				if(jsName.text == "") {
-					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					Alert.show(resourceManager.getString("messages", "jobBaseNameNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
 					return false;
 				}
 				if(jsCommand.text == "") {
-					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
+					Alert.show(resourceManager.getString("messages", "jobBaseCommandNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
 					return false;
 				}
 				

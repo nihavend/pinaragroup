@@ -97,13 +97,13 @@
 						try {
 							remoteSchModuleInfo.load();
 						} catch(err:Error) {
-							Alert.show("Hata Oluştu : " + err.message);
+							Alert.show(resourceManager.getString("messages", "error") + err.message);
 							//trace(err);
 						}
 					}
 					
 				} catch(err:Error) {
-					Alert.show("Hata Oluştu : " + errorString + " \nSunucu cevabı : " + jobDetailXml);
+					Alert.show(resourceManager.getString("messages", "error") + errorString + resourceManager.getString("messages", "jobBaseInfoServerAnswer") + jobDetailXml);
 					trace(err);
 				}
 			}

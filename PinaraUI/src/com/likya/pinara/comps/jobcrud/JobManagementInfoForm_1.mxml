@@ -57,7 +57,7 @@
 				if(autoRetry.selectedItem == "true") {
 					
 					if(arStepValue.text == "") {
-						Alert.show("Autoretry step is not defined !");
+						Alert.show(resourceManager.getString("messages", "jobManageAutoStepNotDefined"));
 						return false;
 					}
 					

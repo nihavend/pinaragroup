@@ -189,7 +189,7 @@
 			
 			private function nrpeFaultHandler(event:FaultEvent):void
 			{
-				Alert.show("Nrpe vekilinin çalıştığından ve bağlantı ayarlarının doğru yapıldığından emin olun !");
+				Alert.show(resourceManager.getString("messages", "itemTreeNrpeAgent"));
 			}
 			
 			

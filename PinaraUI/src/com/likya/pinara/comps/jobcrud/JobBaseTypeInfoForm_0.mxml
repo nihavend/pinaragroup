@@ -38,21 +38,21 @@
 			{
 				if(jsName.text == "") {
 					// Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
-					Alert.show("Job Name is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					Alert.show(resourceManager.getString("messages", "jobBaseNameNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				if(jsCommand.text == "") {
 					// Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent.parent.parent.parent).label);
-					Alert.show("Job Command is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					Alert.show(resourceManager.getString("messages", "jobBaseCommandNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				if(jsJobType.selectedItem == undefined) {
-					Alert.show("Job Type is not selected !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					Alert.show(resourceManager.getString("messages", "jobBaseTypeNotSelected"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				if(jsJobType.selectedItem == BATCH_PROCESS) {
 					if(!regExPath.test(jsCommand.text) || jsCommand.text.indexOf(BATCH_FILE_EXT) == -1) {
-						Alert.show("Windows path or batch file extension is not defined !", "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+						Alert.show(resourceManager.getString("messages", "jobBaseWinPath"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 						return false;
 					}
 				}

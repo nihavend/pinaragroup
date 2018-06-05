@@ -96,7 +96,7 @@ width="100%" height="100%"-->
 			
 			private function initData(graphXML:XML):void {
 				if (graphXML == "false") {
-					Alert.show("Can not read xml !");
+					Alert.show(resourceManager.getString("messages", "viewDepGraphCantReadXml"));
 				}
 				
 				var rootNodeId:String = graphXML.Meta.rootnodeid;

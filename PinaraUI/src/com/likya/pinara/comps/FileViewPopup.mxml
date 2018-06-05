@@ -133,7 +133,7 @@
 				 **/
 				
 				if(returnTxt != null) {
-					Alert.show("Veri dosyası biçim bozuk, düz metin olarak gösterilecek !");
+					Alert.show(resourceManager.getString("messages", "fileViewPopDataFileCorrupted"));
 					mainTextField.textFlow = TextConverter.importToFlow(returnTxt, TextConverter.PLAIN_TEXT_FORMAT);
 					callLater(updateEndOff);
 				} else if(returnXml.code == "-99" || returnXml.code == "-1") {
@@ -188,7 +188,7 @@
 					setCaretPos();
 					setLineNumbers();
 				} else {
-					Alert.show('no more results');
+					Alert.show(resourceManager.getString("messages", "fileViewPopNoMoreResult"));
 				}
 				
 			}

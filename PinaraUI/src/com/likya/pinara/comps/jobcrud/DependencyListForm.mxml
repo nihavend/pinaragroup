@@ -58,7 +58,7 @@
 			{
 				
 				if(stateName.selectedIndex == -1 || selectedJobInfo.text == null || selectedJobInfo.text == "") {
-					Alert.show("State or job not selected !");
+					Alert.show(resourceManager.getString("messages", "depStateNotSelected"));
 					return;
 				}
 				
@@ -81,7 +81,7 @@
 					//trace(ObjectUtil.toString(item));
 					
 					if(item.jobinfo == selectedJobInfo.text && item.stateinfo == jobInfoTmp) {
-						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
+						Alert.show(resourceManager.getString("messages", "depAlreadyDefined") + ObjectUtil.toString(item));
 						return;
 					}
 					
@@ -113,7 +113,7 @@
 			protected function depDegistir_clickHandler(event:MouseEvent):void
 			{
 				if(stateName.selectedIndex == -1 || selectedJobInfo.text == null || selectedJobInfo.text == "") {
-					Alert.show("State or job not selected !");
+					Alert.show(resourceManager.getString("messages", "depStateNotSelected"));
 					return;
 				}
 				
@@ -143,7 +143,7 @@
 					}*/
 					
 					if(item.jobinfo == selectedJobInfo.text && item.stateinfo == jobInfoTmp) {
-						Alert.show("Dependency already defined : " + ObjectUtil.toString(item));
+						Alert.show(resourceManager.getString("messages", "depAlreadyDefined") + ObjectUtil.toString(item));
 						return;
 					}
 				}
@@ -225,7 +225,7 @@
 					lbldel.visible = true;
 					lblrel.visible = true;
 				} else {
-					Alert.show("You selected Nothing.");
+					Alert.show(resourceManager.getString("messages", "depNothingSelected"));
 				} 
 			}
 			

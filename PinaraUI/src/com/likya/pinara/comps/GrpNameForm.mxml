@@ -78,7 +78,7 @@
 				try {
 					returnXml = XML(event.message.body);
 					if(returnXml.result == "NOK") {
-						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+						Alert.show(returnXml.desc.toString(), resourceManager.getString("messages", "jobDetailsError"));
 					} 
 					if(returnXml.result == "OK") {
 						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
@@ -89,7 +89,7 @@
 			}
 			
 			protected function grpName_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);
+				Alert.show(resourceManager.getString("messages", "jobDetailsFault") + event.message);
 			}
 			
 			protected function grpName_closeHandler():void {

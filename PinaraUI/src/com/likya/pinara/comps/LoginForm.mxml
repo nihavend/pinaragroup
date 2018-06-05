@@ -47,13 +47,13 @@
 					dispatchEvent(new ResourceEvent(ResourceEvent.LOGIN, userInfo));
 					
 				} else {
-					Alert.show("Geçerlilik Hatası !", "Hata", Alert.OK, this, null, null);
+					Alert.show(resourceManager.getString("messages", "loginFormValidationError"), "Hata", Alert.OK, this, null, null);
 				}
 			}
 			
 			private function faultHandler(event:FaultEvent):void {
 				//Alert.show("Check if your database is running !");
-				Alert.show("Veri tabanınızın çalışıp çalışmadığını kontrol edin !");
+				Alert.show(resourceManager.getString("messages", "loginFormDBError"));
 			}
 			
 			private function changeLocale(locale:String):void {

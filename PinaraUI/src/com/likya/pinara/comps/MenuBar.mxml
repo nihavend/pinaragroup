@@ -274,7 +274,7 @@
 					//Alert.show(returnXml);
 					returnXml = XML(event.message.body);
 					if(returnXml.result == "NOK") {
-						Alert.show(returnXml.desc.toString(), "Hata Oluştu !");
+						Alert.show(returnXml.desc.toString(), resourceManager.getString("messages", "jobDetailsError"));
 					} 
 					if(XML(returnXml).hasOwnProperty("netTreeId")) {
 						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, returnXml));
@@ -285,7 +285,7 @@
 			}
 			
 			protected function jobManagerService_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);	
+				Alert.show(resourceManager.getString("messages", "jobDetailsFault") + event.message);	
 			}
 			
 			protected function suspendAppResult_resultHandler(event:ResultEvent):void {
@@ -321,7 +321,7 @@
 			}
 			
 			protected function xmlService_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);
+				Alert.show(resourceManager.getString("messages", "jobDetailsFault") + event.message);
 			}
 			
 			protected function pinaraMenuBar_creationCompleteHandler(event:FlexEvent):void

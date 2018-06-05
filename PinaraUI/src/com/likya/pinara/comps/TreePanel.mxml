@@ -184,7 +184,7 @@
 					}
 					liveTree.validateNow();
 				} catch(err:Error) {
-					Alert.show("Hata Oluştu : " + errorString);
+					Alert.show(resourceManager.getString("messages", "jobDetailsError") + errorString);
 					trace(err);
 				}
 				

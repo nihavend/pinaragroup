@@ -32,11 +32,11 @@
 					return false;
 				}*/
 				if(jsJobActivity.selectedIndex == -1) {
-					Alert.show("Job Activity is not selected !");
+					Alert.show(resourceManager.getString("messages", "jobBaseActivityNotSelected"));
 					return false;
 				}
 				if(jsJobPriority.selectedIndex == -1) {
-					Alert.show("Job Priority is not selected !");
+					Alert.show(resourceManager.getString("messages", "jobBasePriorityNotSelected"));
 					return false;
 				}
 				checkLogPath();

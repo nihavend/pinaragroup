@@ -118,7 +118,7 @@
 								
 							default:
 							{
-								Alert.show(" Tanımsız işlem komutu : " + compId);
+								Alert.show(resourceManager.getString("messages", "manageButUndefinedOperation") + compId);
 								break;
 							}
 						}

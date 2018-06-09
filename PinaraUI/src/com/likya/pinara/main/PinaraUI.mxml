@@ -400,10 +400,10 @@
 					var cancelLabel:String = Alert.cancelLabel;
 					var width:Number = Alert.buttonWidth;
 					
-					Alert.okLabel = "Recover Etsin";
-					Alert.cancelLabel = "Sıfırdan Başlasın";
+					Alert.okLabel = resourceManager.getString("messages", "pinaraRecover");
+					Alert.cancelLabel = resourceManager.getString("messages", "pinaraStartScratch");
 					Alert.buttonWidth = 120;
-					Alert.show("Uygulama nasıl başlasın ?", warningStr, Alert.OK|Alert.CANCEL, this, doRecoveryOnDemand, null, Alert.CANCEL);
+					Alert.show(resourceManager.getString("messages", "pinaraAppStartChoice"), warningStr, Alert.OK|Alert.CANCEL, this, doRecoveryOnDemand, null, Alert.CANCEL);
 					Alert.okLabel = okLabel;
 					Alert.cancelLabel = cancelLabel;
 					Alert.buttonWidth = width;
@@ -448,10 +448,10 @@
 					// currentState = "anaSayfaState"
 					// Alert.show("Giriş başarılı :)");
 				} else if (event.status == 400) {
-					Alert.show("Kullacını adı ya da şifre hatalı veya giriş izniniz yok !");
+					Alert.show(resourceManager.getString("messages", "pinaraPassOrUserError"));
 					ModelLocator.getInstance().currentUser.username = "";
 				} else if (event.status == 0) {
-					Alert.show("Server is not available, check pls !");
+					Alert.show(resourceManager.getString("messages", "pinaraServerUnavailable"));
 				} else {
 					Alert.show("Unexpected [Code : + " + event.status + "] Event : " + event.toString());
 				}
@@ -460,7 +460,7 @@
 			
 			private function securityError(event:SecurityErrorEvent):void {
 				CursorManager.removeCursor(ModelLocator.getInstance().currentBusyCursorId);
-				Alert.show("securityError : " + event.toString());
+				Alert.show(resourceManager.getString("messages", "pinaraSecurityError") + event.toString());
 			}
 			
 			private function ioErrorHandler(event:IOErrorEvent):void {
@@ -645,7 +645,7 @@
 				PopUpManager.removePopUp(dummyWindow);
 				CursorManager.removeBusyCursor();
 				logout(null);
-				Alert.show("Pınara Server is not ready, check server logs for detail info !");
+				Alert.show(resourceManager.getString("messages", "pinaraServerNotReady"));
 			}
 			
 			protected function refreshTreeAfterRelogin():void {

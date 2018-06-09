@@ -29,7 +29,7 @@
 			public function validateForm():Boolean
 			{
 				if(statusInfoGrid.dataProvider.length == 0) {
-					Alert.show("Job Status Info List is empty !");
+					Alert.show(resourceManager.getString("messages", "stateInfoJobStatusListEmpty"));
 					return false;
 				}
 				
@@ -63,7 +63,7 @@
 					retCodeDegistir.enabled = true;
 					retCodeList.selectedIndex = myDp.length - 1;
 				} else {
-					Alert.show("Return code already defined : " + retCode.text);
+					Alert.show(resourceManager.getString("messages", "stateInfoRetCodeAlreadyDefined") + retCode.text);
 				}
 				
 				/*if(myDp.length > 0) {
@@ -148,13 +148,13 @@
 				// var stateArray:Object = {statusname:jobStatusName.selectedItem, desc:statusDescription.text, retCodeList: retCodeList.dataProvider/*new ArrayCollection(["code:a", "desc:b"])*/};
 				
 				if(jobStatusName.selectedIndex == -1 || retCodeList.dataProvider.length == 0) {
-					Alert.show("Status name not selected !");
+					Alert.show(resourceManager.getString("messages", "stateInfoStatusNameNotSelected"));
 					return;
 				}
 				
 				for each (var item:Object in statusInfoGrid.dataProvider.toArray()) {
 					if(jobStatusName.selectedItem == item.statusname) {
-						Alert.show("Status Name already defined : " + item.statusname);
+						Alert.show(resourceManager.getString("messages", "stateInfoStatusNameAlreadyDefined") + item.statusname);
 						return;
 					}
 				}
@@ -185,7 +185,7 @@
 			protected function jobStatusDegistir_clickHandler(event:MouseEvent):void
 			{
 				if(jobStatusName.selectedIndex == -1 || retCodeList.dataProvider.length == 0) {
-					Alert.show("Status name not selected !");
+					Alert.show(resourceManager.getString("messages", "stateInfoStatusNameNotSelected"));
 					return;
 				}
 				

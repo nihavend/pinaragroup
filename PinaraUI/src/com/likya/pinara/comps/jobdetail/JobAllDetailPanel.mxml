@@ -90,7 +90,7 @@
 				var testFlag:Boolean = isNaN(Number(selectedJobId));
 				
 				if(testFlag) {
-					Alert.show("Selected Job id is not valid ! >> " + selectedJobId);
+					Alert.show(resourceManager.getString("messages", "jobDetailJobNotValid") + selectedJobId);
 					return;
 				}
 				

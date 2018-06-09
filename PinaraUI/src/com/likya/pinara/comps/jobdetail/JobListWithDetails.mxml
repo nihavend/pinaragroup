@@ -311,14 +311,14 @@
 
 					if(XML(returnXml).hasOwnProperty("desc")) {
 						// WindowUtils.showDummyWindow(this, returnXml.desc.toString());
-						Alert.show(returnXml.desc.toString() + " Tree data is refreshed !");
+						Alert.show(returnXml.desc.toString() + resourceManager.getString("messages", "jobDetailsTreeDataRefresh"));
 					} else {
 						/**
 						 * Ekran çalışırken server kapanıp açıldığında her şeyin yenilenmesi lazım,
 						 * buna nettree id ler de dahil. Bunun için zorla login sonrası ağaç güncellemesi
 						 * yapılıyor.
 						 */
-						Alert.show("Server state is not available, please relogin !");
+						Alert.show(resourceManager.getString("messages", "jobDetailsServerState"));
 						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.LOGOUT));
 					}
 					return;
@@ -391,13 +391,13 @@
 						try {
 							depGraphModuleInfo.load(null, null, null, moduleFactory);
 						} catch(err:Error) {
-							Alert.show("Hata Oluştu : " + err.message);
+							Alert.show(resourceManager.getString("messages", "jobDetailsError") + err.message);
 							//trace(err);
 						}
 					}
 					
 				} catch(err:Error) {
-					Alert.show("Hata Oluştu : " + errorString);
+					Alert.show(resourceManager.getString("messages", "jobDetailsError") + errorString);
 					trace(err);
 				}
 			}
@@ -440,7 +440,7 @@
 			}
 			
 			protected function graphLayerService_faultHandler(event:FaultEvent):void {
-				Alert.show("Fault : " + event.message);	
+				Alert.show( resourceManager.getString("messages", "jobDetailsFault") + event.message);	
 			}
 			
 			protected function pinaraJobListGrid_creationCompleteHandler(event:FlexEvent):void

@@ -55,19 +55,19 @@
 				}	
 */				
 				if(timoutValue.text == "") {
-					Alert.show("Timeout is not defined !");
+					Alert.show(resourceManager.getString("messages", "jobManageTimeoutNotDefined"));
 					return false;
 				}	
 
 				if(expectedValue.text == "") {
-					Alert.show("Expected time is not defined !");
+					Alert.show(resourceManager.getString("messages", "jobManageExpectedTimeNotDefined"));
 					return false;
 				}	
 				
 				if(autoRetry.selectedItem == "true") {
 					
 					if(arStepValue.text == "") {
-						Alert.show("Autoretry step is not defined !");
+						Alert.show(resourceManager.getString("messages", "jobManageAutoStepNotDefined"));
 						return false;
 					}
 

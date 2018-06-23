@@ -19,11 +19,14 @@
 			import mx.controls.Alert;
 			
 			import spark.components.NavigatorContent;
+			import spark.components.TextInput;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
 			
 			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
 			public var jsJobWorkDir:TextInput = new TextInput();
+			
+			private static var invalidFileNameChars:RegExp = /[\/\\:*?"<>|%@]/;
 			
 			public function validateForm():Boolean
 			{
@@ -37,6 +40,10 @@
 				}
 				if(jsJobPriority.selectedIndex == -1) {
 					Alert.show(resourceManager.getString("messages", "jobBasePriorityNotSelected"));
+					return false;
+				}
+				if(jsJobLogFile.text != "" && invalidFileNameChars.test(jsJobLogFile.text)) {
+					Alert.show(resourceManager.getString("messages", "jobBaseLogFilename"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
 					return false;
 				}
 				checkLogPath();

@@ -90,6 +90,13 @@
 		<copy file="${src.dir}/bin/start-notr.bat" todir="${dest.dir}"/>
 		<copy file="${src.dir}/bin/start-notr.sh" todir="${dest.dir}"/>
 		<chmod file="${dest.dir}/start-notr.sh" perm="ugo+rx"/>
+		
+		<copy file="${src.dir}/bin/stop.bat" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/stopf.bat" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/stop.sh" todir="${dest.dir}"/>
+		<copy file="${src.dir}/bin/stopf.sh" todir="${dest.dir}"/>
+		<chmod file="${dest.dir}/stop.sh" perm="ugo+rx"/>
+		<chmod file="${dest.dir}/stopf.sh" perm="ugo+rx"/>
 
 		<copy file="${src.dir}/bin/README.txt" todir="${dest.dir}"/>
 		

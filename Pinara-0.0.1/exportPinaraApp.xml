@@ -59,6 +59,7 @@
 		<copy file="../pinara-libs/libs/tlostestjob.jar" todir="${dest.dir}/libs"/>
 
 		<mkdir dir="${dest.dir}/jobs"/>
+		<copy file="${src.dir}/jobs/job01.bat" todir="${dest.dir}/jobs"/>
 		<copy file="${src.dir}/jobs/job01.sh" todir="${dest.dir}/jobs"/>
 		<copy file="${src.dir}/jobs/job02.sh" todir="${dest.dir}/jobs"/>
 		<copy file="${src.dir}/jobs/job03.sh" todir="${dest.dir}/jobs"/>
@@ -107,13 +108,22 @@
 		
 		<mkdir dir="${dest.dir}/data/pnr"/>
 		<copy file="${src.dir}/testjob/1.pjf" todir="${dest.dir}/data/pnr"/>
+		<copy file="${src.dir}/testjob/2.pjf" todir="${dest.dir}/data/pnr"/>
+		<copy file="${src.dir}/testjob/3.pjf" todir="${dest.dir}/data/pnr"/>
 		
 		<delete dir="${releases}/pinaraDist"/>
 		<mkdir dir="${releases}/pinaraDist"/>
 
-		<tar destfile="${releases}/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/>
-		<gzip destfile="${releases}/pinaraDist/pinaraWLM-${version}.tar.gz" src="${releases}/pinaraDist/pinaraWLM-${version}.tar"/>
-		<delete file="${releases}/pinaraDist/pinaraWLM$-{version}.tar"/>
-
+		<!--tar destfile="${releases}/pinaraDist/pinaraWLM-${version}.tar" basedir="${dest.dir}"/-->
+		
+		<tstamp>
+		      <format property="current_timestamp" pattern="yyyyMMdd-HHmmss"  locale="tr,TR" />
+		</tstamp>
+		
+		<tar destfile="${releases}/pinaraDist/pinaraWLM-${version}-${current_timestamp}.tar" basedir="${dest.dir}" />
+		
+		<gzip destfile="${releases}/pinaraDist/pinaraWLM-${version}-${current_timestamp}.tar.gz" src="${releases}/pinaraDist/pinaraWLM-${version}-${current_timestamp}.tar"/>
+		<delete file="${releases}/pinaraDist/pinaraWLM$-{version}-${current_timestamp}.tar"/>
+ 
 	</target>
 </project>

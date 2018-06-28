@@ -162,7 +162,7 @@ public class PinaraOutputManager implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		Pinara.getLogger().info(Pinara.getMessage("PinaraOutputManager kapatıldı"));
+		Pinara.getLogger().info(Pinara.getMessage("PinaraOutputManager.0"));
 		Pinara.getLogger().info("PinaraOutputManager : " + Pinara.getMessage("PinaraMailServer.8") + pinaraOutput.getOutputList().size());
 	}
 

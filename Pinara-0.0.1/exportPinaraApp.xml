@@ -63,6 +63,7 @@
 		<copy file="${src.dir}/jobs/job02.sh" todir="${dest.dir}/jobs"/>
 		<copy file="${src.dir}/jobs/job03.sh" todir="${dest.dir}/jobs"/>
 		<copy file="${src.dir}/jobs/job04.sh" todir="${dest.dir}/jobs"/>
+		<copy file="${src.dir}/jobs/job01.bat" todir="${dest.dir}/jobs"/>
 		
 		<!-- delete file="${dest.dir}/flexroot/PinaraUI.swf"/>
     	<delete file="${dest.dir}/flexroot/ViewDepGraph.swf"/-->
@@ -107,6 +108,9 @@
 		
 		<mkdir dir="${dest.dir}/data/pnr"/>
 		<copy file="${src.dir}/testjob/1.pjf" todir="${dest.dir}/data/pnr"/>
+		<copy file="${src.dir}/testjob/2.pjf" todir="${dest.dir}/data/pnr"/>
+		<copy file="${src.dir}/testjob/3.pjf" todir="${dest.dir}/data/pnr"/>
+		
 		
 		<delete dir="${releases}/pinaraDist"/>
 		<mkdir dir="${releases}/pinaraDist"/>

@@ -16,12 +16,18 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.model.AppInfo;
+			import com.likya.pinara.model.ModelLocator;
+			
 			import mx.controls.Alert;
 			
 			import spark.components.NavigatorContent;
 			import spark.components.TextInput;
 			import spark.events.IndexChangeEvent;
 			import spark.events.TextOperationEvent;
+			
+			[Bindable] 
+			public var appInfo:AppInfo = ModelLocator.getInstance().appInfo;
 			
 			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
 			public var jsJobWorkDir:TextInput = new TextInput();
@@ -54,10 +60,10 @@
 			protected function checkLogPath():void
 			{
 				var logPath:String = jsJobLogPath.text;
-				//unix path - windows path
-				if(logPath.indexOf("/") != -1 && logPath.indexOf("/", logPath.length-1) == -1) {
+				
+				if(appInfo.ostype == AppInfo.OS_UNIX && logPath.indexOf("/", logPath.length-1) == -1) {
 					logPath = logPath + "/";
-				} else if(logPath.indexOf("\\") != -1 && logPath.indexOf("\\", logPath.length-1) == -1) {
+				} else if(appInfo.ostype == AppInfo.OS_WINDOWS && logPath.indexOf("\\", logPath.length-1) == -1) {
 					logPath = logPath + "\\";
 				} else {
 					logPath = logPath;

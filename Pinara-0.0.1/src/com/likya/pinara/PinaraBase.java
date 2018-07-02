@@ -178,7 +178,7 @@ public abstract class PinaraBase {
 		PinaraSMSHandler pinaraSMSHandler = null;
 
 		try {
-			logger.info(Pinara.getMessage("Tlos.33") + libName);
+			logger.info(Pinara.getMessage("Pinara.33") + libName);
 			@SuppressWarnings("rawtypes")
 			Class handlerClass = Class.forName(libName);
 
@@ -187,10 +187,10 @@ public abstract class PinaraBase {
 			if (myObject instanceof PinaraSMSHandler) {
 				pinaraSMSHandler = (PinaraSMSHandler) (myObject);
 			}
-			logger.info(Pinara.getMessage("Tlos.34"));
+			logger.info(Pinara.getMessage("Pinara.34"));
 		} catch (Exception e) {
-			System.out.println(Pinara.getMessage("Tlos.35") + libName);
-			System.out.println(Pinara.getMessage("Tlos.36"));
+			System.out.println(Pinara.getMessage("Pinara.35") + libName);
+			System.out.println(Pinara.getMessage("Pinara.36"));
 			e.printStackTrace();
 		}
 

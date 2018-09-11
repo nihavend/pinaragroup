@@ -37,6 +37,9 @@ public class RestParser extends GenericRestParser {
 	private static final String JOBLIST_XML_CMD = "joblistxml";
 	public static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
+	
+	private static final String MAILINFO_XML_READ = "readmailinfo";
+	private static final String MAILINFO_XML_WRITE = "writemailinfo";
 
 	public static final String CMD_JOBLIST = "jobList";
 
@@ -458,6 +461,16 @@ public class RestParser extends GenericRestParser {
 
 			break;
 			
+		case RestParser.MAILINFO_XML_READ:
+			try {
+				retStr = PinaraAppManagerImpl.getInstance().readMailInfo();
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
+			}
+			
+			break;
+			
 		default:
 			retStr = "<message><result>NOK</result><desc>" + "Command not found : " + restCommArr[0] + "</desc></message>";
 
@@ -574,13 +587,26 @@ public class RestParser extends GenericRestParser {
 			}
 
 			break;
-
+			
+		case RestParser.MAILINFO_XML_WRITE:
+			try {
+				String mailInfoXmlStr = extractPostInfo(bufferString, RestParser.MAILINFO_XML_WRITE);
+				PinaraAppManagerImpl.getInstance().writeMailInfo(mailInfoXmlStr);
+				retStr = "<message><result>OK</result></message>";
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
+			}
+			
+			break;
+			
 		default:
 			retStr = "<message><result>NOK : " + "Command not found : " + switchId + "</result></message>";
 
 			break;
 		}
 
+		Pinara.getLogger().debug(uriTxt + " command received and response forwarded !");
 		responseBytes = retStr.getBytes();
 
 		return responseBytes;
@@ -632,6 +658,27 @@ public class RestParser extends GenericRestParser {
 		}
 
 		return null;
+	}
+	
+	private static String extractPostInfo(String bufferString, String command) {
+		
+		String data = bufferString.split("<datamess>")[1].split("</datamess>")[0];
+
+		switch (command) {
+
+		case MAILINFO_XML_WRITE:
+			return data;
+		default:
+			try {
+				throw new Exception("Undefined command value : " + command);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+
+		return null;
+
 	}
 	
 	private static String getFamilyJobId(String jobId) {

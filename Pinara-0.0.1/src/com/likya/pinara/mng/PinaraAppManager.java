@@ -68,4 +68,8 @@ public interface PinaraAppManager {
 	public void disableGroup(String grpId) throws PinaraAuthenticationException;
 	
 	public void changeGroupName(String netTreeGrpId, String newGrpName) throws PinaraAuthenticationException;
+	
+	public String readMailInfo() throws PinaraAuthenticationException, PinaraXMLValidationException;
+	
+	public void writeMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException;
 }

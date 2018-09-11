@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 	   xmlns:s="library://ns.adobe.com/flex/spark" 
+		 	   xmlns:mx="library://ns.adobe.com/flex/mx" 
+		       width="100%" height="100%"
+			   title="{resourceManager.getString('messages', 'mailConfigurationwWindowTitle')}"
+			   close="removeMe();"
+			   xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" xmlns:utils="com.likya.pinara.utils.*">
+	
+	<s:states>
+		<s:State name="defined"/>
+		<s:State name="undefined"/>
+	</s:states>
+
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace local "*";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		.toggleSwitch
+		{
+			skinClass:ClassReference("com.likya.pinara.skins.ToggleSwitchSkin");
+		}
+	</fx:Style>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
+			import com.likya.pinara.utils.ConfigurationsUtil;
+			import com.likya.pinara.utils.JobXmlToView;
+			import com.likya.pinara.utils.SSS;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridSelectionEvent;
+			import spark.events.IndexChangeEvent;
+			
+			[Bindable]
+			public var mailStateInfoArray:ArrayList;
+			
+			[Bindable]
+			public var mailInfoArray:ArrayList;
+			
+			[Bindable]
+			public var mailPropArray:ArrayList;
+			
+			[Bindable]
+			public var mailInfoXml:XML;
+			
+			private function removeMe():void {
+				PopUpManager.removePopUp(this);
+			}
+	
+			public function resetList(item:DropDownList):void {
+				item.dataProvider = null;
+				item.enabled = false;
+			}
+			
+			protected function stateName_changeHandler(event:IndexChangeEvent):void
+			{
+				var data:ArrayCollection = new ArrayCollection();
+				
+				if(stateName.selectedItem.value == "PENDING") {
+					data = new ArrayCollection(
+						[   
+							{value:"CREATED"},
+							{value:"VALIDATED"},
+							{value:"IDLED"},
+							{value:"DEACTIVATED"},
+							{value:"READY"},
+							{value:"PAUSED"}
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				} else if(stateName.selectedItem.value == "RUNNING") {
+					data = new ArrayCollection(
+						[   
+							{value:"STAGE-IN"},
+							{value:"MIGRATING"},
+							{value:"ON-RESOURCE"},
+							{value:"HELD"},
+							{value:"STAGE-OUT"}
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				} else if(stateName.selectedItem.value == "CANCELLED") {
+					data = null;
+					substateName.enabled = false;
+					resetList(statusName);
+				} else if(stateName.selectedItem.value == "FAILED") {
+					data = null;
+					substateName.enabled = false;
+					resetList(statusName);
+				} else if(stateName.selectedItem.value == "FINISHED") {
+					data = new ArrayCollection(
+						[   
+							{value:"STOPPED"},
+							{value:"SKIPPED"},
+							{value:"COMPLETED"},
+						]                
+					);
+					substateName.enabled = true;
+					resetList(statusName);
+				}
+				
+				substateName.dataProvider = data;
+			}
+
+			protected function substateName_changeHandler(event:IndexChangeEvent):void
+			{
+				var data:ArrayCollection = new ArrayCollection();
+				
+				if(substateName.selectedItem.value == "CREATED") {
+					data = new ArrayCollection(
+						[   
+							{value:"DEVELOPMENT"},
+							{value:"TEST"},
+							{value:"REQUEST"},
+							{value:"DEPLOYED"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "VALIDATED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "IDLED") {
+					data = new ArrayCollection(
+						[   
+							{value:"BYTIME"},
+							{value:"BYUSER"},
+							{value:"BYEVENT"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "DEACTIVATED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "READY") {
+					data = new ArrayCollection(
+						[   
+							{value:"LOOKFOR-RESOURCE"},
+							{value:"USER-CHOOSE-RESOURCE"},
+							{value:"USER-WAITING"},
+							{value:"WAITING"},
+							{value:"TRANSFERING"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "PAUSED") {
+					data = new ArrayCollection(
+						[   
+							{value:"BYUSER"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "STAGE-IN") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "MIGRATING") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "ON-RESOURCE") {
+					data = new ArrayCollection(
+						[   
+							{value:"TIME-IN"},
+							{value:"TIME-OUT"}
+						]                
+					);
+					statusName.enabled = true;
+				} else if(substateName.selectedItem.value == "HELD") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "STAGE-OUT") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "STOPPED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "SKIPPED") {
+					data = null;
+					statusName.enabled = false;
+				} else if(substateName.selectedItem.value == "COMPLETED") {
+					data = new ArrayCollection(
+						[   
+							{value:"SUCCESS"},
+							{value:"WARNING"},
+							{value:"FAILED"}
+						]                
+					);
+					statusName.enabled = true;
+				}
+				
+				statusName.dataProvider = data;
+			}
+			
+			protected function mailStateGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				if(mailStateInfoGrid.selectedIndex != -1) {
+					mailStateCikar.enabled = true;
+					mailStateDegistir.enabled = true;
+					
+					var sssTmp:SSS = new SSS(mailStateInfoGrid.selectedItem.stateinfo);
+					
+					stateName.selectedIndex = JobXmlToView.indexOf(sssTmp.state, stateName.dataProvider.toArray());
+					
+					stateName_changeHandler(null);
+					if(substateName.dataProvider != null) {
+						(substateName.dataProvider as ArrayCollection).refresh();
+					}
+					
+					if(sssTmp.substate != null) {
+						substateName.selectedIndex = JobXmlToView.indexOf(sssTmp.substate, substateName.dataProvider.toArray());
+						substateName_changeHandler(null);
+						if(statusName.dataProvider != null) {
+							(statusName.dataProvider as ArrayCollection).refresh();
+						}
+					}
+					
+					if(sssTmp.status != null) {
+						statusName.selectedIndex = JobXmlToView.indexOf(sssTmp.status, statusName.dataProvider.toArray());
+					}
+
+				} else {
+					mailStateCikar.enabled = false;
+					mailStateDegistir.enabled = false;
+				}
+			}
+
+			
+			protected function mailStateEkle_clickHandler(event:MouseEvent):void
+			{
+				var mailStateInfoTmp:String = stateName.selectedItem.value;
+				
+				if(substateName.selectedItem != null) {
+					mailStateInfoTmp += ":" + substateName.selectedItem.value;
+				}
+				
+				if(statusName.selectedItem != null) {
+					mailStateInfoTmp += ":" + statusName.selectedItem.value;
+				}
+				
+				for each (var item:Object in mailStateInfoGrid.dataProvider.toArray()) {
+					if(item.stateinfo == mailStateInfoTmp) {
+						Alert.show(resourceManager.getString("messages", "mailStateAlreadyDefinded") + item.stateinfo);
+						return;
+					}
+				}
+				
+				var mailStateArray:Object = {stateinfo:mailStateInfoTmp};
+				mailStateInfoGrid.dataProvider.addItem(mailStateArray);
+			}
+			
+			protected function mailStateCikar_clickHandler(event:MouseEvent):void
+			{
+				if(mailStateInfoGrid.dataProvider != null && mailStateInfoGrid.dataProvider.length != 0 && mailStateInfoGrid.selectedIndex != -1) {
+					mailStateInfoGrid.dataProvider.removeItemAt(mailStateInfoGrid.selectedIndex);
+					if(mailStateInfoGrid.dataProvider.length == 0) {
+						mailStateCikar.enabled = false;
+					}
+				} else {
+					mailStateCikar.enabled = false;
+				}
+			}
+
+			protected function mailStateDegistir_clickHandler(event:MouseEvent):void
+			{
+				var mailStateInfoTmp:String = stateName.selectedItem.value;
+				
+				if(substateName.selectedItem != null) {
+					mailStateInfoTmp += ":" + substateName.selectedItem.value;
+				}
+				
+				if(statusName.selectedItem != null) {
+					mailStateInfoTmp += ":" + statusName.selectedItem.value;
+				}
+				
+				for each (var item:Object in mailStateInfoGrid.dataProvider.toArray()) {
+					if(item.stateinfo == mailStateInfoTmp) {
+						Alert.show(resourceManager.getString("messages", "mailStateAlreadyDefinded") + item.stateinfo);
+						return;
+					}
+				}
+				
+				var mailStateArray:Object = {stateinfo:mailStateInfoTmp};
+				mailStateInfoGrid.dataProvider.setItemAt(mailStateArray, mailStateInfoGrid.selectedIndex);
+			}
+			
+			protected function mailEkle_clickHandler(event:MouseEvent):void
+			{
+				var mailInfo:String = toText.text;
+				
+				if(mailInfo == null || mailInfo == "" ) {
+					Alert.show(resourceManager.getString("messages", "mailToNotDefined"));
+					return;
+				}
+				
+				for each (var item:Object in mailListGrid.dataProvider.toArray()) {
+					if(item.mailinfo == mailInfo) {
+						Alert.show(resourceManager.getString("messages", "mailToAlreadyDefined") + item.mailinfo);
+						return;
+					}
+				}
+				
+				var mailInfoArray:Object = {mailinfo:mailInfo};
+				mailListGrid.dataProvider.addItem(mailInfoArray);
+			}
+			
+			protected function mailCikar_clickHandler(event:MouseEvent):void
+			{
+				if(mailListGrid.dataProvider != null && mailListGrid.dataProvider.length != 0 && mailListGrid.selectedIndex != -1) {
+					mailListGrid.dataProvider.removeItemAt(mailListGrid.selectedIndex);
+					if(mailListGrid.dataProvider.length == 0) {
+						mailCikar.enabled = false;
+					}
+				} else {
+					mailCikar.enabled = false;
+				}
+			}
+			
+			protected function mailListGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				if(mailListGrid.selectedIndex != -1) {
+					mailCikar.enabled = true;
+				} else {
+					mailCikar.enabled = false;
+				}				
+			}
+			
+			protected function mailPropEkle_clickHandler(event:MouseEvent):void
+			{
+				if(propKey.text == null || propKey.text == "" || propValue.text == null || propValue.text == "") {
+					Alert.show(resourceManager.getString("messages", "mailPropertyNotDefined"));
+					return;
+				}
+				
+				var mailPrpTmp:String = propKey.text + "," + propValue.text;
+				
+				for each (var item:Object in mailPrpListGrid.dataProvider.toArray()) {
+					if(item.mailprop == mailPrpTmp) {
+						Alert.show(resourceManager.getString("messages", "mailPropertyAlreadyDefined") + item.mailprop);
+						return;
+					}
+				}
+				
+				var mailPropArray:Object = {mailprop:mailPrpTmp};
+				mailPrpListGrid.dataProvider.addItem(mailPropArray);				
+			}
+			
+			protected function mailPropCikar_clickHandler(event:MouseEvent):void
+			{
+				if(mailPrpListGrid.dataProvider != null && mailPrpListGrid.dataProvider.length != 0 && mailPrpListGrid.selectedIndex != -1) {
+					mailPrpListGrid.dataProvider.removeItemAt(mailPrpListGrid.selectedIndex);
+					if(mailPrpListGrid.dataProvider.length == 0) {
+						mailPropCikar.enabled = false;
+					}
+				} else {
+					mailPropCikar.enabled = false;
+				}
+			}
+			
+			protected function mailPrpListGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				if(mailPrpListGrid.selectedIndex != -1) {
+					mailPropCikar.enabled = true;
+				} else {
+					mailPropCikar.enabled = false;
+				}				
+			}
+
+			protected function readMailInfo_resultHandler(event:ResultEvent):void {
+				var returnTxt:String = null;
+				
+				try {
+					mailInfoXml = XML(event.message.body);
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+				prepare_mailInfoForm();
+			}
+			
+			protected function mailInfo_faultHandler(event:FaultEvent):void {
+				Alert.show(resourceManager.getString("messages", "jobDetailsFault") + event.message);
+			}
+			
+			public function init():void {
+				mailStateInfoArray = new ArrayList();
+				mailInfoArray = new ArrayList();
+				mailPropArray = new ArrayList();
+				readMailInfo.token = BasicAuthenticationHandler.authAndCall(mailInfoService, "readmailinfo", null);
+			}
+			
+			public function prepare_mailInfoForm():void {
+				var tmpState:String = null;
+				
+				mcToggle.selected = (mailInfoXml.@enabled == "true") ? true : false;
+				fromText.text = mailInfoXml.from;
+				
+				for each (var mailItem:Object in mailInfoXml.EmailList.email) {
+					mailListGrid.dataProvider.addItem({mailinfo:mailItem});
+				}
+				
+				for each (var stateItem:Object in mailInfoXml.stateInfos.LiveStateInfos.LiveStateInfo) {
+					tmpState = stateItem.StateName;
+					if(stateItem.SubstateName != null && stateItem.SubstateName != "") {
+						tmpState += ":" + stateItem.SubstateName;
+					}
+					if(stateItem.StatusName != null && stateItem.StatusName != "") {
+						tmpState += ":" + stateItem.StatusName;
+					}
+					mailStateInfoGrid.dataProvider.addItem({stateinfo:tmpState});
+				}
+				
+				userNameText.text = mailInfoXml.userName;
+				passwordText.text = mailInfoXml.userPassword;
+				
+				for each (var propItem:Object in mailInfoXml.mailProps.prop) {
+					mailPrpListGrid.dataProvider.addItem({mailprop:propItem});
+				}
+				
+				mcToggle_changeHandler(null);
+			}
+			
+			private function validateAll():Boolean {
+				
+				if(fromText.text == "" || fromText.text == null) {
+					Alert.show(resourceManager.getString("messages", "mailFromIsEmpty"));
+					return false;
+				}
+				
+				if(mailListGrid.dataProvider.length == 0) {
+					Alert.show(resourceManager.getString("messages", "mailListIsEmpty"));
+					return false;
+				}
+				
+				if(mailStateInfoGrid.dataProvider.length == 0) {
+					Alert.show(resourceManager.getString("messages", "mailStateGridIsEmpty"));
+					return false;
+				}
+				
+				if(userNameText.text == "" || userNameText.text == null) {
+					Alert.show(resourceManager.getString("messages", "mailUserNameIsEmpty"));
+					return false;
+				}
+				
+				if(passwordText.text == "" || passwordText.text == null) {
+					Alert.show(resourceManager.getString("messages", "mailUserPassIsEmpty"));
+					return false;
+				}
+				
+				if(mailPrpListGrid.dataProvider.length == 0) {
+					Alert.show(resourceManager.getString("messages", "mailPropertyListIsEmpty"));
+					return false;
+				}
+				
+				return true;
+			}
+			
+			private function checkConfirmSave():void {
+				if(!validateAll()) {
+					return;
+				}
+				Alert.show(resourceManager.getString("messages", "mailConfigSaveConfirm"), resourceManager.getString("messages", "warnKey"), Alert.OK|Alert.CANCEL, this, processSave, null, Alert.CANCEL);
+			}
+			
+			protected function processSave(eventObj:CloseEvent):void
+			{
+				if(eventObj.detail == Alert.CANCEL) {
+					return;
+				}
+				
+				var serializationInfo:String = "false";
+				
+				if(eventObj.detail == Alert.OK) {
+					serializationInfo = "true";
+				}
+				
+				var mailConfigInfoXml:XML = ConfigurationsUtil.getXML(this);
+				
+				var packedResponse:XML = XML("<data><serialize>" + serializationInfo + "</serialize><datamess>" + mailConfigInfoXml + "</datamess></data>");
+				
+				writeMailInfo.token = BasicAuthenticationHandler.authAndCall(mailInfoService, "writemailinfo", packedResponse); 
+			}
+			
+			protected function writeMailInfo_resultHandler(event:ResultEvent):void {
+				var returnXml:XML;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "OK") {
+						removeMe();
+						Alert.show(resourceManager.getString("messages", "mailConfigSavedSuccess"));
+					} else if(returnXml.result == "NOK") {
+						Alert.show(returnXml.desc);
+					}
+				} catch(err:Error) {
+					Alert.show("jobManagerService_resultHandler Result : " + err.message);
+				}
+			}
+			
+			protected function mcToggle_changeHandler(event:Event):void
+			{
+				var tmpState:String = "undefined";
+				if(mcToggle.selected == true) {
+					tmpState = "defined"; 
+				}
+				setCurrentState(tmpState);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<jobmanager:JobManager id="mailInfoService" fault="mailInfo_faultHandler(event)"/>
+		<s:CallResponder id="readMailInfo" result="readMailInfo_resultHandler(event)"/>
+		<s:CallResponder id="writeMailInfo" result="writeMailInfo_resultHandler(event)"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:FormLayout gap="1"/>
+	</s:layout>  
+	
+	<s:VGroup width="700" height="600">
+		
+		<s:HGroup paddingTop="10">
+			<utils:ToggleSwitch id="mcToggle" selected="true" selectedLabel="{resourceManager.getString('messages', 'mailEnabledLabel')}" deselectedLabel="{resourceManager.getString('messages', 'mailDisabledLabel')}" styleName="toggleSwitch" change="mcToggle_changeHandler(event)" />
+		</s:HGroup>
+		
+		<s:Label visible="false" />
+	
+		<s:HGroup gap="-20" includeIn="defined">
+			<s:VGroup id="fromTextGroup" width="90%" height="110" gap="10">
+				<s:HGroup paddingLeft="20">
+					<s:Label id="fromLabel" x="15" y="21" text="{resourceManager.getString('messages', 'mailFromText')}" fontSize="12" fontWeight="bold"/>
+					<s:TextInput id="fromText" x="60" y="15"/>
+				</s:HGroup>
+				<s:HGroup paddingLeft="37">
+					<s:Label id="toLabel" x="15" y="42" text="{resourceManager.getString('messages', 'mailToText')}" fontSize="12" fontWeight="bold"/>
+					<s:TextInput id="toText" x="60" y="36"/>
+				</s:HGroup>
+				<s:HGroup paddingLeft="50">
+					<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="mailEkle" click="mailEkle_clickHandler(event)" enabled="true"/>
+					<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="mailCikar" click="mailCikar_clickHandler(event)" enabled="false"/>
+				</s:HGroup>
+			</s:VGroup>
+			<s:VGroup id="MailListGrp" width="90%" height="100">
+				<s:HGroup paddingLeft="130" paddingTop="10">
+					<s:DataGrid id="mailListGrid" dataProvider="{mailInfoArray}" selectionChange="mailListGrid_selectionChangeHandler(event)" width="300" height="80" rowHeight="50" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
+						<s:columns>
+							<s:ArrayList>                    
+								<s:GridColumn dataField="mailinfo" headerText="{resourceManager.getString('messages', 'mailList')}" id="mailGridCol">
+									<s:itemRenderer>
+										<fx:Component>
+											<s:GridItemRenderer>
+												<s:Label id="labelDisplay"
+														 left="5" top="9" right="5" bottom="5"/>
+											</s:GridItemRenderer>
+										</fx:Component>
+									</s:itemRenderer>
+								</s:GridColumn>
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid>
+				</s:HGroup>	
+			</s:VGroup>
+		</s:HGroup>
+		
+		<s:BorderContainer id="mailStateInfoSelector" width="700" height="200" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+			<s:HGroup gap="-20">
+				<s:VGroup >
+					<s:Label paddingLeft="15" paddingTop="10" text="{resourceManager.getString('messages', 'mailStateInfo')}" fontSize="14" fontWeight="bold"/>
+					
+					<s:HGroup>				
+						<s:FormItem label="{resourceManager.getString('messages', 'jobStateLabel')}" width="140">
+							<s:DropDownList id="stateName" width="110" prompt="Select Status" change="stateName_changeHandler(event)" selectedIndex="4" labelField="value" > 
+								<s:dataProvider>
+									<mx:ArrayList>
+										<fx:Object value="PENDING"/>
+										<fx:Object value="RUNNING"/>
+										<fx:Object value="CANCELLED"/>
+										<fx:Object value="FAILED"/>
+										<fx:Object value="FINISHED"/>
+									</mx:ArrayList>
+								</s:dataProvider>
+							</s:DropDownList>
+						</s:FormItem>
+						
+						<s:FormItem label="{resourceManager.getString('messages', 'jobSubStateNameLabel')}" width="170">
+							<s:DropDownList id="substateName" width="120" prompt="Select Status" labelField="value" change="substateName_changeHandler(event)" enabled="true" selectedIndex="0"> 
+								<s:dataProvider>
+									<mx:ArrayList>
+										<fx:Object value="COMPLETED"/>
+										<fx:Object value="STOPPED"/>
+										<fx:Object value="SKIPPED"/>
+										
+									</mx:ArrayList>
+								</s:dataProvider>
+							</s:DropDownList>
+						</s:FormItem>
+						<s:FormItem label="{resourceManager.getString('messages', 'jobStatusLabel')}">
+							<s:DropDownList id="statusName" width="120" prompt="Select Status" labelField="value" enabled="true" selectedIndex="0"> 
+								<s:dataProvider>
+									<mx:ArrayList>
+										<fx:Object value="SUCCESS"/>
+										<fx:Object value="WARNING"/>
+										<fx:Object value="FAILED"/>
+									</mx:ArrayList>
+								</s:dataProvider>
+							</s:DropDownList>
+						</s:FormItem>
+					</s:HGroup>
+					
+					<s:HGroup id="mailStateInfos" paddingLeft="230" enabled="true">
+						<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="mailStateEkle" click="mailStateEkle_clickHandler(event)" enabled="true"/>
+						<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="mailStateCikar" click="mailStateCikar_clickHandler(event)" enabled="false"/>
+						<s:Button label="{resourceManager.getString('messages', 'retCodeUpdateButLabel')}" id="mailStateDegistir" click="mailStateDegistir_clickHandler(event)" enabled="false"/>
+					</s:HGroup>
+					
+					<s:HGroup id="mailStateInfoGridGrp" paddingLeft="15" enabled="true">
+						<s:DataGrid id="mailStateInfoGrid" dataProvider="{mailStateInfoArray}" selectionChange="mailStateGrid_selectionChangeHandler(event)" width="670" height="80" rowHeight="50" left="20" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
+							<s:columns>
+								<s:ArrayList>                    
+									<s:GridColumn dataField="stateinfo" headerText="{resourceManager.getString('messages', 'jobStateSubstateStatusColText')}" id="mailStateGridCol">
+										<s:itemRenderer>
+											<fx:Component>
+												<s:GridItemRenderer>
+													<s:Label id="labelDisplay"
+															 left="5" top="9" right="5" bottom="5"/>
+												</s:GridItemRenderer>
+											</fx:Component>
+										</s:itemRenderer>
+									</s:GridColumn>
+								</s:ArrayList>
+							</s:columns>
+						</s:DataGrid>
+					</s:HGroup>					
+				</s:VGroup>
+			</s:HGroup>
+		</s:BorderContainer>	
+		
+		<s:BorderContainer id="mailServerInfoBorder" width="700" height="180" borderWeight="1" cornerRadius="3" dropShadowVisible="true" enabled="true" includeIn="defined">
+			<s:HGroup gap="-20">
+				<s:VGroup id="userGrp" paddingTop="10" width="90%" height="110" gap="10">
+					<s:HGroup>
+						<s:Label paddingLeft="15" paddingTop="10" text="{resourceManager.getString('messages', 'mailServerInfo')}" fontSize="14" fontWeight="bold"/>
+					</s:HGroup>
+
+					<s:HGroup paddingLeft="44">
+						<s:Label id="userNameLbl" x="15" y="21" text="{resourceManager.getString('messages', 'mailUserNameText')}" fontSize="12" fontWeight="bold"/>
+						<s:TextInput id="userNameText" x="55" y="15"/>
+					</s:HGroup>
+					<s:HGroup paddingLeft="20">
+						<s:Label id="passwordLbl" x="15" y="42" text="{resourceManager.getString('messages', 'mailUserPassText')}" fontSize="12" fontWeight="bold"/>
+						<s:TextInput id="passwordText" x="55" y="36"/>
+					</s:HGroup>
+				</s:VGroup>
+				
+				<s:VGroup id="MailPrpListGrp" paddingTop="25" width="90%" height="100">
+					<s:HGroup paddingLeft="100">
+						<s:Label id="propLbl" x="15" y="42" text="{resourceManager.getString('messages', 'mailPropertyText')}" fontSize="12" fontWeight="bold"/>
+						<s:TextInput id="propKey" x="55" widthInChars="8" />
+						<s:Label x="15" y="42" text=":" fontSize="12" fontWeight="bold"/>
+						<s:TextInput id="propValue" x="55" widthInChars="8" />
+					</s:HGroup>	
+					
+					<s:HGroup paddingLeft="200">
+						<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="mailPropEkle" click="mailPropEkle_clickHandler(event)" enabled="true"/>
+						<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="mailPropCikar" click="mailPropCikar_clickHandler(event)" enabled="false"/>
+					</s:HGroup>	
+					
+					<s:HGroup paddingLeft="100" paddingTop="5">
+						<s:DataGrid id="mailPrpListGrid" dataProvider="{mailPropArray}" selectionChange="mailPrpListGrid_selectionChangeHandler(event)" width="300" height="80" rowHeight="50" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
+							<s:columns>
+								<s:ArrayList>                    
+									<s:GridColumn dataField="mailprop" headerText="{resourceManager.getString('messages', 'mailPropertyList')}" id="mailPrpGridCol">
+										<s:itemRenderer>
+											<fx:Component>
+												<s:GridItemRenderer>
+													<s:Label id="labelDisplay"
+															 left="5" top="9" right="5" bottom="5"/>
+												</s:GridItemRenderer>
+											</fx:Component>
+										</s:itemRenderer>
+									</s:GridColumn>
+								</s:ArrayList>
+							</s:columns>
+						</s:DataGrid>
+					</s:HGroup>	
+				</s:VGroup>
+			</s:HGroup>
+		</s:BorderContainer>	
+		
+		<s:BorderContainer width="700" height="500" includeIn="undefined">
+		</s:BorderContainer>
+		
+		<s:BorderContainer width="100%" height="100%" borderWeight="2" cornerRadius="3" dropShadowVisible="true" backgroundColor="8">
+			<s:HGroup paddingBottom="5" paddingTop="5" paddingLeft="300">
+				<s:Button label="{resourceManager.getString('messages', 'saveLabel')}" click="checkConfirmSave()" visible="true" includeInLayout="true"/>
+				<s:Button label="{resourceManager.getString('messages', 'cancelLabel')}" click="removeMe();"/> 
+			</s:HGroup>
+		</s:BorderContainer>		
+	</s:VGroup>	
+</s:TitleWindow>

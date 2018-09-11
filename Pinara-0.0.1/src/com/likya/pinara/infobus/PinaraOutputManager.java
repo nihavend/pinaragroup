@@ -9,6 +9,7 @@ import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.OutputData;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.model.PinaraOutput;
+import com.likya.pinara.utils.MailContentHelper.MailSubjectType;
 import com.likya.pinara.utils.PersistDBApi;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
@@ -74,14 +75,16 @@ public class PinaraOutputManager implements Runnable {
 					LiveStateInfosType liveStateInfosType = mailInfo.getStateInfos().getLiveStateInfos();
 					if(LiveStateInfoUtils.containsAny(liveStateInfosType, liveStateInfo)) {
 						String subjectTxt = "Job Durum değişikliği Job >> " + outputData.getJobId() + ":" + outputData.getJobName();
-						String bodyTxt = "Belirtilen iş şu duruma geçti : " + dump + "\n";
+						String bodyTxt = "Belirtilen iş şu duruma geçti ; " + dump + "\n";
 						String content = "";
 						if(liveStateInfo.getReturnCode() != null && liveStateInfo.getReturnCode().getDesc() != null && liveStateInfo.getReturnCode().getDesc().length() > 0) {
-							content = "\nİçerik : \n" + liveStateInfo.getReturnCode().getDesc();	
+							content = "\nİçerik ; \n" + liveStateInfo.getReturnCode().getDesc();
+							bodyTxt = bodyTxt + ";" + content ;
 						}
 						
-						SimpleMail simpleMail = new SimpleMail(subjectTxt, bodyTxt + content);
-						Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
+						//SimpleMail simpleMail = new SimpleMail(subjectTxt, bodyTxt + content);
+						//Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(simpleMail);
+						Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(new StateChangeMail(subjectTxt, bodyTxt));
 					}
 				}
 			}
@@ -93,7 +96,7 @@ public class PinaraOutputManager implements Runnable {
 		if(pinaraConfig.isSetMailInfo()) {
 			MailInfo mailInfo = pinaraConfig.getMailInfo();
 			if(mailInfo.getEnabled()) {
-				Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(new ContentMail("LOGANALYZER", outputData.getOutputContent().toString()));
+				Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(new ContentMail(MailSubjectType.LOGANALYZE.toString(), outputData.getOutputContent().toString()));
 			}
 		}
 	}
@@ -115,6 +118,23 @@ public class PinaraOutputManager implements Runnable {
 					jobNetTreeQueue.put(jobId, jobMainQueue.get(jobId));
 				}
 				Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(new EndOfCycleMail(netTree.getVirtualId(), jobNetTreeQueue));
+			}
+		}
+	}
+
+	private void handle_BEGINOFCYCLE(OutputData outputData) {
+		NetTreeResolver.NetTree netTree = (NetTreeResolver.NetTree) outputData.getOutputContent();
+		Pinara.getLogger().debug("Dependency group with virtualId  " + netTree.getVirtualId() + " is started !!!!");
+		PinaraConfig pinaraConfig = Pinara.getInstance().getConfigurationManager().getPinaraConfig();
+		if(pinaraConfig.isSetMailInfo()) {
+			MailInfo mailInfo = pinaraConfig.getMailInfo();
+			if(mailInfo.getEnabled()) {
+				HashMap<String, JobImpl> jobMainQueue = CoreFactory.getInstance().getMonitoringOperations().getJobQueue();
+				HashMap<String, JobImpl> jobNetTreeQueue = new HashMap<String, JobImpl>();
+				for (String jobId : netTree.getMembers()) {
+					jobNetTreeQueue.put(jobId, jobMainQueue.get(jobId));
+				}
+				Pinara.getInstance().getConfigurationManager().getPinaraMailServer().sendMail(new BeginOfCycleMail(netTree.getVirtualId(), jobNetTreeQueue));
 			}
 		}
 	}
@@ -142,6 +162,9 @@ public class PinaraOutputManager implements Runnable {
 						break;
 					case ENDOFCYCLE:
 						handle_ENDOFCYCLE(outputData);
+						break;
+					case BEGINOFCYCLE:
+						handle_BEGINOFCYCLE(outputData);
 						break;
 					default:
 						Pinara.getLogger().error("Invalid output type :" + outputData.getOutputType());

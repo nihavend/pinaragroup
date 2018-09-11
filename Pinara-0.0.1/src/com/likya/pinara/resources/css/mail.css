@@ -1,0 +1,129 @@
+.likya body, .likya-main, html.likya {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 14px;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: auto;
+}
+.likya-main {
+    display: none;
+    font-size: 14px;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.likya-left, .likya-placeholder, .likya-right, .likya-top, .likya-right-small {
+    position: absolute;
+    -webkit-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+}
+.likya-left, .likya-right, .likya-right-small {
+    //top: 0;
+    top: 10px;
+    bottom: 0;
+}
+.likya-top {
+    background-color: #eee;
+    right: 0;
+    left: 0;
+    height: 75px;
+    line-height: 75px;
+    min-width: 1100px;
+    font-size: 18px;
+    padding: 0 10px;
+}
+.likya-left {
+    left: 0;
+    width: 300px;
+	box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    -webkit-box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    -moz-box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    
+}
+.likya-right {
+    right: 0;
+    left: 0;
+    width: 98%;
+    margin: 0 auto;
+}
+.likya-right-small {
+    right: 0;
+    left: 0;
+    width: 50%;
+    margin: 0 auto;
+}
+.likya-placeholder {
+    overflow: hidden !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 80px;
+    position: relative;
+    background:#666666;
+     -webkit-transition: all ease .5s;
+    -o-transition: all ease .5s;
+    transition: all ease .5s;
+}
+.likya-left .likya-placeholder {
+    left: 0;
+    right: 0;
+}
+.likya-right .likya-placeholder {
+    border: none;
+    box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    -webkit-box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    -moz-box-shadow:0px 0px 20px 0px rgba(000, 000, 000, 0.20);
+    
+}
+.likya-hide.likya-left {
+    left: -300px;
+}
+.likya-hide.likya-right {
+    left: 0;
+}
+
+.likya-left {
+    left: -300px;
+}
+.likya-right {
+    min-width: 0;
+    left: 0;
+}
+.likya-hide.likya-main {
+    overflow: hidden;
+}
+.likya-hide.likya-left {
+    left: 0;
+}
+.likya-hide.likya-right {
+    left: 300px;
+    right: -300px;
+}
+
+#likya-tools-reset:hover {
+    background-color: #e67e22;
+}
+#likya-preview {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-height: 300px;
+}
+
+td.gray {  
+     color: #666666;  
+} 
+
+table{
+	table-layout:fixed;
+}
+
+td{
+  overflow-y: hidden;
+  word-wrap:break-word;
+}

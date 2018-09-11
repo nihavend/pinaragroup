@@ -1,6 +1,8 @@
 package com.likya.pinara.mng;
 
 import java.net.UnknownServiceException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
+import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.model.UnresolvedDependencyException;
 import com.likya.myra.commons.utils.JobDependencyResolver;
 import com.likya.myra.commons.utils.JobListFilter;
@@ -33,13 +36,17 @@ import com.likya.pinara.infobus.PinaraOutputManager;
 import com.likya.pinara.infobus.PinaraSMSServer;
 import com.likya.pinara.model.PinaraAuthenticationException;
 import com.likya.pinara.model.PinaraXMLValidationException;
+import com.likya.pinara.utils.PersistApi;
 import com.likya.pinara.utils.PersistDBApi;
+import com.likya.pinara.utils.xml.mappers.ConfigurationMapper;
 import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.wlagen.OperatingSystemTypeEnumeration;
+import com.likya.xsd.pinara.model.config.MailInfoDocument;
+import com.likya.xsd.pinara.model.config.PinaraConfigDocument;
 
 public final class PinaraAppManagerImpl implements PinaraAppManager {
 	
@@ -643,6 +650,77 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			Pinara.getLogger().debug("CHANGEDINTREE-AND-UPDATED:---->" + "jobId: " + job.getId() + "--" + "jobName: " + job.getBaseJobInfos().getJsName() + "--"  + "ScenarioOLD: " + tmpScenarioId + "--" + "ScenarioNEW: " + job.getScenarioId() + "--" + "GroupId: " + job.getGroupId());
 		}
 	}
+
+	public String readMailInfo() throws PinaraAuthenticationException, PinaraXMLValidationException {
+		
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+
+		String mailInfo;
+		PinaraConfigDocument pinaraConfigDocument = null;
+		
+		Path configFile = Paths.get(Pinara.CONFIG_FILE_PATH);
+		StringBuffer configFileXmlStr = FileUtils.readFile(configFile.toString());
+		try {
+			pinaraConfigDocument = PinaraConfigDocument.Factory.parse(configFileXmlStr.toString());
+		} catch (XmlException e) {
+			String errMsg = "Pinara Configuration file couldn't been read !";
+			System.err.println(errMsg);
+			throw new PinaraXMLValidationException(errMsg);
+		}
+		
+		//mailInfo = ConfigurationMapper.getMappedMail(Pinara.getInstance().getConfigurationManager().getPinaraConfig().getMailInfo());
+		mailInfo = ConfigurationMapper.getMappedMail(pinaraConfigDocument.getPinaraConfig().getMailInfo());
+		
+		return mailInfo;
+	}
+
+	public void writeMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		
+		Path configFile = Paths.get(Pinara.CONFIG_FILE_PATH);
+		PinaraConfigDocument pinaraConfigDocument = null;
+		MailInfoDocument mailInfoDocument = validateMailInfo(mailInfoXml);
+		StringBuffer configFileXmlStr = FileUtils.readFile(configFile.toString());
+		
+		try {
+			pinaraConfigDocument = PinaraConfigDocument.Factory.parse(configFileXmlStr.toString());
+			pinaraConfigDocument.getPinaraConfig().setMailInfo(mailInfoDocument.getMailInfo());
+			PersistApi.serializeAsFlat(configFile.toString(), pinaraConfigDocument.toString());
+			Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setMailInfoStr(mailInfoXml);
+			Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setReLoadParamsFlag(true);
+		} catch (Exception e) {
+			String errMsg = "Pinara Configuration file couldn't been saved for new Mail Configuration !";
+			System.err.println(errMsg);
+			throw new PinaraXMLValidationException(errMsg);
+		}
+				
+	}
 	
+	private MailInfoDocument validateMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		MailInfoDocument mailInfoDocument = null;
+		
+		try {
+			ArrayList<String> errMsgLst = new ArrayList<String>();
+			mailInfoDocument = MailInfoDocument.Factory.parse(mailInfoXml);
+			
+			if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), mailInfoDocument, errMsgLst)) {
+				System.err.println("JobList.xml is null or damaged !");
+				
+				String[] strArr = errMsgLst.toArray(new String[errMsgLst.size()]);
+				
+				throw new PinaraXMLValidationException(strArr);
+			}
+			
+			return mailInfoDocument;
+		} catch (XmlException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 }

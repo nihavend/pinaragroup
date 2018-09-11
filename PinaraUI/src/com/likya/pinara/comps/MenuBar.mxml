@@ -10,6 +10,7 @@
 		<![CDATA[
 			import com.likya.comps.crud.user.ChangePass;
 			import com.likya.comps.crud.user.UserListWindow;
+			import com.likya.pinara.comps.configuration.MailConfigurationForm;
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
@@ -127,6 +128,8 @@
 					Alert.show(ResourceManager.getInstance().getString('messages', 'shutdownPinaraNormalConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, shutdownNormal, null, Alert.CANCEL);
 				} else if (event.label == resourceManager.getString("messages", "shutdownForce")) {
 					Alert.show(ResourceManager.getInstance().getString('messages', 'shutdownPinaraForcefulConfirmation'), warningStr, Alert.OK|Alert.CANCEL, this, shutdownForce, null, Alert.CANCEL);
+				} else if(event.label == resourceManager.getString("messages", "mailConfiguration")) {
+					showMailConfigPopup();
 				} else if(event.label == resourceManager.getString("messages", "addJob")) {
 					showAddJob();
 				} else if(event.label == resourceManager.getString("messages", "editJob")) {
@@ -141,6 +144,13 @@
 				} else if(event.label == resourceManager.getString("messages", "uculWindowTitle")) {
 					showUserList();
 				}
+			}
+			
+			private function showMailConfigPopup():void {
+				var mailConfigurationForm:MailConfigurationForm = PopUpManager.createPopUp(this, MailConfigurationForm, true) as MailConfigurationForm;
+				mailConfigurationForm.init();
+				PopUpManager.centerPopUp(mailConfigurationForm);
+				mailConfigurationForm.setFocus();
 			}
 
 			private function showChangePass():void {
@@ -411,6 +421,9 @@
 				<menuitem label="{resourceManager.getString('messages', 'suspendApp')}" id="suspendApp"/>
 				<menuitem label="{resourceManager.getString('messages', 'shutdownNormal')}" id="shutdownNormal"/>		
 				<menuitem label="{resourceManager.getString('messages', 'shutdownForce')}" id="shutdownForce"/>
+			</menuitem>
+			<menuitem label="{resourceManager.getString('messages', 'configuration')}" id="admin" role="{UserRole.ADMIN}">
+				<menuitem label="{resourceManager.getString('messages', 'mailConfiguration')}" id="mailConfig"/>
 			</menuitem>
 			<menuitem label="{resourceManager.getString('messages', 'jobOps')}" id="jobOps" role="{UserRole.OPERATION}">			
 				<menuitem label="{resourceManager.getString('messages', 'addJob')}" id="addJob" />			

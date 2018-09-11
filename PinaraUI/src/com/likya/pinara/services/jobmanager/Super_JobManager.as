@@ -226,6 +226,22 @@ package com.likya.pinara.services.jobmanager
 			operation.resultType = Object;
 			operations.push(operation);
 			
+			operation = new mx.rpc.http.Operation(null, "readmailinfo");
+			operation.url = "/flex/restsrvc/readmailinfo";
+			operation.method = "GET";
+			operation.serializationFilter = serializer0;
+			operation.resultType = Object;
+			operations.push(operation);
+			
+			operation = new mx.rpc.http.Operation(null, "writemailinfo");
+			operation.url = "/flex/restsrvc/writemailinfo/";
+			operation.method = "POST";
+			operation.serializationFilter = serializer0;
+			operation.contentType = "application/xml";
+			operation.resultType = Object;
+			operations.push(operation);
+
+			
 			_serviceControl.operationList = operations;  
 			
 			

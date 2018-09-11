@@ -38,9 +38,99 @@
 			
 			private var jobListForDep:XML;
 			
+			private static const NOT_VALIDATED:String = "NOT VALIDATED";
+			
 			public function validateForm():Boolean
 			{
-				return true;
+				var depListItem:Object;
+				var depExpItem:Object;
+				var depExpStr:String = depExp.text;
+				var depIdFound:Boolean = true; 
+				var loop:Boolean = true;
+				
+				
+				if(depExpStr != null && depExpStr != "") {
+					
+					depExpStr = replFN(depExp.text);
+					
+					if(depExpStr == NOT_VALIDATED) {
+						Alert.show("Hatalı DepExp tanımı!");
+						return false;
+					}
+					
+					var i:int = depExpStr.indexOf("dep_", i);
+					j = i+5;
+					var j:int = depExpStr.indexOf("", j);
+					while(loop) {
+						depExpItem = depExpStr.substring(i,j);
+						depIdFound = false;	
+						
+						for (var k:int = 0; k < dependencyListGrid.dataProvider.toArray().length; k++) {
+							depListItem = dependencyListGrid.dataProvider.toArray()[k];
+							if(depExpItem == depListItem.depid) {
+								depIdFound = true;
+							}
+						}
+						
+						i = j;
+						i = depExpStr.indexOf("dep_", i);
+						
+						if(!depIdFound || i == -1) {
+							loop = false;
+						} else {
+							j = i+5;
+							j = depExpStr.indexOf(" ", j);
+							if(j == -1) {
+								j = depExpStr.length;
+							}
+						}
+					}
+				}
+				
+				if(!depIdFound) {
+					Alert.show("Hatalı DepExp tanımı!");
+					//Alert.show(resourceManager.getString("messages", "logAnalySearchPatNotDefined"));
+				}
+				return depIdFound;
+			}
+			
+			private function replFN(strRepl:String):String 
+			{ 
+				var result:Object;
+				var strReplArray:Array;
+				var rightParantehis:int = 0;
+				var leftParantehis:int = 0;
+				var depExpPattern:RegExp = /dep_\d+/;
+				
+				for (var i:int = 0; i < strRepl.length; i++) {
+					if(strRepl.charAt(i) == "(") leftParantehis = leftParantehis + 1; 
+					if(strRepl.charAt(i) == ")") rightParantehis = rightParantehis + 1; 
+				}
+				
+				if(leftParantehis != rightParantehis) {
+					strRepl = NOT_VALIDATED;
+					return strRepl;
+				}
+				
+				strRepl = strRepl.replace("("," ");
+				strRepl = strRepl.replace(")"," ");
+				strRepl = strRepl.replace("!"," ");
+				strRepl = strRepl.replace("AND"," ");
+				strRepl = strRepl.replace("OR"," ");
+				
+				strReplArray = strRepl.split(" ");
+				
+				for (var k:int = 0; k < strReplArray.length; k++) {
+					if(strReplArray[k] != "") {
+						result = strReplArray[k].match(depExpPattern);
+						if(result == null) {
+							strRepl = NOT_VALIDATED;
+							break;
+						}
+					}
+				}
+				
+				return strRepl; 
 			}
 			
 			private function checkGridForItem(checkItem:Object, checkArr:Array):Boolean

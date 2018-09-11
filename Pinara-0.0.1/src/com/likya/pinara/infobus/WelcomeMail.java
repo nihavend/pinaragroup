@@ -16,6 +16,7 @@ import javax.mail.util.ByteArrayDataSource;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.utils.MailContentHelper;
+import com.likya.pinara.utils.MailContentHelper.MailSubjectType;
 
 public class WelcomeMail extends MultipartMail {
 
@@ -102,7 +103,8 @@ public class WelcomeMail extends MultipartMail {
 	
 		// HTML part
 		MimeBodyPart mimeBodyPartHtml = new MimeBodyPart();
-		String mailHtml = MailContentHelper.getHTMLFormattedJobProperties(jobQueue);
+		String mailHtml = MailContentHelper.getHTMLMailForStartup(MailSubjectType.STARTUP, jobQueue, Pinara.getMessage("JobQueueOperations.64"));
+		//String mailHtml = MailContentHelper.getHTMLFormattedJobProperties(jobQueue);
 		
 //		Test için
 //		try {
@@ -118,21 +120,28 @@ public class WelcomeMail extends MultipartMail {
 		
 		// Image part
 		MimeBodyPart imagePart = new MimeBodyPart();
+		MimeBodyPart imagePart2 = new MimeBodyPart();
 		try {
-			String imgUrl = "/com/likya/pinara/resources/likya_mail.jpg";
+			String imgUrl = "/com/likya/pinara/resources/img/mail-likya.jpg";
 			URL url = this.getClass().getResource(imgUrl);
 			imagePart.setDataHandler(new DataHandler(new ByteArrayDataSource(url.openStream(), "image/jpg")));
+			
+			String imgUrl2 = "/com/likya/pinara/resources/img/mail-divider.png";
+			URL url2 = this.getClass().getResource(imgUrl2);
+			imagePart2.setDataHandler(new DataHandler(new ByteArrayDataSource(url2.openStream(), "image/png")));
 			// imagePart.attachFile("/com/likya/pinara/resources/likya_mail.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		imagePart.setHeader("Content-ID", "<likyajpg10976@likyateknoloji.com>");
+		imagePart2.setHeader("Content-ID", "<dividerpng10977@likyateknoloji.com>");
 		imagePart.setDisposition(MimeBodyPart.INLINE);
-
+		imagePart2.setDisposition(MimeBodyPart.INLINE);
 		
 		multipart.addBodyPart(mimeBodyPartHtml);
 		multipart.addBodyPart(imagePart);
+		multipart.addBodyPart(imagePart2);
 		
 		return multipart;
 		

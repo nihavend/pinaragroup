@@ -12,15 +12,13 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import com.likya.pinara.utils.MailContentHelper;
-import com.likya.pinara.utils.MailContentHelper.MailSubjectType;
 
-public class ContentMail extends MultipartMail {
-
-	public ContentMail(String mailType, String content) {
+public class StateChangeMail extends MultipartMail {
+	
+	public StateChangeMail(String subject, String messageList) {
 		try {
-			// Instance name yanlış, artık tek bir senaryo yok !
-			setMailSubject("Log Analyzer Action : " + mailType);
-			setMultipart(prepare(content));
+			setMailSubject(subject);
+			setMultipart(prepareStateChangeMail(messageList));
 			setMAIL_TYPE(PinaraMail.MULTIPART);
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -29,14 +27,13 @@ public class ContentMail extends MultipartMail {
 		}
 	}
 	
-	private Multipart prepare(String content) throws MessagingException, URISyntaxException {
+	private Multipart prepareStateChangeMail(String messageList) throws MessagingException, URISyntaxException {
 		
 		MimeMultipart multipart = new MimeMultipart("related");
 	
 		// HTML part
 		MimeBodyPart mimeBodyPartHtml = new MimeBodyPart();
-		// String localizedMessage = Pinara.getMessage("EndOfCycleMail.8"); //$NON-NLS-1$
-		String mailHtml = MailContentHelper.getHTMLMailForInfo(MailSubjectType.LOGANALYZE, content);
+		String mailHtml = MailContentHelper.getHTMLMailForStateChange(messageList);
 		
 		mimeBodyPartHtml.setText(mailHtml, "utf-8", "html");
 		
@@ -68,5 +65,7 @@ public class ContentMail extends MultipartMail {
 		return multipart;
 		
 	}
+
+
 
 }

@@ -16,7 +16,10 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.xmlbeans.XmlException;
+
 import com.likya.pinara.Pinara;
+import com.likya.xsd.pinara.model.config.MailInfoDocument;
 import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
 
 /**
@@ -32,13 +35,16 @@ public class PinaraMailServer implements Runnable {
 	private Properties props;
 	private Authenticator authenticator;
 
+	private MailInfo mailInfo;
+	
 	private String userName;
 	private String password;
 	private String from;
 	
-	private MailInfo mailInfo;
-	
 	private Thread executorThread;
+	
+	private String mailInfoStr;
+	private boolean reLoadParamsFlag = false;
 	
 	/**
 	 * SimpleAuthenticator is used to do simple authentication when the SMTP
@@ -81,6 +87,33 @@ public class PinaraMailServer implements Runnable {
 		}
 		
 	}
+	
+	private void reLoadParams() {
+		
+		for(String prop : mailInfo.getMailProps().getPropArray()) {
+			props.remove(prop.split(",")[0], prop.split(",")[1]);
+		}
+
+		try {
+			this.mailInfo = (MailInfoDocument.Factory.parse(mailInfoStr)).getMailInfo();
+			Pinara.getInstance().getConfigurationManager().getPinaraConfig().setMailInfo(mailInfo);
+		} catch (XmlException e) {
+			e.printStackTrace();
+		}
+		
+		authenticator = new SMTPAuthenticator();
+
+		this.userName = mailInfo.getUserName();
+		this.password = mailInfo.getUserPassword();
+
+		this.from = mailInfo.getFrom();
+			
+		for(String prop : mailInfo.getMailProps().getPropArray()) {
+			props.put(prop.split(",")[0], prop.split(",")[1]);
+		}
+		
+		reLoadParamsFlag = false;
+	}
 
 	public void terminate(boolean forcedTerminate) {
 		synchronized (this) {
@@ -98,6 +131,10 @@ public class PinaraMailServer implements Runnable {
 		while (executePermission || mailQueue.size() > 0) {
 			
 			while (mailQueue.size() > 0 && mailInfo.getEmailList().sizeOfEmailArray() > 0) {
+				
+				if(reLoadParamsFlag) {
+					reLoadParams();
+				}
 				
 				PinaraMail pinaraMail = (PinaraMail) mailQueue.get(0);
 				Pinara.getLogger().debug(Pinara.getMessage("PinaraMailServer.4")); 
@@ -123,7 +160,6 @@ public class PinaraMailServer implements Runnable {
 					
 				}
 				
-
 				if(!mailQueue.isEmpty()) {
 					mailQueue.remove(0);
 				}
@@ -206,4 +242,13 @@ public class PinaraMailServer implements Runnable {
 	public void setExecutorThread(Thread executorThread) {
 		this.executorThread = executorThread;
 	}
+
+	public void setReLoadParamsFlag(boolean reLoadParamsFlag) {
+		this.reLoadParamsFlag = reLoadParamsFlag;
+	}
+
+	public void setMailInfoStr(String mailInfoStr) {
+		this.mailInfoStr = mailInfoStr;
+	}
+	
 }

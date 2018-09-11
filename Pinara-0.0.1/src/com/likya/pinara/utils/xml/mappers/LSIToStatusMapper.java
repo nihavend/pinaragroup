@@ -35,6 +35,8 @@ public class LSIToStatusMapper {
 			statu = 8;
 		} else if(LiveStateInfoUtils.equalStates(liveStateInfo, StateName.PENDING, SubstateName.DEACTIVATED)) {
 			statu = 9;
+		} else if(LiveStateInfoUtils.equalStates(liveStateInfo, StateName.FINISHED, SubstateName.COMPLETED, StatusName.WARNING)) {
+			statu = 10;
 		}
 		
 		return statu;

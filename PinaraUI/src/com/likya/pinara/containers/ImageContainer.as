@@ -37,6 +37,9 @@ package com.likya.pinara.containers
 		[@Embed(source='/images/disableds.png')]
 		public static const disableds:Class;
 		
+		[@Embed(source='/images/warnings.png')]
+		public static const warnings:Class;
+		
 		// Liste için statu ikonları
 		
 		[@Embed(source='/images/clock1.jpg')]
@@ -68,6 +71,9 @@ package com.likya.pinara.containers
 		
 		[@Embed(source='/images/disabled.jpg')]
 		public static const disabled:Class;
+		
+		[@Embed(source='/images/warning.jpg')]
+		public static const warning:Class;
 		
 		// Liste için komut ikonları
 		
@@ -123,6 +129,7 @@ package com.likya.pinara.containers
 		treeIconList.addItem(stops)
 		treeIconList.addItem(pauses)
 		treeIconList.addItem(disableds)
+		treeIconList.addItem(warnings)
 		
 		// 0-9 Statu ikonları
 		//
@@ -146,6 +153,7 @@ package com.likya.pinara.containers
 		statuImageList.addItem(stop)
 		statuImageList.addItem(pause)
 		statuImageList.addItem(disabled)
+		statuImageList.addItem(warning)
 
 		// 10-18 Komut ikonları
 		manageImageList.addItem(disableJob)

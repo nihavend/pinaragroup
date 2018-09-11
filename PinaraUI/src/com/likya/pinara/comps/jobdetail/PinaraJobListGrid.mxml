@@ -40,6 +40,10 @@
 				return item.baseJobInfos.jobTypeDetails.jobCommandType;
 			}
 			
+			public function getJobTriggerType(item:Object, column:GridColumn):String {
+				return item.management.trigger;
+			}
+			
 			public function getRealizedDuration(item:Object, column:GridColumn):String {
 				return item.runtimeParams.realizedDuration;
 			}
@@ -180,6 +184,7 @@
 					</s:itemRenderer>
 				</s:GridColumn>
 				<s:GridColumn dataField="job_command_type" sortCompareFunction="Transformer.compareSortString" labelFunction="getJobCommandType" headerText="{resourceManager.getString('messages', 'jobCommandTypeGrid')}" width="{this.pinaraJobList.width * 0.12}"/>
+				<s:GridColumn dataField="job_trigger_type" sortCompareFunction="Transformer.compareSortString" labelFunction="getJobTriggerType" headerText="{resourceManager.getString('messages', 'jobTriggerTypeGrid')}" width="{this.pinaraJobList.width * 0.12}"/>
 				<s:GridColumn dataField="@groupId" headerText="{resourceManager.getString('messages', 'jobGrupIdGrid')}" width="{this.pinaraJobList.width * 0.10}"/>
 				<s:GridColumn dataField="son_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getRecordedDT" headerText="{resourceManager.getString('messages', 'jobLastWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>
 				<s:GridColumn dataField="planlanan_cz" sortCompareFunction="Transformer.compareSortForDate" labelFunction="Transformer.getActualDT" headerText="{resourceManager.getString('messages', 'jobPlannedWTGrid')}" width="{this.pinaraJobList.width * 0.15}"/>

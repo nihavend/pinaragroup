@@ -14,6 +14,8 @@
 			import mx.formatters.DateFormatter;
 			import mx.rpc.events.FaultEvent;
 			
+			import spark.components.NavigatorContent;
+			
 			[Bindable] 
 			private var jobs:ArrayCollection;
 			
@@ -26,6 +28,8 @@
 			
 			[Bindable]
 			public var jobDetailXml:XML;
+			
+			private var editMode:Boolean = false;
 			
 			public function getDate(dateTxt:String):String {
 				var dateFormatter:DateFormatter = new DateFormatter();
@@ -41,6 +45,10 @@
 				
 			}
 			
+			public function setEditMode(mode:Boolean):void {
+				editMode = mode;
+			}
+			
 			public function setDataXml(xml:XML):void {
 				// trace(xml);
 				// trace(xml.executeRShellParams.hostName);
@@ -52,19 +60,72 @@
 			}
 			
 			protected function module1_creationCompleteHandler(event:FlexEvent):void {
-				// trace("XML(executeRShellParamsXml) : " + XML(executeRShellParamsXml));
-				if(XML(executeRShellParamsXml).hasOwnProperty("hostName")) {
-					hostName.selected = true;
-					ipHostText.text = executeRShellParamsXml.hostName;
-				} else {
-					ipAddress.selected = true;
-					ipHostText.text = executeRShellParamsXml.ipAddress;
+				//trace("XML(executeRShellParamsXml) : " + XML(executeRShellParamsXml));
+				if(executeRShellParamsXml != null) {
+					if(XML(executeRShellParamsXml).hasOwnProperty("hostName")) {
+						hostName.selected = true;
+						ipHostText.text = executeRShellParamsXml.hostName;
+					} else {
+						ipAddress.selected = true;
+						ipHostText.text = executeRShellParamsXml.ipAddress;
+					}
+					
+					userInput.text = executeRShellParamsXml.userName;
+					passInput.text = executeRShellParamsXml.rshellPassword;
+					portInput.text = executeRShellParamsXml.port;
+					fileDelInput.text = executeRShellParamsXml.fileSeperator
 				}
 				
-				userInput.text = executeRShellParamsXml.userName;
-				passInput.text = executeRShellParamsXml.rshellPassword;
-				portInput.text = executeRShellParamsXml.port;
-				fileDelInput.text = executeRShellParamsXml.fileSeperator
+				if(editMode) {
+					ipHostText.editable = true;
+					userInput.editable = true;
+					passInput.editable = true;
+					portInput.editable = true;
+					fileDelInput.editable = true;
+				}
+			}
+			
+			public function getDataXml():XML {
+				var rShellParams:XML = 
+					<rs:executeRShellParams xmlns:rs="http://www.likyateknoloji.com/rs">
+					</rs:executeRShellParams>;
+				if(serverdef.selection == hostName) {
+					rShellParams.appendChild(<rs:hostName xmlns:rs="http://www.likyateknoloji.com/rs">{"" + ipHostText.text } </rs:hostName>);
+				} else {
+					rShellParams.appendChild(<rs:ipAddress xmlns:rs="http://www.likyateknoloji.com/rs">{"" + ipHostText.text } </rs:ipAddress>);
+				}
+			    rShellParams.appendChild(<rs:port xmlns:rs="http://www.likyateknoloji.com/rs">{"" + portInput.text } </rs:port>);
+			    rShellParams.appendChild(<rs:userName xmlns:rs="http://www.likyateknoloji.com/rs">{"" + userInput.text } </rs:userName>);
+				rShellParams.appendChild(<rs:rshellPassword  xmlns:rs="http://www.likyateknoloji.com/rs">{"" + passInput.text } </rs:rshellPassword>);
+				rShellParams.appendChild(<lik:fileSeperator xmlns:lik="http://www.likyateknoloji.com/likya-gen">{"" + fileDelInput.text } </lik:fileSeperator>);	
+				
+				return rShellParams;
+			}
+			
+			public function validateForm():Boolean
+			{
+				if(ipHostText.text == "") {
+					Alert.show(resourceManager.getString("messages", "remoteSchHostNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				if(portInput.text == "") {
+					Alert.show(resourceManager.getString("messages", "remoteSchPortNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				if(userInput.text == "") {
+					Alert.show(resourceManager.getString("messages", "remoteSchUserNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				if(passInput.text == "") {
+					Alert.show(resourceManager.getString("messages", "remoteSchPassNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				if(fileDelInput.text == "") {
+					Alert.show(resourceManager.getString("messages", "remoteSchFileSepNotDefined"), "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+					return false;
+				}
+				
+				return true;
 			}
 			
 		]]>
@@ -74,7 +135,7 @@
 		<s:RadioButtonGroup id="serverdef" itemClick="serverdef_itemClickHandler(event)"/>
 	</fx:Declarations>
 	
-	<s:BorderContainer width="100%" height="100%" borderVisible="false"> 
+	<s:BorderContainer id="remoteSchPropId" width="100%" height="100%" borderVisible="false"> 
 		<s:layout> 
 			<s:VerticalLayout gap="5" clipAndEnableScrolling="true"/> 
 		</s:layout>
@@ -97,18 +158,18 @@
 		<mx:HRule width="100%"/>
 		
 		<s:HGroup verticalAlign="top" paddingTop="10" paddingLeft="10">
-			<s:Label text="Kullanıcı Adı :" />
+			<s:Label text="{resourceManager.getString('messages', 'remoteSchUserNames')}" />
 			<s:TextInput id="userInput" editable="false"/>
-			<s:Label text="Şifre :" />
+			<s:Label text="{resourceManager.getString('messages', 'remoteSchPass')}" />
 			<s:TextInput id="passInput" editable="false"/>
 		</s:HGroup>
 		
 		<mx:HRule width="100%"/>
 		
 		<s:HGroup verticalAlign="baseline" paddingTop="10" paddingLeft="10">
-			<s:Label text="Port Number :" />
+			<s:Label text="{resourceManager.getString('messages', 'remoteSchPort')}" />
 			<s:TextInput id="portInput" editable="false"/>
-			<s:Label text="Dosya ayracı :" />
+			<s:Label text="{resourceManager.getString('messages', 'remoteSchFileSep')}" />
 			<s:TextInput id="fileDelInput" editable="false"/>
 		</s:HGroup>
 		

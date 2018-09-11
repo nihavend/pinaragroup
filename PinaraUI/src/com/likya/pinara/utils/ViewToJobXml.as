@@ -1,17 +1,18 @@
 package com.likya.pinara.utils {
+	import com.likya.pinara.comps.jobcrud.JobBaseTypeInfoForm_0;
 	import com.likya.pinara.comps.jobcrud.JobEditWindow;
+	import com.likya.pinara.modules.IModuleInterface;
 	
 	import mx.formatters.DateFormatter;
 	
 	public class ViewToJobXml {
-		
 		/*namespace xsi="http://www.w3.org/2001/XMLSchema-instance"
 		use namespace xsi;*/
 		
 		namespace myra = "http://www.likyateknoloji.com/myra-joblist";
 		use namespace myra;
 		
-		namespace myra_jobprops="http://www.likyateknoloji.com/myra-jobprops";
+		namespace myra_jobprops= "http://www.likyateknoloji.com/myra-jobprops";
 		use namespace myra_jobprops;
 		
 		namespace wla = "http://www.likyateknoloji.com/wla-gen";
@@ -20,20 +21,33 @@ package com.likya.pinara.utils {
 		namespace lik = "http://www.likyateknoloji.com/likya-gen";
 		use namespace lik;
 		
-		namespace myra_stateinfo ="http://www.likyateknoloji.com/myra-stateinfo";
+		namespace myra_stateinfo = "http://www.likyateknoloji.com/myra-stateinfo";
 		use namespace myra_stateinfo;
+		
+		namespace rs = "http://www.likyateknoloji.com/rs";
+		use namespace rs;
+
 		
 		public static function getXML(j:JobEditWindow):XML {
 			
 			var myraJobList:XML = 
 				<myra:jobList xmlns:myra="http://www.likyateknoloji.com/myra-joblist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 						xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" xmlns:wla="http://www.likyateknoloji.com/wla-gen"
-						xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">
-					<myra:genericJob xsi:type="myra:simpleProperties" />
-				</myra:jobList>;
-
-			if(j.jobDetailXml == null) {
+						xmlns:lik="http://www.likyateknoloji.com/likya-gen" xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo"
+						xmlns:rs="http://www.likyateknoloji.com/rs">
+					<myra:genericJob />
+				</myra:jobList>; 
+			
+			var jobType:String = j.baseInfoForm_0.jsJobType.selectedItem;
+			if(jobType == JobBaseTypeInfoForm_0.REMOTE_SHELL) {
+				myraJobList.myra::genericJob.@['xsi:type'] = "myra:remoteSchProperties";
+				myraJobList.myra::genericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteSchComponent";
+			} else {
+				myraJobList.myra::genericJob.@['xsi:type'] = "myra:simpleProperties";
 				myraJobList.myra::genericJob.@handlerURI = "com.likya.myra.jef.jobs.ExecuteInShell";
+			}
+				
+			if(j.jobDetailXml == null) {
 				myraJobList.myra::genericJob.@Id = "-1"; // will be replaced on the service side with the valid value
 				myraJobList.myra::genericJob.@groupId = "my_group"; // Ekrandan girilmesi gerekiyor !!!!
 				trace("UYARI !!!! : myraJobList.myra::genericJob.@groupId ekrandan girilmeli");
@@ -41,7 +55,7 @@ package com.likya.pinara.utils {
 				myraJobList.myra::genericJob.@scenarioId = "";
 				trace("UYARI !!!! : myraJobList.myra::genericJob.@agentId ekrandan girilmeli");
 			} else { 
-				myraJobList.myra::genericJob.@handlerURI = j.jobDetailXml.@handlerURI; //"com.likya.myra.jef.jobs.ExecuteInShell";
+				//myraJobList.myra::genericJob.@handlerURI = j.jobDetailXml.@handlerURI; //"com.likya.myra.jef.jobs.ExecuteInShell";
 				myraJobList.myra::genericJob.@Id = j.jobDetailXml.@Id; //"22";
 				// myraJobList.myra::genericJob.@groupId = j.jobDetailXml.@groupId; //"my_group";
 				myraJobList.myra::genericJob.@agentId = j.jobDetailXml.@agentId; //"1";
@@ -65,6 +79,10 @@ package com.likya.pinara.utils {
 			myraJobList = getLogAnalysis(j, myraJobList);
 
 			myraJobList = getScheduleInfo(j, myraJobList);
+			
+			if(jobType == JobBaseTypeInfoForm_0.REMOTE_SHELL) {
+				myraJobList.myra::genericJob.appendChild((j.remoteSchModule as IModuleInterface).getDataXml());
+			}
 
 			return myraJobList;
 			
@@ -738,7 +756,6 @@ package com.likya.pinara.utils {
 					
 				}
 			}
-			
 			
 			return myraJobList;
 		}

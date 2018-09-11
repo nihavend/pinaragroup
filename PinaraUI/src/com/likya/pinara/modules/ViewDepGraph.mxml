@@ -179,6 +179,20 @@
 				refreshGraphData(defaultXml);
 			}
 			
+			public function setEditMode(mode:Boolean):void {
+				
+			}
+			
+			public function getDataXml():XML {
+				return null;
+			}
+			
+			public function validateForm():Boolean {
+				return true;
+			}
+
+				
+			
 		]]>
 	</fx:Script>
 	

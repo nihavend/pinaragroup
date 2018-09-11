@@ -4,5 +4,8 @@ package com.likya.pinara.modules
 
 	public interface IModuleInterface extends IModule {
 		function setDataXml(xml:XML):void;
+		function getDataXml():XML;
+		function setEditMode(mode:Boolean):void;
+		function validateForm():Boolean;
 	}
 }

@@ -27,6 +27,8 @@ package com.likya.pinara.event {
 		
 		public static const SERVER_UNREADY_LOGOUT:String = "serverUnreadyLogoutRequest";
 		
+		public static const JOB_TYPE_CHANGED:String = "jobTypeChangedEvent";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

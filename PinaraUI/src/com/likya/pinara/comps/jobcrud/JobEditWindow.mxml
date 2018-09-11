@@ -14,6 +14,7 @@
 		<![CDATA[
 			import com.likya.pinara.comps.DummyForm;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.modules.IModuleInterface;
 			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			import com.likya.pinara.utils.JobXmlToView;
 			import com.likya.pinara.utils.ViewToJobXml;
@@ -22,19 +23,25 @@
 			import mx.core.FlexGlobals;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ModuleEvent;
 			import mx.managers.PopUpManager;
+			import mx.modules.IModuleInfo;
+			import mx.modules.ModuleManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
+			import spark.modules.Module;
 			
 			
-
 			[Bindable]
 			public var jobDetailXml:XML;
 			
 			// 0 new ; 1 edit ; 2 clone
 			[Bindable]
 			public var isMode:Number = 0;
+			
+			public var remoteSchModule:Module;
+			private var remoteSchModuleInfo:IModuleInfo;
 			
 			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -47,6 +54,9 @@
 					}
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm_0, baseInfoForm_1, jobDetailXml);
+					if(jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType == JobBaseTypeInfoForm_0.REMOTE_SHELL){
+						initRemoteSchModule();
+					}
 					JobXmlToView.prepare_stateInfosForm(stateInfosForm, jobDetailXml);
 					JobXmlToView.prepare_dependencyListForm(dependencyListForm, jobDetailXml);
 					dependencyListForm.updateData();
@@ -56,18 +66,22 @@
 				} else {
 					dependencyListForm.updateData();
 				}
-
+					
+				addEventListener(ResourceEvent.JOB_TYPE_CHANGED, jobTypeChangedHandler);
 			}
 			// Handle the close button and Cancel button.
 			private function handleCloseEvent():void {
 				PopUpManager.removePopUp(this);
 			}            
 			
-			protected function validateAll():Boolean
-			{
+			protected function validateAll():Boolean {
+				
 				var formsValid:Boolean = true;
 				
 				formsValid = formsValid && baseInfoForm_0.validateForm() && baseInfoForm_1.validateForm();
+				if(baseInfoForm_0.jsJobType.selectedItem == JobBaseTypeInfoForm_0.REMOTE_SHELL){
+					formsValid = formsValid && (remoteSchModule as IModuleInterface).validateForm();
+				}
 				formsValid = formsValid && stateInfosForm.validateForm();
 				formsValid = formsValid && dependencyListForm.validateForm();
 				formsValid = formsValid && managementInfoForm_0.validateForm() && managementInfoForm_1.validateForm();
@@ -196,6 +210,62 @@
 				dummyWindow.setFocus();
 				
 			}
+			
+			private function jobTypeChangedHandler(event:ResourceEvent):void {
+				var jobTypeSelectedItem:String = String(event.object);
+				
+				if(jobTypeSelectedItem == JobBaseTypeInfoForm_0.REMOTE_SHELL && myViewStack.getChildByName("remoteSch") == null){
+					initRemoteSchModule();
+				} else {
+					if(myViewStack.getChildByName("remoteSch") != null) {
+						myViewStack.removeChild(myViewStack.getChildByName("remoteSch"));
+					}
+				}
+				
+			}
+			
+			private function handleError(event:ModuleEvent):void {
+				Alert.show(event.errorText, "Error");
+			}
+			
+			private function initRemoteSchModule():void {
+				
+				remoteSchModuleInfo = ModuleManager.getModule("RemoteSchProps.swf");
+				remoteSchModuleInfo.addEventListener(ModuleEvent.READY, renderRemoteSchPropsModule);
+				remoteSchModuleInfo.addEventListener(ModuleEvent.ERROR, handleError);
+				try {
+					remoteSchModuleInfo.load();
+				} catch(err:Error) {
+					Alert.show(resourceManager.getString("messages", "error") + err.message);
+				}
+				
+				baseInfoForm_0.includeInLayout = true;
+				baseInfoForm_0.visible = true;
+				
+				baseInfoForm_1.includeInLayout = true;
+				baseInfoForm_1.visible = true;
+			}
+			
+			private function renderRemoteSchPropsModule(event:ModuleEvent):void {
+				
+				var remoteSchTab:NavigatorContent = new NavigatorContent();
+				
+				remoteSchModule = remoteSchModuleInfo.factory.create() as Module;
+				
+				remoteSchTab.name = "remoteSch";
+				remoteSchTab.label = "RemoteSch Parameters";
+				
+				(remoteSchModule as IModuleInterface).setEditMode(true);
+				
+				if(jobDetailXml != null) {
+					(remoteSchModule as IModuleInterface).setDataXml(XML(jobDetailXml.executeRShellParams));
+				}
+				
+				myViewStack.addElement(remoteSchTab);
+				
+				remoteSchTab.addElement(remoteSchModule);
+			}
+			
 			
 		]]>
 	</fx:Script>

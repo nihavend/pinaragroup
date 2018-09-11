@@ -15,17 +15,21 @@
  						 
 	<fx:Script>
 		<![CDATA[
-			import mx.controls.Alert;
-			import mx.collections.ArrayList;
+			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.AppInfo;
-			import spark.components.NavigatorContent;
 			import com.likya.pinara.model.ModelLocator;
 			
-			private static const BATCH_PROCESS:String = "BATCH PROCESS"; 
-			private static const SHELL_SCRIPT:String = "SHELL SCRIPT"; 
-			private static const SYSTEM_COMMAND:String = "SYSTEM COMMAND";
-			private static const BATCH_FILE_EXT:String = ".bat";
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
 			
+			import spark.components.NavigatorContent;
+			
+			public static const BATCH_PROCESS:String = "BATCH PROCESS"; 
+			public static const SHELL_SCRIPT:String = "SHELL SCRIPT"; 
+			public static const SYSTEM_COMMAND:String = "SYSTEM COMMAND";
+			public static const REMOTE_SHELL:String = "REMOTE SHELL";
+			
+			private static const BATCH_FILE_EXT:String = ".bat";
 			private static var regExPath:RegExp = new RegExp("([abcdefgABCDEFG]:[\\\\/])?([a-zA-Z/\\\\\\.0-9_ \\-])*");
 			
 			[Bindable] 
@@ -64,6 +68,7 @@
 			{	
 				var jobTypesArray:ArrayList = new ArrayList();
 				jobTypesArray.addItem(SYSTEM_COMMAND);
+				jobTypesArray.addItem(REMOTE_SHELL);
 				
 				if(appInfo.ostype == AppInfo.OS_UNIX) {
 					jobTypesArray.addItem(SHELL_SCRIPT);
@@ -77,6 +82,11 @@
 				}
 				
 				jsJobType.dataProvider = jobTypesArray;
+			}
+			
+			protected function jsJobTypeSelectionChange(event:Event):void
+			{
+				dispatchEvent(new ResourceEvent(ResourceEvent.JOB_TYPE_CHANGED, jsJobType.selectedItem));
 			}
 			
 		]]>
@@ -109,7 +119,7 @@
 	</s:FormItem>
 	
 	<s:FormItem label="{resourceManager.getString('messages', 'jobTypeItemLabel')}">
-		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" selectedIndex="0" enabled="true"/> 
+		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" change="jsJobTypeSelectionChange(event)" selectedIndex="0" enabled="true"/> 
 			<!--s:dataProvider>
 				<mx:ArrayList>
 					<fx:String>BATCH PROCESS</fx:String>

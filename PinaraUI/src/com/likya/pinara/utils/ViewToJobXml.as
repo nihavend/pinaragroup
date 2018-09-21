@@ -275,7 +275,12 @@ package com.likya.pinara.utils {
 				managementInfoXML.appendChild(<myra-jobprops:periodInfo xmlns:myra-jobprops="http://www.likyateknoloji.com/myra-jobprops" />);
 				
 				managementInfoXML.periodInfo.@relativeStart = j.managementInfoForm_1.relativeStart.selectedItem;
-				managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
+				
+			
+				if(j.managementInfoForm_1.stepValue.text != "") {
+					managementInfoXML.periodInfo.@step = j.managementInfoForm_1.stepValue.text;
+				}
+				
 				if(j.managementInfoForm_1.maxCountValue.text != null && j.managementInfoForm_1.maxCountValue.text.length > 0 && j.managementInfoForm_1.maxCountValue.text != "0") {
 					managementInfoXML.periodInfo.@maxCount = j.managementInfoForm_1.maxCountValue.text;
 				}

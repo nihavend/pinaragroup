@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.test.deps.TestBase;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
@@ -60,18 +61,18 @@ public class ZipUtil extends TestBase {
 		File file = new File(pathName + fileNames[idx] + ".bin");
 		
 		System.err.print("	>> serializing...");
-		long startTime = System.currentTimeMillis();
+		long startTime = DateUtils.getCurrentTimeMilliseconds();
 		byte[] data = jobListDocument.toString().getBytes("utf-8");
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println(file.getName() + "	>> serialized to byte[] in " + duration + " ms");
 		
-		startTime = System.currentTimeMillis();
+		startTime = DateUtils.getCurrentTimeMilliseconds();
 		OutputStream outputStream = new FileOutputStream(file);
 		// ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		GZIPOutputStream gzip = new GZIPOutputStream(outputStream);
 		gzip.write(data);
 		gzip.close();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println(file.getName() + "	>> is saved in " + duration + " ms");
 
 

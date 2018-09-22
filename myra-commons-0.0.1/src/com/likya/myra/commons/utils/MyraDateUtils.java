@@ -22,7 +22,7 @@ public class MyraDateUtils extends DateUtils {
 		int clientZoneOffset = 7200000; // milisecond
 		int clientDSTOffset = 3600000; // milisecond
 
-		Calendar jobCalendar = Calendar.getInstance();
+		Calendar jobCalendar = DateUtils.getCalendarInstance();
 
 		if (startTime) {
 			jobCalendar.set(Calendar.YEAR, jsRecordedTime.getStartTime().get(Calendar.YEAR));
@@ -84,12 +84,12 @@ public class MyraDateUtils extends DateUtils {
 			return "-";
 		}
 
-		Calendar startCalendar = Calendar.getInstance();
+		Calendar startCalendar = DateUtils.getCalendarInstance();
 		startCalendar.set(Calendar.HOUR_OF_DAY, jsRecordedTime.getStartTime().get(Calendar.HOUR_OF_DAY));
 		startCalendar.set(Calendar.MINUTE, jsRecordedTime.getStartTime().get(Calendar.MINUTE));
 		startCalendar.set(Calendar.SECOND, jsRecordedTime.getStartTime().get(Calendar.SECOND));
 
-		Calendar stopCalendar = Calendar.getInstance();
+		Calendar stopCalendar = DateUtils.getCalendarInstance();
 
 		// is bitmisse
 		if (jsRecordedTime.getStopTime() != null) {
@@ -230,7 +230,7 @@ public class MyraDateUtils extends DateUtils {
 
 		// GDuration gDuration = new GDuration(durationString);
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtils.getCalendarInstance();
 		cal.setTimeInMillis(0);
 
 		GDate base = new GDate(cal);
@@ -242,7 +242,7 @@ public class MyraDateUtils extends DateUtils {
 	}
 	
 	public static Calendar setTimePart(Calendar srcCal) {
-		return setTimePart(srcCal, Calendar.getInstance());
+		return setTimePart(srcCal, DateUtils.getCalendarInstance());
 	}
 	
 	public static Calendar setTimePart(Calendar srcCal, Calendar destCal) {

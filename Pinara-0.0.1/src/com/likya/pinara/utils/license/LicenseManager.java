@@ -2,7 +2,6 @@ package com.likya.pinara.utils.license;
 
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import com.likya.commons.utils.DateUtils;
@@ -35,12 +34,12 @@ public class LicenseManager {
 
 			SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
 			Date expireDate = formatter.parse(licenseInfo.getExpireDate());
-			if (!licenseInfo.getLicenseType().equals("" + 12) && expireDate.before(Calendar.getInstance().getTime())) {
+			if (!licenseInfo.getLicenseType().equals("" + 12) && expireDate.before(DateUtils.getCalendarInstance().getTime())) {
 				expired = true;
 				return false;
 			}
 			
-			long timeToExpire = DateUtils.daysBetween(Calendar.getInstance().getTime(), expireDate);
+			long timeToExpire = DateUtils.daysBetween(DateUtils.getCalendarInstance().getTime(), expireDate);
 			if(!licenseInfo.getLicenseType().equals("" + 12) && (++timeToExpire < 15)){
 				Pinara.println(Pinara.getMessage("LicenseManager.14") + timeToExpire + Pinara.getMessage("LicenseManager.15"));
 			}

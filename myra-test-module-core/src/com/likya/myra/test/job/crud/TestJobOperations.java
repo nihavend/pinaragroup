@@ -3,8 +3,7 @@ package com.likya.myra.test.job.crud;
 import java.io.IOException;
 import java.util.HashMap;
 
-import junit.framework.TestCase;
-
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.LiveStateInfoUtils;
 import com.likya.myra.commons.utils.NetTreeResolver.NetTree;
 import com.likya.myra.jef.core.CoreFactory;
@@ -16,6 +15,8 @@ import com.likya.myra.test.model.generators.SimplePropertiesGenerator;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
+
+import junit.framework.TestCase;
 
 public class TestJobOperations extends TestCase {
 
@@ -98,7 +99,7 @@ public class TestJobOperations extends TestCase {
 			int depCount = 0;
 			for (int c = 0; c < treeCount * depAmount; c++) {
 
-				startTime = System.currentTimeMillis();
+				startTime = DateUtils.getCurrentTimeMilliseconds();
 
 				int maxId = latestJobId();
 
@@ -125,7 +126,7 @@ public class TestJobOperations extends TestCase {
 				
 				jobOperations.addJob(abstractJobType, false);
 
-				long duration = System.currentTimeMillis() - startTime;
+				long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 				System.err.println("added record in  " + duration + " ms");
 
 				// System.out.println(coreFactory.getMonitoringOperations().getJobQueue().get((maxId + 1) + "").getAbstractJobType());

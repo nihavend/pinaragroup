@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -13,6 +12,7 @@ import org.apache.commons.collections4.iterators.ArrayIterator;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.utils.LiveStateInfoUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
@@ -211,7 +211,7 @@ public class TestMyra {
 						if(jobId != null) {
 							TimeManagement timeManagement = coreFactory.getMonitoringOperations().getJobQueue().get(jobId).getAbstractJobType().getManagement().getTimeManagement();
 							
-							if(timeManagement.getJsActualTime().getStartTime().before(Calendar.getInstance())) {
+							if(timeManagement.getJsActualTime().getStartTime().before(DateUtils.getCalendarInstance())) {
 								while(true) {
 									System.out.print("Başlama zamanı geçmiş hemen çalışsın mı ? (E, H veya Bir üst menu için Q): ");
 									String elCevap = br.readLine();

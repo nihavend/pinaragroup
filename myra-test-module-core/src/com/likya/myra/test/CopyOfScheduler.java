@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 import org.apache.xmlbeans.GDuration;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.myra.commons.utils.RestrictedDailyIterator;
 import com.likya.myra.jef.core.CoreFactory;
@@ -41,7 +42,7 @@ public class CopyOfScheduler {
 		// TODO Special care for daily jobs, may be done compatible with general periodicity
 		if (periodInfo == null || periodInfo.getStep() == null || periodInfo.getStep().equals(new GDuration("P1D"))) {
 			Calendar selectedSchedule = regularSchedule(abstractJobType);
-			if (selectedSchedule != null /*&& selectedSchedule.after(Calendar.getInstance())*/) {
+			if (selectedSchedule != null /*&& selectedSchedule.after(DateUtils.getCalendarInstance())*/) {
 				abstractJobType.getManagement().getTimeManagement().getJsActualTime().setStartTime(selectedSchedule);
 			} else {
 				// yeni zamana kurulmadı, artık çalışmayacak
@@ -73,7 +74,7 @@ public class CopyOfScheduler {
 			//abstractJobType.getManagement().getTimeManagement().getJsPlannedTime().setStartTime(c);
 			// System.err.println(abstractJobType.getManagement().getTimeManagement().getJsPlannedTime().getStartTime());
 			Calendar selectedSchedule = regularSchedule(abstractJobType);
-			if (selectedSchedule != null /*&& selectedSchedule.after(Calendar.getInstance())*/) {
+			if (selectedSchedule != null /*&& selectedSchedule.after(DateUtils.getCalendarInstance())*/) {
 				MyraDateUtils.setTimePart(bornedCal, selectedSchedule);
 				abstractJobType.getManagement().getTimeManagement().getJsActualTime().setStartTime(selectedSchedule);
 				// yeni zamana kuruldu
@@ -152,9 +153,9 @@ public class CopyOfScheduler {
 			}
 
 			if (lastDay != null) {
-				int lastDayOfMonth = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
+				int lastDayOfMonth = DateUtils.getCalendarInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
 				restCal = MyraDateUtils.setTimePart(jsScheduledTime);
-				if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == lastDayOfMonth) {
+				if (DateUtils.getCalendarInstance().get(Calendar.DAY_OF_MONTH) == lastDayOfMonth) {
 					restCal.add(Calendar.MONTH, 1);
 					lastDayOfMonth = restCal.getActualMaximum(Calendar.DAY_OF_MONTH);
 				}
@@ -180,7 +181,7 @@ public class CopyOfScheduler {
 		// System.err.println(MyraDateUtils.getDate(selectedSchedule.getTime()));
 
 		if (sortedCals.length > 0) {
-			selectedSchedule = Calendar.getInstance();
+			selectedSchedule = DateUtils.getCalendarInstance();
 			selectedSchedule.setTime(sortedCals[0].getTime());
 			if (periodInfo != null) {
 				periodInfo.setCounter(BigInteger.valueOf(periodInfo.getCounter().intValue() + 1));

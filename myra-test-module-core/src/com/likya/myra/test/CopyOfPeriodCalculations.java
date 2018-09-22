@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import org.apache.xmlbeans.GDate;
 import org.apache.xmlbeans.GDuration;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.xsd.myra.model.generics.TypeOfTimeType;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -95,7 +96,7 @@ public class CopyOfPeriodCalculations {
 
 	private static Calendar findNextPeriod(Calendar startDateTime, long period, String selectedTZone, boolean isRelativeStart) {
 
-		Date currentTime = Calendar.getInstance().getTime();
+		Date currentTime = DateUtils.getCalendarInstance().getTime();
 
 		if (isRelativeStart) {
 			startDateTime.setTime(currentTime);
@@ -145,10 +146,10 @@ public class CopyOfPeriodCalculations {
 
 	public static Date changeYMDPart(Date firstDate, Date secondDate) {
 
-		Calendar calendarFirst = Calendar.getInstance();
+		Calendar calendarFirst = DateUtils.getCalendarInstance();
 		calendarFirst.setTime(firstDate);
 
-		Calendar calendarSecond = Calendar.getInstance();
+		Calendar calendarSecond = DateUtils.getCalendarInstance();
 		calendarSecond.setTime(secondDate);
 
 		calendarSecond.set(Calendar.YEAR, calendarFirst.get(Calendar.YEAR));
@@ -160,10 +161,10 @@ public class CopyOfPeriodCalculations {
 
 //	private static boolean checkStayInDay(Calendar date) {
 //
-//		Calendar cal = Calendar.getInstance();
+//		Calendar cal = DateUtils.getCalendarInstance();
 //		cal.setTime(date.getTime());
 //
-//		if (cal.get(Calendar.DAY_OF_MONTH) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+//		if (cal.get(Calendar.DAY_OF_MONTH) != DateUtils.getCalendarInstance().get(Calendar.DAY_OF_MONTH)) {
 //			return false;
 //		}
 //
@@ -174,7 +175,7 @@ public class CopyOfPeriodCalculations {
 
 		// GDuration gDuration = new GDuration(durationString);
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtils.getCalendarInstance();
 		cal.setTimeInMillis(0);
 
 		GDate base = new GDate(cal);

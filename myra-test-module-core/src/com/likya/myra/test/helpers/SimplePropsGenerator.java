@@ -1,13 +1,13 @@
 package com.likya.myra.test.helpers;
 
 import java.math.BigInteger;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import org.apache.xmlbeans.GDuration;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.xsd.myra.model.generics.JobCommandTypeDocument.JobCommandType;
 import com.likya.xsd.myra.model.generics.JobTypeDetailsDocument.JobTypeDetails;
@@ -84,18 +84,18 @@ public class SimplePropsGenerator {
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		
 		JsScheduledTime jsScheduledTime = timeManagement.addNewJsScheduledTime();
-		jsScheduledTime.setStartTime(Calendar.getInstance());
+		jsScheduledTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
-		jsActualTime.setStartTime(Calendar.getInstance());
+		jsActualTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
 		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
-		jsRecordedTime.setStartTime(Calendar.getInstance());
-		jsRecordedTime.setStopTime(Calendar.getInstance());
+		jsRecordedTime.setStartTime(DateUtils.getCalendarInstance());
+		jsRecordedTime.setStopTime(DateUtils.getCalendarInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);
@@ -230,18 +230,18 @@ public class SimplePropsGenerator {
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		
 		JsScheduledTime jsScheduledTime = timeManagement.addNewJsScheduledTime();
-		jsScheduledTime.setStartTime(Calendar.getInstance());
+		jsScheduledTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
-		jsActualTime.setStartTime(Calendar.getInstance());
+		jsActualTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
 		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
-		jsRecordedTime.setStartTime(Calendar.getInstance());
-		jsRecordedTime.setStopTime(Calendar.getInstance());
+		jsRecordedTime.setStartTime(DateUtils.getCalendarInstance());
+		jsRecordedTime.setStopTime(DateUtils.getCalendarInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);

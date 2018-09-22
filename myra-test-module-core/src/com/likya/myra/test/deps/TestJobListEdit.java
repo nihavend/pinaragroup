@@ -7,6 +7,7 @@ import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
@@ -33,9 +34,9 @@ public class TestJobListEdit extends TestBase {
 			JobListDocument jobListDocument = getJobList(pathName, fileNames[idx], true);
 
 			File file = new File(pathName + "XB_" + fileNames[idx]);
-			long startTime = System.currentTimeMillis();
+			long startTime = DateUtils.getCurrentTimeMilliseconds();
 			jobListDocument.save(file);
-			long duration = System.currentTimeMillis() - startTime;
+			long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 			System.err.print(file.getName() + "	>> is saved in " + duration + " ms");
 
 		} catch (Exception e) {

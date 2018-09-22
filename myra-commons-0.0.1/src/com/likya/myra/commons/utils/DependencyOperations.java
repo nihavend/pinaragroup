@@ -227,7 +227,7 @@ public class DependencyOperations {
 
 	public static boolean validateDependencyList(Logger logger, HashMap<String, AbstractJobType> jobQueue) {
 
-		Date startTime = Calendar.getInstance().getTime();
+		Date startTime = DateUtils.getCalendarInstance().getTime();
 
 		boolean cyclCheck = checkCyclicDependency(logger, jobQueue);
 

@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import org.apache.xmlbeans.XmlException;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.wlagen.JsExecutionTimeFrameDocument.JsExecutionTimeFrame;
 
@@ -62,7 +63,7 @@ public class PeriodTesterDataGenerator {
 			
 			abstractJobType.getManagement().getTimeManagement().setJsExecutionTimeFrame(JsExecutionTimeFrame.Factory.newInstance());
 
-			Calendar calendar = Calendar.getInstance(); // this would default to now
+			Calendar calendar = DateUtils.getCalendarInstance(); // this would default to now
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
 
 			abstractJobType.getManagement().getTimeManagement().getJsExecutionTimeFrame().setStartTime(calendar);

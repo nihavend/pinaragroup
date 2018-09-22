@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
@@ -18,21 +19,21 @@ public abstract class TestBase {
 
 		System.err.print(fName + " loading...");
 
-		long startTime = System.currentTimeMillis();
+		long startTime = DateUtils.getCurrentTimeMilliseconds();
 		xmlString = FileUtils.readFile(path + fName);
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.print("	>> is loaded in " + duration + " ms	>> parsing...");
 
-		startTime = System.currentTimeMillis();
+		startTime = DateUtils.getCurrentTimeMilliseconds();
 		JobListDocument jobListDocument = JobListDocument.Factory.parse(xmlString.toString());
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.print("	>> is parsed in " + duration + " ms");
 
 		if(validate) {
 			System.err.print("	>> validating...");
-			startTime = System.currentTimeMillis();
+			startTime = DateUtils.getCurrentTimeMilliseconds();
 			validator(jobListDocument);
-			duration = System.currentTimeMillis() - startTime;
+			duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 			System.err.print("	>> is validated in " + duration + " ms");
 		}
 		
@@ -41,11 +42,11 @@ public abstract class TestBase {
 
 	public static void validator(XmlObject xmlObject) throws Exception {
 		
-		long startTime = System.currentTimeMillis();
+		long startTime = DateUtils.getCurrentTimeMilliseconds();
 		if (!XMLValidations.validateWithXSDAndLog(Logger.getRootLogger(), xmlObject)) {
 			throw new Exception("JobList.xml is null or damaged !");
 		}
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("	>> is validate in " + duration + " ms");
 		
 	}

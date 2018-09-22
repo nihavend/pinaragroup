@@ -162,7 +162,7 @@ public class TestDependencyChain extends TestCase {
 	//		
 	//		HashMap<String, String> freeJobs = new HashMap<String, String>();
 	//		
-	//		long started = System.currentTimeMillis();
+	//		long started = DateUtils.getCurrentTimeMilliseconds();
 	//		
 	//		// StringBuffer xmlString = TestMyra.getData(dataPath + "3depV.xml");
 	//		StringBuffer xmlString = TestMyra.getData(dataPath + "10dep2tree.xml");
@@ -185,7 +185,7 @@ public class TestDependencyChain extends TestCase {
 	//				str = NetTreeResolver.runAlgorythm(objectArray, netTreeMap, freeJobs);
 	//			//}
 	//			
-	//			long ended = System.currentTimeMillis();
+	//			long ended = DateUtils.getCurrentTimeMilliseconds();
 	//			
 	//			System.err.println(str.toString());
 	//			
@@ -243,7 +243,7 @@ public class TestDependencyChain extends TestCase {
 			
 			prop.load(fileInputStream);
 
-			// Date time = new Date(System.currentTimeMillis());
+			// Date time = new Date(DateUtils.getCurrentTimeMilliseconds());
 
 			// get the property value and print it out
 			// String user = prop.getProperty("user");

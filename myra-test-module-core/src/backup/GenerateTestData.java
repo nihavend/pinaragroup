@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.GDuration;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.xsd.myra.model.generics.UnitDocument.Unit;
@@ -168,15 +168,15 @@ public class GenerateTestData {
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		
 		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
-		jsActualTime.setStartTime(Calendar.getInstance());
+		jsActualTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
 		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
-		jsRecordedTime.setStartTime(Calendar.getInstance());
-		jsRecordedTime.setStopTime(Calendar.getInstance());
+		jsRecordedTime.setStartTime(DateUtils.getCalendarInstance());
+		jsRecordedTime.setStopTime(DateUtils.getCalendarInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);

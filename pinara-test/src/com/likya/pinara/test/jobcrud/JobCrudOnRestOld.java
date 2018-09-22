@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlOptions;
 import org.junit.Assert;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.XMLValidations;
 import com.likya.myra.test.model.generators.SimplePropertiesGenerator;
 import com.likya.pinara.gui.rest.RestParser;
@@ -36,7 +37,7 @@ public class JobCrudOnRestOld extends JobRestTestCaseBase {
 			int depCount = 0;
 			for (int c = 0; c < treeCount * depAmount; c++) {
 				
-				startTime = System.currentTimeMillis();
+				startTime = DateUtils.getCurrentTimeMilliseconds();
 				
 				int maxId = latestJobId();
 				
@@ -92,7 +93,7 @@ public class JobCrudOnRestOld extends JobRestTestCaseBase {
 				xmlJob = "<data><serialize>true</serialize><datamess>" + xmlJob + "</datamess></data>";
 				String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBADD, xmlJob);
 
-				long duration = System.currentTimeMillis() - startTime;
+				long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 				System.err.println("added record in  " + duration + " ms");
 				
 				Assert.assertNotNull(retString);
@@ -121,7 +122,7 @@ public class JobCrudOnRestOld extends JobRestTestCaseBase {
 			
 			for (int c = 0; c < testCount; c++) {
 				
-				startTime = System.currentTimeMillis();
+				startTime = DateUtils.getCurrentTimeMilliseconds();
 				
 				int maxId = latestJobId();
 				
@@ -181,7 +182,7 @@ public class JobCrudOnRestOld extends JobRestTestCaseBase {
 				xmlJob = "<data><serialize>true</serialize><datamess>" + xmlJob + "</datamess></data>";
 				String retString = httpPost(RESTJOBROPS_CTX + RestParser.CMD_JOBADD, xmlJob);
 
-				long duration = System.currentTimeMillis() - startTime;
+				long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 				System.err.println("added record in  " + duration + " ms");
 				
 				Assert.assertNotNull(retString);

@@ -1,11 +1,11 @@
 package com.likya.myra.test.helpers;
 
 import java.math.BigInteger;
-import java.util.Calendar;
 
 import org.apache.xmlbeans.GDuration;
 import org.apache.xmlbeans.XmlObject;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.xsd.myra.model.generics.JobCommandTypeDocument.JobCommandType;
 import com.likya.xsd.myra.model.generics.JobTypeDetailsDocument.JobTypeDetails;
@@ -70,15 +70,15 @@ public class JobICPropsGenerator {
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		
 		JsActualTime jsPlannedTime = timeManagement.addNewJsActualTime();
-		jsPlannedTime.setStartTime(Calendar.getInstance());
+		jsPlannedTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
 		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
-		jsRecordedTime.setStartTime(Calendar.getInstance());
-		jsRecordedTime.setStopTime(Calendar.getInstance());
+		jsRecordedTime.setStartTime(DateUtils.getCalendarInstance());
+		jsRecordedTime.setStopTime(DateUtils.getCalendarInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);

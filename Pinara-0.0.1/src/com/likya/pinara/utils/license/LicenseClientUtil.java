@@ -82,7 +82,7 @@ public class LicenseClientUtil {
 		Date date;
 
 		// System.out.println("Expire Date : " + value);
-		// System.out.println("Current Date : " + format.format(Calendar.getInstance().getTime()));
+		// System.out.println("Current Date : " + format.format(DateUtils.getCalendarInstance().getTime()));
 
 		try {
 			date = format.parse(value);

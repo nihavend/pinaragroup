@@ -1,5 +1,6 @@
 package com.likya.myra.test.deps;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.DependencyOperations;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 
@@ -19,9 +20,9 @@ public class TestCyclicDeps extends TestBase {
 				JobListDocument jobListDocument = getJobList(pathName, fileName, true);
 				
 				System.out.println(">> Checking" + fileName + "...");
-				long startTime = System.currentTimeMillis();
+				long startTime = DateUtils.getCurrentTimeMilliseconds();
 				boolean hasCycle = DependencyOperations.checkCyclicDependency(null, toAbstractJobMap(jobListDocument));
-				long duration = System.currentTimeMillis() - startTime;
+				long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 				System.out.println(">> checked in " + duration + " ms");
 				
 				if(hasCycle) { 

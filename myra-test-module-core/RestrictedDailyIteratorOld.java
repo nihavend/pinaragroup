@@ -28,7 +28,7 @@ public class RestrictedDailyIteratorOld {
 	@SuppressWarnings("unused")
 	private final int hourOfDay, minute, second;
 	private final int[] days;
-	private final Calendar calendar = Calendar.getInstance();
+	private final Calendar calendar = DateUtils.getCalendarInstance();
 
 	public RestrictedDailyIteratorOld(int hourOfDay, int minute, int second, int[] days) {
 		this(hourOfDay, minute, second, days, new Date());

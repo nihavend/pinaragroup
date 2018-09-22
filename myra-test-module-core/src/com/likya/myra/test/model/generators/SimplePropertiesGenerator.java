@@ -1,37 +1,36 @@
 package com.likya.myra.test.model.generators;
 
 import java.math.BigInteger;
-import java.util.Calendar;
 
 import org.apache.xmlbeans.GDuration;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.xsd.myra.model.generics.JobCommandTypeDocument.JobCommandType;
 import com.likya.xsd.myra.model.generics.JobTypeDetailsDocument.JobTypeDetails;
 import com.likya.xsd.myra.model.generics.UnitDocument.Unit;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
-import com.likya.xsd.myra.model.joblist.SimpleProperties;
 import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
+import com.likya.xsd.myra.model.joblist.SimpleProperties;
 import com.likya.xsd.myra.model.jobprops.BaseJobInfosDocument.BaseJobInfos;
 import com.likya.xsd.myra.model.jobprops.DaysOfMonthDocument.DaysOfMonth;
 import com.likya.xsd.myra.model.jobprops.DependencyListDocument.DependencyList;
 import com.likya.xsd.myra.model.jobprops.ManagementDocument.Management;
 import com.likya.xsd.myra.model.jobprops.PeriodInfoDocument.PeriodInfo;
 import com.likya.xsd.myra.model.jobprops.ScheduleInfoDocument.ScheduleInfo;
-import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
-import com.likya.xsd.myra.model.stateinfo.Status;
 import com.likya.xsd.myra.model.stateinfo.JobStatusListDocument.JobStatusList;
 import com.likya.xsd.myra.model.stateinfo.JsDependencyRuleDocument.JsDependencyRule;
 import com.likya.xsd.myra.model.stateinfo.LiveStateInfoDocument.LiveStateInfo;
+import com.likya.xsd.myra.model.stateinfo.LiveStateInfosType;
 import com.likya.xsd.myra.model.stateinfo.ReturnCodeDocument.ReturnCode;
 import com.likya.xsd.myra.model.stateinfo.ReturnCodeListDocument.ReturnCodeList;
 import com.likya.xsd.myra.model.stateinfo.ReturnCodeListDocument.ReturnCodeList.OsType;
 import com.likya.xsd.myra.model.stateinfo.StateInfosDocument.StateInfos;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
+import com.likya.xsd.myra.model.stateinfo.Status;
 import com.likya.xsd.myra.model.stateinfo.StatusNameDocument.StatusName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
-import com.likya.xsd.myra.model.wlagen.JsScheduledTimeDocument.JsScheduledTime;
 import com.likya.xsd.myra.model.wlagen.CascadingConditionsDocument.CascadingConditions;
 import com.likya.xsd.myra.model.wlagen.ExpectedTimeDocument.ExpectedTime;
 import com.likya.xsd.myra.model.wlagen.ItemDocument.Item;
@@ -39,6 +38,7 @@ import com.likya.xsd.myra.model.wlagen.JobAutoRetryInfoDocument.JobAutoRetryInfo
 import com.likya.xsd.myra.model.wlagen.JobPriorityDocument.JobPriority;
 import com.likya.xsd.myra.model.wlagen.JsActualTimeDocument.JsActualTime;
 import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
+import com.likya.xsd.myra.model.wlagen.JsScheduledTimeDocument.JsScheduledTime;
 import com.likya.xsd.myra.model.wlagen.JsTimeOutDocument.JsTimeOut;
 import com.likya.xsd.myra.model.wlagen.JsTypeDocument.JsType;
 import com.likya.xsd.myra.model.wlagen.TimeManagementDocument.TimeManagement;
@@ -76,18 +76,18 @@ public class SimplePropertiesGenerator {
 		management.setTrigger(Trigger.TIME);
 		TimeManagement timeManagement = management.addNewTimeManagement();
 		JsScheduledTime jsScheduledTime = timeManagement.addNewJsScheduledTime();
-		jsScheduledTime.setStartTime(Calendar.getInstance());
+		jsScheduledTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsActualTime jsActualTime = timeManagement.addNewJsActualTime();
-		jsActualTime.setStartTime(Calendar.getInstance());
+		jsActualTime.setStartTime(DateUtils.getCalendarInstance());
 		
 		JsTimeOut jsTimeOut = timeManagement.addNewJsTimeOut();
 		jsTimeOut.setUnit(Unit.SECONDS);
 		jsTimeOut.setValueInteger(BigInteger.valueOf(100));
 		
 		JsRecordedTime jsRecordedTime = timeManagement.addNewJsRecordedTime();
-		jsRecordedTime.setStartTime(Calendar.getInstance());
-		jsRecordedTime.setStopTime(Calendar.getInstance());
+		jsRecordedTime.setStartTime(DateUtils.getCalendarInstance());
+		jsRecordedTime.setStopTime(DateUtils.getCalendarInstance());
 		
 		ExpectedTime expectedTime = timeManagement.addNewExpectedTime();
 		expectedTime.setUnit(Unit.SECONDS);

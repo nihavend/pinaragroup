@@ -72,7 +72,7 @@ public class TestPeriodCalculations {
 
 		GDuration gDuration = new GDuration("PT5M");
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtils.getCalendarInstance();
 		cal.setTimeInMillis(0);
 
 		GDate base = new GDate(cal);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.myra.commons.utils.MyraDateUtils;
 
 public class TestCalendarSort {
@@ -12,23 +13,23 @@ public class TestCalendarSort {
 		
 		ArrayList<Calendar> floatingSchedules = new ArrayList<Calendar>();
 		
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtils.getCalendarInstance();
 		
 		cal.add(Calendar.DAY_OF_MONTH, -1);
 		System.out.println("1 : " + MyraDateUtils.getDate(cal));
 		floatingSchedules.add(cal);
 		
-		cal = Calendar.getInstance();
+		cal = DateUtils.getCalendarInstance();
 		cal.add(Calendar.DAY_OF_MONTH, 3);
 		System.out.println("2 : " + MyraDateUtils.getDate(cal));
 		floatingSchedules.add(cal);
 		
-		cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, 2);
+		cal = DateUtils.getCalendarInstance();
+		cal.add(Calendar.DAY_OF_MONTH, 2);	
 		System.out.println("3 : " + MyraDateUtils.getDate(cal));
 		floatingSchedules.add(cal);
 
-		cal = Calendar.getInstance();
+		cal = DateUtils.getCalendarInstance();
 		cal.add(Calendar.DAY_OF_MONTH, -2);
 		System.out.println("4 : " + MyraDateUtils.getDate(cal));
 		floatingSchedules.add(cal);

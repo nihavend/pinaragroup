@@ -15,7 +15,7 @@ public class DateUtils {
 
 	public static long dateDiffWithNow(Calendar sDate) {
 
-		Date now = Calendar.getInstance().getTime();
+		Date now = getCalendarInstance().getTime();
 		long timeDiff = now.getTime() - sDate.getTimeInMillis();
 
 		return timeDiff;
@@ -23,7 +23,7 @@ public class DateUtils {
 
 	public static long dateDiffWithNow(Date sDate) {
 
-		Date now = Calendar.getInstance().getTime();
+		Date now = getCalendarInstance().getTime();
 		long timeDiff = now.getTime() - sDate.getTime();
 
 		return timeDiff;
@@ -31,7 +31,7 @@ public class DateUtils {
 
 	public static long dateDiffWithNow(long sDate) {
 
-		Date now = Calendar.getInstance().getTime();
+		Date now = getCalendarInstance().getTime();
 		long timeDiff = now.getTime() - sDate;
 
 		return timeDiff;
@@ -115,7 +115,7 @@ public class DateUtils {
 
 	public static Calendar normalizeDate(Calendar calendar) {
 
-		Calendar tmpCalendar = Calendar.getInstance();
+		Calendar tmpCalendar = getCalendarInstance();
 
 		tmpCalendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
 		tmpCalendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
@@ -168,7 +168,7 @@ public class DateUtils {
 		int clientZoneOffset = 7200000; // milisecond
 		int clientDSTOffset = 3600000; // milisecond
 
-		Calendar jobCalendar = Calendar.getInstance();
+		Calendar jobCalendar = getCalendarInstance();
 
 		jobCalendar.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
 		jobCalendar.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
@@ -251,13 +251,13 @@ public class DateUtils {
 
 	public static String getCurrentTimeWithMilliseconds() {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.S");
-		Date timeStr = Calendar.getInstance().getTime();
+		Date timeStr = getCalendarInstance().getTime();
 		return formatter.format(timeStr);
 	}
 
 	public static String getCurrentTimeForFileName() {
 		SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy_HHmmssS");
-		Date timeStr = Calendar.getInstance().getTime();
+		Date timeStr = getCalendarInstance().getTime();
 		return formatter.format(timeStr);
 	}
 
@@ -273,12 +273,16 @@ public class DateUtils {
 		return System.currentTimeMillis();
 	}
 
+	public static Calendar getCalendarInstance() {
+		return Calendar.getInstance();
+	}
+	
 	public static Date changeDateValue(Date firstDate, Date secondDate) {
 
-		Calendar calendarFirst = Calendar.getInstance();
+		Calendar calendarFirst = getCalendarInstance();
 		calendarFirst.setTime(firstDate);
 
-		Calendar calendarSecond = Calendar.getInstance();
+		Calendar calendarSecond = getCalendarInstance();
 		calendarSecond.setTime(secondDate);
 
 		calendarSecond.set(Calendar.YEAR, calendarFirst.get(Calendar.YEAR));
@@ -290,10 +294,10 @@ public class DateUtils {
 
 	public static boolean checkStayInDay(Date date) {
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = getCalendarInstance();
 		cal.setTime(date);
 
-		if (cal.get(Calendar.DAY_OF_MONTH) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
+		if (cal.get(Calendar.DAY_OF_MONTH) != getCalendarInstance().get(Calendar.DAY_OF_MONTH)) {
 			return false;
 		}
 
@@ -348,7 +352,7 @@ public class DateUtils {
 //	public static Date findNextPeriod(Date nextPeriodTime, Long period) {
 //		
 //		period = period * 1000; // Convert to milliseconds
-//		Date currentTime = Calendar.getInstance().getTime();
+//		Date currentTime = getCalendarInstance().getTime();
 //		// System.out.println(currentTime + "\n" + nextPeriodTime);
 //		
 //		long diffDate = currentTime.getTime() - nextPeriodTime.getTime();
@@ -377,7 +381,7 @@ public class DateUtils {
 		boolean loop = true;
 
 		while (loop) {
-			Date currentTime = Calendar.getInstance().getTime();
+			Date currentTime = getCalendarInstance().getTime();
 			if (nextPeriodTime.before(currentTime)) {
 				nextPeriodTime = DateUtils.longtoDate(nextPeriodTime.getTime() + period);
 			} else {
@@ -393,7 +397,7 @@ public class DateUtils {
 
 		StringTokenizer dateTokenizer = new StringTokenizer(dateTimeInfo, " "); //$NON-NLS-1$
 		
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = getCalendarInstance();
 		
 		String timeToken = null;
 		String dateToken = null;
@@ -437,8 +441,8 @@ public class DateUtils {
 
 	public static Date setForToday(Date myDate) {
 		
-		Calendar todayCalendar = Calendar.getInstance();
-		Calendar myCalendar = Calendar.getInstance();
+		Calendar todayCalendar = getCalendarInstance();
+		Calendar myCalendar = getCalendarInstance();
 		myCalendar.setTime(myDate);
 		
 		myCalendar.set(Calendar.MONTH, todayCalendar.get(Calendar.MONTH));
@@ -449,7 +453,7 @@ public class DateUtils {
 	}
 	
 	public static long getDurationNumeric(Date sDate) {
-		Date now = Calendar.getInstance().getTime();
+		Date now = getCalendarInstance().getTime();
 		long timeDiff = now.getTime() - sDate.getTime();
 		return timeDiff;
 	}

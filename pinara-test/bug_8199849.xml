@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project pinara-test">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="D:/dev/eclipse_workspaces/j2ee_oxygen/jdk1.8"/>
+    <property name="dir.jarfile" value="D:/dev/bug_report"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/BUG_8199849.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.likya.bugreport.JDK_8199849.BugReport_JDK_8199849"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.buildfile}/target/classes"/>
+            <fileset dir="D:/dev/git/pinaragroup/myra-commons-0.0.1/target/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/likyateknoloji/myra-schema/0.0.1/myra-schema-0.0.1.jar"/>
+            <fileset dir="D:/dev/git/pinaragroup/likya-commons-0.0.1/target/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/net/java/dev/eval/eval/0.5/eval-0.5.jar"/>
+            <fileset dir="D:/dev/git/pinaragroup/Pinara-0.0.1/target/classes"/>
+            <fileset dir="D:/dev/git/Myra/Myra-0.0.1/target/classes"/>
+            <fileset dir="D:/dev/git/pinaragroup/myra-test-module-core/target/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/org/jvnet/winp/winp/1.14/winp-1.14.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/com/jcraft/jsch/0.1.50/jsch-0.1.50.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/serkan/.m2/repository/commons-codec/commons-codec/1.8/commons-codec-1.8.jar"/>
+        </jar>
+    </target>
+</project>

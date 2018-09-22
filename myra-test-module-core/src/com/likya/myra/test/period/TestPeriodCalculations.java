@@ -5,13 +5,13 @@ import java.util.Calendar;
 
 import org.apache.xmlbeans.GDate;
 import org.apache.xmlbeans.GDuration;
-import org.apache.xmlbeans.XmlException;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.likya.commons.utils.DateUtils;
+import com.likya.myra.jef.model.Forwarder;
 import com.likya.myra.jef.utils.timeschedules.PeriodCalculations;
-import com.likya.myra.test.helpers.SimplePropsGenerator;
+import com.likya.myra.test.helpers.PeriodTesterDataGenerator;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 
 public class TestPeriodCalculations {
@@ -21,23 +21,43 @@ public class TestPeriodCalculations {
 
 		AbstractJobType abstractJobType;
 		try {
-			abstractJobType = AbstractJobType.Factory.parse(SimplePropsGenerator.generateAbstractJobType(false).xmlText());
+			abstractJobType = PeriodTesterDataGenerator.generate(); 
 			ArrayList<String> errorMessages = new ArrayList<String>();
 
-			abstractJobType.getManagement().getPeriodInfo().setRelativeStart(false);
+			Forwarder forwarder = PeriodCalculations.forward(abstractJobType, errorMessages);
+			comperator(abstractJobType, forwarder);
 			
-			Calendar forwarded = PeriodCalculations.forward(abstractJobType, errorMessages);
-			System.out.println(abstractJobType.getManagement().getTimeManagement().getJsScheduledTime().getStartTime());
-			System.out.println(DateUtils.getDate(forwarded));
+			abstractJobType = PeriodTesterDataGenerator.generateMaxCountExceeded();
 			
-		} catch (XmlException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			forwarder = PeriodCalculations.forward(abstractJobType, errorMessages);
+			comperator(abstractJobType, forwarder);
+
+			abstractJobType = PeriodTesterDataGenerator.generateOutOfTimeFrame();
+			forwarder = PeriodCalculations.forward(abstractJobType, errorMessages);
+			comperator(abstractJobType, forwarder);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	@Ignore
+	public void comperator(AbstractJobType abstractJobType, Forwarder forwarder) {
+		if(forwarder.equals(Forwarder.MAX_COUNT_EXCEEDED)) {
+			// System.out.println("Due to a reason that maxCount reached, process changed to disabled !");
+			System.out.println(forwarder.getObject());
+			System.out.println(abstractJobType.getStateInfos().toString());
+		} else if (forwarder.equals(Forwarder.CALENDAR_CALCULATED)) {
+			System.out.println(abstractJobType.getManagement().getTimeManagement().getJsScheduledTime().getStartTime());
+			System.out.println(DateUtils.getDate((Calendar) forwarder.getObject()));
+		} else if (forwarder.equals(Forwarder.CALENDAR_NOT_CALCULATED)) {
+			System.out.println(forwarder.getObject());
+		} else {
+			System.out.println("Unexpected forwarder value, should be BUG !");
+		}
+	}
+		
 	
 	@Ignore
 	public void duration() {

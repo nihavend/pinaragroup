@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.ValidPlatforms;
 import com.likya.myra.commons.utils.XMLValidations;
@@ -117,38 +118,38 @@ public class Pinara extends PinaraBase {
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.PINARA_CONSOLE, Level.INFO);
 		// PinaraLogManager.setLogLevelMin(PinaraAppender.MYRA_CONSOLE, Level.INFO);
 
-		long startTime = System.currentTimeMillis();
+		long startTime = DateUtils.getCurrentTimeMilliseconds();
 		pinara = new Pinara();
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("new Pinara()" + " in " + duration + " ms");
 
 		pinara.setConfigurationManager(configurationManager);
 
 		pinara.loadAuthenticationInfo();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.loadAuthenticationInfo()" + " in " + duration + " ms");
 
 		pinara.startInfoServers();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.startInfoServers()" + " in " + duration + " ms");
 
 		pinara.startWebManager();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.startWebManager()" + " in " + duration + " ms");
 
 		if (!pinara.initMyra()) {
 			throw new Exception();
 		}
 		
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.initMyra()" + " in " + duration + " ms");
 
 		PinaraAppManagerImpl.initialize();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("PinaraAppManagerImpl.initialize()" + " in " + duration + " ms");
 		
 		pinara.startCommServer();
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.startCommServer()" + " in " + duration + " ms");
 		
 		if(PinaraAppManagerImpl.getExecutionState().equals(CoreStateInfo.STATE_STARTING)) {
@@ -156,7 +157,7 @@ public class Pinara extends PinaraBase {
 		}
 
 		pinara.sendInfos(EventTypeInfo.StartUp);
-		duration = System.currentTimeMillis() - startTime;
+		duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.sendStartUpInfos()" + " in " + duration + " ms");
 		System.out.println();
 

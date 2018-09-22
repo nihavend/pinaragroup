@@ -11,6 +11,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
 
+import com.likya.commons.utils.DateUtils;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.model.UnresolvedDependencyException;
 import com.likya.myra.commons.utils.JobDependencyResolver;
@@ -231,9 +232,9 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		PinaraSMSServer pinaraSMSServer = Pinara.getInstance().getConfigurationManager().getPinaraSmsServer();
 		TcpManagementConsole tcpManagementConsole = Pinara.getInstance().getConfigurationManager().getTcpManagementConsole();
 		
-		long startTime = System.currentTimeMillis();
+		long startTime = DateUtils.getCurrentTimeMilliseconds();
 		Pinara.getInstance().sendInfos(EventTypeInfo.ShutDown);
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = DateUtils.getCurrentTimeMilliseconds() - startTime;
 		System.err.println("pinara.sendShutDownInfos()" + " in " + duration + " ms");
 		System.out.println();
 		

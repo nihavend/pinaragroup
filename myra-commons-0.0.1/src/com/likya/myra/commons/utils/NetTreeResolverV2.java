@@ -34,7 +34,7 @@ public class NetTreeResolverV2 {
 	}
 	
 	public static synchronized String generateVirtualId() {
-		return "" + System.currentTimeMillis();
+		return "" + DateUtils.getCurrentTimeMilliseconds();
 	}
 
 	public static StringBuilder runAlgorythm(XmlObject[] objectArray, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) throws Exception {
@@ -44,13 +44,13 @@ public class NetTreeResolverV2 {
 
 		StringBuilder outputStr = new StringBuilder();
 
-		long started = System.currentTimeMillis();
+		long started = DateUtils.getCurrentTimeMilliseconds();
 
 		ArrayList<String> jobListIdx = createIdx((AbstractJobType[]) objectArray);
 
 		HashMap<String, AbstractJobType> jobMap = toMap((AbstractJobType[]) objectArray);
 
-		long ended = System.currentTimeMillis();
+		long ended = DateUtils.getCurrentTimeMilliseconds();
 
 		outputStr.append("header >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
 
@@ -67,12 +67,12 @@ public class NetTreeResolverV2 {
 			NetTree netTree = new NetTree();
 			netTree.virtualId = generateVirtualId();
 
-			started = System.currentTimeMillis();
+			started = DateUtils.getCurrentTimeMilliseconds();
 			// mainScan(idKey, netTree, jobMap, netTreeMap, freeJobs);
 			
 			scan(jobMap.get(idKey), netTree, jobMap, netTreeMap, freeJobs);
 			
-			ended = System.currentTimeMillis();
+			ended = DateUtils.getCurrentTimeMilliseconds();
 			outputStr.append("mainScan total duration for [" + idKey + "] >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
 
 			netTreeMap.put(netTree.virtualId, netTree);

@@ -35,7 +35,7 @@ public class NetTreeResolverV0 {
 	}
 	
 	public static synchronized String generateVirtualId() {
-		return "" + System.currentTimeMillis();
+		return "" + DateUtils.getCurrentTimeMilliseconds();
 	}
 
 	public static StringBuilder runAlgorythm(XmlObject[] objectArray, HashMap<String, NetTree> netTreeMap, HashMap<String, AbstractJobType> freeJobs) throws Exception {
@@ -45,13 +45,13 @@ public class NetTreeResolverV0 {
 
 		StringBuilder outputStr = new StringBuilder();
 
-		long started = System.currentTimeMillis();
+		long started = DateUtils.getCurrentTimeMilliseconds();
 
 		ArrayList<String> jobListIdx = createIdx((AbstractJobType[]) objectArray);
 
 		HashMap<String, AbstractJobType> jobMap = toMap((AbstractJobType[]) objectArray);
 
-		long ended = System.currentTimeMillis();
+		long ended = DateUtils.getCurrentTimeMilliseconds();
 
 		outputStr.append("header >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
 
@@ -68,9 +68,9 @@ public class NetTreeResolverV0 {
 			NetTree netTree = new NetTree();
 			netTree.virtualId = generateVirtualId();
 
-			started = System.currentTimeMillis();
+			started = DateUtils.getCurrentTimeMilliseconds();
 			mainScan(idKey, netTree, jobMap, netTreeMap, freeJobs);
-			ended = System.currentTimeMillis();
+			ended = DateUtils.getCurrentTimeMilliseconds();
 			outputStr.append("mainScan total duration for [" + idKey + "] >> " + DateUtils.getFormattedElapsedTimeMS((ended - started)) + "\n");
 
 		}
@@ -107,9 +107,9 @@ public class NetTreeResolverV0 {
 
 		boolean isUppable = abstractJobType.getDependencyList() != null && abstractJobType.getDependencyList().sizeOfItemArray() != 0;
 
-		//		long started = System.currentTimeMillis();
+		//		long started = DateUtils.getCurrentTimeMilliseconds();
 		boolean isDownable = findMeInDeps(abstractJobType, jobMap);
-		//		long ended = System.currentTimeMillis();
+		//		long ended = DateUtils.getCurrentTimeMilliseconds();
 		// System.err.println("findMeInDeps Total Duration for " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
 
 		// System.err.println("Working for : " + idKey + " " + abstractJobType.getBaseJobInfos().getJsName() + " [isUppable : " + isUppable + "][isDownable : " + isDownable + "]");
@@ -121,15 +121,15 @@ public class NetTreeResolverV0 {
 			netTree.members.add(abstractJobType);
 			jobMap.remove(idKey);
 			if (isUppable) {
-				//				started = System.currentTimeMillis();
+				//				started = DateUtils.getCurrentTimeMilliseconds();
 				upScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
-				//				ended = System.currentTimeMillis();
+				//				ended = DateUtils.getCurrentTimeMilliseconds();
 				// System.err.println("upScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
 			}
 			if (isDownable) {
-				//				started = System.currentTimeMillis();
+				//				started = DateUtils.getCurrentTimeMilliseconds();
 				downScan(abstractJobType, netTree, jobMap, netTreeMap, freeJobs);
-				//				ended = System.currentTimeMillis();
+				//				ended = DateUtils.getCurrentTimeMilliseconds();
 				// System.err.println("downScan recursive Total Duration for job : " + idKey + " : " + DateUtils.getFormattedElapsedTimeMS((ended - started)));
 			} else {
 				// This job is one of the last jobs of branch

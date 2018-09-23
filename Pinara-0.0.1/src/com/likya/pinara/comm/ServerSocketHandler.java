@@ -156,10 +156,9 @@ public class ServerSocketHandler implements Runnable {
 				
 				TemporalUnit temporalUnit = pnrInfo.getTemporalUnit();
 				long amountToAdd = pnrInfo.getAmountToAdd();
-				
-				if(amountToAdd != 0) {
-					Pinara.adjustPnrClock(amountToAdd, temporalUnit);
-				}
+
+				// if amountToAdd == 0 or temporalUnit == null clock is adjusted to os or call as RESET
+				Pinara.adjustPnrClock(amountToAdd, temporalUnit);
 
 				pnrInfo.setErrCode(0);
 				

@@ -53,7 +53,7 @@ public class GoodByeMail extends MultipartMail {
 		
 		// Image part
 		MimeBodyPart imagePart = new MimeBodyPart();
-		MimeBodyPart imagePart2 = new MimeBodyPart();
+		// MimeBodyPart imagePart2 = new MimeBodyPart();
 		try {
 			String imgUrl = "/com/likya/pinara/resources/img/mail-likya.jpg";
 			URL url = this.getClass().getResource(imgUrl);

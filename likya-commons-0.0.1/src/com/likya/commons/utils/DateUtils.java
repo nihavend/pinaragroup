@@ -262,7 +262,7 @@ public class DateUtils {
 	}
 
 	public static String getW3CDateTime() {
-		Date date = new Date();
+		Date date = getDate();
 		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH);
 		TimeZone zone = dateFormater.getTimeZone();
 		dateFormater.setTimeZone(zone);
@@ -519,6 +519,11 @@ public class DateUtils {
 		}
 	}
 	
+	public static Date getDate() {
+		//return new Date() 
+		return ClockUtils.getDate();
+	}
+	
 	public static String getDate(Calendar executionTime) {
 		return getDate(executionTime.getTime());
 	}
@@ -534,7 +539,7 @@ public class DateUtils {
 	}
 
 	public static Date longtoDate(Long longDate) {
-		Date date = new Date();
+		Date date = getDate();
 	    date.setTime(longDate);
 
 	    return  date;

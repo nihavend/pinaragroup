@@ -1,6 +1,7 @@
 package com.likya.pinara.model;
 
 import java.io.Serializable;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -10,7 +11,7 @@ public class TrxInfo implements Serializable {
 	
 	private static final long serialVersionUID = 6113817205009241653L;
 
-	private int errCode = 0;
+	private int errCode = -1;
 	private String errDesc = ""; //$NON-NLS-1$
 	
 	public final static int TLOS_STATUS = 10;
@@ -19,6 +20,7 @@ public class TrxInfo implements Serializable {
 	public final static int FORCED_TERMINATE = 40;
 	public final static int RESUME_JOB = 50;
 	public final static int DUMP_JOB_LIST = 60; 
+	public final static int CHANGE_CLOCK = 70;
 	
 	//Tlos's status
 	public static final int STATE_STOP = 10;
@@ -35,6 +37,9 @@ public class TrxInfo implements Serializable {
 	private Date executionDate;
 	private Date nextExecutionDate;
 	private ArrayList<Integer> jobStatusHistory = new ArrayList<Integer>();
+	
+	private long amountToAdd;
+	private TemporalUnit temporalUnit;
 	
 	public TrxInfo() {
 	}
@@ -55,6 +60,8 @@ public class TrxInfo implements Serializable {
 			retValue = RESUME_JOB;
 		} else if (commandType.equals("DUMP_JOB_LIST")) { //$NON-NLS-1$
 			retValue = DUMP_JOB_LIST;
+		} else if (commandType.equals("CHANGE_CLOCK")) { //$NON-NLS-1$
+			retValue = CHANGE_CLOCK;
 		}
 		
 		return retValue;
@@ -89,6 +96,10 @@ public class TrxInfo implements Serializable {
 		
 		case DUMP_JOB_LIST:
 			retValue = "DUMP_JOB_LIST"; //$NON-NLS-1$
+			break;
+			
+		case CHANGE_CLOCK:
+			retValue = "CHANGE_CLOCK"; //$NON-NLS-1$
 			break;
 		}
 		
@@ -233,6 +244,22 @@ public class TrxInfo implements Serializable {
 
 	public String getTlosId() {
 		return tlosId;
+	}
+
+	public TemporalUnit getTemporalUnit() {
+		return temporalUnit;
+	}
+
+	public void setTemporalUnit(TemporalUnit temporalUnit) {
+		this.temporalUnit = temporalUnit;
+	}
+
+	public long getAmountToAdd() {
+		return amountToAdd;
+	}
+
+	public void setAmountToAdd(long amountToAdd) {
+		this.amountToAdd = amountToAdd;
 	}
 	
 }

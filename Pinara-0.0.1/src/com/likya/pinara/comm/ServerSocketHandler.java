@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,19 +44,19 @@ public class ServerSocketHandler implements Runnable {
 			
 			Logger logger = CoreFactory.getLogger();
 			
-			TrxInfo tlosInfo = readData(client, objectInputStream);		
+			TrxInfo pnrInfo = readData(client, objectInputStream);		
 			
-			int commandTypeValue = tlosInfo.getCommandType().getId();
-			logger.info(Pinara.getMessage("ServerSocketHandler.0") + tlosInfo.getCommandType().getDescription());
-			logger.info(Pinara.getMessage("ServerSocketHandler.1") + tlosInfo.getClientId());
+			int commandTypeValue = pnrInfo.getCommandType().getId();
+			logger.info(Pinara.getMessage("ServerSocketHandler.0") + pnrInfo.getCommandType().getDescription());
+			logger.info(Pinara.getMessage("ServerSocketHandler.1") + pnrInfo.getClientId());
 			
 			switch (commandTypeValue) {
 			
 			case TrxInfo.NORMAL_TERMINATE:
 				logger.info(Pinara.getMessage("ServerSocketHandler.2"));
 				
-				tlosInfo.setErrCode(0);
-				writeData(client, tlosInfo);
+				pnrInfo.setErrCode(0);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				pinaraManager.gracefulShutDown();
@@ -66,8 +67,8 @@ public class ServerSocketHandler implements Runnable {
 			case TrxInfo.FORCED_TERMINATE:
 				logger.info(Pinara.getMessage("ServerSocketHandler.3"));
 				
-				tlosInfo.setErrCode(0);
-				writeData(client, tlosInfo);
+				pnrInfo.setErrCode(0);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				pinaraManager.forceFullShutDown();
@@ -77,7 +78,7 @@ public class ServerSocketHandler implements Runnable {
 
 			case TrxInfo.RESUME_JOB:
 				
-				String jobName = tlosInfo.getJobId();
+				String jobName = pnrInfo.getJobId();
 				
 				// JobImpl tmpJob = jobQueue.get(jobName);
 				boolean isResumable = true;
@@ -88,11 +89,11 @@ public class ServerSocketHandler implements Runnable {
 					pinaraManager.retryExecution(jobName);
 				} else {
 					logger.info(Pinara.getMessage("ServerSocketHandler.6") + jobName);
-					tlosInfo.setErrCode(1);
+					pnrInfo.setErrCode(1);
 				}
-				tlosInfo.setErrCode(0);
+				pnrInfo.setErrCode(0);
 				
-				writeData(client, tlosInfo);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				break;
@@ -102,23 +103,23 @@ public class ServerSocketHandler implements Runnable {
 				boolean isThreshold = CoreFactory.getInstance().getMonitoringOperations().isThresholdOverflow();
 				
 				if (isThreshold) {
-					tlosInfo.setTlosStatus(TrxInfo.STATE_JOBOVERFLOW);
-					tlosInfo.setErrCode(0);
+					pnrInfo.setTlosStatus(TrxInfo.STATE_JOBOVERFLOW);
+					pnrInfo.setErrCode(0);
 				} else if (ManagementOperationsImpl.getExecutionState() == CoreStateInfo.STATE_SUSPENDED) {
-					tlosInfo.setTlosStatus(TrxInfo.STATE_SUSPENDED);
-					tlosInfo.setErrCode(0);
+					pnrInfo.setTlosStatus(TrxInfo.STATE_SUSPENDED);
+					pnrInfo.setErrCode(0);
 				} else {
-					tlosInfo.setErrCode(1);
-					tlosInfo.setErrDesc(Pinara.getMessage("ServerSocketHandler.7"));
+					pnrInfo.setErrCode(1);
+					pnrInfo.setErrDesc(Pinara.getMessage("ServerSocketHandler.7"));
 				}
-				writeData(client, tlosInfo);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				break;
 			
 			case TrxInfo.JOB_STATUSLIST:
 
-				jobName = tlosInfo.getJobId();
+				jobName = pnrInfo.getJobId();
 				if(jobQueue.containsKey(jobName)) {
 					ArrayList<Integer> statusList = new ArrayList<Integer>();
 //					statusList.add(jobQueue.get(jobName).getJobProperties().getStatus());
@@ -127,16 +128,16 @@ public class ServerSocketHandler implements Runnable {
 //						statusList.add(jobQueue.get(jobName).getJobProperties().getPreviousStatusList().get(i));
 //					}
 					
-					tlosInfo.setJobStatusHistory(statusList);
+					pnrInfo.setJobStatusHistory(statusList);
 					
-					tlosInfo.setExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime().getStartTime().getTime());
-					tlosInfo.setNextExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsActualTime().getStartTime().getTime());
-					tlosInfo.setErrCode(0);
+					pnrInfo.setExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime().getStartTime().getTime());
+					pnrInfo.setNextExecutionDate(jobQueue.get(jobName).getAbstractJobType().getManagement().getTimeManagement().getJsActualTime().getStartTime().getTime());
+					pnrInfo.setErrCode(0);
 				} else {
-					tlosInfo.setErrCode(1);
-					tlosInfo.setErrDesc(jobName + Pinara.getMessage("ServerSocketHandler.8"));
+					pnrInfo.setErrCode(1);
+					pnrInfo.setErrDesc(jobName + Pinara.getMessage("ServerSocketHandler.8"));
 				}
-				writeData(client, tlosInfo);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				break;
@@ -144,15 +145,31 @@ public class ServerSocketHandler implements Runnable {
 			case TrxInfo.DUMP_JOB_LIST:
 				
 				// JobQueueOperations.dumpJobQueue(jobQueue, true);
-				tlosInfo.setErrCode(0);
+				pnrInfo.setErrCode(0);
 				
-				writeData(client, tlosInfo);
+				writeData(client, pnrInfo);
 				cleanUp();
 
 				break;
+				
+			case TrxInfo.CHANGE_CLOCK:
+				
+				TemporalUnit temporalUnit = pnrInfo.getTemporalUnit();
+				long amountToAdd = pnrInfo.getAmountToAdd();
+				
+				if(amountToAdd != 0) {
+					Pinara.adjustPnrClock(amountToAdd, temporalUnit);
+				}
 
+				pnrInfo.setErrCode(0);
+				
+				writeData(client, pnrInfo);
+				cleanUp();
+				
+				break;
+			
 			default:
-				writeData(client, tlosInfo);
+				writeData(client, pnrInfo);
 				cleanUp();
 				
 				break;

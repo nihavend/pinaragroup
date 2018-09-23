@@ -24,6 +24,8 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
 import com.likya.commons.utils.LocaleMessages;
 import com.likya.pinara.model.CommandType;
@@ -51,6 +53,9 @@ public class PinaraRemoteManager {
 		String jobname = null;
 		String terminate = null;
 		String fterminate = null;
+		
+		String unit = null;
+		String amount = null;
 		
 		boolean vflag = false;
 		boolean jflag = false;
@@ -95,6 +100,20 @@ public class PinaraRemoteManager {
 				terminate = arg;
 			} else if(arg.equals("-fterminate")) { //$NON-NLS-1$
 				fterminate = arg;
+			} else if (arg.equals("-unit")) { //$NON-NLS-1$
+				if (i < args.length)
+					unit = args[i++];
+				else
+					System.err.println(Pinara.getMessage("PinaraRemoteManager.8")); //$NON-NLS-1$
+				if (vflag)
+					System.out.println(Pinara.getMessage("PinaraRemoteManager.9") + unit); //$NON-NLS-1$
+			} else if (arg.equals("-amount")) { //$NON-NLS-1$
+				if (i < args.length)
+					amount = args[i++];
+				else
+					System.err.println(Pinara.getMessage("PinaraRemoteManager.8")); //$NON-NLS-1$
+				if (vflag)
+					System.out.println(Pinara.getMessage("PinaraRemoteManager.9") + amount); //$NON-NLS-1$
 			} else {
 				System.err.println(USAGE_MSG);
 				System.exit(0);
@@ -150,6 +169,45 @@ public class PinaraRemoteManager {
 				commandType.setId(TrxInfo.FORCED_TERMINATE);
 				commandType.setDescription(TrxInfo.getCommandTypeDescription(TrxInfo.FORCED_TERMINATE));
 				System.out.println(Pinara.getMessage("PinaraRemoteManager.19")); //$NON-NLS-1$
+			} else if(unit != null) {
+				commandType.setId(TrxInfo.CHANGE_CLOCK);
+				TemporalUnit temporalUnit = null;
+				long amountToAdd = 0;
+				if(amount != null) { // amount verilmezse bir değişmeyecek 0  set edecek, yani çalışmayacak // 22.09.2018 16:28 Serkan Taş
+					amountToAdd = Long.parseLong(amount);
+				}
+
+				switch (unit.toUpperCase()) {
+				case "NANOS":
+					temporalUnit = ChronoUnit.DAYS;
+					break;
+				case "MICROS":
+					temporalUnit = ChronoUnit.MICROS;
+					break;
+				case "MILLIS":
+					temporalUnit = ChronoUnit.MILLIS;
+					break;
+				case "SECONDS":
+					temporalUnit = ChronoUnit.SECONDS;
+					break;
+				case "MINUTES":
+					temporalUnit = ChronoUnit.MINUTES;
+					break;
+				case "HOURS":
+					temporalUnit = ChronoUnit.HOURS;
+					break;
+				case "HALF_DAYS":
+					temporalUnit = ChronoUnit.HALF_DAYS;
+					break;
+				case "DAYS":
+					temporalUnit = ChronoUnit.DAYS;
+					break;
+				default:
+					temporalUnit = ChronoUnit.MILLIS;
+					break;
+				}
+				pinaraInfo.setAmountToAdd(amountToAdd);
+				pinaraInfo.setTemporalUnit(temporalUnit);
 			} else if(jflag) {
 				commandType.setId(TrxInfo.DUMP_JOB_LIST);
 				commandType.setDescription(TrxInfo.getCommandTypeDescription(TrxInfo.DUMP_JOB_LIST));

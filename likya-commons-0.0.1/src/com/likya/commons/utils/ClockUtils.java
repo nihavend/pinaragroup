@@ -3,6 +3,7 @@ package com.likya.commons.utils;
 import java.time.Clock;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.likya.commons.models.LikyaCustomClock;
@@ -20,6 +21,10 @@ public class ClockUtils {
 		ZonedDateTime zdt = ZonedDateTime.now(activeClock);
 		GregorianCalendar cal = GregorianCalendar.from(zdt);
 		return cal;
+	}
+	
+	public static Date getDate() {
+		return new Date(getCurrentTimeMilliseconds());
 	}
 
 }

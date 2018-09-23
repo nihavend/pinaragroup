@@ -3,14 +3,14 @@ package com.likya.pinara.utils;
 import org.apache.commons.codec.binary.Base64;
 
 import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpContext;
+//import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 
 public class BasicAuthenticationInfo {
 
 	public static String[] resolve(HttpExchange t) {
 		
-		HttpContext context = t.getHttpContext();
+		//HttpContext context = t.getHttpContext();
 		
 		Headers rmap = (Headers) t.getRequestHeaders();
 		/*
@@ -20,7 +20,7 @@ public class BasicAuthenticationInfo {
 		String auth = rmap.getFirst("Authorization");
 		
 		if (auth == null) {
-			Headers map = (Headers) t.getResponseHeaders();
+			//Headers map = (Headers) t.getResponseHeaders();
 			// map.set("WWW-Authenticate", "Basic realm=" + "\"" + realm + "\"");
 			return null; // new Authenticator.Retry(401);
 		}

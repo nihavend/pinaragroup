@@ -24,7 +24,7 @@ public class TestClock {
 
 	public static String getCurrentTimeWithMillisecondsNEW() {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.S");
-		Date timeStr = ClockUtils.getCalendarGetInstance().getTime();
+		Date timeStr = ClockUtils.getCalendarInstance().getTime();
 		return formatter.format(timeStr);
 	}
 

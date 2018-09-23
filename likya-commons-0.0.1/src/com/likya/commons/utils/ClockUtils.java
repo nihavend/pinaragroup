@@ -5,15 +5,17 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.likya.commons.models.LikyaCustomClock;
+
 public class ClockUtils {
 	
-	public static Clock activeClock = Clock.systemDefaultZone();
+	private static Clock activeClock = LikyaCustomClock.getInstance();
 	
 	public static long getCurrentTimeMilliseconds() {
 		return activeClock.millis();
 	}
 	
-	public static Calendar getCalendarGetInstance() {
+	public static Calendar getCalendarInstance() {
 		
 		ZonedDateTime zdt = ZonedDateTime.now(activeClock);
 		GregorianCalendar cal = GregorianCalendar.from(zdt);

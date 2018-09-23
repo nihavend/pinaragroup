@@ -270,11 +270,13 @@ public class DateUtils {
 	}
 
 	public static long getCurrentTimeMilliseconds() {
-		return System.currentTimeMillis();
+		// return System.currentTimeMillis();
+		return ClockUtils.getCurrentTimeMilliseconds();
 	}
 
 	public static Calendar getCalendarInstance() {
-		return Calendar.getInstance();
+		// return Calendar.getInstance();
+		return ClockUtils.getCalendarInstance();
 	}
 	
 	public static Date changeDateValue(Date firstDate, Date secondDate) {

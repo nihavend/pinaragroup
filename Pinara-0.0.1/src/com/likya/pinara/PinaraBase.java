@@ -1,11 +1,14 @@
 package com.likya.pinara;
 
 import java.net.SocketException;
+import java.time.Clock;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlObject;
 
+import com.likya.commons.models.LikyaCustomClock;
 import com.likya.commons.utils.LocaleMessages;
 import com.likya.myra.jef.core.CoreFactory;
 import com.likya.myra.jef.jobs.JobImpl;
@@ -32,7 +35,6 @@ import com.likya.pinara.utils.PinaraFileUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.pinara.model.config.MailInfoDocument.MailInfo;
-import com.likya.xsd.pinara.model.config.McInfoDocument.McInfo;
 import com.likya.xsd.pinara.model.config.SmsInfoDocument.SmsInfo;
 import com.likya.xsd.pinara.model.config.TcpInfoDocument.TcpInfo;
 
@@ -59,6 +61,8 @@ public abstract class PinaraBase {
 	public final static String authTxt = "pinara";
 	
 	public static final String versionFile = "version.info";
+	
+	private static Clock pnrClock = LikyaCustomClock.getInstance();
 	
 	public enum EventTypeInfo {
 
@@ -399,4 +403,13 @@ public abstract class PinaraBase {
 	public static LicenseInfo getLicenseInfo() {
 		return licenseInfo;
 	}
+
+	public static Clock getPnrClock() {
+		return pnrClock;
+	}
+
+	public static void adjustPnrClock(long amountToAdd, TemporalUnit temporalUnit) {
+		PinaraBase.pnrClock = LikyaCustomClock.getInstance(amountToAdd, temporalUnit);
+	}
+	
 }

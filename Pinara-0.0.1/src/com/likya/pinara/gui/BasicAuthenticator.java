@@ -25,7 +25,7 @@
 
 package com.likya.pinara.gui;
 
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 import com.likya.pinara.utils.UTF8String;

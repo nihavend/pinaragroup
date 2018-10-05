@@ -9,6 +9,7 @@ import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
 import com.likya.myra.commons.utils.DependencyOperations;
+import com.likya.myra.commons.utils.MyraDateUtils;
 import com.likya.myra.jef.core.Commandability;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.myra.jef.model.InstanceNotFoundException;
@@ -19,6 +20,7 @@ import com.likya.pinara.utils.PinaraFileUtils;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.joblist.JobListDocument;
 import com.likya.xsd.myra.model.joblist.JobListDocument.JobList;
+import com.likya.xsd.myra.model.wlagen.JsRecordedTimeDocument.JsRecordedTime;
 
 public class JobGridListMapper {
 
@@ -74,11 +76,13 @@ public class JobGridListMapper {
 		
 		xmlCursor.beginElement("runtimeParams");
 		xmlCursor.beginElement("realizedDuration");
-		xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
+		//xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
+		xmlCursor.insertChars(calculateRealizedDuration(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime()));
 		xmlCursor.toNextToken(); // exit from realizedDuration
 		
 		xmlCursor.beginElement("previousDuration");
-		xmlCursor.insertChars(jobImpl.getJobRuntimeProperties().getRecentWorkDuration());
+		//xmlCursor.insertChars(jobImpl.getJobRuntimeProperties().getRecentWorkDuration());
+		xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
 		xmlCursor.toNextToken(); // exit from previousDuration
 
 		HashMap<String, AbstractJobType> abstractJobTypeList = JobQueueOperations.toAbstractJobTypeList(jobQueue);
@@ -103,6 +107,17 @@ public class JobGridListMapper {
 		
 		xmlCursor.toNextToken(); // exit from runtimeParams
 		
+	}
+	
+	private static String calculateRealizedDuration(JsRecordedTime jsRecordedTime) {
+		long timeDiff;
+		String realizedDuration = "-";
+		if(jsRecordedTime != null && jsRecordedTime.getStopTime() != null && jsRecordedTime.getStartTime() != null) {
+			timeDiff = jsRecordedTime.getStopTime().getTime().getTime() - jsRecordedTime.getStartTime().getTime().getTime();
+			realizedDuration = MyraDateUtils.getUnFormattedElapsedTimeInMilliSec(Math.abs(timeDiff));
+     	}
+		
+		return realizedDuration;
 	}
 	
 	protected static void addNetTreeParams(String netTreeId, XmlCursor xmlCursorNetTree) {

@@ -4,6 +4,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" >
 	<fx:Script>
 		<![CDATA[
+			import com.adobe.utils.DateUtil;
 			import com.likya.pinara.comps.FileViewPopup;
 			import com.likya.pinara.containers.ImageContainer;
 			import com.likya.pinara.modules.IModuleInterface;
@@ -11,17 +12,80 @@
 			import mx.controls.Alert;
 			import mx.core.UIComponent;
 			import mx.events.ModuleEvent;
+			import mx.formatters.DateFormatter;
 			import mx.managers.PopUpManager;
 			import mx.modules.IModuleInfo;
 			import mx.modules.ModuleManager;
 			
-			import spark.components.TitleWindow;
 			import spark.modules.Module;
 			
 			private var remoteSchModule:Module;
 			private var remoteSchModuleInfo:IModuleInfo;
 			
 			private var jobDetailLocalXml:XML;
+			
+			private static function calculateDiffDuration(timeA:String, timeB:String):String {
+				
+				var diffDuration:String = "-";
+				if(timeA == null || timeB == null || timeA == "" || timeB == "") {
+					return diffDuration;
+				}
+				
+				if(timeB == "-") {
+					timeB = "00:00:00";
+				}
+				
+				var currentDateTime:Date = new Date();
+				var currentDF:DateFormatter = new DateFormatter(); 
+				currentDF.formatString = "YYYY-MM-DD";
+				var dateString:String = currentDF.format(currentDateTime);
+				
+				var dateTimeA:String = dateString + "T" + timeA + "+03:00";;	
+				var dateTimeB:String = dateString + "T" + timeB + "+03:00";;
+				
+				var dateA:Date = DateUtil.parseW3CDTF(dateTimeA);
+				var dateB:Date = DateUtil.parseW3CDTF(dateTimeB);
+				//var dateB:Date = DateFormatter.parseDateString(dateTimeB);
+				
+				var dateDiff:Number = dateA.time - dateB.time;
+				diffDuration = getUnFormattedElapsedTimeInMilliSec(Math.abs(dateDiff));
+				if(dateDiff < 0) {
+					diffDuration = "-" + diffDuration;
+				}
+				
+				return diffDuration;
+			}
+			
+			public static function getUnFormattedElapsedTime(timeInSeconds:int):String {
+			    var hours:int;
+				var minutes:int;
+				var seconds:int;
+				
+				hours = timeInSeconds / 3600;
+				timeInSeconds = timeInSeconds - (hours * 3600);
+				minutes = timeInSeconds / 60;
+				timeInSeconds = timeInSeconds - (minutes * 60);
+				seconds = timeInSeconds;
+				
+				return getDigitStr(hours) + ":" + getDigitStr(minutes) + ":" + getDigitStr(seconds);
+			}
+			
+			public static function getUnFormattedElapsedTimeInMilliSec(timeInMilliSeconds:int):String {
+				var timeInSeconds:int = timeInMilliSeconds / 1000;
+				var milliSeconds:int = timeInMilliSeconds - (timeInSeconds * 1000);
+				
+				return getUnFormattedElapsedTime(timeInSeconds) + "." + milliSeconds;
+			}
+			
+			private static function getDigitStr(digit:int):String {
+				if (digit == 0) {
+					return "00";
+				} else if (digit < 10) {
+					return "0" + digit;
+				} else {
+					return "" + digit;
+				}
+			}
 			
 			public function refreshData(jobDetailXml:XML):void	{
 				
@@ -33,14 +97,7 @@
 				
 				argValues.text = jobDetailXml.baseJobInfos.jobTypeDetails.argValues;
 				
-				var prevDur:Number = Number(prevDuration.text);
-				var realDur:Number = Number(jobDetailXml.runtimeParams.realizedDuration);
-				
-				if(!isNaN(prevDur) && !isNaN(realDur)) {
-					diffDuration.text = "" + (realDur - prevDur);
-				} else {
-					diffDuration.text = "-";
-				}
+				diffDuration.text = calculateDiffDuration(jobDetailXml.runtimeParams.realizedDuration, prevDuration.text);
 				
 				restartable.text = jobDetailXml.management.cascadingConditions.jobSafeToRestart;
 				dzGroup.text = jobDetailXml.@dangerZoneGroupId;

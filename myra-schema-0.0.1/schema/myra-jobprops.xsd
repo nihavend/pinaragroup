@@ -110,6 +110,7 @@
 				<xs:element ref="wla-gen:jobPriority" />
 				<xs:element name="jsIsActive" type="xs:boolean" default="true" minOccurs="1" maxOccurs="1" />
 				<xs:element ref="likya-gen:userId" />
+				<xs:element ref="likya-gen:jobDangerZoneList" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

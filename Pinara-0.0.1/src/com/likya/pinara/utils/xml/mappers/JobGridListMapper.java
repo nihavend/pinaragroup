@@ -78,12 +78,12 @@ public class JobGridListMapper {
 		xmlCursor.beginElement("realizedDuration");
 		//xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
 		xmlCursor.insertChars(calculateRealizedDuration(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime()));
-		xmlCursor.toNextToken(); // exit from realizedDuration
+		xmlCursor.toNextToken(); //exit from realizedDuration
 		
 		xmlCursor.beginElement("previousDuration");
 		//xmlCursor.insertChars(jobImpl.getJobRuntimeProperties().getRecentWorkDuration());
 		xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
-		xmlCursor.toNextToken(); // exit from previousDuration
+		xmlCursor.toNextToken(); //exit from previousDuration
 
 		HashMap<String, AbstractJobType> abstractJobTypeList = JobQueueOperations.toAbstractJobTypeList(jobQueue);
 		ArrayList<AbstractJobType> dependencyList = DependencyOperations.getDependencyList(abstractJobTypeList, abstractJobType.getId());

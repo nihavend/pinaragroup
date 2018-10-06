@@ -72,13 +72,14 @@
 		<copy file="${src.dir}/flexroot/history.css" todir="${dest.dir}/flexroot" />
 		<copy file="${src.dir}/flexroot/PinaraUI.html" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/PinaraUI.swf" todir="${dest.dir}/flexroot"/>
-		<copy file="${src.dir}/flexroot/ViewDepGraph.swf" todir="${dest.dir}/flexroot"/>
+		<copy file="${src.dir}/flexroot/com/likya/pinara/modules/ViewDepGraph.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/framework_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/textLayout_2.0.0.232.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/spark_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/sparkskins_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/rpc_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
 		<copy file="${src.dir}/flexroot/mx_4.6.0.23201.swf" todir="${dest.dir}/flexroot"/>
+		<copy file="${src.dir}/flexroot/com/likya/pinara/modules/RemoteSchProps.swf" todir="${dest.dir}/flexroot"/>
 
 		<copy file="${src.dir}/bin/start.bat" todir="${dest.dir}"/>
 		<copy file="${src.dir}/bin/start.sh" todir="${dest.dir}"/>

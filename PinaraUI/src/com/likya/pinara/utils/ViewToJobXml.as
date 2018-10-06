@@ -762,6 +762,19 @@ package com.likya.pinara.utils {
 				}
 			}
 			
+			if(j.baseInfoForm_0.dzInfoList.length > 0) {
+				var counter:int = 0;
+				baseJobInfosXML.appendChild(<lik:jobDangerZoneList xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
+				for each (var dzItem:XML in j.baseInfoForm_0.dzInfoGrid.dataProvider.toArray()) {
+					baseJobInfosXML.lik::jobDangerZoneList.appendChild(<lik:jobDangerZone xmlns:lik="http://www.likyateknoloji.com/likya-gen"/>);
+					
+					baseJobInfosXML.lik::jobDangerZoneList.lik::jobDangerZone[counter].appendChild(<lik:dangerZoneType xmlns:lik="http://www.likyateknoloji.com/likya-gen">{dzItem.dangerZoneType+""}</lik:dangerZoneType>);
+					baseJobInfosXML.lik::jobDangerZoneList.lik::jobDangerZone[counter].appendChild(<lik:dangerZoneId xmlns:lik="http://www.likyateknoloji.com/likya-gen">{dzItem.dangerZoneId+""}</lik:dangerZoneId>);
+					
+					counter++;
+				}
+			}
+			
 			return myraJobList;
 		}
 		

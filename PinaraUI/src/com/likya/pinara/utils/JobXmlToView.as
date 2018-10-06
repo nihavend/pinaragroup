@@ -34,6 +34,7 @@ package com.likya.pinara.utils {
 		
 		public static function prepare_baseInfoForm(baseInfoForm_0:JobBaseTypeInfoForm_0, baseInfoForm_1:JobBaseTypeInfoForm_1, jobDetailXml:XML):void {
 			
+			baseInfoForm_0.filterId = jobDetailXml.@Id;
 			baseInfoForm_0.jsJobGroup.text = jobDetailXml.@groupId;
 			baseInfoForm_0.jsName.text = jobDetailXml.baseJobInfos.jsName;
 			baseInfoForm_0.jsCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
@@ -42,6 +43,11 @@ package com.likya.pinara.utils {
 			baseInfoForm_0.jsJobType.selectedItem = "" + jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType;
 			// Alert.show(baseInfoForm.jsJobType.selectedItem);
 			baseInfoForm_0.jsJobArgs.text = jobDetailXml.baseJobInfos.jobTypeDetails.argValues;
+			
+			//baseInfoForm_0.dzInfoList.source = jobDetailXml.baseJobInfos.jobDangerZoneList.jobDangerZone;
+			if(jobDetailXml.baseJobInfos.jobDangerZoneList + "" != "") {
+				baseInfoForm_0.dzInfoList.source = XML(jobDetailXml.baseJobInfos.jobDangerZoneList + "").children();
+			}
 			
 			for each (var item:Object in jobDetailXml.baseJobInfos.jobTypeDetails.envVariables.entry) {
 				baseInfoForm_1.envVarList.dataProvider.addItem(item.@key + "=" + item);

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<s:SkinnablePopUpContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+						   xmlns:s="library://ns.adobe.com/flex/spark" 
+						   xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.components.Grid;
+			import spark.events.GridSelectionEvent;
+			
+			[Bindable]
+			public var jobDzList:XMLListCollection = new XMLListCollection();
+					
+			
+			protected function popup_creationCompleteHandler(event:FlexEvent):void
+			{
+			}
+			
+			private function dzGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				const eventGrid:Grid = event.currentTarget.grid;
+				var currentDataItem:Object = eventGrid.selectedItem; 
+				close(true, currentDataItem);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:Panel title="Danger Zone Selection" width="300" height="250">
+		<s:VGroup width="100%" horizontalAlign="center"
+				  paddingTop="20" gap="20">
+			
+			<s:HGroup id="dzGridSelGrp" paddingLeft="15" enabled="true">
+				<s:DataGrid id="dzInfoSelGrid" dataProvider="{jobDzList}" selectionChange="dzGrid_selectionChangeHandler(event)" width="250" height="150" rowHeight="50" left="20" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
+					<s:columns>
+						<s:ArrayList>                    
+							<s:GridColumn dataField="dangerZoneType" headerText="Type" width="{this.dzInfoSelGrid.width * 0.50}">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:DefaultGridItemRenderer textAlign="left" />
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+							<s:GridColumn dataField="dangerZoneId" headerText="Id" width="{this.dzInfoSelGrid.width * 0.50}">
+								<s:itemRenderer>
+									<fx:Component>
+										<s:DefaultGridItemRenderer textAlign="left" />
+									</fx:Component>
+								</s:itemRenderer>
+							</s:GridColumn>
+						</s:ArrayList>
+					</s:columns>
+				</s:DataGrid>
+				
+			</s:HGroup>		
+			
+			<s:Button label="Cancel" click="close();"/>
+			
+		</s:VGroup>
+	</s:Panel>
+	
+</s:SkinnablePopUpContainer>

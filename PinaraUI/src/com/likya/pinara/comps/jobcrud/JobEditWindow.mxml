@@ -54,6 +54,7 @@
 					}
 					// Alert.show("This window is created for edit mode !");
 					JobXmlToView.prepare_baseInfoForm(baseInfoForm_0, baseInfoForm_1, jobDetailXml);
+					baseInfoForm_0.fetchDangerZoneData();
 					if(jobDetailXml.baseJobInfos.jobTypeDetails.jobCommandType == JobBaseTypeInfoForm_0.REMOTE_SHELL){
 						initRemoteSchModule();
 					}
@@ -65,6 +66,7 @@
 					JobXmlToView.prepare_scheduleInfoForm(scheduleInfoForm, jobDetailXml);
 				} else {
 					dependencyListForm.updateData();
+					baseInfoForm_0.fetchDangerZoneData();
 				}
 					
 				addEventListener(ResourceEvent.JOB_TYPE_CHANGED, jobTypeChangedHandler);

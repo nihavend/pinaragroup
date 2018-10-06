@@ -18,11 +18,17 @@
 			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.model.AppInfo;
 			import com.likya.pinara.model.ModelLocator;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
-			import mx.collections.ArrayList;
+			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
+			import spark.components.Grid;
 			import spark.components.NavigatorContent;
+			import spark.events.GridSelectionEvent;
+			import spark.events.PopUpEvent;
 			
 			public static const BATCH_PROCESS:String = "BATCH PROCESS"; 
 			public static const SHELL_SCRIPT:String = "SHELL SCRIPT"; 
@@ -34,6 +40,15 @@
 			
 			[Bindable] 
 			public var appInfo:AppInfo = ModelLocator.getInstance().appInfo;
+			
+			[Bindable]
+			public var dzInfoList:XMLListCollection = new XMLListCollection();
+			private var selectedDataIndex:int;
+			
+			private var jobDzList:XML;
+			
+			[Bindable]
+			public var filterId:String;
 			
 			// Bu değişkeni aşağıdaki work dir enable edilince kaldır !
 			public var jsJobWorkDir:TextInput = new TextInput();
@@ -89,17 +104,88 @@
 				dispatchEvent(new ResourceEvent(ResourceEvent.JOB_TYPE_CHANGED, jsJobType.selectedItem));
 			}
 			
+			public function fetchDangerZoneData():void {
+				if(filterId != null && !isNaN(Number(filterId))) {
+					dzListDS.url = "/flex/restsrvc/jobdzlistxml/" + filterId;
+				} else {
+					dzListDS.url = "/flex/restsrvc/jobdzlistxml";
+				}
+				BasicAuthenticationHandler.authAndSend(dzListDS);
+			}
+			
+			protected function xmlService_resultHandler(event:ResultEvent):void {
+				jobDzList = XML(event.result);
+			}
+
+			protected function xmlService_faultHandler(event:FaultEvent):void {
+				Alert.show(event.toString());
+			}
+
+			
+			private function dzEkle_clickHandler(evt:MouseEvent):void
+			{
+				var dangerZonePopup:DangerZoneListPopup = new DangerZoneListPopup();
+				
+				dangerZonePopup.x = evt.stageX + 50;
+				dangerZonePopup.y = evt.stageY - 60;
+				
+				this.width = dangerZonePopup.width + 100;
+				this.height = dangerZonePopup.height + 75;
+				
+				dangerZonePopup.jobDzList.source = jobDzList.children();
+				// Add an event handler for the close event to check for 
+				// any returned data.
+				dangerZonePopup.addEventListener('close', dzSelection_closeHandler);
+				dangerZonePopup.open(this, true);
+			}
+			
+			protected function dzSelection_closeHandler(event:PopUpEvent):void {
+				// If commit is false, do data is returned.
+				if (!event.commit)
+					return;
+				
+				if(!dzInfoList.source.contains(event.data) && !(jsJobGroup.text == XML(event.data).dangerZoneId +"")) {
+					dzInfoList.addItem(XML(event.data).copy());
+				} else {
+					Alert.show("Item has already ben selected or same with Job Group!");
+				}
+			} 
+			
+			private function dzCikar_clickHandler(event:Event):void
+			{
+				dzInfoList.removeItemAt(selectedDataIndex);
+				dzCikar.enabled = false;
+			}
+			
+			private function dzGrid_selectionChangeHandler(event:GridSelectionEvent):void
+			{
+				const eventGrid:Grid = event.currentTarget.grid;
+				selectedDataIndex = eventGrid.selectedIndex; 
+				dzCikar.enabled = true;
+			}
+			
 		]]>
 	</fx:Script>
+	
+	<fx:Declarations>
+		
+		<s:HTTPService id="dzListDS" 
+					   method="POST"
+					   showBusyCursor="true"
+					   resultFormat="e4x"
+					   result="xmlService_resultHandler(event)"
+					   fault="xmlService_faultHandler(event)"
+					   />
+	</fx:Declarations>
 	
 	<s:layout>
 		<s:FormLayout gap="1"/>
 	</s:layout>  
 	
 	<s:FormItem label="{resourceManager.getString('messages', 'jobNameItemLabel')}">
-		<s:TextInput id="jsName" width="100%"/>
+		<s:TextInput id="jsName" width="300"/>
 		<s:helpContent>
-			<s:Label text="{resourceManager.getString('messages', 'jobNameHelpContentLabel')}"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobNameHelpContentLabel')}" paddingLeft="-50"/>
 		</s:helpContent>
 	</s:FormItem>
 
@@ -107,41 +193,79 @@
 	<s:FormItem label="{resourceManager.getString('messages', 'jobCommandItemLabel')}">
 		<s:TextInput id="jsCommand" width="300" />
 		<s:helpContent>
-			<s:Label text="{resourceManager.getString('messages', 'jobCommandHelpContentLabel')}" left="50"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobCommandHelpContentLabel')}" paddingLeft="-50"/>
 		</s:helpContent>
 	</s:FormItem>
 
 	<s:FormItem label="{resourceManager.getString('messages', 'jobGroupItemLabel')}">
 		<s:TextInput id="jsJobGroup" width="300" />
 		<s:helpContent>
-			<s:Label text="{resourceManager.getString('messages', 'jobGroupHelpContentLabel')}" left="50"/>
+			<s:Label text="{resourceManager.getString('messages', 'jobGroupHelpContentLabel')}" paddingLeft="-50"/>
 		</s:helpContent>
 	</s:FormItem>
 	
-	<s:FormItem label="{resourceManager.getString('messages', 'jobTypeItemLabel')}">
-		<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" change="jsJobTypeSelectionChange(event)" selectedIndex="0" enabled="true"/> 
-			<!--s:dataProvider>
-				<mx:ArrayList>
-					<fx:String>BATCH PROCESS</fx:String>
-					<fx:String>SHELL SCRIPT</fx:String>
-					<fx:String>SYSTEM COMMAND</fx:String>
-					<fx:String>REMOTE SHELL</fx:String>
-					<fx:String>ETL TOOL JOBS</fx:String>
-					<fx:String>SAP</fx:String>
-					<fx:String>SAS</fx:String>
-					<fx:String>FTP</fx:String>
-					<fx:String>FILE PROCESS</fx:String>
-					<fx:String>FILE LISTENER</fx:String>
-					<fx:String>PROCESS NODE</fx:String>
-					<fx:String>DB JOBS</fx:String>
-					<fx:String>WEB SERVICE</fx:String>>
-				</mx:ArrayList>
-			</s:dataProvider>
-		</s:DropDownList-->
-	</s:FormItem>
+	<s:HGroup>
+		<s:FormItem label="{resourceManager.getString('messages', 'jobTypeItemLabel')}">
+			<s:DropDownList id="jsJobType" width="140" prompt="Select Command Type" change="jsJobTypeSelectionChange(event)" selectedIndex="0" enabled="true"/> 
+				<!--s:dataProvider>
+					<mx:ArrayList>
+						<fx:String>BATCH PROCESS</fx:String>
+						<fx:String>SHELL SCRIPT</fx:String>
+						<fx:String>SYSTEM COMMAND</fx:String>
+						<fx:String>REMOTE SHELL</fx:String>
+						<fx:String>ETL TOOL JOBS</fx:String>
+						<fx:String>SAP</fx:String>
+						<fx:String>SAS</fx:String>
+						<fx:String>FTP</fx:String>
+						<fx:String>FILE PROCESS</fx:String>
+						<fx:String>FILE LISTENER</fx:String>
+						<fx:String>PROCESS NODE</fx:String>
+						<fx:String>DB JOBS</fx:String>
+						<fx:String>WEB SERVICE</fx:String>>
+					</mx:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList-->
+		</s:FormItem>
+		
+		<s:FormItem label="{resourceManager.getString('messages', 'jobArgsItemLabel')}"> 
+			<s:TextArea id="jsJobArgs" height="25"/>
+		</s:FormItem>
+	</s:HGroup>
 	
-	<s:FormItem label="{resourceManager.getString('messages', 'jobArgsItemLabel')}"> 
-		<s:TextArea id="jsJobArgs" height="25"/>
-	</s:FormItem>
+	<s:BorderContainer id="dangerZoneSelector" width="670" height="160" borderWeight="1" cornerRadius="3" dropShadowVisible="true">
+		<s:HGroup gap="-20">
+			<s:VGroup >
+				<s:Label paddingLeft="15" paddingTop="10" text="Danger Zone" fontSize="14" fontWeight="bold"/>
+				
+				<s:HGroup id="dzGridGrp" paddingLeft="15" enabled="true">
+					<s:DataGrid id="dzInfoGrid" dataProvider="{dzInfoList}" selectionChange="dzGrid_selectionChangeHandler(event)" width="620" height="80" rowHeight="50" left="20" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
+						<s:columns>
+							<s:ArrayList>                    
+								<s:GridColumn dataField="dangerZoneType" headerText="Type" width="{this.dzInfoGrid.width * 0.50}">
+									<s:itemRenderer>
+										<fx:Component>
+											<s:DefaultGridItemRenderer textAlign="left" />
+										</fx:Component>
+									</s:itemRenderer>
+								</s:GridColumn>
+								<s:GridColumn dataField="dangerZoneId" headerText="Id" width="{this.dzInfoGrid.width * 0.50}">
+									<s:itemRenderer>
+										<fx:Component>
+											<s:DefaultGridItemRenderer textAlign="left" />
+										</fx:Component>
+									</s:itemRenderer>
+								</s:GridColumn>
+							</s:ArrayList>
+						</s:columns>
+					</s:DataGrid>
+				</s:HGroup>		
+				
+				<s:HGroup id="dzButtonGrp" paddingLeft="240" enabled="true">
+					<s:Button label="{resourceManager.getString('messages', 'retCodeAddButLabel')}" id="dzEkle" click="dzEkle_clickHandler(event)" enabled="true"/>
+					<s:Button label="{resourceManager.getString('messages', 'retCodeDeleteButLabel')}" id="dzCikar" click="dzCikar_clickHandler(event)" enabled="false"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:HGroup>
+	</s:BorderContainer>	
 		
 </s:Form>

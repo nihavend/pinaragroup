@@ -3,6 +3,8 @@ package com.likya.pinara.gui.rest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -25,6 +27,7 @@ import com.likya.pinara.utils.xml.mappers.GroupTreeMapper;
 import com.likya.pinara.utils.xml.mappers.JobDetailMapper;
 import com.likya.pinara.utils.xml.mappers.JobGridListMapper;
 import com.likya.pinara.utils.xml.mappers.NetTreeMapper;
+import com.likya.xsd.myra.model.generics.DangerZone;
 import com.likya.xsd.myra.model.joblist.AbstractJobType;
 import com.likya.xsd.myra.model.stateinfo.StateNameDocument.StateName;
 import com.likya.xsd.myra.model.stateinfo.SubstateNameDocument.SubstateName;
@@ -36,6 +39,7 @@ public class RestParser extends GenericRestParser {
 	private static final String GROUPTREE_XML_CMD = "grouptreexml";
 	private static final String JOBLIST_XML_CMD = "joblistxml";
 	public static final String JOBSUMMARYLIST_XML_CMD = "jobsummarylistxml";
+	public static final String JOBDZLIST_XML_CMD = "jobdzlistxml";
 	private static final String JOBDETAIL_XML_CMD = "jobdetailxml";
 	
 	private static final String MAILINFO_XML_READ = "readmailinfo";
@@ -207,6 +211,31 @@ public class RestParser extends GenericRestParser {
 				retStr += "</job>";
 			}
 			retStr += "</joblist>";
+
+			break;
+			
+		case RestParser.JOBDZLIST_XML_CMD:
+
+			HashMap<String, DangerZone> jobDangerZoneList = null;
+			try {
+				jobDangerZoneList = JobQueueOperations.fetchListForDangerZone(PinaraAppManagerImpl.getInstance().getJobQueue());
+				if (restCommArr.length == 2) { 
+					jobDangerZoneList.remove(restCommArr[1]);
+				}
+			} catch (PinaraAuthenticationException e) {
+				e.printStackTrace();
+			}
+
+			retStr = "<jobDangerZoneList>";
+			Iterator<String> dzIterator = jobDangerZoneList.keySet().iterator();
+			while (dzIterator.hasNext()) {
+				String dzKey = dzIterator.next();
+				retStr += "<jobDangerZone>";
+				retStr += "<dangerZoneType>" + jobDangerZoneList.get(dzKey).getDangerZoneType() + "</dangerZoneType>";
+				retStr += "<dangerZoneId>" + jobDangerZoneList.get(dzKey).getDangerZoneId() + "</dangerZoneId>";
+				retStr += "</jobDangerZone>";
+			}
+			retStr += "</jobDangerZoneList>";
 
 			break;
 

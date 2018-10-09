@@ -87,6 +87,36 @@
 				}
 			}
 			
+			public function generateDzText(dzList:XMLList):String {
+				var dzJobs:String = "";
+				var dzGroups:String = "";
+				var dzText:String = "";
+				for each (var dzItem:XML in dzList) {
+					if(dzItem.dangerZoneType+"" == "JOB") {
+						if(dzJobs != "") {
+							dzJobs = dzJobs + "-";
+						}
+						dzJobs = dzJobs + dzItem.dangerZoneId+"";
+					} else if(dzItem.dangerZoneType+"" == "GROUP") {
+						if(dzGroups != "") {
+							dzGroups = dzGroups + "-";
+						}
+						dzGroups = dzGroups + dzItem.dangerZoneId+"";
+					}
+				}
+				if(dzJobs != "") {
+					dzText = "JobIds(" + dzJobs + ")";
+				}
+				if(dzGroups != "") {
+					if(dzText != "") {
+						dzText = dzText + ":";
+					}
+					dzText = dzText + "GrpIds(" + dzGroups + ")";
+				}
+				
+				return dzText;
+			}
+			
 			public function refreshData(jobDetailXml:XML):void	{
 				
 				jobDetailLocalXml = jobDetailXml;
@@ -100,7 +130,13 @@
 				diffDuration.text = calculateDiffDuration(jobDetailXml.runtimeParams.realizedDuration, prevDuration.text);
 				
 				restartable.text = jobDetailXml.management.cascadingConditions.jobSafeToRestart;
-				dzGroup.text = jobDetailXml.@dangerZoneGroupId;
+				
+				if((jobDetailXml.baseJobInfos.jobDangerZoneList+"").length > 0) {
+					dzGroup.text = generateDzText(XML(jobDetailXml.baseJobInfos.jobDangerZoneList).children());
+				} else {
+					dzGroup.text = "";
+				}
+				
 				handlerURI.text = jobDetailXml.@handlerURI;
 				
 				
@@ -259,7 +295,7 @@
 							<s:Image id="showJobContent" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'commandFileTooltip')}" 
 									 buttonMode="true" click="showJobContentPopup()" visible="false" includeInLayout="false" />
 							<s:Image id="dontShowJobContent" source="{ImageContainer.getLogImage(1)}" toolTip="{resourceManager.getString('messages', 'noCommandFileTooltip')}"/>
-							<s:Label text="{resourceManager.getString('messages', 'dzGroupIdLabel')}" width="105" paddingLeft="10" />
+							<s:Label text="{resourceManager.getString('messages', 'jobDangerZone')}:" width="105" paddingLeft="10" />
 							<s:TextInput id="dzGroup" top="5" editable="false"/>
 						</s:HGroup>
 						<s:HGroup verticalAlign="middle" paddingTop="15">

@@ -115,7 +115,7 @@ public abstract class PinaraBase {
 
 	}
 
-	protected void startInfoServers() {
+	protected void startInfoServers() throws Throwable{
 		
 		PinaraOutputManager pinaraOutputManager = new PinaraOutputManager();
 		Thread pinaraOutputManagerThread = new Thread(pinaraOutputManager);
@@ -129,13 +129,14 @@ public abstract class PinaraBase {
 		if (mailInfo != null && mailInfo.getEnabled()) {
 
 			println(Pinara.getMessage("Pinara.24"));
-			PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
-			Thread pinaraMailServerThread = new Thread(pinaraMailServer);
-			pinaraMailServer.setExecutorThread(pinaraMailServerThread);
-			pinaraMailServerThread.start();
+			PinaraMailServer.engage(mailInfo);
+//			PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
+//			Thread pinaraMailServerThread = new Thread(pinaraMailServer);
+//			pinaraMailServer.setExecutorThread(pinaraMailServerThread);
+//			pinaraMailServerThread.start();
 
 			println(getMessage("Pinara.25"));
-			configurationManager.setPinaraMailServer(pinaraMailServer);
+//			configurationManager.setPinaraMailServer(pinaraMailServer);
 
 		}
 

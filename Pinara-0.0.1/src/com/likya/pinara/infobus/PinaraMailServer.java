@@ -30,7 +30,7 @@ public class PinaraMailServer implements Runnable {
 
 	private final int timeout = 10000;
 	private boolean executePermission = true;
-	private static ArrayList<PinaraMail> mailQueue = new ArrayList<PinaraMail>();
+	private ArrayList<PinaraMail> mailQueue;
 
 	private Properties props;
 	private Authenticator authenticator;
@@ -41,7 +41,7 @@ public class PinaraMailServer implements Runnable {
 	private String password;
 	private String from;
 	
-	private static Thread executorThread;
+	private Thread executorThread;
 	
 	private String mailInfoStr;
 	private boolean reLoadParamsFlag = false;
@@ -72,6 +72,8 @@ public class PinaraMailServer implements Runnable {
 		
 		this.executePermission = true;
 		this.reLoadParamsFlag = false;
+		
+		this.mailQueue = new ArrayList<PinaraMail>();
 			
 		/*
 		if(mailInfo.getSmtpServerHostName() == null) {
@@ -129,13 +131,15 @@ public class PinaraMailServer implements Runnable {
 	
 	public static void engage(MailInfo mailInfo) throws Throwable{
 		synchronized (PinaraMailServer.class) {
-			if (executorThread == null || executorThread.getState().equals(Thread.State.TERMINATED)) {
-				PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
-				Thread pinaraMailServerThread = new Thread(pinaraMailServer);
-				pinaraMailServer.setExecutorThread(pinaraMailServerThread);
+			PinaraMailServer pinaraMailServer = Pinara.getInstance().getConfigurationManager().getPinaraMailServer();
+			
+			if (pinaraMailServer == null || pinaraMailServer.getExecutorThread() == null || pinaraMailServer.getExecutorThread().getState().equals(Thread.State.TERMINATED)) {
+				PinaraMailServer newPinaraMailServer = new PinaraMailServer(mailInfo);
+				Thread pinaraMailServerThread = new Thread(newPinaraMailServer);
+				newPinaraMailServer.setExecutorThread(pinaraMailServerThread);
 				pinaraMailServerThread.start();	
 				
-				Pinara.getInstance().getConfigurationManager().setPinaraMailServer(pinaraMailServer);
+				Pinara.getInstance().getConfigurationManager().setPinaraMailServer(newPinaraMailServer);
 				Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.10"));
 			} else {
 				throw new Exception("PinaraMailServer is still running!");
@@ -258,8 +262,8 @@ public class PinaraMailServer implements Runnable {
 		return executorThread;
 	}
 
-	public void setExecutorThread(Thread executorThread) {
-		PinaraMailServer.executorThread = executorThread;
+	private void setExecutorThread(Thread executorThread) {
+		this.executorThread = executorThread;
 	}
 
 	public void setReLoadParamsFlag(boolean reLoadParamsFlag) {

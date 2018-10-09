@@ -30,7 +30,7 @@
 	</fx:Script>
 	
 	
-	<s:Panel title="Danger Zone Selection" width="300" height="250">
+	<s:Panel title="{resourceManager.getString('messages', 'jobDangerZoneSelection')}" width="300" height="250">
 		<s:VGroup width="100%" horizontalAlign="center"
 				  paddingTop="20" gap="20">
 			
@@ -38,7 +38,7 @@
 				<s:DataGrid id="dzInfoSelGrid" dataProvider="{jobDzList}" selectionChange="dzGrid_selectionChangeHandler(event)" width="250" height="150" rowHeight="50" left="20" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
 					<s:columns>
 						<s:ArrayList>                    
-							<s:GridColumn dataField="dangerZoneType" headerText="Type" width="{this.dzInfoSelGrid.width * 0.50}">
+							<s:GridColumn dataField="dangerZoneType" headerText="{resourceManager.getString('messages', 'jobDangerZoneType')}" width="{this.dzInfoSelGrid.width * 0.50}">
 								<s:itemRenderer>
 									<fx:Component>
 										<s:DefaultGridItemRenderer textAlign="left" />

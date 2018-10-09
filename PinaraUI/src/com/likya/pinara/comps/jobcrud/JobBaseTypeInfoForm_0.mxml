@@ -75,6 +75,24 @@
 						return false;
 					}
 				}
+				if(dzInfoGrid.dataProvider.toArray() != null && dzInfoGrid.dataProvider.toArray().length > 0) {	
+					var dzValidation:Boolean = true; 
+					var dzIds:String = "";
+					for each (var dzItem:XML in dzInfoGrid.dataProvider.toArray()) {
+						if(dzItem.dangerZoneType+"" == "JOB" && filterId == dzItem.dangerZoneId+"") {
+							dzValidation = false;
+							dzIds = dzIds + "-" + dzItem.dangerZoneId+"";
+						} else if(dzItem.dangerZoneType+"" == "GROUP" && jsJobGroup.text == dzItem.dangerZoneId+"") {
+							dzValidation = false;
+							dzIds = dzIds + "-" + dzItem.dangerZoneId+"";
+						}
+					}
+					
+					if(!dzValidation) {
+						Alert.show(resourceManager.getString("messages", "dangerZoneIdsNotValid") + dzIds, "Tab Id : " + NavigatorContent(parent.parent.parent).label);
+						return false;
+					}
+			    }
 				
 				return true;
 			}
@@ -235,13 +253,13 @@
 	<s:BorderContainer id="dangerZoneSelector" width="670" height="160" borderWeight="1" cornerRadius="3" dropShadowVisible="true">
 		<s:HGroup gap="-20">
 			<s:VGroup >
-				<s:Label paddingLeft="15" paddingTop="10" text="Danger Zone" fontSize="14" fontWeight="bold"/>
+				<s:Label paddingLeft="15" paddingTop="10" text="{resourceManager.getString('messages', 'jobDangerZone')}" fontSize="14" fontWeight="bold"/>
 				
 				<s:HGroup id="dzGridGrp" paddingLeft="15" enabled="true">
 					<s:DataGrid id="dzInfoGrid" dataProvider="{dzInfoList}" selectionChange="dzGrid_selectionChangeHandler(event)" width="620" height="80" rowHeight="50" left="20" top="40" variableRowHeight="true" verticalCenter="10" horizontalCenter="0">
 						<s:columns>
 							<s:ArrayList>                    
-								<s:GridColumn dataField="dangerZoneType" headerText="Type" width="{this.dzInfoGrid.width * 0.50}">
+								<s:GridColumn dataField="dangerZoneType" headerText="{resourceManager.getString('messages', 'jobDangerZoneType')}" width="{this.dzInfoGrid.width * 0.50}">
 									<s:itemRenderer>
 										<fx:Component>
 											<s:DefaultGridItemRenderer textAlign="left" />

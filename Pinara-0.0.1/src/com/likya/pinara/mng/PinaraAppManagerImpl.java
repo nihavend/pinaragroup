@@ -677,7 +677,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		return mailInfo;
 	}
 
-	public void writeMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException {
+	public void writeMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException, Exception {
 		if(!authorize()) {
 			throw new PinaraAuthenticationException();
 		}
@@ -685,18 +685,36 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		Path configFile = Paths.get(Pinara.CONFIG_FILE_PATH);
 		PinaraConfigDocument pinaraConfigDocument = null;
 		MailInfoDocument mailInfoDocument = validateMailInfo(mailInfoXml);
+		boolean requestMailInfoEnabled = mailInfoDocument.getMailInfo().getEnabled(); 
 		StringBuffer configFileXmlStr = FileUtils.readFile(configFile.toString());
 		
 		try {
 			pinaraConfigDocument = PinaraConfigDocument.Factory.parse(configFileXmlStr.toString());
+			boolean configFileMailInfoEnabled = pinaraConfigDocument.getPinaraConfig().getMailInfo().getEnabled();
 			pinaraConfigDocument.getPinaraConfig().setMailInfo(mailInfoDocument.getMailInfo());
+			
+			if(!requestMailInfoEnabled) {
+				Pinara.getInstance().getConfigurationManager().getPinaraMailServer().terminate(false);
+				Pinara.getInstance().getConfigurationManager().getPinaraConfig().setMailInfo(mailInfoDocument.getMailInfo());
+			} else {
+				if(!configFileMailInfoEnabled) {
+					PinaraMailServer.engage(mailInfoDocument.getMailInfo());
+					Pinara.getInstance().getConfigurationManager().getPinaraConfig().setMailInfo(mailInfoDocument.getMailInfo());
+				} else {
+					Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setMailInfoStr(mailInfoXml);
+					Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setReLoadParamsFlag(true);
+				}
+			}
+			
 			PersistApi.serializeAsFlat(configFile.toString(), pinaraConfigDocument.toString());
-			Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setMailInfoStr(mailInfoXml);
-			Pinara.getInstance().getConfigurationManager().getPinaraMailServer().setReLoadParamsFlag(true);
 		} catch (Exception e) {
 			String errMsg = "Pinara Configuration file couldn't been saved for new Mail Configuration !";
 			System.err.println(errMsg);
 			throw new PinaraXMLValidationException(errMsg);
+		} catch (Throwable e) {
+			String errMsg = "Pinara Configuration file couldn't been saved, PinaraMailServer is still running !";
+			System.err.println(errMsg);
+			throw new Exception(errMsg);
 		}
 				
 	}

@@ -30,7 +30,7 @@ public class PinaraMailServer implements Runnable {
 
 	private final int timeout = 10000;
 	private boolean executePermission = true;
-	private ArrayList<PinaraMail> mailQueue = new ArrayList<PinaraMail>();
+	private static ArrayList<PinaraMail> mailQueue = new ArrayList<PinaraMail>();
 
 	private Properties props;
 	private Authenticator authenticator;
@@ -41,7 +41,7 @@ public class PinaraMailServer implements Runnable {
 	private String password;
 	private String from;
 	
-	private Thread executorThread;
+	private static Thread executorThread;
 	
 	private String mailInfoStr;
 	private boolean reLoadParamsFlag = false;
@@ -69,6 +69,9 @@ public class PinaraMailServer implements Runnable {
 		this.password = mailInfo.getUserPassword();
 
 		this.from = mailInfo.getFrom();
+		
+		this.executePermission = true;
+		this.reLoadParamsFlag = false;
 			
 		/*
 		if(mailInfo.getSmtpServerHostName() == null) {
@@ -121,6 +124,22 @@ public class PinaraMailServer implements Runnable {
 				mailQueue.clear();
 			}
 			this.executePermission = false;
+		}
+	}
+	
+	public static void engage(MailInfo mailInfo) throws Throwable{
+		synchronized (PinaraMailServer.class) {
+			if (executorThread == null || executorThread.getState().equals(Thread.State.TERMINATED)) {
+				PinaraMailServer pinaraMailServer = new PinaraMailServer(mailInfo);
+				Thread pinaraMailServerThread = new Thread(pinaraMailServer);
+				pinaraMailServer.setExecutorThread(pinaraMailServerThread);
+				pinaraMailServerThread.start();	
+				
+				Pinara.getInstance().getConfigurationManager().setPinaraMailServer(pinaraMailServer);
+				Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.10"));
+			} else {
+				throw new Exception("PinaraMailServer is still running!");
+			}
 		}
 	}
 
@@ -240,7 +259,7 @@ public class PinaraMailServer implements Runnable {
 	}
 
 	public void setExecutorThread(Thread executorThread) {
-		this.executorThread = executorThread;
+		PinaraMailServer.executorThread = executorThread;
 	}
 
 	public void setReLoadParamsFlag(boolean reLoadParamsFlag) {

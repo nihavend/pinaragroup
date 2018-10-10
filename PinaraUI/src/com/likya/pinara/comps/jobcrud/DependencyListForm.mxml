@@ -47,9 +47,15 @@
 				var depExpStr:String = depExp.text;
 				var depIdFound:Boolean = true; 
 				var loop:Boolean = true;
+				var orPattern:RegExp = /or/g;
+				var andPattern:RegExp = /and/g;
 				
 				
 				if(depExpStr != null && depExpStr != "") {
+					
+					depExpStr = depExpStr.replace(orPattern, "OR");
+					depExpStr = depExpStr.replace(andPattern, "AND");
+					depExp.text = depExpStr;
 					
 					depExpStr = replFN(depExp.text);
 					
@@ -94,6 +100,38 @@
 				return depIdFound;
 			}
 			
+			private function checkLogicOperands(strRepl:String):String 
+			{
+				var logicOperands:Array = new Array("AND","OR","and","or");
+				
+				for (var i:int = 0; i < logicOperands.length; i++) {
+					var j:int = 0;
+					var index:int = 0;
+					var logicOperand:String = logicOperands[i];
+					var logicOperandLength:int = logicOperand.length;
+					var emptyCharCode:Number = 32;
+					
+					if(strRepl == NOT_VALIDATED) {
+						break;
+					}
+					
+					while(j < strRepl.length) {
+						index = strRepl.indexOf(logicOperand,j);
+						if(index!= -1 && (strRepl.charCodeAt(index-1) != emptyCharCode || strRepl.charCodeAt(index+logicOperandLength) != emptyCharCode)) {
+							strRepl = NOT_VALIDATED;
+							break;
+						}
+						if(index== -1) {
+							break;
+						} else {
+							j = index + logicOperandLength;
+						}
+					}
+				}
+				
+				return strRepl;
+			}
+			
 			private function replFN(strRepl:String):String 
 			{ 
 				var result:Object;
@@ -101,10 +139,18 @@
 				var rightParantehis:int = 0;
 				var leftParantehis:int = 0;
 				var depExpPattern:RegExp = /dep_\d+/;
+				var orPattern:RegExp = /or/gi;
+				var andPattern:RegExp = /and/gi;
+
 				
 				for (var i:int = 0; i < strRepl.length; i++) {
 					if(strRepl.charAt(i) == "(") leftParantehis = leftParantehis + 1; 
 					if(strRepl.charAt(i) == ")") rightParantehis = rightParantehis + 1; 
+				}
+				
+				if(checkLogicOperands(strRepl) == NOT_VALIDATED) {
+					strRepl = NOT_VALIDATED;
+					return strRepl;
 				}
 				
 				if(leftParantehis != rightParantehis) {
@@ -115,8 +161,8 @@
 				strRepl = strRepl.replace("("," ");
 				strRepl = strRepl.replace(")"," ");
 				strRepl = strRepl.replace("!"," ");
-				strRepl = strRepl.replace("AND"," ");
-				strRepl = strRepl.replace("OR"," ");
+				strRepl = strRepl.replace(andPattern," ");
+				strRepl = strRepl.replace(orPattern," ");
 				
 				strReplArray = strRepl.split(" ");
 				

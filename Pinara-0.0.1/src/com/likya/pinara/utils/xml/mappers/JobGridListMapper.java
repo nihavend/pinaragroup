@@ -77,7 +77,11 @@ public class JobGridListMapper {
 		xmlCursor.beginElement("runtimeParams");
 		xmlCursor.beginElement("realizedDuration");
 		//xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
-		xmlCursor.insertChars(calculateRealizedDuration(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime()));
+		if(Commandability.isStopable(jobImpl.getAbstractJobType())) {//job is running
+			xmlCursor.insertChars(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getPrevWorkDuration());
+		} else {
+			xmlCursor.insertChars(calculateRealizedDuration(jobImpl.getAbstractJobType().getManagement().getTimeManagement().getJsRecordedTime()));
+		}
 		xmlCursor.toNextToken(); //exit from realizedDuration
 		
 		xmlCursor.beginElement("previousDuration");

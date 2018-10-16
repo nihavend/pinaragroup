@@ -64,7 +64,28 @@
 						return false;
 					}
 					
-					var i:int = depExpStr.indexOf("dep_", i);
+					var depExpItems:Array = depExpStr.split(/\s+/);
+					
+					for (var i:int = 0; i < depExpItems.length; i++) {
+						depExpItem = depExpItems[i];
+						
+						if(depExpItem != "") {
+							depIdFound = false;
+							
+							for (var k:int = 0; k < dependencyListGrid.dataProvider.toArray().length; k++) {
+								depListItem = dependencyListGrid.dataProvider.toArray()[k];
+								if(depExpItem == depListItem.depid) {
+									depIdFound = true;
+								}
+							}
+						}
+						
+						if(!depIdFound) {
+							break;
+						}
+					}
+					
+					/*var i:int = depExpStr.indexOf("dep_", i);
 					j = i+5;
 					var j:int = depExpStr.indexOf("", j);
 					while(loop) {
@@ -90,7 +111,7 @@
 								j = depExpStr.length;
 							}
 						}
-					}
+					}*/
 				}
 				
 				if(!depIdFound) {
@@ -103,6 +124,7 @@
 			private function checkLogicOperands(strRepl:String):String 
 			{
 				var logicOperands:Array = new Array("AND","OR","and","or");
+				var numberOfLogicalOperands:Number = 0;
 				
 				for (var i:int = 0; i < logicOperands.length; i++) {
 					var j:int = 0;
@@ -125,7 +147,17 @@
 							break;
 						} else {
 							j = index + logicOperandLength;
+							numberOfLogicalOperands += 1;
 						}
+					}
+				}
+				
+				if(strRepl != NOT_VALIDATED) {
+					var strReplArray:Array = strRepl.split(/\s+/);
+					var numberOfDepItems:Number = strReplArray.length;
+
+					if(numberOfDepItems > 1 && numberOfDepItems != (numberOfLogicalOperands*2)+1) {
+						strRepl = NOT_VALIDATED;
 					}
 				}
 				
@@ -141,6 +173,8 @@
 				var depExpPattern:RegExp = /dep_\d+/;
 				var orPattern:RegExp = /or/gi;
 				var andPattern:RegExp = /and/gi;
+				var parantehisPattern:RegExp = /\(|\)/g;
+				var quotaPattern:RegExp = /!/g;
 
 				
 				for (var i:int = 0; i < strRepl.length; i++) {
@@ -158,18 +192,17 @@
 					return strRepl;
 				}
 				
-				strRepl = strRepl.replace("("," ");
-				strRepl = strRepl.replace(")"," ");
-				strRepl = strRepl.replace("!"," ");
+				strRepl = strRepl.replace(parantehisPattern,"");
+				strRepl = strRepl.replace(quotaPattern," ");
 				strRepl = strRepl.replace(andPattern," ");
 				strRepl = strRepl.replace(orPattern," ");
 				
-				strReplArray = strRepl.split(" ");
+				strReplArray = strRepl.split(/\s+/);
 				
 				for (var k:int = 0; k < strReplArray.length; k++) {
 					if(strReplArray[k] != "") {
 						result = strReplArray[k].match(depExpPattern);
-						if(result == null) {
+						if(result == null || result.index > 0) {
 							strRepl = NOT_VALIDATED;
 							break;
 						}

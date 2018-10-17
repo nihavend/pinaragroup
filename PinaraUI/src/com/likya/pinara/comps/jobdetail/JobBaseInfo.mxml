@@ -34,6 +34,9 @@
 				if(timeB == "-") {
 					timeB = "00:00:00";
 				}
+				if(timeA == "-") {
+					timeA = "00:00:00";
+				}
 				
 				var currentDateTime:Date = new Date();
 				var currentDF:DateFormatter = new DateFormatter(); 

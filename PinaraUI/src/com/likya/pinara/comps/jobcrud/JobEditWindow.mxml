@@ -259,7 +259,7 @@
 				
 				(remoteSchModule as IModuleInterface).setEditMode(true);
 				
-				if(jobDetailXml != null) {
+				if(jobDetailXml != null && jobDetailXml.executeRShellParams+"" != "") {
 					(remoteSchModule as IModuleInterface).setDataXml(XML(jobDetailXml.executeRShellParams));
 				}
 				

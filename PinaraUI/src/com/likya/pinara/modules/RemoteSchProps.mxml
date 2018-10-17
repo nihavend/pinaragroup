@@ -158,7 +158,7 @@
 		<mx:HRule width="100%"/>
 		
 		<s:HGroup verticalAlign="top" paddingTop="10" paddingLeft="10">
-			<s:Label text="{resourceManager.getString('messages', 'remoteSchUserNames')}" />
+			<s:Label text="{resourceManager.getString('messages', 'remoteSchUserName')}" />
 			<s:TextInput id="userInput" editable="false"/>
 			<s:Label text="{resourceManager.getString('messages', 'remoteSchPass')}" />
 			<s:TextInput id="passInput" editable="false"/>

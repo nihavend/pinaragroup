@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" >
+		 xmlns:jobmanager="com.likya.pinara.services.jobmanager.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" 
+		 creationComplete="group1_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
 			import com.adobe.utils.DateUtil;
 			import com.likya.pinara.comps.FileViewPopup;
 			import com.likya.pinara.containers.ImageContainer;
+			import com.likya.pinara.event.ResourceEvent;
 			import com.likya.pinara.modules.IModuleInterface;
+			import com.likya.pinara.utils.BasicAuthenticationHandler;
 			
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
 			import mx.events.ModuleEvent;
 			import mx.formatters.DateFormatter;
 			import mx.managers.PopUpManager;
 			import mx.modules.IModuleInfo;
 			import mx.modules.ModuleManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
 			
 			import spark.modules.Module;
 			
@@ -270,11 +278,47 @@
 				fileViewWindow.setFocus();
 			}
 			
+			protected function group1_creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(ResourceEvent.UPDATE_ARGS, updateArgsHandler);
+			}
+			
+			private function updateArgsHandler(event:ResourceEvent):void {
+				var args:String = String(event.object);
+				var jobId:String = jobDetailLocalXml.@Id;
+				
+				var params:String = jobId + ":" + args;
+				BasicAuthenticationHandler.authAndCall(argsService, "updateargs", params);
+			}
+			
+			protected function args_faultHandler(event:FaultEvent):void {
+				Alert.show(resourceManager.getString("messages", "jobDetailsFault") + event.message);
+			}
+			
+			protected function args_resultHandler(event:ResultEvent):void {
+				trace("argsService_resultHandler returned : " + new Date().valueOf());
+				//PopUpManager.removePopUp(this);
+				
+				var returnXml:XML;
+				var returnTxt:String = null;
+				
+				try {
+					returnXml = XML(event.message.body);
+					if(returnXml.result == "NOK") {
+						Alert.show(returnXml.desc.toString(), resourceManager.getString("messages", "jobDetailsError"));
+					} 
+					if(returnXml.result == "OK") {
+						FlexGlobals.topLevelApplication.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_TREE, null));
+					}
+				} catch(err:Error) {
+					returnTxt = String(event.result)
+				}
+			}
 			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<jobmanager:JobManager id="argsService" result="args_resultHandler(event)" fault="args_faultHandler(event)"/>
 	</fx:Declarations>
 	
 	<s:VGroup paddingTop="5">
@@ -313,7 +357,7 @@
 						<s:HGroup verticalAlign="middle" paddingTop="15">
 							<s:Label text="{resourceManager.getString('messages', 'jobPreviousDurationLabel')}" width="105"/>
 							<s:TextInput id="prevDuration" top="5" editable="false" width="95"/>
-							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'errBuffTooltip')}"
+							<s:Image id="showJobBuff" source="{ImageContainer.getLogImage(0)}" toolTip="{resourceManager.getString('messages', 'outputBuffTooltip')}"
 									 buttonMode="true" click="showJobBuffPopup()" top="0"/>
 							<s:Label text="{resourceManager.getString('messages', 'jobParameterLabel')}" width="105" paddingLeft="10" />
 							<s:TextInput id="paramValue" top="5" editable="false"/>

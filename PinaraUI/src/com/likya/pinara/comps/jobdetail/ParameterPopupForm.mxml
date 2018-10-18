@@ -18,6 +18,8 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.likya.pinara.event.ResourceEvent;
+			
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
@@ -28,6 +30,7 @@
 			private function setInputParameters():void {
 				// event parent icinde register edildigi icin bu sekilde tetikleniyor
 				// parentApplication.dispatchEvent(new TlosEvent(TlosEvent.SET_PARAM));
+				parentApplication.jobListDetail.jobBaseInfoId.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_ARGS, parameters.text));
 				PopUpManager.removePopUp(this);
 			}
 		]]>

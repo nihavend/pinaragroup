@@ -741,5 +741,31 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		
 		return null;
 	}
+	
+	public void updateJobArgs(String jobId, String args) throws PinaraAuthenticationException, PinaraXMLValidationException {
+		
+		if(!authorize()) {
+			throw new PinaraAuthenticationException();
+		}
+		
+		AbstractJobType[] abstractJobTypes = new AbstractJobType[1];
+		AbstractJobType job = getJob(jobId).getAbstractJobType();
+		if(args != null) {
+			job.getBaseJobInfos().getJobTypeDetails().setArgValues(args);
+		} else {
+			job.getBaseJobInfos().getJobTypeDetails().unsetArgValues();;
+		}
+		abstractJobTypes[0] = job;
+		
+		JobListDocument jobList = JobListDocument.Factory.newInstance();
+		jobList.addNewJobList();
+		jobList.getJobList().setGenericJobArray(abstractJobTypes);
+		try {
+			updateJob(jobList.toString(), true);
+		} catch (PinaraXMLValidationException e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
 }

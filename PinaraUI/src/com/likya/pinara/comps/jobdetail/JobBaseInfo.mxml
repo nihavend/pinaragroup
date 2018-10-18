@@ -30,6 +30,7 @@
 			private var remoteSchModule:Module;
 			private var remoteSchModuleInfo:IModuleInfo;
 			
+			[Bindable]
 			private var jobDetailLocalXml:XML;
 			
 			private static function calculateDiffDuration(timeA:String, timeB:String):String {
@@ -367,7 +368,8 @@
 							<s:TextInput id="diffDuration" top="5" editable="false" width="95"/>
 							<s:Label text="{resourceManager.getString('messages', 'jobArgsLabel')}" width="65"/>
 							<s:TextInput id="argValues" top="5" editable="false" width="140"/>
-							<s:Button y="-27" right="290" label="{resourceManager.getString('messages', 'jobEditButtonLabel')}" click="showArgValuePopup()" width="50"/>
+							<s:Button y="-27" right="290" label="{resourceManager.getString('messages', 'jobEditButtonLabel')}" click="showArgValuePopup()" 
+									  enabled="{jobDetailLocalXml.visualParams.commandabilityParams.isEnablable == true}" width="50"/>
 						</s:HGroup>
 						
 						<s:HGroup verticalAlign="baseline" paddingTop="15">

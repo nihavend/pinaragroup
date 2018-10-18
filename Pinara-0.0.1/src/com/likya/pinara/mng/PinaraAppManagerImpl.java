@@ -753,7 +753,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 		if(args != null) {
 			job.getBaseJobInfos().getJobTypeDetails().setArgValues(args);
 		} else {
-			job.getBaseJobInfos().getJobTypeDetails().unsetArgValues();;
+			job.getBaseJobInfos().getJobTypeDetails().unsetArgValues();
 		} 
 		abstractJobTypes[0] = job;
 		 

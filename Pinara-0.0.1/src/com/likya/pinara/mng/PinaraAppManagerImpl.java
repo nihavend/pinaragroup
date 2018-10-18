@@ -754,7 +754,7 @@ public final class PinaraAppManagerImpl implements PinaraAppManager {
 			job.getBaseJobInfos().getJobTypeDetails().setArgValues(args);
 		} else {
 			job.getBaseJobInfos().getJobTypeDetails().unsetArgValues();;
-		}
+		} 
 		abstractJobTypes[0] = job;
 		
 		JobListDocument jobList = JobListDocument.Factory.newInstance();

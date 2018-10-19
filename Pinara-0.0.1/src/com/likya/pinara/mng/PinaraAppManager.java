@@ -72,4 +72,6 @@ public interface PinaraAppManager {
 	public String readMailInfo() throws PinaraAuthenticationException, PinaraXMLValidationException;
 	
 	public void writeMailInfo(String mailInfoXml) throws PinaraAuthenticationException, PinaraXMLValidationException, Exception;
+	
+	public void updateJobArgs(String jobId, String args) throws PinaraAuthenticationException, PinaraXMLValidationException;
 }

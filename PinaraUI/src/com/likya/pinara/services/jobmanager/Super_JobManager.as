@@ -240,6 +240,17 @@ package com.likya.pinara.services.jobmanager
 			operation.contentType = "application/xml";
 			operation.resultType = Object;
 			operations.push(operation);
+			
+			operation = new mx.rpc.http.Operation(null, "updateargs");
+			operation.url = "/flex/restsrvc/updateargs/{args}";
+			operation.method = "GET";
+			argsArray = new Array("args");
+			operation.argumentNames = argsArray;    
+			operation.serializationFilter = serializer0;
+			operation.properties = new Object();
+			operation.properties["urlParamNames"] = ["args"];
+			operation.resultType = Object;
+			operations.push(operation);
 
 			
 			_serviceControl.operationList = operations;  

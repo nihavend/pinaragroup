@@ -29,6 +29,8 @@ package com.likya.pinara.event {
 		
 		public static const JOB_TYPE_CHANGED:String = "jobTypeChangedEvent";
 		
+		public static const UPDATE_ARGS:String = "updateargs";
+		
 		public var object:Object;
 	
 		public function ResourceEvent(type:String, object:Object = null, bubbles:Boolean = true, cancelable:Boolean = true) {

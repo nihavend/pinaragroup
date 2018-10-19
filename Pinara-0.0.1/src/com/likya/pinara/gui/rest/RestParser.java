@@ -76,6 +76,7 @@ public class RestParser extends GenericRestParser {
 	public static final String CMD_GRPENABLE = "enablegrp";
 	public static final String CMD_GRPDISABLE = "disablegrp";
 	public static final String CMD_CHANGEGRPNAME = "changegrpname";
+	public static final String CMD_ARGSUPDATE = "updateargs";
 	
 	public static byte[] parse(User reqUserInfo, String uriTxt) throws InstanceNotFoundException {
 
@@ -498,6 +499,34 @@ public class RestParser extends GenericRestParser {
 				t.printStackTrace();
 			}
 			
+			break;
+			
+		case RestParser.CMD_ARGSUPDATE:
+			if (restCommArr.length != 2) {
+				retStr = "JobId or Args not defined or invalid : " + uriTxt;
+				retStr = "<message><result>NOK</result><desc>" + retStr + "</desc></message>";
+				break;
+			}
+			
+			String args[] = restCommArr[1].split(":");
+			String newArgs;
+			String jobIdStr;
+			if(args.length > 1) {
+				newArgs = args[1];
+				jobIdStr = args[0];
+			} else {
+				jobIdStr = args[0];
+				newArgs = null;
+			}
+
+			try {
+				PinaraAppManagerImpl.getInstance().updateJobArgs(jobIdStr, newArgs);
+				retStr = "<message><result>OK</result><desc></desc></message>";
+			} catch (Throwable t) {
+				retStr = "<message><result>NOK</result><desc>" + ExceptionUtils.getStackTrace(t) + "</desc></message>";
+				t.printStackTrace();
+			}
+
 			break;
 			
 		default:

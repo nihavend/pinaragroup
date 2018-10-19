@@ -34,7 +34,8 @@
 					libs/stax-api-1.0.1.jar 
 					libs/gson-2.2.3.jar 
 					libs/jmxremote_optional-repackaged-5.0.jar 
-					libs/javax.mail-1.6.0.jar "/>
+					libs/javax.mail-1.6.0.jar 
+					libs/jsch-0.1.50.jar "/>
 			</manifest>
 			<fileset dir="${gitdir}/pinaragroup/Pinara-0.0.1/target/classes"/>
 		</jar>
@@ -55,6 +56,7 @@
 		<copy file="${m2repo.dir}/com/google/code/gson/gson/2.2.3/gson-2.2.3.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/org/glassfish/main/external/jmxremote_optional-repackaged/5.0/jmxremote_optional-repackaged-5.0.jar" todir="${dest.dir}/libs"/>
 		<copy file="${m2repo.dir}/com/sun/mail/javax.mail/1.6.0/javax.mail-1.6.0.jar" todir="${dest.dir}/libs"/>
+		<copy file="${m2repo.dir}/com/jcraft/jsch/0.1.50/jsch-0.1.50.jar" todir="${dest.dir}/libs"/>
 
 		<copy file="../pinara-libs/libs/tlostestjob.jar" todir="${dest.dir}/libs"/>
 

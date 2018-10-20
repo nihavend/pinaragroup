@@ -435,15 +435,15 @@ public class LiveStateInfoUtils {
 	public static boolean containsAny(LiveStateInfosType liveStateInfosType, LiveStateInfo liveStateInfo) {
 		
 		for(LiveStateInfo tmpLiveStateInfo : liveStateInfosType.getLiveStateInfoArray()) {
-			if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() == null && tmpLiveStateInfo.getSubstateName() == null) {
+			if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getSubstateName() == null && tmpLiveStateInfo.getStatusName() == null) {
 				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName())) {
 					return true;
 				}
-			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() != null && tmpLiveStateInfo.getSubstateName() == null) {
+			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getSubstateName() != null && tmpLiveStateInfo.getStatusName() == null) {
 				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName()) && tmpLiveStateInfo.getSubstateName().equals(liveStateInfo.getSubstateName())) {
 					return true;
 				}
-			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getStatusName() != null && tmpLiveStateInfo.getSubstateName() != null) {
+			} else if(tmpLiveStateInfo.getStateName() != null && tmpLiveStateInfo.getSubstateName() != null && tmpLiveStateInfo.getStatusName() != null) {
 				if(tmpLiveStateInfo.getStateName().equals(liveStateInfo.getStateName()) && tmpLiveStateInfo.getSubstateName().equals(liveStateInfo.getSubstateName()) && tmpLiveStateInfo.getStatusName().equals(liveStateInfo.getStatusName())) {
 					return true;
 				}

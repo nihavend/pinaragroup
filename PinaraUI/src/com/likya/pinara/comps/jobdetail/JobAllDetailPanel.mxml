@@ -146,7 +146,7 @@
 					planlananCZ.text = Transformer.getDate(jobDetailXml.management.timeManagement.jsActualTime.startTime); //Transformer.getDate(jobDetailXml.management.timeManagement.jsPlannedTime.startTime);
 					sonSure.text = jobDetailXml.runtimeParams.realizedDuration;
 					
-					jobBaseInfoId.refreshData(jobDetailXml);
+					jobBaseInfoId.refreshData(jobDetailXml, JobBaseInfo.JOB_ALL_DETAIL_PANEL);
 					
 					/*
 					jobCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;

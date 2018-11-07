@@ -23,6 +23,8 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
+			public var requestPanel:String;
+			
 			private function removeMe():void {
 				PopUpManager.removePopUp(this);
 			}
@@ -30,7 +32,11 @@
 			private function setInputParameters():void {
 				// event parent icinde register edildigi icin bu sekilde tetikleniyor
 				// parentApplication.dispatchEvent(new TlosEvent(TlosEvent.SET_PARAM));
-				parentApplication.jobListDetail.jobBaseInfoId.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_ARGS, parameters.text));
+				if(requestPanel == JobBaseInfo.JOB_LIST_WITH_DETAILS) {
+					parentApplication.jobListDetail.jobBaseInfoId.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_ARGS, parameters.text));
+				} else if(requestPanel == JobBaseInfo.JOB_ALL_DETAIL_PANEL){
+					parentApplication.allJobDetail.jobBaseInfoId.dispatchEvent(new ResourceEvent(ResourceEvent.UPDATE_ARGS, parameters.text));
+				}
 				PopUpManager.removePopUp(this);
 			}
 		]]>

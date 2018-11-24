@@ -14,6 +14,7 @@
 			import com.likya.pinara.comps.jobcrud.JobEditWindow;
 			import com.likya.pinara.comps.jobdetail.JobAllDetailPanel;
 			import com.likya.pinara.event.ResourceEvent;
+			import com.likya.pinara.model.AppInfo;
 			import com.likya.pinara.model.ModelLocator;
 			import com.likya.pinara.model.UserRole;
 			import com.likya.pinara.utils.AddJobDefaults;
@@ -303,12 +304,10 @@
 				var returnXml:XML;
 				returnXml = XML(event.message.body);
 				if(returnXml.result == "OK") {
-					// trace(XML(menuDataXMLList[3]).children()[0].@label);
-					XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
-					XML(menuDataXMLList[1]).children()[0].@id = "resumeApp";
-					// trace(XML(menuDataXMLList[3]).children()[0].@label);
-					// trace(XML(menuDataXMLList[3]).children()[0].@id);
-					MessageUtil.showMessagePanel(MessageUtil.INFO, ResourceManager.getInstance().getString('messages', 'tlosSuspendMessage'));
+					//XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
+					//XML(menuDataXMLList[1]).children()[0].@id = "resumeApp";
+					//MessageUtil.showMessagePanel(MessageUtil.INFO, ResourceManager.getInstance().getString('messages', 'tlosSuspendMessage'));
+					switchToSuspendMode(true);
 				}
 				
 			}
@@ -318,6 +317,19 @@
 				var returnXml:XML;
 				returnXml = XML(event.message.body);
 				if(returnXml.result == "OK") {
+					//XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'suspendApp');
+					//XML(menuDataXMLList[1]).children()[0].@id = "suspendApp";
+					//MessageUtil.closeMessagePanel();
+					switchToSuspendMode(false);
+				}
+			}
+			
+			private function switchToSuspendMode(suspendMode:Boolean):void {
+				if(suspendMode) {
+					XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
+					XML(menuDataXMLList[1]).children()[0].@id = "resumeApp";
+					MessageUtil.showMessagePanel(MessageUtil.INFO, ResourceManager.getInstance().getString('messages', 'tlosSuspendMessage'));
+				} else {
 					XML(menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'suspendApp');
 					XML(menuDataXMLList[1]).children()[0].@id = "suspendApp";
 					MessageUtil.closeMessagePanel();
@@ -337,6 +349,11 @@
 			protected function pinaraMenuBar_creationCompleteHandler(event:FlexEvent):void
 			{
 				// trace("Applying filters...");
+				var appInfo:AppInfo = ModelLocator.getInstance().appInfo;
+				if(appInfo.loginstate == AppInfo.CORE_STATE_SUSPENDED) {
+					switchToSuspendMode(true);
+				}
+				
 				applyFilters();
 				// pinaraMenuBar.callLater(registerClickEvent);
 				// registerClickEvent();

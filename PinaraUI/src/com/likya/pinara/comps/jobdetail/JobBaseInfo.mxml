@@ -33,6 +33,10 @@
 			[Bindable]
 			private var jobDetailLocalXml:XML;
 			
+			public static const JOB_LIST_WITH_DETAILS:String = "jobListWithDetails";
+			public static const JOB_ALL_DETAIL_PANEL:String = "jobAllDetailPanel";
+			private var requestLocalPanel:String;
+			
 			private static function calculateDiffDuration(timeA:String, timeB:String):String {
 				
 				var diffDuration:String = "-";
@@ -129,9 +133,10 @@
 				return dzText;
 			}
 			
-			public function refreshData(jobDetailXml:XML):void	{
+			public function refreshData(jobDetailXml:XML, requestPanel:String):void	{
 				
 				jobDetailLocalXml = jobDetailXml;
+				requestLocalPanel = requestPanel;
 				
 				jobCommand.text = jobDetailXml.baseJobInfos.jobTypeDetails.jobCommand;
 				jobLogFile.text = "" + jobDetailXml.baseJobInfos.jobLogPath + jobDetailXml.baseJobInfos.jobLogFile;
@@ -190,12 +195,10 @@
 					//myViewStack.getChildByName("search");
 					//myViewStack.getChildByName("remoteSch");
 					
-					if(!isRemoteSch && myViewStack.getChildByName("remoteSch") != null) {
-						
+					if(myViewStack.getChildByName("remoteSch") != null) {
 						myViewStack.removeChild(myViewStack.getChildByName("remoteSch"));
-						
-					} else if(isRemoteSch && myViewStack.getChildByName("remoteSch") == null) {
-						
+					} 
+					if(isRemoteSch) {
 						remoteSchModuleInfo = ModuleManager.getModule("RemoteSchProps.swf");
 						remoteSchModuleInfo.addEventListener(ModuleEvent.READY, renderRemoteSchPropsModule);
 						remoteSchModuleInfo.addEventListener(ModuleEvent.ERROR, handleError);
@@ -252,6 +255,7 @@
 			private function showArgValuePopup():void {
 				var parameterPopupForm:ParameterPopupForm = ParameterPopupForm(PopUpManager.createPopUp(this, ParameterPopupForm, true));
 				parameterPopupForm.title = "Working for job with id : " + jobDetailLocalXml.@Id;
+				parameterPopupForm.requestPanel = requestLocalPanel;
 				parameterPopupForm.parameters.text = argValues.text;
 				PopUpManager.centerPopUp(parameterPopupForm);
 			}

@@ -48,11 +48,11 @@ package com.likya.pinara.utils {
 					mailConfigInfo.myra_stateinfo::stateInfos.myra_stateinfo::LiveStateInfos.myra_stateinfo::LiveStateInfo[counter].appendChild(<myra-stateinfo:StateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.state}</myra-stateinfo:StateName>);
 					mailConfigInfo.myra_stateinfo::stateInfos.myra_stateinfo::LiveStateInfos.myra_stateinfo::LiveStateInfo[counter].@LSIDateTime = dateTimeString;
 					
-					if(sssTmp.substate != null) {
+					if(sssTmp.substate != null && sssTmp.substate != "") {
 						mailConfigInfo.myra_stateinfo::stateInfos.myra_stateinfo::LiveStateInfos.myra_stateinfo::LiveStateInfo[counter].appendChild(<myra-stateinfo:SubstateName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.substate}</myra-stateinfo:SubstateName>);
 					}
 					
-					if(sssTmp.status != null) {
+					if(sssTmp.status != null && sssTmp.status != "") {
 						mailConfigInfo.myra_stateinfo::stateInfos.myra_stateinfo::LiveStateInfos.myra_stateinfo::LiveStateInfo[counter].appendChild(<myra-stateinfo:StatusName xmlns:myra-stateinfo="http://www.likyateknoloji.com/myra-stateinfo">{sssTmp.status}</myra-stateinfo:StatusName>);
 					}
 					

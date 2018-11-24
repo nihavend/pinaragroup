@@ -5,6 +5,7 @@ import java.io.File;
 import com.likya.commons.utils.FileUtils;
 import com.likya.myra.commons.ValidPlatforms;
 import com.likya.myra.jef.core.CoreFactory;
+import com.likya.myra.jef.core.ManagementOperationsImpl;
 import com.likya.myra.jef.jobs.JobImpl;
 import com.likya.pinara.Pinara;
 import com.likya.pinara.PinaraBase;
@@ -113,7 +114,7 @@ public class LogViewHandler extends FileViewHandler {
 				
 			case "appInfo":
 				response = PinaraFileUtils.readVersionInfo(PinaraBase.versionFile).toString();
-				response = response + ";" + ValidPlatforms.getOSName();
+				response = response + ";" + ValidPlatforms.getOSName() + ";" + ManagementOperationsImpl.getExecutionState();
 				break;
 
 			default:

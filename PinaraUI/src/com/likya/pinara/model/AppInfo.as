@@ -18,11 +18,20 @@ package com.likya.pinara.model {
 		private static const OS_SUNOS:String = "SunOS"; 
 		private static const MAC_OS_X:String = "Mac OS X"; 
 		
+		//Myra-engine states
+		public static const CORE_STATE_STARTING = "STATE_STARTING";
+		public static const CORE_STATE_STOP = "STATE_STOP";
+		public static const CORE_STATE_SUSPENDED = "STATE_SUSPENDED";
+		public static const CORE_STATE_JOBOVERFLOW = "STATE_JOBOVERFLOW"; 
+		public static const CORE_STATE_WORKING = "STATE_WORKING";
+		public static const CORE_STATE_RECOVER = "STATE_RECOVER";
+		
 		[Bindable]
 		public var version:String = "";
 		
 		public var osname:String = "";
 		public var ostype:String = "";
+		public var loginstate:String = "";
 
 		public function AppInfo()
 		{

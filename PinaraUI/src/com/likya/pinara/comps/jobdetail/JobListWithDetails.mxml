@@ -96,7 +96,7 @@
 				}
 				*/
 				
-				jobBaseInfoId.refreshData(currentDataItem);
+				jobBaseInfoId.refreshData(currentDataItem, JobBaseInfo.JOB_LIST_WITH_DETAILS);
 				
 				if(currentDataItem.hasOwnProperty("runtimeParams")) {
 					depListComp.waitingMeJobs.dataProvider = new XMLListCollection(XMLList(currentDataItem.runtimeParams.waitingMeJobs.jobId));

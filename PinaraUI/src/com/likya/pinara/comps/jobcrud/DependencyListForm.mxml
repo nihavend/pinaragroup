@@ -53,6 +53,7 @@
 				
 				if(depExpStr != null && depExpStr != "") {
 					
+					depExpStr = depExpStr.toLowerCase();
 					depExpStr = depExpStr.replace(orPattern, "OR");
 					depExpStr = depExpStr.replace(andPattern, "AND");
 					depExp.text = depExpStr;

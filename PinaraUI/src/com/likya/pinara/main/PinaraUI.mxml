@@ -241,8 +241,19 @@
 			private function updateTree(event:ResourceEvent):void {
 				
 				trace("Updating tree !");
+				jobTree.jobCRUDOp = false;
+				jobTree.jobCRUDId = "";
+				
 				if(XML(event.object).hasOwnProperty("netTreeId")) { // add,clone,update ve delete için buraya giriyor
 					selectedTreeNode = XML(event.object);
+					
+					jobTree.jobCRUDOp = true;
+					if(XML(event.object).hasOwnProperty("jobId")) { // add,clone,update
+						jobTree.jobCRUDId = XML(event.object).jobId + "";
+					} else {
+						jobTree.jobDelOp = true;
+						jobTree.jobCRUDId = XML(event.object).netTreeId + ""; //delete
+					}
 				} else if(event.object != null) {
 					selectedTreeNode = XML(event.object);
 				} else {
@@ -252,11 +263,11 @@
 				//jobTree.liveTree.selectedItem = selectedTreeNode;
 				//selectedTreeNodeIdx = jobTree.liveTree.selectedIndex;
 				
-				jobTree.liveTree.addEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
+				//jobTree.liveTree.addEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
 				jobTree.refreshTree();
 			}
 			
-			private function onTreeUpdateComplete(event:FlexEvent):void {
+			/*private function onTreeUpdateComplete(event:FlexEvent):void {
 				
 				trace("Updating tree !");
 				jobTree.liveTree.removeEventListener(FlexEvent.UPDATE_COMPLETE, onTreeUpdateComplete);
@@ -274,12 +285,12 @@
 							//if (searchResult[0] != undefined) {
 							// 	selectedTreeNode = jobTree.liveTree.getParentItem(searchResult[0]);
 							// }
-							dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode /*data.@Id*/));
-						} else if(currentState == "jobDetailState") {
-							dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, selectedTreeNode /*data.@Id*/));
-						}
-					} else {// delete için buraya giriyor
-						dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode));
+							/*dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode /*data.@Id*///));
+						/*} else if(currentState == "jobDetailState") {
+							dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED, selectedTreeNode /*data.@Id*///));
+					//	}
+					//} else {// delete için buraya giriyor
+						/*dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode));
 					}
 
 				}
@@ -311,7 +322,7 @@
 					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, null));
 				}
 				*/
-			}
+			//}
 			
 			//private function changeState(event:ResourceEvent):void {
 				

@@ -397,6 +397,23 @@ package com.likya.pinara.utils {
 				managementInfoXML.wla::timeManagement.appendChild(<wla:jsActualTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				managementInfoXML.wla::timeManagement.wla::jsActualTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				managementInfoXML.timeManagement.jsActualTime.startTime = dateString;
+				
+				if(parseInt(j.managementInfoForm_0.timeoutValue.text) > 0) {
+					managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+					managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+					managementInfoXML.timeManagement.jsTimeOut.lik::value_integer = j.managementInfoForm_0.timeoutValue.text;
+					managementInfoXML.timeManagement.jsTimeOut.lik::unit = j.managementInfoForm_0.timeoutUnit.selectedItem;
+				}
+				
+				if(parseInt(j.managementInfoForm_0.expectedValue.text) > 0) {
+					managementInfoXML.wla::timeManagement.appendChild(<wla:expectedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+					managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+					managementInfoXML.timeManagement.expectedTime.lik::value_integer = j.managementInfoForm_0.expectedValue.text;
+					managementInfoXML.timeManagement.expectedTime.lik::unit = j.managementInfoForm_0.expectedTimeUnit.selectedItem;
+				}
+
 			}
 			
 			return managementInfoXML;

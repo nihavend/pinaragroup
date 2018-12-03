@@ -296,19 +296,26 @@ package com.likya.pinara.utils {
 			managementInfoXML.cascadingConditions.appendChild(<wla:runEvenIfFailed xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			managementInfoXML.cascadingConditions.appendChild(<wla:jobSafeToRestart xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			
-			managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
-			managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
-			
-			if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
-				managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "USER") {
+				/** User Managed ****/
+				managementInfoXML.cascadingConditions.runEvenIfFailed = false;
+				managementInfoXML.cascadingConditions.jobSafeToRestart = true;
+			} else {
+				/** Time Managed ****/
+				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
+				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
 				
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
-				if(j.managementInfoForm_1.maxCountValueAr.text != "") {
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
+				if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
+					managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
+					if(j.managementInfoForm_1.maxCountValueAr.text != "") {
+						managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
+					}
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 				}
-				
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 			}
 			
 			return myraJobList;

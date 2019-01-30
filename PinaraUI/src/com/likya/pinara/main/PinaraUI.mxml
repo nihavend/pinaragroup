@@ -43,6 +43,7 @@
 			import mx.managers.CursorManagerPriority;
 			import mx.managers.PopUpManager;
 			import mx.resources.ResourceBundle;
+			import mx.resources.ResourceManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.utils.Base64Encoder;
@@ -640,6 +641,10 @@
 					ModelLocator.getInstance().appInfo.osname = appInfoArray[1];
 					ModelLocator.getInstance().appInfo.loginstate = appInfoArray[2];
 					ModelLocator.getInstance().appInfo.setOsType(ModelLocator.getInstance().appInfo.osname);
+					if(appInfoArray[2] == AppInfo.CORE_STATE_SUSPENDED) {
+						XML(menuBar.menuDataXMLList[1]).children()[0].@label = ResourceManager.getInstance().getString('messages', 'resumeApp');
+						XML(menuBar.menuDataXMLList[1]).children()[0].@id = "resumeApp";
+					} 
 				} catch(err:Error) {
 					ModelLocator.getInstance().appInfo.version = "";
 					ModelLocator.getInstance().appInfo.osname = "";

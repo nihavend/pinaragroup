@@ -8,6 +8,7 @@ import com.likya.pinara.gui.rest.GraphViewHandler;
 import com.likya.pinara.gui.rest.LogViewHandler;
 import com.likya.pinara.gui.rest.RestUserOps;
 import com.likya.pinara.gui.rest.RestfulHandler;
+import com.likya.pinara.gui.rest.RoyaleHandler;
 import com.likya.pinara.model.PinaraAuthorization;
 import com.likya.pinara.model.User.StatuInfo;
 import com.likya.pinara.utils.PasswordService;
@@ -21,11 +22,23 @@ import com.sun.net.httpserver.HttpServer;
 
 public class WebManager {
 
-	private final String FLEX_CTX = "flex";
+	
 	private final String LOGVIEW_CTX = "logview";
 	public final static String GRAPHVIEW_CTX = "graphview";
-	public final static String RESTFUL_CTX = "flex/restsrvc";
-	public final static String RESTUSEROPS_CTX = "flex/restsrv/userops";
+
+	private final static String FLEX_CTX = "flex";
+	private final static String ROYALE_CTX = "PInara";
+	
+	// private final static String ACTIVE_CTX = FLEX_CTX;
+	private final static String ACTIVE_CTX = ROYALE_CTX;
+
+	// public final static String RESTFUL_CTX = "flex/restsrvc";
+	// public final static String RESTUSEROPS_CTX = "flex/restsrv/userops";
+	// public final static String RESTFUL_CTX = "PInara/restsrvc";
+	// public final static String RESTUSEROPS_CTX = "PInara/restsrv/userops";
+
+	public final static String RESTFUL_CTX = ACTIVE_CTX + "/restsrvc";
+	public final static String RESTUSEROPS_CTX = ACTIVE_CTX + "/restsrv/userops";
 	
 	private int httpPort;
 	private String hostName = "localhost";
@@ -138,6 +151,9 @@ public class WebManager {
 
 		HttpServer server;
 		server = HttpServer.create(new InetSocketAddress(hostName, httpPort), 5);
+
+		HttpContext royaleContext = server.createContext("/" + ROYALE_CTX, new RoyaleHandler());
+		Pinara.getLogger().info(royaleContext.getPath());
 
 		HttpContext flexContext = server.createContext("/" + FLEX_CTX, new FlexHandler());
 		Pinara.getLogger().info(flexContext.getPath());

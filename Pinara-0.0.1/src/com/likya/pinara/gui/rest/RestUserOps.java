@@ -80,6 +80,11 @@ public class RestUserOps extends PinaraRestHandler {
 
 			responseBytes = retStr.getBytes();
 			
+			if(paramBuff.length() <= 0 || !paramBuff.toString().contains("=")) {
+				retStr = "<message><result>NOK</result><desc>" + "Input param is emtpy or does not contain id and/or username" + "</desc></message>";
+				break;
+			}
+			
 			String paramName = paramBuff.toString().split("=")[0];
 			String paramValue = paramBuff.toString().split("=")[1];
 			

@@ -33,6 +33,12 @@
 			public static var liveTreeDP:XMLList; 
 			
 			private var selectedTreeNode:Object;
+			private var selectedTreeNodeGroupId:String;
+			
+			public var jobCRUDOp:Boolean = false;
+			public var jobDelOp:Boolean = false;
+			public var jobCRUDId:String = "";
+			public var grpView:Boolean = false;
 			
 			/**
 			 * Stores the open/close states of the tree nodes
@@ -114,8 +120,12 @@
 				if (selectedNodeXml.localName() == "list") {
 					dispatchEvent(new ResourceEvent(ResourceEvent.ANASAYFA));
 				} if (selectedNodeXml.localName() == "jobGroup") {
+					selectedTreeNodeGroupId = selectedNodeXml.@id + "";
+					trace("jobGroup - selectedTreeNodeGroupId: " + selectedTreeNodeGroupId);
 					dispatchEvent(new ResourceEvent(ResourceEvent.LISTNODE_SELECTED, selectedTreeNode));
 				} else if (selectedNodeXml.localName() == "jobProperty") {
+					selectedTreeNodeGroupId = selectedNodeXml.parent().@id + "";
+					trace("jobProperty - selectedTreeNodeGroupId: " + selectedTreeNodeGroupId);
 					dispatchEvent(new ResourceEvent(ResourceEvent.JOBNODE_SELECTED,  selectedTreeNode));
 				}
 				
@@ -151,9 +161,11 @@
 				if(BasicAuthenticationHandler.startsWith(treePanelService.url, "/flex/restsrvc/nettreexml/")) {
 					treePanelService.url = "/flex/restsrvc/grouptreexml/";
 					depGrpButton.label = "D";
+					grpView = true;
 				} else {
 					treePanelService.url = "/flex/restsrvc/nettreexml/";
 					depGrpButton.label = "G";
+					grpView = false;
 				}
 				
 				refreshTree();
@@ -173,16 +185,18 @@
 				try {
 					liveTreeDP = new XMLList(treeXml);
 					liveTree.validateNow();
-
-					for each(var item:XML in treeOpenItems) {
-						if(item.name() == "list") {
-							// trace(treeOpenItems);
-							liveTree.expandItem(liveTreeDP[0], true);
-						} else {
-							liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+					
+					if(!jobCRUDOp) {
+						for each(var item:XML in treeOpenItems) {
+							if(item.name() == "list") {
+								// trace(treeOpenItems);
+								liveTree.expandItem(liveTreeDP[0], true);
+							} else {
+								liveTree.expandItem(liveTreeDP..jobGroup.(@id == item.@id)[0], true);
+							}
 						}
+						liveTree.validateNow();
 					}
-					liveTree.validateNow();
 				} catch(err:Error) {
 					Alert.show(resourceManager.getString("messages", "jobDetailsError") + errorString);
 					trace(err);
@@ -195,13 +209,45 @@
 				
 				if(selectedTreeNode != null && selectedTreeNode.hasOwnProperty("@id")) {
 					trace("[selectedTreeNode] : " + ObjectUtil.toString(selectedTreeNode));
-					var selectedId:String = selectedTreeNode.@id;
+					var selectedNodeXml:XML = selectedTreeNode as XML;
+					var selectedId:String;
+					
+					if(jobCRUDOp) {
+						if(jobDelOp && grpView) {
+							if(selectedNodeXml.localName() == "jobProperty") {
+								//grpView = true (yukarda) 
+								//grup'daki son job siliniyorsa veya selectedTreeNode.parent Dependency view'de kaldi (D view'de secilen job G view'de siliniyor)
+								if(XML(selectedTreeNode).parent().elements().length() == 1 || XML(selectedTreeNode).parent().@id == -1) {
+									selectedId = XML(liveTree.dataProvider[0]).child(0).attribute("id").toString();
+								} else {
+									selectedId = selectedNodeXml.parent().@id;
+								}
+							} else {//jobGroup
+								if(XML(selectedTreeNode).elements().length() == 1) {
+									selectedId = XML(liveTree.dataProvider[0]).child(0).attribute("id").toString();
+								} else {
+									selectedId = selectedNodeXml.@id;
+								}
+							}
+						} else {
+							selectedId = jobCRUDId;
+						}
+					} else {
+						selectedId = selectedTreeNode.@id;
+					}
 					
 					var searchResult:XMLList = TreeUtils.findNode((liveTree.dataProvider[0] as XML), selectedId);
 					
 					if (searchResult[0] != undefined) {
 						
-						// TreeUtils.expandNode(liveTree, searchResult[0]);
+						if(jobCRUDOp) {
+							selectedTreeNode = searchResult[0];
+							TreeUtils.expandNode(liveTree, searchResult[0]);
+							if(jobDelOp) {
+								liveTree.expandItem(searchResult[0], true);
+							}
+							liveTree.validateNow();
+						}
 						
 						liveTree.selectedItem = searchResult[0];
 						
@@ -213,6 +259,13 @@
 					}
 					
 				}
+				
+				if(selectedTreeNode == null) {
+					selectedTreeNode = liveTreeDP[0];
+				}
+				
+				jobCRUDOp = false;
+				jobDelOp = false;
 			}
 
 			protected function liveTree_itemOpenHandler(event:TreeEvent):void

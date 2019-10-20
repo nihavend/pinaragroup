@@ -1,5 +1,6 @@
 package com.likya.pinara.infobus;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -31,6 +32,7 @@ public class PinaraMailServer implements Runnable {
 	private final int timeout = 10000;
 	private boolean executePermission = true;
 	private ArrayList<PinaraMail> mailQueue;
+	private final int MAX_THRESHOLD_VALUE = 300;
 
 	private Properties props;
 	private Authenticator authenticator;
@@ -45,6 +47,10 @@ public class PinaraMailServer implements Runnable {
 	
 	private String mailInfoStr;
 	private boolean reLoadParamsFlag = false;
+	
+	private boolean mailSent;
+	private int mailSendingAttemptCount;
+	private int mailSendingAttemptInterval;
 	
 	/**
 	 * SimpleAuthenticator is used to do simple authentication when the SMTP
@@ -129,6 +135,28 @@ public class PinaraMailServer implements Runnable {
 		}
 	}
 	
+	private void waitNextSendingAttempt() {
+		if(mailSendingAttemptCount == 1) {
+			mailSendingAttemptInterval = 1 * 60 * 1000;
+		} else if(mailSendingAttemptCount == 2) {
+			mailSendingAttemptInterval = 5 * 60 * 1000;
+		} else if(mailSendingAttemptCount == 3) {
+			mailSendingAttemptInterval = 15 * 60 * 1000;
+		} else {
+			mailSendingAttemptInterval = 30 * 60 * 1000;
+		}
+		
+		Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.13") + mailSendingAttemptInterval/(60 * 1000));
+		mailSendingAttemptCount += 1;
+		
+		try {
+			Thread.sleep(mailSendingAttemptInterval);
+			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.12"));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void engage(MailInfo mailInfo) throws Throwable{
 		synchronized (PinaraMailServer.class) {
 			PinaraMailServer pinaraMailServer = Pinara.getInstance().getConfigurationManager().getPinaraMailServer();
@@ -164,21 +192,44 @@ public class PinaraMailServer implements Runnable {
 
 				for(String emailAddress : mailInfo.getEmailList().getEmailArray()) {
 					
-					try {
-						switch (pinaraMail.getMAIL_TYPE()) {
-
-						case PinaraMail.SIMPLE:
-							postMail(emailAddress, ((SimpleMail) pinaraMail).getMailSubject(), ((SimpleMail) pinaraMail).getMailText());
-							break;
-						case PinaraMail.MULTIPART:
-							postMultiPartMail(emailAddress, ((MultipartMail) pinaraMail).getMailSubject(), ((MultipartMail) pinaraMail).getMultipart());
-							break;
+					mailSent = false;
+					mailSendingAttemptCount = 1;
+					while(!mailSent) {
+						try {
+							switch (pinaraMail.getMAIL_TYPE()) {
+	
+							case PinaraMail.SIMPLE:
+								postMail(emailAddress, ((SimpleMail) pinaraMail).getMailSubject(), ((SimpleMail) pinaraMail).getMailText());
+								break;
+							case PinaraMail.MULTIPART:
+								postMultiPartMail(emailAddress, ((MultipartMail) pinaraMail).getMailSubject(), ((MultipartMail) pinaraMail).getMultipart());
+								break;
+							}
+							
+							mailSent = true;
+							Pinara.getLogger().debug("E-posta gönderdildi !"); 
+						//Exception bazında ayrım istenirse (tekrar deneme için), tekrar istemeyen exceptionlara 'mailSent = true;' eklemek yeterli 	
+						} catch(AuthenticationFailedException a) {
+							Pinara.getLogger().error(Pinara.getMessage("PinaraMailServer.9"));
+							Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.11") + mailSendingAttemptCount); 
+							//a.printStackTrace();
+						} catch(MessagingException me) {
+							Pinara.getLogger().error(me.toString());
+							Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.11") + mailSendingAttemptCount);
+							//me.printStackTrace();
+						}  catch(UnknownHostException ue) {
+							Pinara.getLogger().error(ue.toString());
+							Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.11") + mailSendingAttemptCount);
+							//ue.printStackTrace();
+						}  catch (Exception e) {
+							Pinara.getLogger().error(e.toString());
+							Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + e.getMessage() + Pinara.getMessage("PinaraMailServer.11") + mailSendingAttemptCount); //$NON-NLS-1$ //$NON-NLS-2$
+							//e.printStackTrace();
 						}
 						
-						Pinara.getLogger().debug("E-posta gönderdildi !"); 
-					} catch (Exception e) {
-						Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + e.getMessage() + Pinara.getMessage("PinaraMailServer.6")); //$NON-NLS-1$ //$NON-NLS-2$
-						e.printStackTrace();
+						if(!mailSent) {
+							waitNextSendingAttempt(); 
+						}
 					}
 					
 				}
@@ -200,7 +251,7 @@ public class PinaraMailServer implements Runnable {
 		Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.8") + mailQueue.size());
 	}
 
-	private void postMultiPartMail(String to, String subject, Multipart multipart) throws MessagingException {
+	private void postMultiPartMail(String to, String subject, Multipart multipart) throws MessagingException, AuthenticationFailedException, UnknownHostException {
 
 		// Get session
 		Session session = Session.getDefaultInstance(props, authenticator);
@@ -215,22 +266,12 @@ public class PinaraMailServer implements Runnable {
 
 		// Set the content for the message and transmit
 		message.setContent(multipart);
-
-		try {
+		
 		// Send message
-			Transport.send(message);
-		} catch(AuthenticationFailedException a) {
-			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.9"));
-			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6")); 
-			a.printStackTrace();
-		} catch(MessagingException me) {
-			Pinara.getLogger().info(me.toString());
-			Pinara.getLogger().info(Pinara.getMessage("PinaraMailServer.5") + Pinara.getMessage("PinaraMailServer.6"));
-			me.printStackTrace();
-		}
+		Transport.send(message);
 	}
 
-	private void postMail(String to, String subject, String messageText) throws AddressException, MessagingException {
+	private void postMail(String to, String subject, String messageText) throws AddressException, MessagingException, UnknownHostException {
 
 		// Get session
 		Session session = Session.getDefaultInstance(props, authenticator);
@@ -251,7 +292,11 @@ public class PinaraMailServer implements Runnable {
 	}
 
 	public void sendMail(PinaraMail tlosMail) {
-		addMail(tlosMail);
+		if(mailQueue.size() < MAX_THRESHOLD_VALUE) {
+			addMail(tlosMail);
+		} else {
+			Pinara.getLogger().warn(Pinara.getMessage("PinaraMailServer.14"));
+		}
 	}
 
 	public int getQueueSize() {

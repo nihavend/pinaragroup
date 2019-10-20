@@ -296,19 +296,26 @@ package com.likya.pinara.utils {
 			managementInfoXML.cascadingConditions.appendChild(<wla:runEvenIfFailed xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			managementInfoXML.cascadingConditions.appendChild(<wla:jobSafeToRestart xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 			
-			managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
-			managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
-			
-			if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
-				managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
-				managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+			if(j.managementInfoForm_0.jsJobTriggerType.selectedItem.value == "USER") {
+				/** User Managed ****/
+				managementInfoXML.cascadingConditions.runEvenIfFailed = false;
+				managementInfoXML.cascadingConditions.jobSafeToRestart = true;
+			} else {
+				/** Time Managed ****/
+				managementInfoXML.cascadingConditions.runEvenIfFailed = j.managementInfoForm_1.runEvenFailed.selectedItem;
+				managementInfoXML.cascadingConditions.jobSafeToRestart = j.managementInfoForm_1.safeToRestart.selectedItem;
 				
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
-				if(j.managementInfoForm_1.maxCountValueAr.text != "") {
-					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
+				if(j.managementInfoForm_1.autoRetry.selectedItem == "true") {
+					managementInfoXML.cascadingConditions.appendChild(<wla:jobAutoRetryInfo xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.cascadingConditions.wla::jobAutoRetryInfo.appendChild(<wla:jobAutoRetry xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.@step = j.managementInfoForm_1.arStepValue.text;
+					if(j.managementInfoForm_1.maxCountValueAr.text != "") {
+						managementInfoXML.cascadingConditions.jobAutoRetryInfo.@maxCount = j.managementInfoForm_1.maxCountValueAr.text;
+					}
+					
+					managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 				}
-				
-				managementInfoXML.cascadingConditions.jobAutoRetryInfo.jobAutoRetry = j.managementInfoForm_1.autoRetry.selectedItem;
 			}
 			
 			return myraJobList;
@@ -397,6 +404,23 @@ package com.likya.pinara.utils {
 				managementInfoXML.wla::timeManagement.appendChild(<wla:jsActualTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				managementInfoXML.wla::timeManagement.wla::jsActualTime.appendChild(<wla:startTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
 				managementInfoXML.timeManagement.jsActualTime.startTime = dateString;
+				
+				if(parseInt(j.managementInfoForm_0.timeoutValue.text) > 0) {
+					managementInfoXML.wla::timeManagement.appendChild(<wla:jsTimeOut xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+					managementInfoXML.wla::timeManagement.wla::jsTimeOut.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+					managementInfoXML.timeManagement.jsTimeOut.lik::value_integer = j.managementInfoForm_0.timeoutValue.text;
+					managementInfoXML.timeManagement.jsTimeOut.lik::unit = j.managementInfoForm_0.timeoutUnit.selectedItem;
+				}
+				
+				if(parseInt(j.managementInfoForm_0.expectedValue.text) > 0) {
+					managementInfoXML.wla::timeManagement.appendChild(<wla:expectedTime xmlns:wla="http://www.likyateknoloji.com/wla-gen" />);
+					managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:value_integer xmlns:lik="http://www.likyateknoloji.com/likya-gen" />);
+					managementInfoXML.wla::timeManagement.wla::expectedTime.appendChild(<lik:unit xmlns:lik="http://www.likyateknoloji.com/likya-gen"  />);
+					managementInfoXML.timeManagement.expectedTime.lik::value_integer = j.managementInfoForm_0.expectedValue.text;
+					managementInfoXML.timeManagement.expectedTime.lik::unit = j.managementInfoForm_0.expectedTimeUnit.selectedItem;
+				}
+
 			}
 			
 			return managementInfoXML;
